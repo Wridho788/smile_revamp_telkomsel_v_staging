@@ -1,4 +1,6 @@
-import Navbar from  "./navbar"
+import Navbar from  "./navbar";
+import Breadcrumb from "./breadcrumb";
 export {
-    Navbar
+    Navbar,
+    Breadcrumb
 }
