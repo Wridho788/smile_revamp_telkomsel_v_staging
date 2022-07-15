@@ -1,4 +1,4 @@
-import {Breadcrumb, Channel} from "../../components";
+import {Breadcrumb, Channel, Report} from "../../components";
 
 import DefaultBackground from "../../components/atoms/DefaultBackground";
 import {Container} from "@mui/material";
@@ -34,6 +34,8 @@ const Dashboard = () => {
             }} >
             <Breadcrumb title="Dashboard" subtitle="Configuration" active="Redemption" linkTo="/"/>
             <Channel setChannelValue={setChannelValue}/>
+
+                <Report/>
             </Box>
         </DefaultBackground>
     );
