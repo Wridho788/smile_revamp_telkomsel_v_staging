@@ -4,19 +4,19 @@ import {Box} from "@mui/material";
 import React, {useState} from 'react';
 
 
-interface ChannelProps {
-    setChannelValue: any;
+interface MerchantProps {
+    setMerchantValue: any;
 }
 
-const Index: FC<ChannelProps> = ({setChannelValue}: ChannelProps) => {
+const Index: FC<MerchantProps> = ({setMerchantValue}: MerchantProps) => {
     const [value, setValue] = useState(1);
     const onClickCard = (id?: any) => {
         setValue(id)
-        setChannelValue(id)
+        setMerchantValue(id)
     }
     return (
         <Box>
-            <H2 sx={{paddingTop: '50px', paddingBottom: '30px'}}>Channel</H2>
+            <H2 sx={{paddingTop: '50px', paddingBottom: '30px'}}>Merchant</H2>
             <Box
                 sx={{
                     display: 'grid',

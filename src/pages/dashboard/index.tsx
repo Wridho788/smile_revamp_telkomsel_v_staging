@@ -1,7 +1,10 @@
+<<<<<<< HEAD
 import {Breadcrumb, Channel, Report} from "../../components";
+=======
+import {Breadcrumb, Channel,Merchant} from "../../components";
+>>>>>>> feature/merchant
 
 import DefaultBackground from "../../components/atoms/DefaultBackground";
-import {Container} from "@mui/material";
 import React, {useState, useEffect} from 'react';
 import Dummy from "../../mock-data/index.json"
 import {Box} from "@mui/material";
@@ -34,8 +37,12 @@ const Dashboard = () => {
             }} >
             <Breadcrumb title="Dashboard" subtitle="Configuration" active="Redemption" linkTo="/"/>
             <Channel setChannelValue={setChannelValue}/>
+<<<<<<< HEAD
 
                 <Report/>
+=======
+            <Merchant setMerchantValue={setMerchantValue}/>
+>>>>>>> feature/merchant
             </Box>
         </DefaultBackground>
     );
