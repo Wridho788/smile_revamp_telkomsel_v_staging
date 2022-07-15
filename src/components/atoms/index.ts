@@ -1,31 +1,33 @@
 import Button from "./button";
 import Label from "./label";
 import Card from "./card";
+import ChannelCard from "./channelCard"
 import {
-  H1,
-  H2,
-  H3,
-  Subtitle,
-  BodyCopy,
-  SmallCopy,
-  PreTitle,
-  ButtonText,
-  MediumButtonText,
-  BigButtonText,
+    H1,
+    H2,
+    H3,
+    Subtitle,
+    BodyCopy,
+    SmallCopy,
+    PreTitle,
+    ButtonText,
+    MediumButtonText,
+    BigButtonText,
 } from "./Typography";
 
 export {
-  Button,
-  Label,
-  Card,
-  H1,
-  H2,
-  H3,
-  Subtitle,
-  BodyCopy,
-  SmallCopy,
-  PreTitle,
-  ButtonText,
-  MediumButtonText,
-  BigButtonText,
+    Button,
+    Label,
+    Card,
+    H1,
+    H2,
+    H3,
+    Subtitle,
+    BodyCopy,
+    SmallCopy,
+    PreTitle,
+    ButtonText,
+    MediumButtonText,
+    BigButtonText,
+    ChannelCard
 };

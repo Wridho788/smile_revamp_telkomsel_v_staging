@@ -1,0 +1,38 @@
+{
+  "page": 2,
+  "per_page": 6,
+  "total_data": 12,
+  "total_page": 2,
+  "data": [
+    {
+      "id": 1,
+      "product_id": 1,
+      "channel_id": 1,
+      "merchant_id": 1
+    },
+    {
+      "id": 2,
+      "product_id": 2,
+      "channel_id": 2,
+      "merchant_id": 2
+    },
+    {
+      "id": 3,
+      "product_id": 3,
+      "channel_id": 3,
+      "merchant_id": 3
+    },
+    {
+      "id": 3,
+      "product_id": 3,
+      "channel_id": 3,
+      "merchant_id": 3
+    },
+    {
+      "id": 3,
+      "product_id": 3,
+      "channel_id": 3,
+      "merchant_id": 3
+    }
+  ]
+}
