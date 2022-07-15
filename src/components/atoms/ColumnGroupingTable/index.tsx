@@ -42,8 +42,13 @@ const rows = [
   createData(2, "July 10, 2022", 14124221, 54124),
 ];
 
+//TODO loop data
+// let rows:any =[];
+// for (var i = 0; i < data.length; i++) {
+//   rows.push(createData(data.id, data.period, data[i].year_to_date, data[i].month_to_date));
+// }
 export default function ColumnGroupingTable(props: any) {
-  const { title = "Title" } = props;
+  const { title = "Title", data } = props;
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 

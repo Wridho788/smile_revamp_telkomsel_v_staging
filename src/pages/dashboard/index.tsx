@@ -9,7 +9,7 @@ const dataList = Dummy.data;
 const Dashboard = () => {
     const [channelValue, setChannelValue] = useState(0)
     const [merchantValue, setMerchantValue] = useState(0)
-    const [data, setDada] = useState(0)
+    const [data, setDada] = useState({})
 
     let rows: any = [];
     const updateList = (channelId?: any, merchantId?: any) => {
@@ -17,11 +17,12 @@ const Dashboard = () => {
             if (dataList[i].channel_id == channelId && dataList[i].merchant_id == merchantId) {
                 rows.push(dataList[i])
             }
-            setDada(rows);
         }
+        setDada(rows);
     }
     useEffect(() => {
         updateList(channelValue, merchantValue)
+        return;
     }, [channelValue, merchantValue]);
 
     return (
@@ -35,7 +36,7 @@ const Dashboard = () => {
                 <Breadcrumb title="Dashboard" subtitle="Configuration" active="Redemption" linkTo="/"/>
                 <Channel setChannelValue={setChannelValue}/>
                 <Merchant setMerchantValue={setMerchantValue}/>
-                <Report/>
+                <Report resultData={data}/>
             </Box>
         </DefaultBackground>
     );

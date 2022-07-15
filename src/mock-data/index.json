@@ -6,33 +6,43 @@
   "data": [
     {
       "id": 1,
-      "product_id": 1,
       "channel_id": 1,
-      "merchant_id": 1
+      "merchant_id": 1,
+      "period": "July 10, 2021",
+      "year_to_date": 14124221,
+      "month_to_date": 54124
     },
-    {
+     {
       "id": 2,
-      "product_id": 2,
       "channel_id": 2,
-      "merchant_id": 2
+      "merchant_id": 1,
+      "period": "July 10, 2021",
+      "year_to_date": 14124221,
+      "month_to_date": 54124
     },
-    {
+     {
       "id": 3,
-      "product_id": 3,
-      "channel_id": 3,
-      "merchant_id": 3
+      "channel_id": 2,
+      "merchant_id": 1,
+      "period": "July 10, 2021",
+      "year_to_date": 14124221,
+      "month_to_date": 54124
     },
-    {
-      "id": 3,
-      "product_id": 3,
-      "channel_id": 3,
-      "merchant_id": 3
+     {
+      "id": 4,
+      "channel_id": 2,
+      "merchant_id": 1,
+      "period": "July 10, 2021",
+      "year_to_date": 14124221,
+      "month_to_date": 54124
     },
-    {
-      "id": 3,
-      "product_id": 3,
-      "channel_id": 3,
-      "merchant_id": 3
+       {
+      "id": 5,
+      "channel_id": 1,
+      "merchant_id": 1,
+      "period": "July 10, 2021",
+      "year_to_date": 14124221,
+      "month_to_date": 54124
     }
   ]
 }
