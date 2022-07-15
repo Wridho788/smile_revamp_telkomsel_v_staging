@@ -1,0 +1,10 @@
+export { default as H1 } from "./H1";
+export { default as H2 } from "./H2";
+export { default as H3 } from "./H3";
+export { default as Subtitle } from "./Subtitle";
+export { default as BodyCopy } from "./BodyCopy";
+export { default as SmallCopy } from "./SmallCopy";
+export { default as PreTitle } from "./PreTitle";
+export { default as ButtonText } from "./ButtonText";
+export { default as MediumButtonText } from "./MediumButtonText";
+export { default as BigButtonText } from "./BigButtonText";
