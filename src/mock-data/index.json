@@ -15,31 +15,31 @@
      {
       "id": 2,
       "channel_id": 2,
-      "merchant_id": 1,
+      "merchant_id": 2,
       "period": "July 10, 2021",
       "year_to_date": 14124221,
       "month_to_date": 54124
     },
      {
       "id": 3,
-      "channel_id": 2,
-      "merchant_id": 1,
+      "channel_id": 3,
+      "merchant_id": 3,
       "period": "July 10, 2021",
       "year_to_date": 14124221,
       "month_to_date": 54124
     },
      {
       "id": 4,
-      "channel_id": 2,
-      "merchant_id": 1,
+      "channel_id": 4,
+      "merchant_id": 4,
       "period": "July 10, 2021",
       "year_to_date": 14124221,
       "month_to_date": 54124
     },
        {
       "id": 5,
-      "channel_id": 1,
-      "merchant_id": 1,
+      "channel_id": 5,
+      "merchant_id": 5,
       "period": "July 10, 2021",
       "year_to_date": 14124221,
       "month_to_date": 54124
