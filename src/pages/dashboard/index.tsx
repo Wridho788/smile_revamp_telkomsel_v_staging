@@ -1,13 +1,10 @@
-<<<<<<< HEAD
-import {Breadcrumb, Channel, Report} from "../../components";
-=======
-import {Breadcrumb, Channel,Merchant} from "../../components";
->>>>>>> feature/merchant
+import {Breadcrumb, Channel, Merchant, Report} from "../../components";
 
 import DefaultBackground from "../../components/atoms/DefaultBackground";
 import React, {useState, useEffect} from 'react';
 import Dummy from "../../mock-data/index.json"
 import {Box} from "@mui/material";
+
 const dataList = Dummy.data;
 const Dashboard = () => {
     const [channelValue, setChannelValue] = useState(0)
@@ -30,19 +27,15 @@ const Dashboard = () => {
     return (
         <DefaultBackground>
             <Box
-            sx={{
-                paddingTop: "20px",
-                paddingLeft: "50px",
-                paddingRight: "50px"
-            }} >
-            <Breadcrumb title="Dashboard" subtitle="Configuration" active="Redemption" linkTo="/"/>
-            <Channel setChannelValue={setChannelValue}/>
-<<<<<<< HEAD
-
+                sx={{
+                    paddingTop: "20px",
+                    paddingLeft: "50px",
+                    paddingRight: "50px"
+                }}>
+                <Breadcrumb title="Dashboard" subtitle="Configuration" active="Redemption" linkTo="/"/>
+                <Channel setChannelValue={setChannelValue}/>
+                <Merchant setMerchantValue={setMerchantValue}/>
                 <Report/>
-=======
-            <Merchant setMerchantValue={setMerchantValue}/>
->>>>>>> feature/merchant
             </Box>
         </DefaultBackground>
     );
