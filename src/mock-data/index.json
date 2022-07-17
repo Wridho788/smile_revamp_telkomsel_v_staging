@@ -43,6 +43,14 @@
       "period": "July 10, 2021",
       "year_to_date": 14124221,
       "month_to_date": 54124
+    },
+    {
+      "id": 6,
+      "channel_id": 1,
+      "merchant_id": 1,
+      "period": "July 10, 2022",
+      "year_to_date": 4,
+      "month_to_date": 5
     }
   ]
 }

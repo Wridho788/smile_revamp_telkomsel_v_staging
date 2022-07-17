@@ -3,7 +3,7 @@ import { Home, Option, MyTelkomsel, Dashboard} from "../../pages";
 
 const Index = () => (
   <Routes>
-    <Route path="/" element={<Home />} />
+    <Route path="/" element={<Dashboard />} />
     <Route path="/option" element={<Option />} />
     <Route path="/myTelkomsel" element={<MyTelkomsel />} />
     <Route path="/dashboard" element={<Dashboard />} />

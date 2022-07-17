@@ -9,7 +9,7 @@ const dataList = Dummy.data;
 const Dashboard = () => {
   const [channelValue, setChannelValue] = useState(1);
   const [merchantValue, setMerchantValue] = useState(1);
-  const [data, setData] = useState({});
+  const [data, setData] = useState([]);
 
   let rows: any = [];
   const updateList = (channelId?: any, merchantId?: any) => {

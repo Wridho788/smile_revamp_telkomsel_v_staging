@@ -8,20 +8,16 @@ import DarkButton from "../../../components/atoms/DarkButton";
 import KeywordSearch from "../../../components/atoms/KeywordSearch";
 
 interface IReportProps {
-  resultData: object;
+  resultData: Array<any>;
 }
 
 const Report: React.FunctionComponent<IReportProps> = ({ resultData }) => {
-  // TODO if need data string
-  const dataList = JSON.stringify(resultData);
+
   const datePickerRef = React.useRef<any>();
   const [filterValue, setFilterValue] = React.useState("");
 
-  console.log(dataList);
-
   return (
     <>
-      <H2>{dataList}</H2>
       <Stack
         direction={"row"}
         justifyContent={"space-between"}
@@ -47,13 +43,13 @@ const Report: React.FunctionComponent<IReportProps> = ({ resultData }) => {
         </Stack>
       </Stack>
       <Box mt={5}>
-        <ColumnGroupingTable title="POIN OWNER" data={dataList} />
+        <ColumnGroupingTable title="POIN OWNER" data={resultData} />
       </Box>
       <Box mt={5}>
-        <ColumnGroupingTable title="Gross Revenue" data={dataList} />
+        <ColumnGroupingTable title="Gross Revenue" data={resultData} />
       </Box>
       <Box mt={5}>
-        <ColumnGroupingTable title="Poin Earned" data={dataList} />
+        <ColumnGroupingTable title="Poin Earned" data={resultData} />
       </Box>
     </>
   );
