@@ -1,5 +1,5 @@
 import { Routes, Route } from "react-router-dom";
-import { Home, Option, MyTelkomsel, Dashboard} from "../../pages";
+import { Option, MyTelkomsel, Dashboard} from "../../pages";
 
 const Index = () => (
   <Routes>

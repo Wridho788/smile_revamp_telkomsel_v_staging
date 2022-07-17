@@ -36,11 +36,11 @@ function createData(
   return { id, periode, year_to_date, month_to_date };
 }
 
-const rows = [
-  createData(0, "July 10, 2021", 14124221, 54124),
-  createData(1, "July 10, 2022", 14124221, 54124),
-  createData(2, "July 10, 2022", 14124221, 54124),
-];
+// const rows = [
+//   createData(0, "July 10, 2021", 14124221, 54124),
+//   createData(1, "July 10, 2022", 14124221, 54124),
+//   createData(2, "July 10, 2022", 14124221, 54124),
+// ];
 
 
 export default function ColumnGroupingTable(props: any) {
