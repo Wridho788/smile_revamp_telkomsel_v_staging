@@ -12,7 +12,6 @@ interface IReportProps {
 }
 
 const Report: React.FunctionComponent<IReportProps> = ({ resultData }) => {
-
   const datePickerRef = React.useRef<any>();
   const [filterValue, setFilterValue] = React.useState("");
 
@@ -50,6 +49,57 @@ const Report: React.FunctionComponent<IReportProps> = ({ resultData }) => {
       </Box>
       <Box mt={5}>
         <ColumnGroupingTable title="Poin Earned" data={resultData} />
+      </Box>
+      <Box mt={5}>
+        <ColumnGroupingTable title="Redeemer Existing" data={resultData} />
+      </Box>
+      <Box mt={5}>
+        <ColumnGroupingTable title="Reward Live System" data={resultData} />
+      </Box>
+      <Box mt={5}>
+        <ColumnGroupingTable title="Reward TRX" data={resultData} />
+      </Box>
+      <Box mt={5}>
+        <ColumnGroupingTable title="Program" data={resultData} />
+      </Box>
+      <Box mt={5}>
+        <ColumnGroupingTable title="Redeemer" data={resultData} />
+      </Box>
+      <Box mt={5}>
+        <ColumnGroupingTable title="Gross Revenue Redeemer" data={resultData} />
+      </Box>
+      <Box mt={5}>
+        <ColumnGroupingTable title="Poin Earned Reedemer" data={resultData} />
+      </Box>
+      <Box mt={5}>
+        <ColumnGroupingTable title="Poin Burning" data={resultData} />
+      </Box>
+      <Box mt={5}>
+        <ColumnGroupingTable title="TRX Burn" data={resultData} />
+      </Box>
+      <Box mt={5}>
+        <ColumnGroupingTable title="Redeemer MyTelkomsel" data={resultData} />
+      </Box>
+      <Box mt={5}>
+        <ColumnGroupingTable
+          title="Gross Revenue Redeemer MyTelkomsel"
+          data={resultData}
+        />
+      </Box>
+      <Box mt={5}>
+        <ColumnGroupingTable
+          title="Poin Earned Reedemer MyTelkomsel"
+          data={resultData}
+        />
+      </Box>
+      <Box mt={5}>
+        <ColumnGroupingTable
+          title="Poin Burning MyTelkomsel"
+          data={resultData}
+        />
+      </Box>
+      <Box mt={5}>
+        <ColumnGroupingTable title="TRX Burn MyTelkomsel" data={resultData} />
       </Box>
     </>
   );
