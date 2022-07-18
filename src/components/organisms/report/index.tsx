@@ -42,7 +42,7 @@ const Report: React.FunctionComponent<IReportProps> = ({ resultData }) => {
         </Stack>
       </Stack>
       <Box mt={5}>
-        <ColumnGroupingTable title="POIN OWNER" data={resultData} />
+        <ColumnGroupingTable title="Poin Owner" data={resultData} />
       </Box>
       <Box mt={5}>
         <ColumnGroupingTable title="Gross Revenue" data={resultData} />
