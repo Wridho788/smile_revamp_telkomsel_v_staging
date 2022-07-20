@@ -1,11 +1,11 @@
 import * as React from "react";
 import { Box, Stack } from "@mui/material";
-import { BodyCopy, H2 } from "../../../components";
+import { BodyCopy, H2 } from "../..";
 import FilterListIcon from "@mui/icons-material/FilterList";
-import PopUpDatePicker from "../../../components/atoms/PopUpDatePicker";
-import ColumnGroupingTable from "../../../components/atoms/ColumnGroupingTable";
-import DarkButton from "../../../components/atoms/DarkButton";
-import KeywordSearch from "../../../components/atoms/KeywordSearch";
+import PopUpDatePicker from "../../atoms/PopUpDatePicker";
+import ColumnGroupingTable from "../../atoms/ColumnGroupingTable";
+import DarkButton from "../../atoms/DarkButton";
+import KeywordSearch from "../../atoms/KeywordSearch";
 
 interface IReportProps {
   resultData: Array<any>;
