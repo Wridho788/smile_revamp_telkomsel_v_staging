@@ -2,7 +2,7 @@ import * as React from "react";
 import { Box, Stack } from "@mui/material";
 import { BodyCopy, H2 } from "../../../components";
 import FilterListIcon from "@mui/icons-material/FilterList";
-import PopUpDatePickers from "../../../components/atoms/PopUpDatePicker";
+import PopUpDatePicker from "../../../components/atoms/PopUpDatePicker";
 import ColumnGroupingTable from "../../../components/atoms/ColumnGroupingTable";
 import DarkButton from "../../../components/atoms/DarkButton";
 import KeywordSearch from "../../../components/atoms/KeywordSearch";
@@ -34,7 +34,7 @@ const Report: React.FunctionComponent<IReportProps> = ({ resultData }) => {
             <BodyCopy>Filter</BodyCopy>
           </DarkButton>
           <Box display={"none"}>
-            <PopUpDatePickers
+            <PopUpDatePicker
               datePickerRef={datePickerRef}
               setFilterValue={setFilterValue}
             />

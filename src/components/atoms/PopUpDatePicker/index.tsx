@@ -4,7 +4,7 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { MobileDatePicker } from "@mui/x-date-pickers/MobileDatePicker";
 
-export default function PopUpDatePickers(props: any) {
+export default function PopUpDatePicker(props: any) {
   const { datePickerRef, setFilterValue } = props;
   const [value, setValue] = React.useState<Date | null>(new Date());
 
