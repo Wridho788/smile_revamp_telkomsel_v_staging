@@ -6,7 +6,7 @@ const Index = createTheme({
       main: "#ED0226",
     },
     secondary: {
-      light: "#ff4081",
+      light: "#4E5764",
       main: "#EDECF0",
       dark: "#001A41",
       contrastText: "#fff",

@@ -3,4 +3,5 @@ import Tes from "./tes";
 import Channel from "./channel";
 import Report from "./Report";
 import Merchant from "./merchant";
-export { Tes, MainCard, Channel, Report, Merchant };
+import Programs from "./Programs";
+export { Tes, MainCard, Channel, Report, Merchant, Programs };

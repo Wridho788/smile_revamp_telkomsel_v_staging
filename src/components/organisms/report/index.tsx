@@ -23,12 +23,12 @@ const Report: React.FunctionComponent<IReportProps> = ({ resultData }) => {
         sx={{ paddingTop: "50px" }}
       >
         <H2>Products</H2>
-        <Stack direction="row" spacing={2}>
+        <Stack direction="row" alignItems="center" spacing={2}>
           <KeywordSearch />
           <DarkButton
             onClick={() => datePickerRef.current.click()}
             variant="contained"
-            size="small"
+            size="medium"
             startIcon={<FilterListIcon />}
           >
             <BodyCopy>Filter</BodyCopy>

@@ -36,14 +36,14 @@ const Dashboard = () => {
           paddingRight: "50px",
         }}
       >
-        {/* <Breadcrumb
+        <Breadcrumb
           title="Dashboard"
           subtitle="Configuration"
           active="Redemption"
           linkTo="/"
         />
         <Channel setChannelValue={setChannelValue} />
-        <Merchant setMerchantValue={setMerchantValue} /> */}
+        <Merchant setMerchantValue={setMerchantValue} />
         {/* {console.log(data)} */}
         <Report resultData={data} />
       </Box>
