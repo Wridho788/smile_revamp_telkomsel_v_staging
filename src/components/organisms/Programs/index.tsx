@@ -1,20 +1,12 @@
 import * as React from "react";
-import {
-  Box,
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  Grid,
-  Stack,
-  Typography,
-} from "@mui/material";
-import { BodyCopy, H2, PreTitle } from "../..";
+import { Box, Card, CardContent, Grid, IconButton, Stack } from "@mui/material";
+import { BodyCopy, H2, SmallCopy, PreTitle } from "../..";
 import KeywordSearch from "../../atoms/KeywordSearch";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import DarkButton from "../../atoms/DarkButton";
 import ListButton from "../../atoms/ListButton";
 import CardButton from "../../atoms/CardButton";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
 
 interface IProgramsProps {
   programsData: any;
@@ -28,11 +20,7 @@ const Programs: React.FunctionComponent<IProgramsProps> = ({
   const [listForm, setListForm] = React.useState("card");
   return (
     <>
-      <Stack
-        direction={"row"}
-        justifyContent={"space-between"}
-        sx={{ paddingTop: "50px" }}
-      >
+      <Stack direction={"row"} justifyContent={"space-between"}>
         <H2 color={"secondary.dark"}>Program</H2>
         <Stack direction="row" alignItems="center" spacing={"1vw"}>
           <ListButton
@@ -70,8 +58,8 @@ const Programs: React.FunctionComponent<IProgramsProps> = ({
               <Grid key={id} item xs={1}>
                 <Card>
                   <CardContent>
-                    <Grid container spacing={"1vw"} columns={8}>
-                      <Grid item xs={7}>
+                    <Grid container columns={11}>
+                      <Grid item xs={9}>
                         <PreTitle
                           color={"secondary.light"}
                           sx={{ opacity: 0.5 }}
@@ -79,29 +67,43 @@ const Programs: React.FunctionComponent<IProgramsProps> = ({
                           {_.link}
                         </PreTitle>
                       </Grid>
+                      <Grid item xs={1}>
+                        <IconButton
+                          size="small"
+                          sx={{
+                            bgcolor: "secondary.main",
+                            borderRadius: "0.4vw",
+                            opacity: 0.8,
+                          }}
+                        >
+                          <MoreVertIcon fontSize="inherit" />
+                        </IconButton>
+                      </Grid>
                     </Grid>
-                    <Typography
-                      sx={{ fontSize: 14 }}
-                      color="text.secondary"
-                      gutterBottom
-                    >
-                      Word of the Day
-                    </Typography>
-                    <Typography variant="h5" component="div">
-                      benevolent
-                    </Typography>
-                    <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                      adjective
-                    </Typography>
-                    <Typography variant="body2">
-                      well meaning and kindly.
-                      <br />
-                      {'"a benevolent smile"'}
-                    </Typography>
+                    <H2 mt={"2.5vw"}>{_.title}</H2>
+                    <Stack direction={"row"} spacing={"0.1vw"} mt={"0.5vw"}>
+                      <Box
+                        bgcolor={"secondary.main"}
+                        color={"secondary.light"}
+                        borderRadius={"1vw"}
+                        px={"0.9vw"}
+                        py={"0.2vw"}
+                        sx={{ opacity: 0.8 }}
+                      >
+                        <SmallCopy>{_.unit_amount}</SmallCopy>
+                      </Box>
+                      <Box
+                        bgcolor={"secondary.main"}
+                        color={"secondary.light"}
+                        borderRadius={"1vw"}
+                        px={"0.9vw"}
+                        py={"0.2vw"}
+                        sx={{ opacity: 0.8 }}
+                      >
+                        <SmallCopy>{_.rules_amount}</SmallCopy>
+                      </Box>
+                    </Stack>
                   </CardContent>
-                  <CardActions>
-                    <Button size="small">Learn More</Button>
-                  </CardActions>
                 </Card>
               </Grid>
             ))

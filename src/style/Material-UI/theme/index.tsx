@@ -22,7 +22,7 @@ const Index = createTheme({
     },
     background: {
       default: "#F5F5F5",
-      paper: "#fff",
+      paper: "#FFFFFF",
     },
   },
 

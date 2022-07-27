@@ -3,37 +3,37 @@
     {
       "id": 0,
       "link": "Unilever / Internal Product",
-      "title": "#SurpriseDeal Unlimited FUP 6...",
-      "unit_amount": 1000,
-      "rules_amount": 1
+      "title": "#SurpriseDeal Unlimited FUP",
+      "unit_amount": "1000 Unit",
+      "rules_amount": "1 Rules"
     },
     {
       "id": 1,
       "link": "Telkomsel Indonesia / Internal Product",
-      "title": "#SurpriseDeal Unlimited FUP 1...",
-      "unit_amount": 1000,
-      "rules_amount": 1
+      "title": "#SurpriseDeal Unlimited FUP",
+      "unit_amount": "1000 Unit",
+      "rules_amount": "0 Rules"
     },
     {
       "id": 2,
       "link": "Unilever / External Product",
       "title": "Samsung J5 - Auction",
-      "unit_amount": 20,
-      "rules_amount": 2
+      "unit_amount": "20 Unit",
+      "rules_amount": "2 Rules"
     },
     {
       "id": 3,
       "link": "Telkomsel Indonesia / External Product",
       "title": "Samsung J5 - Auction",
-      "unit_amount": 1000,
-      "rules_amount": 5
+      "unit_amount": "1000 Unit",
+      "rules_amount": "5 Rules"
     },
     {
       "id": 4,
       "link": "Telkomsel Indonesia / External Product",
       "title": "Samsung J5 - Auction",
-      "unit_amount": 1000,
-      "rules_amount": 5
+      "unit_amount": "1000 Unit",
+      "rules_amount": "5 Rules"
     }
   ]
 }
