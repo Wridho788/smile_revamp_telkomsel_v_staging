@@ -4,11 +4,13 @@ import Report from './report'
 import Merchant from "./merchant"
 import LoginCard from "./loginCard"
 import AlertCard from "./alertCard"
+import DashboardSection from "./DashboardSection";
 export {
     MainCard,
     Channel,
     Report,
     Merchant,
     LoginCard,
-    AlertCard
+    AlertCard,
+    DashboardSection
 }
