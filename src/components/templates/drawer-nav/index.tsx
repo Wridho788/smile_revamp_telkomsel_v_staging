@@ -21,6 +21,7 @@ import {BodyCopy, H1, H2, H3} from "../../../components";
 import {Avatar, CardMedia} from "@mui/material";
 import {LogoTsel, SuccessAlert} from "../../../assets"
 import {menuItems} from '../../../mocks/menuItems'
+import { Link } from "react-router-dom";
 
 const drawerWidth = 240;
 
@@ -131,10 +132,10 @@ const Index: React.FC<LayoutProps> = ({children}: LayoutProps) => {
             </AppBar>
             <Drawer variant="permanent" open={open}>
                 <DrawerHeader>
-                    <H2 sx={{
+                    <H1 sx={{
                         color: theme.palette.primary.main,
                         textAlign: "center",
-                    }}>Telkomsel</H2>
+                    }}>Telkomsel</H1>
                     <IconButton onClick={handleDrawerClose}>
                         {theme.direction === 'rtl' ? <ChevronRightIcon/> : <ChevronLeftIcon/>}
                     </IconButton>
@@ -144,7 +145,7 @@ const Index: React.FC<LayoutProps> = ({children}: LayoutProps) => {
                     {menuItems.map((menu, index) =>
                         (
                             <ListItem key={index} disablePadding sx={{display: 'block'}}>
-                                <ListItemButton
+                                <ListItemButton component={Link} to={menu.path}
                                     sx={{
                                         minHeight: 48,
                                         justifyContent: open ? 'initial' : 'center',

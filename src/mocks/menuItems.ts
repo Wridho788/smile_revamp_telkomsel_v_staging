@@ -15,7 +15,7 @@ export interface Menu {
     hasChild?: boolean
     icon: any
     child?: ChildMenu[]
-    path?: string
+    path: string
 }
 
 export interface ChildMenu {
@@ -25,28 +25,35 @@ export interface ChildMenu {
 }
 
 export const menuItems: Menu[] = [
+    // {
+    //     label: 'Management Program',
+    //     hasChild: true,
+    //     icon: PersonSearch,
+    //     child: [
+    //         {
+    //             label: 'Program',
+    //             path: '/program',
+    //             alias: ['/program'],
+    //         },
+    //         {
+    //             label: 'Program Mechanism',
+    //             path: '/progarmMechanism',
+    //             alias: ['/progarmMechanism'],
+    //         },
+    //     ],
+    // },
+
     {
         label: 'Management Program',
-        hasChild: true,
+        hasChild: false,
         icon: PersonSearch,
-        child: [
-            {
-                label: 'Program',
-                path: '/program',
-                alias: ['/program'],
-            },
-            {
-                label: 'Program Mechanism',
-                path: '/progarmMechanism',
-                alias: ['/progarmMechanism'],
-            },
-        ],
+        path: '/program-management',
     },
     {
         label: 'Merchant',
         hasChild: false,
         icon: Storefront,
-        path: '/merchant',
+        path: '/dashboard',
     },
     {
         label: 'Configuration',
