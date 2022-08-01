@@ -15,11 +15,12 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import {Avatar, Collapse} from "@mui/material";
-import {LogoTsel, TelkomselLabel} from "../../../assets"
+import {BtnArrowLeft, BtnArrowRight, LogoTsel, TelkomselLabel, UserIcon} from "../../../assets"
 import {menuItems} from '../../../mocks/menuItems'
 import {Link} from "react-router-dom";
-import {StarBorder} from "@mui/icons-material";
+import {ExpandLess, ExpandMore, StarBorder} from "@mui/icons-material";
 import SidebarItem from "./sidebarItem";
+import {SmallCopy} from "../../atoms";
 
 const drawerWidth = 260;
 const drawerHeight = "50%";
@@ -83,20 +84,13 @@ interface LayoutProps {
 
 const Index: React.FC<LayoutProps> = ({children}: LayoutProps) => {
     const theme = useTheme();
-    const [open, setOpen] = React.useState(false);
-    let [openList, setOpenList] = React.useState(0);
+    // const [open, setOpen] = React.useState(false);
+    let [open, setOpenList] = React.useState(false);
 
-    const handleClick = (id?: any) => {
-        setOpenList(id);
+    const handleClick = () => {
+        setOpenList(!open);
     };
 
-    const handleDrawerOpen = () => {
-        setOpen(true);
-    };
-
-    const handleDrawerClose = () => {
-        setOpen(false);
-    };
 
     return (
         <Box>
@@ -107,17 +101,13 @@ const Index: React.FC<LayoutProps> = ({children}: LayoutProps) => {
                         <IconButton
                             color="inherit"
                             aria-label="open drawer"
-                            onClick={handleDrawerOpen}
                             edge="start"
                         >
                             <img src={LogoTsel} srcSet={LogoTsel} style={{width: 28, height: 35}}/>
                         </IconButton>
                     </Toolbar> :
-                    <DrawerHeader>
+                    <DrawerHeader sx={{justifyContent: "center"}}>
                         <img src={TelkomselLabel} srcSet={TelkomselLabel} style={{height: 55}}/>
-                        <IconButton onClick={handleDrawerClose}>
-                            {theme.direction === 'rtl' ? <ChevronRightIcon/> : <ChevronLeftIcon/>}
-                        </IconButton>
                     </DrawerHeader>
                 }
                 <Divider/>
@@ -127,6 +117,50 @@ const Index: React.FC<LayoutProps> = ({children}: LayoutProps) => {
                             <SidebarItem menu={menu} openMenu={open}/>
                         ))}
                 </List>
+
+                <IconButton style={{
+                    position: 'absolute', //Here is the trick
+                    bottom: 35,
+                    left: -10,
+                }}
+                            onClick={handleClick}>
+                    <img src={open ? BtnArrowRight : BtnArrowLeft} style={{height: 35}}/>
+                </IconButton>
+
+                <Box style={{
+                    width: "100%",
+                    position: 'absolute',
+                    bottom: 10,
+                }}>
+
+                    <Divider/>
+
+                    <ListItem disablePadding sx={{
+                        display: 'block',
+                        top: 10,
+                    }}>
+                        <ListItemButton
+                            sx={{
+                                minHeight: 48,
+                                justifyContent: open ? 'initial' : 'center',
+                                px: 2.5,
+                            }}
+                        >
+                            <ListItemIcon
+                                sx={{
+                                    minWidth: 0,
+                                    mr: open ? 3 : 'auto',
+                                    justifyContent: 'center',
+                                }}
+                            >
+
+                                <img src={UserIcon} style={{height: 30}}/>
+                            </ListItemIcon>
+                            <ListItemText primary={<SmallCopy>{'Nathan Smitch'}</SmallCopy>}
+                                          sx={{opacity: open ? 1 : 0}}/>
+                        </ListItemButton>
+                    </ListItem>
+                </Box>
             </Drawer>
             <Box component="main" sx={{flexGrow: 1, p: 3, marginBottom: 40}}>
                 <DrawerHeader/>
