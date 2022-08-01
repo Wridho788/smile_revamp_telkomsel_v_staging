@@ -7624,6 +7624,11 @@ react-transition-group@^4.4.2:
     loose-envify "^1.4.0"
     prop-types "^15.6.2"
 
+react-use-disclosure@^5.2.0:
+  version "5.2.0"
+  resolved "https://registry.yarnpkg.com/react-use-disclosure/-/react-use-disclosure-5.2.0.tgz#009d4aaa0fb4f704c0a3258012d0074308fe012a"
+  integrity sha512-L6aUO2Fpe6zRoE7KK2catDjWOdggOkk/C5OhOOVFRxb3ui6WXO2Tehqut7hvT+bzwwms9wknhlAOe579P2yyRw==
+
 react@^18.2.0:
   version "18.2.0"
   resolved "https://registry.npmjs.org/react/-/react-18.2.0.tgz#555bd98592883255fa00de14f1151a917b5d77d5"

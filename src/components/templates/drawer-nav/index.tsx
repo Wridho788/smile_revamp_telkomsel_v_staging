@@ -6,7 +6,6 @@ import MuiAppBar, {AppBarProps as MuiAppBarProps} from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import List from '@mui/material/List';
 import CssBaseline from '@mui/material/CssBaseline';
-import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
@@ -15,18 +14,21 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
-import {BodyCopy, H1, H2, H3} from "../../../components";
-import {Avatar, CardMedia} from "@mui/material";
-import {LogoTsel, SuccessAlert} from "../../../assets"
+import {Avatar, Collapse} from "@mui/material";
+import {LogoTsel, TelkomselLabel} from "../../../assets"
 import {menuItems} from '../../../mocks/menuItems'
-import { Link } from "react-router-dom";
+import {Link} from "react-router-dom";
+import {StarBorder} from "@mui/icons-material";
+import SidebarItem from "./sidebarItem";
 
-const drawerWidth = 240;
+const drawerWidth = 260;
+const drawerHeight = "50%";
+const drawerPosition = "25%"
 
 const openedMixin = (theme: Theme): CSSObject => ({
+    top: drawerPosition,
     width: drawerWidth,
+    height: drawerHeight,
     transition: theme.transitions.create('width', {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.enteringScreen,
@@ -35,6 +37,8 @@ const openedMixin = (theme: Theme): CSSObject => ({
 });
 
 const closedMixin = (theme: Theme): CSSObject => ({
+    top: drawerPosition,
+    height: drawerHeight,
     transition: theme.transitions.create('width', {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen,
@@ -55,27 +59,6 @@ const DrawerHeader = styled('div')(({theme}) => ({
     ...theme.mixins.toolbar,
 }));
 
-interface AppBarProps extends MuiAppBarProps {
-    open?: boolean;
-}
-
-const AppBar = styled(MuiAppBar, {
-    shouldForwardProp: (prop) => prop !== 'open',
-})<AppBarProps>(({theme, open}) => ({
-    zIndex: theme.zIndex.drawer + 1,
-    transition: theme.transitions.create(['width', 'margin'], {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.leavingScreen,
-    }),
-    ...(open && {
-        marginLeft: drawerWidth,
-        width: `calc(100% - ${drawerWidth}px)`,
-        transition: theme.transitions.create(['width', 'margin'], {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.enteringScreen,
-        }),
-    }),
-}));
 
 const Drawer = styled(MuiDrawer, {shouldForwardProp: (prop) => prop !== 'open'})(
     ({theme, open}) => ({
@@ -101,6 +84,11 @@ interface LayoutProps {
 const Index: React.FC<LayoutProps> = ({children}: LayoutProps) => {
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
+    let [openList, setOpenList] = React.useState(0);
+
+    const handleClick = (id?: any) => {
+        setOpenList(id);
+    };
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -111,59 +99,32 @@ const Index: React.FC<LayoutProps> = ({children}: LayoutProps) => {
     };
 
     return (
-        <Box sx={{display: 'flex'}}>
+        <Box>
             <CssBaseline/>
-            <AppBar position="fixed" open={open} sx={{backgroundColor: "white", color: "black"}}>
-                <Toolbar>
-                    <IconButton
-                        color="inherit"
-                        aria-label="open drawer"
-                        onClick={handleDrawerOpen}
-                        edge="start"
-                        sx={{
-                            marginRight: 5,
-                            ...(open && {display: 'none'}),
-                        }}
-                    >
-                        <Avatar alt="Remy Sharp" src={LogoTsel} sx={{width: 24, height: 24}}/>
-                    </IconButton>
-                    <BodyCopy>DASHBOARD</BodyCopy>
-                </Toolbar>
-            </AppBar>
-            <Drawer variant="permanent" open={open}>
-                <DrawerHeader>
-                    <H1 sx={{
-                        color: theme.palette.primary.main,
-                        textAlign: "center",
-                    }}>Telkomsel</H1>
-                    <IconButton onClick={handleDrawerClose}>
-                        {theme.direction === 'rtl' ? <ChevronRightIcon/> : <ChevronLeftIcon/>}
-                    </IconButton>
-                </DrawerHeader>
+            <Drawer variant="permanent" open={open} anchor="right">
+                {open == false ?
+                    <Toolbar>
+                        <IconButton
+                            color="inherit"
+                            aria-label="open drawer"
+                            onClick={handleDrawerOpen}
+                            edge="start"
+                        >
+                            <img src={LogoTsel} srcSet={LogoTsel} style={{width: 28, height: 35}}/>
+                        </IconButton>
+                    </Toolbar> :
+                    <DrawerHeader>
+                        <img src={TelkomselLabel} srcSet={TelkomselLabel} style={{height: 55}}/>
+                        <IconButton onClick={handleDrawerClose}>
+                            {theme.direction === 'rtl' ? <ChevronRightIcon/> : <ChevronLeftIcon/>}
+                        </IconButton>
+                    </DrawerHeader>
+                }
                 <Divider/>
                 <List>
                     {menuItems.map((menu, index) =>
                         (
-                            <ListItem key={index} disablePadding sx={{display: 'block'}}>
-                                <ListItemButton component={Link} to={menu.path}
-                                    sx={{
-                                        minHeight: 48,
-                                        justifyContent: open ? 'initial' : 'center',
-                                        px: 2.5,
-                                    }}
-                                >
-                                    <ListItemIcon
-                                        sx={{
-                                            minWidth: 0,
-                                            mr: open ? 3 : 'auto',
-                                            justifyContent: 'center',
-                                        }}
-                                    >
-                                        {<menu.icon/>}
-                                    </ListItemIcon>
-                                    <ListItemText primary={menu.label} sx={{opacity: open ? 1 : 0}}/>
-                                </ListItemButton>
-                            </ListItem>
+                            <SidebarItem menu={menu} openMenu={open}/>
                         ))}
                 </List>
             </Drawer>
