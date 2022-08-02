@@ -6,6 +6,7 @@ import LoginCard from "./loginCard"
 import AlertCard from "./alertCard"
 import Programs from "./Programs";
 import DashboardSection from "./DashboardSection";
+import Keyword from "./Keyword";
 export {
     MainCard,
     Channel,
@@ -14,5 +15,6 @@ export {
     LoginCard,
     AlertCard,
     DashboardSection,
-    Programs
+    Programs,
+    Keyword
 }
