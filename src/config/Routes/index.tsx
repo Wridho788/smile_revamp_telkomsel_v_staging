@@ -6,7 +6,7 @@ import {
   LoginPage,
   ProgramManagement,
   ProgramPage,
-  CreateProgramPage,
+  CreateProgram,
 } from "../../pages";
 
 const Index = () => (
@@ -16,7 +16,7 @@ const Index = () => (
     <Route path="/dashboard" element={<Dashboard />} />
     <Route path="/program-management" element={<ProgramPage />} />
     <Route path="/login" element={<LoginPage />} />
-    <Route path="/create-program" element={<CreateProgramPage />} />
+    <Route path="/create-program" element={<CreateProgram />} />
   </Routes>
 );
 export default Index;

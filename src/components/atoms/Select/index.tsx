@@ -12,7 +12,8 @@ import { BodyCopy } from "../Typography";
 interface IIndexProps {
   label?: string;
   placeholder?: string;
-  options?: [];
+  options?: string[];
+  returnedValue?: any;
   setReturnedValue?: any;
 }
 
@@ -20,12 +21,13 @@ const Index: React.FunctionComponent<IIndexProps> = ({
   label,
   placeholder,
   options,
+  returnedValue,
   setReturnedValue,
 }) => {
-  const [value, setValue] = React.useState("");
+  //   const [value, setValue] = React.useState("");
 
   const handleChangeValue = (event: SelectChangeEvent) => {
-    setValue(event.target.value);
+    // setValue(event.target.value);
     setReturnedValue(event.target.value);
   };
 
@@ -37,8 +39,7 @@ const Index: React.FunctionComponent<IIndexProps> = ({
       <Grid item xs={6}>
         <FormControl sx={{ minWidth: "100%" }}>
           <Select
-            multiple
-            value={value}
+            value={returnedValue}
             onChange={handleChangeValue}
             displayEmpty
             size="small"
@@ -48,6 +49,7 @@ const Index: React.FunctionComponent<IIndexProps> = ({
               if (selected.length === 0) {
                 return <>{placeholder}</>;
               }
+              return selected;
             }}
           >
             <MenuItem disabled value="">

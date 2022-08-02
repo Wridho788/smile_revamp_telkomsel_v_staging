@@ -4,7 +4,7 @@ import Dashboard from "./Dashboard";
 import ProgramManagement from "./ProgramManagement";
 import LoginPage from "./Login";
 import ProgramPage from "./ProgramPage";
-import CreateProgramPage from "./CreateProgram";
+import CreateProgram from "./CreateProgram";
 
 export {
   Option,
@@ -13,5 +13,5 @@ export {
   LoginPage,
   ProgramManagement,
   ProgramPage,
-  CreateProgramPage,
+  CreateProgram,
 };
