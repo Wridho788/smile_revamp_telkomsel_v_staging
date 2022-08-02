@@ -17,6 +17,7 @@ import {
 import StepperPaper from "./StepperPaper";
 import Select from "./Select";
 import OutlinedTextField from "./OutlinedTextField";
+import ResponsiveDateTimePicker from "./ResponsiveDateTimePicker";
 
 export {
   Button,
@@ -36,4 +37,5 @@ export {
   StepperPaper,
   Select,
   OutlinedTextField,
+  ResponsiveDateTimePicker,
 };

@@ -1,8 +1,9 @@
-import { OutlinedTextFieldProps } from "@mui/material";
+import { SelectProps } from "@mui/material";
 
-export interface IOutlinedTextFieldProps extends OutlinedTextFieldProps {
+export interface ISelectProps extends SelectProps {
   label?: string;
   placeholder?: string;
+  options?: string[];
   value?: any;
   setValue?: any;
   totalColumn?: number;

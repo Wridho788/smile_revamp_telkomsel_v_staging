@@ -6,26 +6,33 @@ import { IOutlinedTextFieldProps } from "./types";
 const Index: React.FunctionComponent<IOutlinedTextFieldProps> = ({
   label,
   placeholder,
-  returnedValue,
-  setReturnedValue,
+  value,
+  setValue,
+  totalColumn = 10,
+  leftColumn = 4,
+  rightColumn = 6,
+  ...props
 }) => {
   const handleChangeValue = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setReturnedValue(event.target.value);
+    setValue(event.target.value);
   };
   return (
-    <Grid container columns={10} alignItems={"center"}>
-      <Grid item xs={4}>
+    <Grid
+      container
+      columns={label ? totalColumn : rightColumn}
+      alignItems={"center"}
+    >
+      <Grid item xs={label ? leftColumn : 0}>
         <BodyCopy>{label}</BodyCopy>
       </Grid>
-      <Grid item xs={6}>
+      <Grid item xs={rightColumn}>
         <TextField
-          id="outlined-basic"
-          value={returnedValue}
+          value={value}
           onChange={handleChangeValue}
           placeholder={placeholder}
-          variant={"outlined"}
           size="small"
           sx={{ width: "100%" }}
+          {...props}
         />
       </Grid>
     </Grid>

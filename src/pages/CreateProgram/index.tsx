@@ -6,9 +6,8 @@ const CreateProgram = () => {
   return (
     <Box
       sx={{
-        paddingTop: "3vw",
-        paddingLeft: "50px",
-        paddingRight: "50px",
+        paddingBlock: "5vw",
+        paddingInline: "5vw",
       }}
     >
       <MainInfo />

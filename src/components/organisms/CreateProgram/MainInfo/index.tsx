@@ -1,6 +1,12 @@
-import { Stack } from "@mui/material";
+import { Grid, Stack } from "@mui/material";
 import * as React from "react";
-import { Select, OutlinedTextField } from "../../../atoms";
+import {
+  Select,
+  OutlinedTextField,
+  ResponsiveDateTimePicker,
+  BodyCopy,
+  H1,
+} from "../../../atoms";
 import StepperPaper from "../../../atoms/StepperPaper";
 
 interface IMainInfoProps {}
@@ -11,11 +17,16 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
   const [pointType, setPointType] = React.useState("");
   const [mechanism, setMechanism] = React.useState("");
   const [owner, setOwner] = React.useState("");
+  const [startPeriod, setStartPeriod] = React.useState("");
+  const [endPeriod, setEndPeriod] = React.useState("");
+  const [cPointBalance, setCPointBalance] = React.useState("");
+  const [startNumeric, setStartNumeric] = React.useState("");
+  const [endNumeric, setEndNumeric] = React.useState("");
+  const [cLOSEnabled, setCLOSEnabled] = React.useState("");
+  const [cLOSType, setCLOSType] = React.useState("");
+  const [cLOSValue, setCLOSValue] = React.useState("");
 
-  const typeOptions = ["Type 1", "Type 2", "Type 3"];
-  const pointTypeOptions = ["Point Type 1", "Point Type 2", "Point Type 3"];
-  const mechanismOptions = ["Mechanism 1", "Mechanism 2", "Mechanism 3"];
-  const ownerOptions = ["Owner 1", "Owner 2", "Owner 3"];
+  const Options = ["Option 1", "Option 2", "Option 3"];
 
   return (
     <>
@@ -24,43 +35,122 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
           <Select
             label="Type"
             placeholder="Option"
-            options={typeOptions}
-            returnedValue={type}
-            setReturnedValue={setType}
+            options={Options}
+            value={type}
+            setValue={setType}
           />
           <OutlinedTextField
             label="Name"
-            placeholder="Text"
-            returnedValue={name}
-            setReturnedValue={setName}
+            placeholder="Name"
+            value={name}
+            setValue={setName}
             variant={"outlined"}
           />
           <Select
             label="Point Type"
             placeholder="Option"
-            options={pointTypeOptions}
-            returnedValue={pointType}
-            setReturnedValue={setPointType}
+            options={Options}
+            value={pointType}
+            setValue={setPointType}
           />
           <Select
             label="Mechanism"
             placeholder="Option"
-            options={mechanismOptions}
-            returnedValue={mechanism}
-            setReturnedValue={setMechanism}
+            options={Options}
+            value={mechanism}
+            setValue={setMechanism}
           />
           <Select
             label="Owner"
             placeholder="Option"
-            options={ownerOptions}
-            returnedValue={owner}
-            setReturnedValue={setOwner}
+            options={Options}
+            value={owner}
+            setValue={setOwner}
           />
           <OutlinedTextField
             label="Owner Detail"
-            placeholder="Text Area"
-            returnedValue={name}
-            setReturnedValue={setName}
+            placeholder="Owner Detail"
+            value={name}
+            setValue={setName}
+            variant={"outlined"}
+            multiline
+            rows={4}
+          />
+          <ResponsiveDateTimePicker
+            label="Start Period"
+            placeholder="Start Period"
+            value={startPeriod}
+            setValue={setStartPeriod}
+          />
+          <ResponsiveDateTimePicker
+            label="End Period"
+            placeholder="End Period"
+            value={endPeriod}
+            setValue={setEndPeriod}
+          />
+        </Stack>
+        <Stack mt={"1vw"} spacing={"1vw"} maxWidth={"100%"}>
+          <OutlinedTextField
+            label="Description"
+            placeholder="Description"
+            value={name}
+            setValue={setName}
+            variant={"outlined"}
+            multiline
+            rows={10}
+            totalColumn={5}
+            leftColumn={1}
+            rightColumn={4}
+          />
+          <Grid container columns={10}>
+            <Grid item xs={5}>
+              <Select
+                label="C. Point Balance"
+                placeholder="Option"
+                options={Options}
+                value={cPointBalance}
+                setValue={setCPointBalance}
+              />
+            </Grid>
+            <Grid item xs={5} pl="1vw">
+              <Stack direction="row" spacing={"1vw"} alignItems="center">
+                <OutlinedTextField
+                  placeholder="Start Numeric"
+                  value={startNumeric}
+                  setValue={setStartNumeric}
+                  variant={"outlined"}
+                />
+                <H1 lineHeight={0}>-</H1>
+                <OutlinedTextField
+                  placeholder="End Numeric"
+                  value={endNumeric}
+                  setValue={setEndNumeric}
+                  variant={"outlined"}
+                />
+              </Stack>
+            </Grid>
+          </Grid>
+        </Stack>
+        <Stack mt="1vw" spacing={"1vw"} maxWidth={"50%"}>
+          <Select
+            label="C. LOS Enabled"
+            placeholder="Option"
+            options={Options}
+            value={cLOSEnabled}
+            setValue={setCLOSEnabled}
+          />
+          <Select
+            label="C. LOS Type"
+            placeholder="Option"
+            options={Options}
+            value={cLOSType}
+            setValue={setCLOSType}
+          />
+          <OutlinedTextField
+            label="C. LOS Value"
+            placeholder="C. LOS Value"
+            value={cLOSValue}
+            setValue={setCLOSValue}
             variant={"outlined"}
           />
         </Stack>
