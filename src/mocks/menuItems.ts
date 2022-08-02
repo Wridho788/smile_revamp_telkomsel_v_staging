@@ -44,12 +44,6 @@ export const menuItems: Menu[] = [
     },
 
     {
-        label: 'Management Program',
-        hasChild: false,
-        icon: PersonSearch,
-        path: '/program-management',
-    },
-    {
         label: 'Merchant',
         hasChild: false,
         icon: Storefront,
@@ -79,5 +73,11 @@ export const menuItems: Menu[] = [
         hasChild: false,
         icon: Redeem,
         path: '/luckyDraw',
+    },
+    {
+        label: 'Keyword',
+        hasChild: false,
+        icon: Redeem,
+        path: '/keyword',
     }
 ]

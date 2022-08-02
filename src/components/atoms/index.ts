@@ -2,6 +2,7 @@ import Button from "./button";
 import Label from "./label";
 import Card from "./card";
 import ChannelCard from "./channelCard"
+import Stepper from "./Stepper"
 import {
     H1,
     H2,
@@ -29,5 +30,6 @@ export {
     ButtonText,
     MediumButtonText,
     BigButtonText,
-    ChannelCard
+    ChannelCard,
+    Stepper
 };
