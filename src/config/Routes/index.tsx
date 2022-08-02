@@ -1,11 +1,12 @@
 import { Routes, Route } from "react-router-dom";
 
 import {
-    MyTelkomsel,
-    Dashboard,
-    LoginPage,
-    ProgramManagement,
-    ProgramPage
+  MyTelkomsel,
+  Dashboard,
+  LoginPage,
+  ProgramManagement,
+  ProgramPage,
+  CreateProgramPage,
 } from "../../pages";
 
 const Index = () => (
@@ -15,6 +16,7 @@ const Index = () => (
     <Route path="/dashboard" element={<Dashboard />} />
     <Route path="/program-management" element={<ProgramPage />} />
     <Route path="/login" element={<LoginPage />} />
+    <Route path="/create-program" element={<CreateProgramPage />} />
   </Routes>
 );
 export default Index;

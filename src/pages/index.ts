@@ -1,15 +1,17 @@
-import Option from "./option";
-import MyTelkomsel from "./myTelkomsel";
-import Dashboard from "./dashboard";
-import ProgramManagement from "./programManagement";
-import LoginPage from "./login"
-import ProgramPage from "./programPage"
+import Option from "./Option";
+import MyTelkomsel from "./MyTelkomsel";
+import Dashboard from "./Dashboard";
+import ProgramManagement from "./ProgramManagement";
+import LoginPage from "./Login";
+import ProgramPage from "./ProgramPage";
+import CreateProgramPage from "./CreateProgram";
 
 export {
-    Option,
-    MyTelkomsel,
-    Dashboard,
-    LoginPage,
-    ProgramManagement,
-    ProgramPage
+  Option,
+  MyTelkomsel,
+  Dashboard,
+  LoginPage,
+  ProgramManagement,
+  ProgramPage,
+  CreateProgramPage,
 };

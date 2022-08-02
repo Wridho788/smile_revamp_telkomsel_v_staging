@@ -1,33 +1,37 @@
 import Button from "./button";
 import Label from "./label";
 import Card from "./card";
-import ChannelCard from "./channelCard"
+import ChannelCard from "./channelCard";
 import {
-    H1,
-    H2,
-    H3,
-    Subtitle,
-    BodyCopy,
-    SmallCopy,
-    PreTitle,
-    ButtonText,
-    MediumButtonText,
-    BigButtonText,
+  H1,
+  H2,
+  H3,
+  Subtitle,
+  BodyCopy,
+  SmallCopy,
+  PreTitle,
+  ButtonText,
+  MediumButtonText,
+  BigButtonText,
 } from "./Typography";
+import StepperPaper from "./StepperPaper";
+import Select from "./Select";
 
 export {
-    Button,
-    Label,
-    Card,
-    H1,
-    H2,
-    H3,
-    Subtitle,
-    BodyCopy,
-    SmallCopy,
-    PreTitle,
-    ButtonText,
-    MediumButtonText,
-    BigButtonText,
-    ChannelCard
+  Button,
+  Label,
+  Card,
+  H1,
+  H2,
+  H3,
+  Subtitle,
+  BodyCopy,
+  SmallCopy,
+  PreTitle,
+  ButtonText,
+  MediumButtonText,
+  BigButtonText,
+  ChannelCard,
+  StepperPaper,
+  Select,
 };
