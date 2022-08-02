@@ -24,10 +24,7 @@ const Index: React.FunctionComponent<IIndexProps> = ({
   returnedValue,
   setReturnedValue,
 }) => {
-  //   const [value, setValue] = React.useState("");
-
   const handleChangeValue = (event: SelectChangeEvent) => {
-    // setValue(event.target.value);
     setReturnedValue(event.target.value);
   };
 

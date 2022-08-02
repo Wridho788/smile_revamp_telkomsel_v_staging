@@ -16,6 +16,7 @@ import {
 } from "./Typography";
 import StepperPaper from "./StepperPaper";
 import Select from "./Select";
+import OutlinedTextField from "./OutlinedTextField";
 
 export {
   Button,
@@ -34,4 +35,5 @@ export {
   ChannelCard,
   StepperPaper,
   Select,
+  OutlinedTextField,
 };
