@@ -1,13 +1,11 @@
-import { Grid, Stack } from "@mui/material";
+import { Box, Grid, Stack } from "@mui/material";
 import * as React from "react";
 import {
   Select,
   OutlinedTextField,
   ResponsiveDateTimePicker,
-  BodyCopy,
   H1,
 } from "../../../atoms";
-import StepperPaper from "../../../atoms/StepperPaper";
 
 interface IMainInfoProps {}
 
@@ -29,133 +27,131 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
   const Options = ["Option 1", "Option 2", "Option 3"];
 
   return (
-    <>
-      <StepperPaper>
-        <Stack spacing={"1vw"} maxWidth={"50%"}>
-          <Select
-            label="Type"
-            placeholder="Option"
-            options={Options}
-            value={type}
-            setValue={setType}
-          />
-          <OutlinedTextField
-            label="Name"
-            placeholder="Name"
-            value={name}
-            setValue={setName}
-            variant={"outlined"}
-          />
-          <Select
-            label="Point Type"
-            placeholder="Option"
-            options={Options}
-            value={pointType}
-            setValue={setPointType}
-          />
-          <Select
-            label="Mechanism"
-            placeholder="Option"
-            options={Options}
-            value={mechanism}
-            setValue={setMechanism}
-          />
-          <Select
-            label="Owner"
-            placeholder="Option"
-            options={Options}
-            value={owner}
-            setValue={setOwner}
-          />
-          <OutlinedTextField
-            label="Owner Detail"
-            placeholder="Owner Detail"
-            value={name}
-            setValue={setName}
-            variant={"outlined"}
-            multiline
-            rows={4}
-          />
-          <ResponsiveDateTimePicker
-            label="Start Period"
-            placeholder="Start Period"
-            value={startPeriod}
-            setValue={setStartPeriod}
-          />
-          <ResponsiveDateTimePicker
-            label="End Period"
-            placeholder="End Period"
-            value={endPeriod}
-            setValue={setEndPeriod}
-          />
-        </Stack>
-        <Stack mt={"1vw"} spacing={"1vw"} maxWidth={"100%"}>
-          <OutlinedTextField
-            label="Description"
-            placeholder="Description"
-            value={name}
-            setValue={setName}
-            variant={"outlined"}
-            multiline
-            rows={10}
-            totalColumn={5}
-            leftColumn={1}
-            rightColumn={4}
-          />
-          <Grid container columns={10}>
-            <Grid item xs={5}>
-              <Select
-                label="C. Point Balance"
-                placeholder="Option"
-                options={Options}
-                value={cPointBalance}
-                setValue={setCPointBalance}
-              />
-            </Grid>
-            <Grid item xs={5} pl="1vw">
-              <Stack direction="row" spacing={"1vw"} alignItems="center">
-                <OutlinedTextField
-                  placeholder="Start Numeric"
-                  value={startNumeric}
-                  setValue={setStartNumeric}
-                  variant={"outlined"}
-                />
-                <H1 lineHeight={0}>-</H1>
-                <OutlinedTextField
-                  placeholder="End Numeric"
-                  value={endNumeric}
-                  setValue={setEndNumeric}
-                  variant={"outlined"}
-                />
-              </Stack>
-            </Grid>
+    <Box border="0.1vw solid rgba(0, 0, 0, 0.1)" borderRadius="0.3vw" p="3vw">
+      <Stack spacing={"1vw"} maxWidth={"50%"}>
+        <Select
+          label="Type"
+          placeholder="Option"
+          options={Options}
+          value={type}
+          setValue={setType}
+        />
+        <OutlinedTextField
+          label="Name"
+          placeholder="Name"
+          value={name}
+          setValue={setName}
+          variant={"outlined"}
+        />
+        <Select
+          label="Point Type"
+          placeholder="Option"
+          options={Options}
+          value={pointType}
+          setValue={setPointType}
+        />
+        <Select
+          label="Mechanism"
+          placeholder="Option"
+          options={Options}
+          value={mechanism}
+          setValue={setMechanism}
+        />
+        <Select
+          label="Owner"
+          placeholder="Option"
+          options={Options}
+          value={owner}
+          setValue={setOwner}
+        />
+        <OutlinedTextField
+          label="Owner Detail"
+          placeholder="Owner Detail"
+          value={name}
+          setValue={setName}
+          variant={"outlined"}
+          multiline
+          rows={4}
+        />
+        <ResponsiveDateTimePicker
+          label="Start Period"
+          placeholder="Start Period"
+          value={startPeriod}
+          setValue={setStartPeriod}
+        />
+        <ResponsiveDateTimePicker
+          label="End Period"
+          placeholder="End Period"
+          value={endPeriod}
+          setValue={setEndPeriod}
+        />
+      </Stack>
+      <Stack mt={"1vw"} spacing={"1vw"} maxWidth={"100%"}>
+        <OutlinedTextField
+          label="Description"
+          placeholder="Description"
+          value={name}
+          setValue={setName}
+          variant={"outlined"}
+          multiline
+          rows={10}
+          totalColumn={18}
+          leftColumn={3}
+          rightColumn={15}
+        />
+        <Grid container columns={10}>
+          <Grid item xs={5}>
+            <Select
+              label="C. Point Balance"
+              placeholder="Option"
+              options={Options}
+              value={cPointBalance}
+              setValue={setCPointBalance}
+            />
           </Grid>
-        </Stack>
-        <Stack mt="1vw" spacing={"1vw"} maxWidth={"50%"}>
-          <Select
-            label="C. LOS Enabled"
-            placeholder="Option"
-            options={Options}
-            value={cLOSEnabled}
-            setValue={setCLOSEnabled}
-          />
-          <Select
-            label="C. LOS Type"
-            placeholder="Option"
-            options={Options}
-            value={cLOSType}
-            setValue={setCLOSType}
-          />
-          <OutlinedTextField
-            label="C. LOS Value"
-            placeholder="C. LOS Value"
-            value={cLOSValue}
-            setValue={setCLOSValue}
-            variant={"outlined"}
-          />
-        </Stack>
-      </StepperPaper>
-    </>
+          <Grid item xs={5} pl="1vw">
+            <Stack direction="row" spacing={"1vw"} alignItems="center">
+              <OutlinedTextField
+                placeholder="Start Numeric"
+                value={startNumeric}
+                setValue={setStartNumeric}
+                variant={"outlined"}
+              />
+              <H1 lineHeight={0}>-</H1>
+              <OutlinedTextField
+                placeholder="End Numeric"
+                value={endNumeric}
+                setValue={setEndNumeric}
+                variant={"outlined"}
+              />
+            </Stack>
+          </Grid>
+        </Grid>
+      </Stack>
+      <Stack mt="1vw" spacing={"1vw"} maxWidth={"50%"}>
+        <Select
+          label="C. LOS Enabled"
+          placeholder="Option"
+          options={Options}
+          value={cLOSEnabled}
+          setValue={setCLOSEnabled}
+        />
+        <Select
+          label="C. LOS Type"
+          placeholder="Option"
+          options={Options}
+          value={cLOSType}
+          setValue={setCLOSType}
+        />
+        <OutlinedTextField
+          label="C. LOS Value"
+          placeholder="C. LOS Value"
+          value={cLOSValue}
+          setValue={setCLOSValue}
+          variant={"outlined"}
+        />
+      </Stack>
+    </Box>
   );
 };
 

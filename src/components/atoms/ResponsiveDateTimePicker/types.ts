@@ -3,4 +3,7 @@ export interface IResponsiveDateTimePickerProps {
   placeholder?: string;
   value?: any;
   setValue?: any;
+  totalColumn?: number;
+  leftColumn?: number;
+  rightColumn?: number;
 }

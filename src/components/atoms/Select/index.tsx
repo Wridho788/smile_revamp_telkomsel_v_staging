@@ -16,9 +16,10 @@ const Index: React.FunctionComponent<ISelectProps> = ({
   options,
   value,
   setValue,
-  totalColumn = 10,
-  leftColumn = 4,
+  totalColumn = 9,
+  leftColumn = 3,
   rightColumn = 6,
+  direction = "row",
   ...props
 }) => {
   const handleChangeValue = (event: SelectChangeEvent) => {
@@ -26,11 +27,18 @@ const Index: React.FunctionComponent<ISelectProps> = ({
   };
 
   return (
-    <Grid container columns={totalColumn} alignItems={"center"}>
-      <Grid item xs={leftColumn}>
+    <Grid
+      container
+      columns={!label || direction === "column" ? rightColumn : totalColumn}
+      alignItems={"center"}
+    >
+      <Grid
+        item
+        xs={!label ? 0 : direction === "column" ? rightColumn : leftColumn}
+      >
         <BodyCopy>{label}</BodyCopy>
       </Grid>
-      <Grid item xs={rightColumn}>
+      <Grid item xs={rightColumn} mt={direction === "column" ? "1vw" : 0}>
         <FormControl sx={{ minWidth: "100%" }}>
           <Select
             value={value}

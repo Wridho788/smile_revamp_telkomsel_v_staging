@@ -12,13 +12,20 @@ const Index: React.FunctionComponent<IResponsiveDateTimePickerProps> = ({
   placeholder,
   value,
   setValue,
+  totalColumn = 9,
+  leftColumn = 3,
+  rightColumn = 6,
 }) => {
   return (
-    <Grid container columns={label ? 10 : 6} alignItems={"center"}>
-      <Grid item xs={label ? 4 : 0}>
+    <Grid
+      container
+      columns={label ? totalColumn : rightColumn}
+      alignItems={"center"}
+    >
+      <Grid item xs={label ? leftColumn : 0}>
         <BodyCopy>{label}</BodyCopy>
       </Grid>
-      <Grid item xs={6}>
+      <Grid item xs={rightColumn}>
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <DateTimePicker
             value={value}

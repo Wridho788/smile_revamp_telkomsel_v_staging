@@ -18,6 +18,8 @@ import StepperPaper from "./StepperPaper";
 import Select from "./Select";
 import OutlinedTextField from "./OutlinedTextField";
 import ResponsiveDateTimePicker from "./ResponsiveDateTimePicker";
+import Stepper from "./Stepper";
+import SingleBreadcrumbs from "./SingleBreadcrumbs";
 
 export {
   Button,
@@ -38,4 +40,6 @@ export {
   Select,
   OutlinedTextField,
   ResponsiveDateTimePicker,
+  Stepper,
+  SingleBreadcrumbs,
 };

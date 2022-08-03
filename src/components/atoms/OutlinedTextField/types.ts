@@ -8,4 +8,5 @@ export interface IOutlinedTextFieldProps extends OutlinedTextFieldProps {
   totalColumn?: number;
   leftColumn?: number;
   rightColumn?: number;
+  direction?: "row" | "column";
 }

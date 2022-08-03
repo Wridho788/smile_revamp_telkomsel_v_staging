@@ -7,11 +7,7 @@ const StepperPaper: React.FunctionComponent<IStepperPaperProps> = ({
   ...props
 }) => {
   return (
-    <Paper
-      elevation={3}
-      sx={{ paddingBlock: "2vw", paddingInline: "1.5vw" }}
-      {...props}
-    >
+    <Paper elevation={3} {...props}>
       {children}
     </Paper>
   );

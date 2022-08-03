@@ -9,4 +9,5 @@ export interface ISelectProps extends SelectProps {
   totalColumn?: number;
   leftColumn?: number;
   rightColumn?: number;
+  direction?: "row" | "column";
 }

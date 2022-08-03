@@ -8,9 +8,10 @@ const Index: React.FunctionComponent<IOutlinedTextFieldProps> = ({
   placeholder,
   value,
   setValue,
-  totalColumn = 10,
-  leftColumn = 4,
+  totalColumn = 9,
+  leftColumn = 3,
   rightColumn = 6,
+  direction = "row",
   ...props
 }) => {
   const handleChangeValue = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -19,10 +20,13 @@ const Index: React.FunctionComponent<IOutlinedTextFieldProps> = ({
   return (
     <Grid
       container
-      columns={label ? totalColumn : rightColumn}
+      columns={!label || direction === "column" ? rightColumn : totalColumn}
       alignItems={"center"}
     >
-      <Grid item xs={label ? leftColumn : 0}>
+      <Grid
+        item
+        xs={!label ? 0 : direction === "column" ? rightColumn : leftColumn}
+      >
         <BodyCopy>{label}</BodyCopy>
       </Grid>
       <Grid item xs={rightColumn}>
