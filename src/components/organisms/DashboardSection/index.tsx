@@ -1,5 +1,4 @@
 import { Breadcrumb, Channel, Merchant, Report } from "../../../components";
-import DefaultBackground from "../../../components/atoms/DefaultBackground";
 import React, { useState, useEffect } from "react";
 import Dummy from "../../../mock-data/index.json";
 import { Box } from "@mui/material";
@@ -27,7 +26,6 @@ const Index = () => {
   }, [channelValue, merchantValue]);
 
   return (
-    <DefaultBackground>
       <Box
         sx={{
           paddingTop: "20px",
@@ -46,7 +44,6 @@ const Index = () => {
         {/* {console.log(data)} */}
         <Report resultData={data} />
       </Box>
-    </DefaultBackground>
   );
 };
 
