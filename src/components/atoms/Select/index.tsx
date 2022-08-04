@@ -3,55 +3,70 @@ import {
     Select,
     MenuItem,
     SelectChangeEvent,
-    OutlinedInput,
+    OutlinedInput, Grid,
 } from "@mui/material";
 import * as React from "react";
+import {BodyCopy} from "../Typography";
+import {ISelectProps} from "./types";
 
-interface IIndexProps {
-    placeholder?: string;
-    options?: string[];
-    returnedValue?: any;
-    setReturnedValue?: any;
-    minWidth?:string
-}
-
-const Index: React.FunctionComponent<IIndexProps> = ({
-                                                         placeholder,
-                                                         options,
-                                                         returnedValue,
-                                                         setReturnedValue,
-                                                         minWidth = "100%"
-                                                     }) => {
-
+const Index: React.FunctionComponent<ISelectProps> = ({
+                                                          label,
+                                                          placeholder,
+                                                          options,
+                                                          value,
+                                                          setValue,
+                                                          totalColumn = 9,
+                                                          leftColumn = 3,
+                                                          rightColumn = 6,
+                                                          direction = "row",
+                                                          ...props
+                                                      }) => {
     const handleChangeValue = (event: SelectChangeEvent) => {
-        setReturnedValue(event.target.value);
+        setValue(event.target.value);
     };
+
     return (
-        <FormControl sx={{minWidth: minWidth }}>
-            <Select
-                value={returnedValue}
-                onChange={handleChangeValue}
-                displayEmpty
-                size="small"
-                input={<OutlinedInput/>}
-                inputProps={{"aria-label": "Without label"}}
-                renderValue={(selected) => {
-                    if (selected.length === 0) {
-                        return <>{placeholder}</>;
-                    }
-                    return selected;
-                }}>
-                <MenuItem disabled value="">
-                    {placeholder}
-                </MenuItem>
-                {typeof options !== "undefined" &&
-                    options.map((option: string) => (
-                        <MenuItem key={option} value={option}>
-                            {option}
+        <Grid
+            container
+            columns={!label || direction === "column" ? rightColumn : totalColumn}
+            alignItems={"center"}
+        >
+            <Grid
+                item
+                xs={!label ? 0 : direction === "column" ? rightColumn : leftColumn}
+            >
+                <BodyCopy>{label}</BodyCopy>
+            </Grid>
+            <Grid item xs={rightColumn} mt={direction === "column" ? "1vw" : 0}>
+                <FormControl sx={{minWidth: "100%"}}>
+                    <Select
+                        value={value}
+                        onChange={handleChangeValue}
+                        displayEmpty
+                        size="small"
+                        input={<OutlinedInput/>}
+                        inputProps={{"aria-label": "Without label"}}
+                        renderValue={(selected) => {
+                            if (selected.length === 0) {
+                                return <>{placeholder}</>;
+                            }
+                            return selected;
+                        }}
+                        {...props}
+                    >
+                        <MenuItem disabled value="">
+                            {placeholder}
                         </MenuItem>
-                    ))}
-            </Select>
-        </FormControl>
+                        {typeof options !== "undefined" &&
+                            options.map((option: string) => (
+                                <MenuItem key={option} value={option}>
+                                    {option}
+                                </MenuItem>
+                            ))}
+                    </Select>
+                </FormControl>
+            </Grid>
+        </Grid>
     );
 };
 

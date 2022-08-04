@@ -1,11 +1,6 @@
-import {Breadcrumb, Stepper, StepperPaper} from "../../../components";
 import React, {useState,} from "react";
 import {Box, Button} from "@mui/material";
 import {keywordStep} from "../../../mocks/keywordStep";
-import Bonus from "./Bonus";
-import ButtonAction from "./buttonAction";
-import BoardSwitch from "./boardSwitch";
-
 
 const Index = () => {
     const [intervalValue, setInterval] = useState(0);
@@ -28,25 +23,14 @@ const Index = () => {
         }
     }
     return (
-        <>
-            <Breadcrumb title={"Dashboard"} subtitle={"Keyword"} active={"Create Keyword"} linkTo={"/"}/>
-            <StepperPaper sx={{padding: 2}}>
-                <Box>
-                    <Stepper intervalActive={intervalValue} dataStep={keywordStep}/>
-                    <div style={{padding: 60}}>
-                        <Box sx={{
-                            border: 1,
-                            padding: 5,
-                        }}>
-                            <BoardSwitch intervalValue={intervalValue}/>
-                            <ButtonAction btnBack={() => handleBack()} btnNext={() => handleNext()} isDone={isDone}
-                                          isCancel={isCancel}
-                                          sx={{paddingTop: 5}}/>
-                        </Box>
-                    </div>
-                </Box>
-            </StepperPaper>
-        </>
+        <Box>
+            <Button variant="contained" onClick={() => handleBack()}>Back</Button>
+            {isDone ?
+                <Button variant="contained" onClick={() => handleNext()}>Done</Button>
+                :
+                <Button variant="contained" onClick={() => handleNext()}>Next</Button>
+            }
+        </Box>
     );
 };
 

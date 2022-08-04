@@ -5,16 +5,21 @@ import reportWebVitals from './reportWebVitals';
 import {BrowserRouter} from "react-router-dom";
 import {ThemeProvider} from "@mui/material";
 import {Theme} from "./style/Material-UI"
+import {store} from "./app/redux/store";
+import {Provider} from "react-redux";
+
 require('dotenv').config();
 
 ReactDOM.render(
-    <React.StrictMode>
-        <ThemeProvider theme={Theme}>
-            <BrowserRouter>
-                <Routes/>
-            </BrowserRouter>
-        </ThemeProvider>
-    </React.StrictMode>,
+    <Provider store={store}>
+        <React.StrictMode>
+            <ThemeProvider theme={Theme}>
+                <BrowserRouter>
+                    <Routes/>
+                </BrowserRouter>
+            </ThemeProvider>
+        </React.StrictMode>
+    </Provider>,
     document.getElementById('root')
 );
 
