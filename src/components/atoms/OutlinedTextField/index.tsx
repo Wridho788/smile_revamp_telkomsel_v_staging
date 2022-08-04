@@ -8,8 +8,8 @@ const Index: React.FunctionComponent<IOutlinedTextFieldProps> = ({
   placeholder,
   value,
   setValue,
-  totalColumn = 9,
-  leftColumn = 3,
+  totalColumn = 10,
+  leftColumn = 4,
   rightColumn = 6,
   direction = "row",
   ...props

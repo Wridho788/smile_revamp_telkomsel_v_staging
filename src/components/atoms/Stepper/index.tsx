@@ -8,6 +8,7 @@ import Typography from "@mui/material/Typography";
 import { BodyCopy } from "../Typography";
 import ArrowLeftIcon from "@mui/icons-material/ArrowLeft";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
+import TelegramIcon from "@mui/icons-material/Telegram";
 
 export default function HorizontalLinearStepper({
   children,
@@ -95,7 +96,7 @@ export default function HorizontalLinearStepper({
       {activeStep === steps.length ? (
         <React.Fragment>
           <Typography sx={{ mt: "1vw", mb: 1 }}>
-            All steps completed - you&apos;re finished
+            All steps completed - your inputs are submitted
           </Typography>
           <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
             <Box sx={{ flex: "1 1 auto" }} />
@@ -130,14 +131,20 @@ export default function HorizontalLinearStepper({
               onClick={handleNext}
               color="primary"
               variant="contained"
-              endIcon={<ArrowRightIcon fontSize="large" />}
+              endIcon={
+                activeStep === steps.length - 1 ? (
+                  <TelegramIcon fontSize="large" />
+                ) : (
+                  <ArrowRightIcon fontSize="large" />
+                )
+              }
               sx={{
                 borderRadius: "0.3vw",
                 paddingInline: "1.5vw",
                 paddingBlock: "0.5vw",
               }}
             >
-              {activeStep === steps.length - 1 ? "Finish" : "Next"}
+              {activeStep === steps.length - 1 ? "Submit" : "Next"}
             </Button>
           </Box>
         </React.Fragment>

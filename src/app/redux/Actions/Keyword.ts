@@ -12,7 +12,7 @@ export const fetchKeywords = () => {
                 dispatch({type: KeywordActionTypes.FETCH_KEYWORDS_SUCCESS, payload: response.data})
             }, 1500)
         }catch(e){
-            dispatch({type: KeywordActionTypes.FETCH_KEYWORDS_ERROR, payload: 'Error on KEYWORDS loading'})
+            dispatch({type: KeywordActionTypes.FETCH_KEYWORDS_ERROR, payload: 'Error on keywords loading'})
         }
     }
 }
@@ -21,12 +21,14 @@ export const getKeywordType = () => {
         try{
             dispatch({type: KeywordActionTypes.FETCH_KEYWORDS})
             const response = await API.getKeywordType()
+            console.log(response.data)
 
             setTimeout(()=>{
                 dispatch({type: KeywordActionTypes.FETCH_KEYWORDS_SUCCESS, payload: response.data})
             }, 1500)
         }catch(e){
-            dispatch({type: KeywordActionTypes.FETCH_KEYWORDS_ERROR, payload: 'Error on KEYWORDS loading'})
+            console.log(e)
+            dispatch({type: KeywordActionTypes.FETCH_KEYWORDS_ERROR, payload: 'Error on keywords loading'})
         }
     }
 }

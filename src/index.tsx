@@ -8,8 +8,6 @@ import {Theme} from "./style/Material-UI"
 import {store} from "./app/redux/store";
 import {Provider} from "react-redux";
 
-require('dotenv').config();
-
 ReactDOM.render(
     <Provider store={store}>
         <React.StrictMode>

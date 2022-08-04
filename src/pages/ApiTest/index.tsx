@@ -18,7 +18,7 @@ const Index: FC = () => {
     return (
         <div>
             {keywords.map(keyword=>{
-                return <div key={keyword} />
+                return <div key={keyword} >{keyword}</div>
             })}
         </div>
     );

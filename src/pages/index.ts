@@ -5,8 +5,10 @@ import ProgramManagement from "./ProgramManagement";
 import LoginPage from "./Login";
 import ProgramPage from "./ProgramPage";
 import CreateProgram from "./CreateProgram";
-import KeywordPage from "./KeywordPage"
 import ApiTest from "./ApiTest";
+
+
+import Keyword from "./Keyword";
 
 export {
     Option,
@@ -16,6 +18,6 @@ export {
     ProgramManagement,
     ProgramPage,
     CreateProgram,
-    KeywordPage,
+    Keyword,
     ApiTest
 };

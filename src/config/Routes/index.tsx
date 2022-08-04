@@ -6,7 +6,7 @@ import {
     LoginPage,
     ProgramPage,
     CreateProgram,
-    KeywordPage,
+    Keyword,
     ApiTest
 } from "../../pages";
 
@@ -19,7 +19,7 @@ const Index = () => (
         <Route path="/program-management" element={<ProgramPage/>}/>
         <Route path="/login" element={<LoginPage/>}/>
         <Route path="/create-program" element={<CreateProgram/>}/>
-        <Route path="/keyword" element={<KeywordPage/>}/>
+        <Route path="/keyword" element={<Keyword/>}/>
         <Route path="/api-test" element={<ApiTest/>}/>
     </Routes>
 );
