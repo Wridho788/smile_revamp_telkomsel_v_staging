@@ -2,9 +2,9 @@ import React from "react";
 import { Search, SearchIconWrapper, StyledInputBase } from "./StyledComponents";
 import SearchIcon from "@mui/icons-material/Search";
 
-const KeywordSearch = () => {
+const KeywordSearch = (props: any) => {
   return (
-    <Search>
+    <Search {...props}>
       <SearchIconWrapper>
         <SearchIcon />
       </SearchIconWrapper>

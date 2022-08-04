@@ -21,7 +21,7 @@ const Index = () => {
     return (
         <Box>
 
-            <Stepper intervalActive={intervalValue} dataStep={keywordStep}/>
+            {/*<Stepper dataStep={keywordStep}/>*/}
             <Button variant="contained" onClick={() => handleBack()}>Back</Button>
             {isDone ?
                 <Button variant="contained" onClick={() => handleNext()}>Done</Button>
