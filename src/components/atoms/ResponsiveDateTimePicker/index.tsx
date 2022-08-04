@@ -12,8 +12,8 @@ const Index: React.FunctionComponent<IResponsiveDateTimePickerProps> = ({
   placeholder,
   value,
   setValue,
-  totalColumn = 9,
-  leftColumn = 3,
+  totalColumn = 10,
+  leftColumn = 4,
   rightColumn = 6,
 }) => {
   return (

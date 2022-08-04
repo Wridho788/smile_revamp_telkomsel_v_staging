@@ -15,8 +15,10 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
   const [pointType, setPointType] = React.useState("");
   const [mechanism, setMechanism] = React.useState("");
   const [owner, setOwner] = React.useState("");
+  const [ownerDetail, setOwnerDetail] = React.useState("");
   const [startPeriod, setStartPeriod] = React.useState("");
   const [endPeriod, setEndPeriod] = React.useState("");
+  const [description, setDescription] = React.useState("");
   const [cPointBalance, setCPointBalance] = React.useState("");
   const [startNumeric, setStartNumeric] = React.useState("");
   const [endNumeric, setEndNumeric] = React.useState("");
@@ -67,8 +69,8 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
         <OutlinedTextField
           label="Owner Detail"
           placeholder="Owner Detail"
-          value={name}
-          setValue={setName}
+          value={ownerDetail}
+          setValue={setOwnerDetail}
           variant={"outlined"}
           multiline
           rows={4}
@@ -90,14 +92,14 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
         <OutlinedTextField
           label="Description"
           placeholder="Description"
-          value={name}
-          setValue={setName}
+          value={description}
+          setValue={setDescription}
           variant={"outlined"}
           multiline
           rows={10}
-          totalColumn={18}
-          leftColumn={3}
-          rightColumn={15}
+          totalColumn={20}
+          leftColumn={4}
+          rightColumn={16}
         />
         <Grid container columns={10}>
           <Grid item xs={5}>
