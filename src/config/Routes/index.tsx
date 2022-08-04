@@ -4,9 +4,9 @@ import {
   MyTelkomsel,
   Dashboard,
   LoginPage,
-  ProgramManagement,
   ProgramPage,
   CreateProgram,
+  Keyword,
 } from "../../pages";
 
 const Index = () => (
@@ -17,6 +17,7 @@ const Index = () => (
     <Route path="/program-management" element={<ProgramPage />} />
     <Route path="/login" element={<LoginPage />} />
     <Route path="/create-program" element={<CreateProgram />} />
+    <Route path="/keyword" element={<Keyword />} />
   </Routes>
 );
 export default Index;

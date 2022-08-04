@@ -5,6 +5,7 @@ import ProgramManagement from "./ProgramManagement";
 import LoginPage from "./Login";
 import ProgramPage from "./ProgramPage";
 import CreateProgram from "./CreateProgram";
+import Keyword from "./Keyword";
 
 export {
   Option,
@@ -14,4 +15,5 @@ export {
   ProgramManagement,
   ProgramPage,
   CreateProgram,
+  Keyword,
 };
