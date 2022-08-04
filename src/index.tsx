@@ -5,6 +5,7 @@ import reportWebVitals from './reportWebVitals';
 import {BrowserRouter} from "react-router-dom";
 import {ThemeProvider} from "@mui/material";
 import {Theme} from "./style/Material-UI"
+require('dotenv').config();
 
 ReactDOM.render(
     <React.StrictMode>
