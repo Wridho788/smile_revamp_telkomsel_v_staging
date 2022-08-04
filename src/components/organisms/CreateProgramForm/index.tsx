@@ -157,8 +157,8 @@ const CreateProgramForm: React.FunctionComponent<ICreateProgramFormProps> = (
             </Grid>
             <Grid item xs={6}>
               <ResponsiveDateTimePickers
-                dateTimeValue={dateTimeValue}
-                setDateTimeValue={setDateTimeValue}
+                value={dateTimeValue}
+                setValue={setDateTimeValue}
               />
             </Grid>
           </Grid>
