@@ -7,13 +7,10 @@ const AxiosGet = async (
     params?: string,
     isAuth?: boolean
 ) => {
-    console.log("axiosGet")
     let response: any = []
     await Instance(isAuth).get(baseUrl + endpoint, {params: params})
         .then((res) => {
-
-            console.log(res)
-            response = res
+            response = res.data
         })
         .catch((error) => {
             response = error.response

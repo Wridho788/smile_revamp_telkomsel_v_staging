@@ -1,6 +1,7 @@
 import React, { FC, useEffect } from 'react';
 import { useTypedSelector } from '../../app/hooks/useTypedSelector';
 import { useActions } from '../../app/hooks/useActions';
+import {H1} from "../../components";
 
 const Index: FC = () => {
     const {keywords, error, loading} = useTypedSelector(state=>state.keyword);
@@ -16,11 +17,21 @@ const Index: FC = () => {
         return <h1>Loading ...</h1>
     }
     return (
-        <div>
-            {keywords.map(keyword=>{
-                return <div key={keyword} >{keyword}</div>
-            })}
-        </div>
+        <>
+            <p>Keyword Type</p>
+            <div>
+                {keywords.main_info.keyword_type.map(data=>{
+                    return <div key={data} >{data.set_value}</div>
+                })}
+            </div>
+
+            <p>Program Type</p>
+            <div>
+                {keywords.segmentation.program_type.map(data=>{
+                    return <div key={data} >{data.set_value}</div>
+                })}
+            </div>
+        </>
     );
 };
 

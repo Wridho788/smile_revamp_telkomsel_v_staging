@@ -1,7 +1,25 @@
-﻿export interface KeywordState {
-    keywords: any[];
-    loading: boolean;
-    error: null | string;
+﻿
+export interface MainInfo{
+    keyword_type:any[]
+    program_type:any[]
+}
+export interface Segmentation{
+    keyword_type:any[]
+    program_type:any[]
+}
+export interface Notification{
+    keyword_type:any[]
+    program_type:any[]
+}
+export interface KeywordPageData{
+    main_info: MainInfo,
+    segmentation : Segmentation,
+    notification : Notification
+}
+export interface KeywordState {
+    keywords: KeywordPageData
+    loading: boolean
+    error: null | string
 } 
 export enum KeywordActionTypes {
     FETCH_KEYWORDS = 'FETCH_KEYWORDS',
@@ -13,7 +31,7 @@ interface FetchKeywordsAction {
 }
 interface FetchKeywordsSuccessAction {
     type: KeywordActionTypes.FETCH_KEYWORDS_SUCCESS;
-    payload: any[];
+    payload: KeywordPageData;
 }
 interface FetchKEYWORDsErrorAction {
     type: KeywordActionTypes.FETCH_KEYWORDS_ERROR;
