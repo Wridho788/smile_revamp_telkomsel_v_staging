@@ -10,6 +10,7 @@ const useApiRequest = ({BaseURL, Headers}: PropsConstruct) => {
     let _BaseURL: string = BaseURL ?? process.env.REACT_APP_BASE_URL!
     let _Headers: AxiosRequestHeaders = Headers ?? {
         'Content-Type': 'application/x-www-form-urlencoded'
+
     }
 
     const fetch = axios.create({

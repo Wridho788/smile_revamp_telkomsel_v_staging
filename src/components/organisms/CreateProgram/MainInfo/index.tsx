@@ -32,7 +32,6 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
     <Box border="0.1vw solid rgba(0, 0, 0, 0.1)" borderRadius="0.3vw" p="3vw">
       <Stack spacing={"1vw"} maxWidth={"50%"}>
         <Select
-          label="Type"
           placeholder="Option"
           options={Options}
           value={type}

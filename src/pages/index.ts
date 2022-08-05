@@ -5,15 +5,19 @@ import ProgramManagement from "./ProgramManagement";
 import LoginPage from "./Login";
 import ProgramPage from "./ProgramPage";
 import CreateProgram from "./CreateProgram";
+import ApiTest from "./ApiTest";
+
+
 import Keyword from "./Keyword";
 
 export {
-  Option,
-  MyTelkomsel,
-  Dashboard,
-  LoginPage,
-  ProgramManagement,
-  ProgramPage,
-  CreateProgram,
-  Keyword,
+    Option,
+    MyTelkomsel,
+    Dashboard,
+    LoginPage,
+    ProgramManagement,
+    ProgramPage,
+    CreateProgram,
+    Keyword,
+    ApiTest
 };

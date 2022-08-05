@@ -163,7 +163,6 @@ const Index: React.FC<LayoutProps> = ({children}: LayoutProps) => {
                 </Box>
             </Drawer>
             <Box component="main" sx={{flexGrow: 1, p: 3, marginBottom: 40}}>
-                <DrawerHeader/>
                 {children}
             </Box>
         </Box>
