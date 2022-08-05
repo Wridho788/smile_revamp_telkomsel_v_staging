@@ -9,8 +9,13 @@
 } from "../Types/keyword"
 
 const MainInfoInitial: MainInfo = {
-    keyword_type: [],
-    program_type: []
+    keyword_type:[],
+    point_type:[],
+    mechanism:[],
+    owner:[],
+    c_point_balance:[],
+    c_los_enable:[],
+    los_type:[],
 }
 
 const SegmentationInitial: Segmentation = {

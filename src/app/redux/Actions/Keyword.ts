@@ -32,15 +32,24 @@ export const getKeywordType = () => {
         try {
             dispatch({type: KeywordActionTypes.FETCH_KEYWORDS})
 
-            const keywordType = await API.getKeywordType()
+            await API.getKeywordType()
                 .then((res) => {
                     mainInfo.keyword_type = res.data
-                    segmentation.keyword_type = res.data
-                    notification.keyword_type = res.data
                 })
-            const programType = await API.getProgramType()
+            await API.getPointType()
                 .then((res) => {
-                    mainInfo.program_type = res.data
+                    mainInfo.point_type = res.data
+                })
+            await API.getMechanism()
+                .then((res) => {
+                    mainInfo.mechanism = res.data
+                })
+            await API.getOwner()
+                .then((res) => {
+                    mainInfo.owner = res.data
+                })
+            await API.getProgramType()
+                .then((res) => {
                     segmentation.program_type = res.data
                     notification.program_type = res.data
                 })
