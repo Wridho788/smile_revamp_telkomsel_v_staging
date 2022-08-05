@@ -17,7 +17,7 @@ const Programs: React.FunctionComponent<IProgramsProps> = ({
 }) => {
   const data = programsData.data;
   console.log(data);
-  const [listForm, setListForm] = React.useState("card");
+  const [listForm, setListForm] = React.useState<string>("card");
   return (
     <>
       <Stack direction={"row"} justifyContent={"space-between"}>

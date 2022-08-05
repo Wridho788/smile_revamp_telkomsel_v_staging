@@ -3,16 +3,16 @@ import { Grid, Stack, IconButton, Box, Button } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Select } from "../../../atoms";
 import AddBoxIcon from "@mui/icons-material/AddBox";
+import { options } from "../../../../mocks/options";
 
 interface INotificationProps {}
 
 const Notification: React.FunctionComponent<INotificationProps> = (props) => {
-  const [via, setVia] = React.useState("");
-  const [type, setType] = React.useState("");
-  const [template, setTemplate] = React.useState("");
-  const [transactionType, setTransactionType] = React.useState("");
-  const [totalRow, setTotalRow] = React.useState([1]);
-  const Options = ["Option 1", "Option 2", "Option 3"];
+  const [via, setVia] = React.useState<string>("");
+  const [type, setType] = React.useState<string>("");
+  const [template, setTemplate] = React.useState<string>("");
+  const [transactionType, setTransactionType] = React.useState<string>("");
+  const [totalRow, setTotalRow] = React.useState<number[]>([1]);
 
   return (
     <Box border="0.1vw solid rgba(0, 0, 0, 0.1)" borderRadius="0.3vw" p="3vw">
@@ -31,7 +31,7 @@ const Notification: React.FunctionComponent<INotificationProps> = (props) => {
                 direction="column"
                 label="Via"
                 placeholder="Option"
-                options={Options}
+                options={options}
                 value={via}
                 setValue={setVia}
               />
@@ -41,7 +41,7 @@ const Notification: React.FunctionComponent<INotificationProps> = (props) => {
                 direction="column"
                 label="Type"
                 placeholder="Option"
-                options={Options}
+                options={options}
                 value={type}
                 setValue={setType}
               />
@@ -51,7 +51,7 @@ const Notification: React.FunctionComponent<INotificationProps> = (props) => {
                 direction="column"
                 label="Template"
                 placeholder="Option"
-                options={Options}
+                options={options}
                 value={template}
                 setValue={setTemplate}
               />
@@ -61,7 +61,7 @@ const Notification: React.FunctionComponent<INotificationProps> = (props) => {
                 direction="column"
                 label="Transaction Type"
                 placeholder="Option"
-                options={Options}
+                options={options}
                 value={transactionType}
                 setValue={setTransactionType}
               />

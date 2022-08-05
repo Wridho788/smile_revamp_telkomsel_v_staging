@@ -17,26 +17,12 @@ import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrowLeft";
 import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { tabTitles } from "../../../../mocks/tabTitles";
 
 interface ISegmentationProps {}
 
 const Segmentation: React.FunctionComponent<ISegmentationProps> = (props) => {
-  const [activeTab, setActiveTab] = React.useState(0);
-
-  const handleChangeTab = (event: React.SyntheticEvent, newValue: number) => {
-    setActiveTab(newValue);
-  };
-
-  const tabTitles = [
-    "C. Type",
-    "C. Tier",
-    "C. Badges",
-    "C. Location",
-    "C. Brand",
-    "C. ARPU",
-    "C. Outlet",
-    "MSSIDN",
-  ];
+  const [activeTab, setActiveTab] = React.useState<number>(0);
 
   return (
     <Box
@@ -46,7 +32,13 @@ const Segmentation: React.FunctionComponent<ISegmentationProps> = (props) => {
       pb="3vw"
       px="3vw"
     >
-      <Tabs value={activeTab} onChange={handleChangeTab} centered>
+      <Tabs
+        value={activeTab}
+        onChange={(event: React.SyntheticEvent, newValue: number) => {
+          setActiveTab(newValue);
+        }}
+        centered
+      >
         {tabTitles.map((tabTitle, idx) => (
           <Tab key={`tabTitle__${idx}`} label={tabTitle} sx={{ px: "2vw" }} />
         ))}

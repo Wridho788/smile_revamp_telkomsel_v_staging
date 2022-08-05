@@ -22,10 +22,6 @@ const Index: React.FunctionComponent<ISelectProps> = ({
   direction = "row",
   ...props
 }) => {
-  const handleChangeValue = (event: SelectChangeEvent) => {
-    setValue(event.target.value);
-  };
-
   return (
     <Grid
       container
@@ -42,7 +38,9 @@ const Index: React.FunctionComponent<ISelectProps> = ({
         <FormControl sx={{ minWidth: "100%" }}>
           <Select
             value={value}
-            onChange={handleChangeValue}
+            onChange={(event: SelectChangeEvent) => {
+              setValue(event.target.value);
+            }}
             displayEmpty
             size="small"
             input={<OutlinedInput />}

@@ -3,18 +3,18 @@ import { Grid, Stack, IconButton, Box, Button } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Select } from "../../../atoms";
 import AddBoxIcon from "@mui/icons-material/AddBox";
+import { options } from "../../../../mocks/options";
 
 interface IBonusProps {}
 
 const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
-  const [type, setType] = React.useState("");
-  const [bucket, setBucket] = React.useState("");
-  const [quantity, setQuantity] = React.useState("");
-  const [granular, setGranular] = React.useState("");
-  const [bid, setBid] = React.useState("");
-  const [bonus, setBonus] = React.useState("");
-  const [totalRow, setTotalRow] = React.useState([1]);
-  const Options = ["Option 1", "Option 2", "Option 3"];
+  const [type, setType] = React.useState<string>("");
+  const [bucket, setBucket] = React.useState<string>("");
+  const [quantity, setQuantity] = React.useState<string>("");
+  const [granular, setGranular] = React.useState<string>("");
+  const [bid, setBid] = React.useState<string>("");
+  const [bonus, setBonus] = React.useState<string>("");
+  const [totalRow, setTotalRow] = React.useState<number[]>([1]);
 
   return (
     <Box border="0.1vw solid rgba(0, 0, 0, 0.1)" borderRadius="0.3vw" p="3vw">
@@ -33,7 +33,7 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
                 direction="column"
                 label="Type"
                 placeholder="Option"
-                options={Options}
+                options={options}
                 value={type}
                 setValue={setType}
               />
@@ -43,7 +43,7 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
                 direction="column"
                 label="Bucket"
                 placeholder="Option"
-                options={Options}
+                options={options}
                 value={bucket}
                 setValue={setBucket}
               />
@@ -53,7 +53,7 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
                 direction="column"
                 label="Quantity"
                 placeholder="Option"
-                options={Options}
+                options={options}
                 value={quantity}
                 setValue={setQuantity}
               />
@@ -63,7 +63,7 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
                 direction="column"
                 label="Granular"
                 placeholder="Option"
-                options={Options}
+                options={options}
                 value={granular}
                 setValue={setGranular}
               />
@@ -73,7 +73,7 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
                 direction="column"
                 label="Bid"
                 placeholder="Option"
-                options={Options}
+                options={options}
                 value={bid}
                 setValue={setBid}
               />
@@ -83,7 +83,7 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
                 direction="column"
                 label="Bonus"
                 placeholder="Option"
-                options={Options}
+                options={options}
                 value={bonus}
                 setValue={setBonus}
               />

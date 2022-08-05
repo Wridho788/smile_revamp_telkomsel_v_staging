@@ -9,7 +9,7 @@ import {
 } from "../../components/organisms/CreateProgram";
 
 const CreateProgram = () => {
-  const [activeStep, setActiveStep] = React.useState(0);
+  const [activeStep, setActiveStep] = React.useState<number>(0);
   const steps = ["Main Info", "Segmentation", "Notification", "Summary"];
   const stepsItem = [
     <MainInfo />,

@@ -5,9 +5,9 @@ import { Box } from "@mui/material";
 
 const dataList = Dummy.data;
 const Index = () => {
-  const [channelValue, setChannelValue] = useState(1);
-  const [merchantValue, setMerchantValue] = useState(1);
-  const [data, setData] = useState(Array<any>);
+  const [channelValue, setChannelValue] = useState<number>(1);
+  const [merchantValue, setMerchantValue] = useState<number>(1);
+  const [data, setData] = useState<any[]>(Array<any>);
 
   let rows: any = [];
   const updateList = (channelId?: any, merchantId?: any) => {

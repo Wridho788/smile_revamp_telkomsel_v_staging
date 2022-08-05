@@ -1,5 +1,6 @@
 import { Box, Grid, Stack } from "@mui/material";
 import * as React from "react";
+import { options } from "../../../../mocks/options";
 import {
   Select,
   OutlinedTextField,
@@ -10,23 +11,21 @@ import {
 interface IMainInfoProps {}
 
 const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
-  const [type, setType] = React.useState("");
-  const [name, setName] = React.useState("");
-  const [pointType, setPointType] = React.useState("");
-  const [mechanism, setMechanism] = React.useState("");
-  const [owner, setOwner] = React.useState("");
-  const [ownerDetail, setOwnerDetail] = React.useState("");
-  const [startPeriod, setStartPeriod] = React.useState("");
-  const [endPeriod, setEndPeriod] = React.useState("");
-  const [description, setDescription] = React.useState("");
-  const [cPointBalance, setCPointBalance] = React.useState("");
-  const [startNumeric, setStartNumeric] = React.useState("");
-  const [endNumeric, setEndNumeric] = React.useState("");
-  const [cLOSEnabled, setCLOSEnabled] = React.useState("");
-  const [cLOSType, setCLOSType] = React.useState("");
-  const [cLOSValue, setCLOSValue] = React.useState("");
-
-  const Options = ["Option 1", "Option 2", "Option 3"];
+  const [type, setType] = React.useState<string>("");
+  const [name, setName] = React.useState<string>("");
+  const [pointType, setPointType] = React.useState<string>("");
+  const [mechanism, setMechanism] = React.useState<string>("");
+  const [owner, setOwner] = React.useState<string>("");
+  const [ownerDetail, setOwnerDetail] = React.useState<string>("");
+  const [startPeriod, setStartPeriod] = React.useState<string>("");
+  const [endPeriod, setEndPeriod] = React.useState<string>("");
+  const [description, setDescription] = React.useState<string>("");
+  const [cPointBalance, setCPointBalance] = React.useState<string>("");
+  const [startNumeric, setStartNumeric] = React.useState<string>("");
+  const [endNumeric, setEndNumeric] = React.useState<string>("");
+  const [cLOSEnabled, setCLOSEnabled] = React.useState<string>("");
+  const [cLOSType, setCLOSType] = React.useState<string>("");
+  const [cLOSValue, setCLOSValue] = React.useState<string>("");
 
   return (
     <Box border="0.1vw solid rgba(0, 0, 0, 0.1)" borderRadius="0.3vw" p="3vw">
@@ -34,7 +33,7 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
         <Select
           label="Type"
           placeholder="Option"
-          options={Options}
+          options={options}
           value={type}
           setValue={setType}
         />
@@ -48,21 +47,21 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
         <Select
           label="Point Type"
           placeholder="Option"
-          options={Options}
+          options={options}
           value={pointType}
           setValue={setPointType}
         />
         <Select
           label="Mechanism"
           placeholder="Option"
-          options={Options}
+          options={options}
           value={mechanism}
           setValue={setMechanism}
         />
         <Select
           label="Owner"
           placeholder="Option"
-          options={Options}
+          options={options}
           value={owner}
           setValue={setOwner}
         />
@@ -106,7 +105,7 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
             <Select
               label="C. Point Balance"
               placeholder="Option"
-              options={Options}
+              options={options}
               value={cPointBalance}
               setValue={setCPointBalance}
             />
@@ -134,14 +133,14 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
         <Select
           label="C. LOS Enabled"
           placeholder="Option"
-          options={Options}
+          options={options}
           value={cLOSEnabled}
           setValue={setCLOSEnabled}
         />
         <Select
           label="C. LOS Type"
           placeholder="Option"
-          options={Options}
+          options={options}
           value={cLOSType}
           setValue={setCLOSType}
         />

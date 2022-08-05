@@ -14,9 +14,6 @@ const Index: React.FunctionComponent<IOutlinedTextFieldProps> = ({
   direction = "row",
   ...props
 }) => {
-  const handleChangeValue = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(event.target.value);
-  };
   return (
     <Grid
       container
@@ -32,7 +29,9 @@ const Index: React.FunctionComponent<IOutlinedTextFieldProps> = ({
       <Grid item xs={rightColumn}>
         <TextField
           value={value}
-          onChange={handleChangeValue}
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+            setValue(event.target.value);
+          }}
           placeholder={placeholder}
           size="small"
           sx={{ width: "100%" }}

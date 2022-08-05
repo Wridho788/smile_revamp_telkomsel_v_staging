@@ -9,7 +9,7 @@ import {
 } from "../../components/organisms/Keyword";
 
 const Keyword = () => {
-  const [activeStep, setActiveStep] = React.useState(0);
+  const [activeStep, setActiveStep] = React.useState<number>(0);
   const steps = ["Main Info", "Bonus", "Notification", "Summary"];
   const stepsItem = [<MainInfo />, <Bonus />, <Notification />, <Summary />];
 
@@ -23,7 +23,7 @@ const Keyword = () => {
       <SingleBreadcrumbs
         firstTitle="Dashboard"
         secondTitle="Program"
-        title="Create Program"
+        title="Keyword"
         sx={{ mb: "3vw" }}
       />
       <StepperPaper sx={{ paddingBlock: "3vw", paddingInline: "4vw" }}>
