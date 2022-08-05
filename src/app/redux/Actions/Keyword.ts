@@ -1,33 +1,16 @@
 ﻿import {Dispatch} from "redux"
 import API from "../../services/API/Keyword"
-import {KeywordAction,
+import {
+    ICreateKeywordState,
+    KeywordAction,
     KeywordActionTypes,
-    KeywordPageData,
-MainInfo,
-    Segmentation,
-    Notification
 } from "../Types/keyword"
 import {KeywordPageDataInitial} from "../Reducers/keywordReducer";
 
-
-export const fetchKeywords = () => {
-    return async (dispatch: Dispatch<KeywordAction>) => {
-        try {
-            dispatch({type: KeywordActionTypes.FETCH_KEYWORDS})
-            const response = await API.getDataTes()
-
-            setTimeout(() => {
-                dispatch({type: KeywordActionTypes.FETCH_KEYWORDS_SUCCESS, payload: response.data})
-            }, 1500)
-        } catch (e) {
-            dispatch({type: KeywordActionTypes.FETCH_KEYWORDS_ERROR, payload: 'Error on keywords loading'})
-        }
-    }
-}
 export const getKeywordType = () => {
-   const mainInfo = KeywordPageDataInitial.main_info
-   const segmentation = KeywordPageDataInitial.segmentation
-   const notification = KeywordPageDataInitial.notification
+    const mainInfo = KeywordPageDataInitial.main_info
+    const segmentation = KeywordPageDataInitial.segmentation
+    const notification = KeywordPageDataInitial.notification
     return async (dispatch: Dispatch<KeywordAction>) => {
         try {
             dispatch({type: KeywordActionTypes.FETCH_KEYWORDS})
@@ -64,11 +47,14 @@ export const getKeywordType = () => {
     }
 }
 
-export const getProgramType = () => {
+interface ICreateKeywordProps {
+    data: ICreateKeywordState
+}
+export const createKeyword = ({data}: ICreateKeywordProps) => {
     return async (dispatch: Dispatch<KeywordAction>) => {
         try {
             dispatch({type: KeywordActionTypes.FETCH_KEYWORDS})
-            const response = await API.getKeywordType()
+            const response = await API.createKeyword(data)
 
             setTimeout(() => {
                 dispatch({type: KeywordActionTypes.FETCH_KEYWORDS_SUCCESS, payload: response.data})

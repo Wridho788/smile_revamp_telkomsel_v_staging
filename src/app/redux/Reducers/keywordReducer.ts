@@ -1,14 +1,15 @@
 ﻿import {
-    KeywordState,
+   IKeywordState,
+    ICreateKeywordState,
     KeywordAction,
     KeywordActionTypes,
-    KeywordPageData,
-    MainInfo,
-    Segmentation,
-    Notification
+    IKeywordPageData,
+    IMainInfo,
+    ISegmentation,
+    INotification
 } from "../Types/keyword"
 
-const MainInfoInitial: MainInfo = {
+const MainInfoInitial: IMainInfo = {
     keyword_type:[],
     point_type:[],
     mechanism:[],
@@ -18,29 +19,29 @@ const MainInfoInitial: MainInfo = {
     los_type:[],
 }
 
-const SegmentationInitial: Segmentation = {
+const SegmentationInitial: ISegmentation = {
     keyword_type: [],
     program_type: []
 }
 
-const NotificationInitial: Notification = {
+const NotificationInitial: INotification = {
     keyword_type: [],
     program_type: []
 }
 
-export const KeywordPageDataInitial: KeywordPageData = {
+export const KeywordPageDataInitial: IKeywordPageData = {
     main_info : MainInfoInitial,
     segmentation :SegmentationInitial,
     notification: NotificationInitial
 
 }
-const initialState: KeywordState = {
+const initialState: IKeywordState = {
     keywords: KeywordPageDataInitial,
     loading: false,
     error: null
 }
 
-export const keywordReducer = (state: KeywordState = initialState, action: KeywordAction): KeywordState => {
+export const keywordReducer = (state: IKeywordState = initialState, action: KeywordAction): IKeywordState => {
     switch (action.type) {
         case KeywordActionTypes.FETCH_KEYWORDS:
             return {loading: true, error: null, keywords: KeywordPageDataInitial}

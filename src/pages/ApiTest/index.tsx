@@ -1,14 +1,13 @@
 import React, { FC, useEffect } from 'react';
 import { useTypedSelector } from '../../app/hooks/useTypedSelector';
 import { useActions } from '../../app/hooks/useActions';
-import {H1} from "../../components";
 
 const Index: FC = () => {
     const {keywords, error, loading} = useTypedSelector(state=>state.keyword);
     const {getKeywordType} = useActions();
     useEffect(()=>{
         getKeywordType();
-    }, [])
+    }, [keywords])
 
     if (error){
         return <h1 style={{color: 'red', fontWeight: '700'}}>{error}</h1>

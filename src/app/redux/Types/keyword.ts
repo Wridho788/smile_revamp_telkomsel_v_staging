@@ -1,45 +1,105 @@
-﻿
-export interface MainInfo{
-    keyword_type:any[]
-    point_type:any[]
-    mechanism:any[]
-    owner:any[]
-    c_point_balance:any[]
-    c_los_enable:any[]
-    los_type:any[]
+﻿export interface IMainInfo {
+    keyword_type: any[]
+    point_type: any[]
+    mechanism: any[]
+    owner: any[]
+    c_point_balance: any[]
+    c_los_enable: any[]
+    los_type: any[]
 }
-export interface Segmentation{
-    keyword_type:any[]
-    program_type:any[]
+
+export interface ISegmentation {
+    keyword_type: any[]
+    program_type: any[]
 }
-export interface Notification{
-    keyword_type:any[]
-    program_type:any[]
+
+export interface INotification {
+    keyword_type: any[]
+    program_type: any[]
 }
-export interface KeywordPageData{
-    main_info: MainInfo,
-    segmentation : Segmentation,
-    notification : Notification
+
+export interface IKeywordPageData {
+    main_info: IMainInfo,
+    segmentation: ISegmentation,
+    notification: INotification
 }
-export interface KeywordState {
-    keywords: KeywordPageData
+
+export interface IKeywordBonus {
+    bonus_type: string,
+    location: string
+    limit: number
+    stock: number
+    bucket: string
+    qty_denom: string
+    payment: string
+    granular: string
+    bid: string
+    bonus_id: string
+    bonus_name: string
+}
+
+export interface IKeywordNotification {
+    notification: string,
+    via: string
+    receiver: number
+    transaction_type: number
+}
+
+export interface ICreateKeyword {
+    name: string,
+    start_period: string,
+    end_period: string,
+    max_redeem_per_msisdn: number,
+    max_redeem_per_msisdn_type: number,
+    max_redeem_per_msisdn_from: string,
+    max_redeem_per_msisdn_to: string,
+    channel_validation: string,
+    telkomsel_los: boolean,
+    telkomsel_los_value: number,
+    enable_coorporate: boolean,
+    customer_tier: string,
+    point_type: string,
+    comment_approval: string,
+    status_approval: string,
+    notification_type: string,
+    keyword_parent: string,
+    keyword_bonus: IKeywordBonus,
+    keyword_notification: IKeywordNotification,
+    keyword_type:string
+
+}
+
+
+export interface IKeywordState {
+    keywords: IKeywordPageData
     loading: boolean
     error: null | string
-} 
+}
+
+export interface ICreateKeywordState {
+    keywords: ICreateKeyword
+    loading: boolean
+    error: null | string
+}
+
 export enum KeywordActionTypes {
     FETCH_KEYWORDS = 'FETCH_KEYWORDS',
     FETCH_KEYWORDS_SUCCESS = 'FETCH_KEYWORDS_SUCCESS',
     FETCH_KEYWORDS_ERROR = 'FETCH_KEYWORDS_ERROR'
 }
-interface FetchKeywordsAction {
+
+interface IFetchKeywordsAction {
     type: KeywordActionTypes.FETCH_KEYWORDS;
 }
-interface FetchKeywordsSuccessAction {
+
+interface IFetchKeywordsSuccessAction {
     type: KeywordActionTypes.FETCH_KEYWORDS_SUCCESS;
-    payload: KeywordPageData;
+    payload: IKeywordPageData;
 }
-interface FetchKEYWORDsErrorAction {
+
+interface IFetchKEYWORDsErrorAction {
     type: KeywordActionTypes.FETCH_KEYWORDS_ERROR;
     payload: string;
 }
-export type KeywordAction = FetchKeywordsAction | FetchKeywordsSuccessAction | FetchKEYWORDsErrorAction;
+
+export type KeywordAction = IFetchKeywordsAction | IFetchKeywordsSuccessAction | IFetchKEYWORDsErrorAction;
