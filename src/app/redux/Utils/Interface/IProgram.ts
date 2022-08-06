@@ -1,5 +1,5 @@
 export interface IMainInfo {
-    keyword_type: any[]
+    program_type: any[]
     point_type: any[]
     mechanism: any[]
     owner: any[]
@@ -9,22 +9,22 @@ export interface IMainInfo {
 }
 
 export interface ISegmentation {
-    keyword_type: any[]
     program_type: any[]
+    point_type: any[]
 }
 
 export interface INotification {
-    keyword_type: any[]
     program_type: any[]
+    point_type: any[]
 }
 
-export interface IKeywordPageData {
+export interface IProgramPageData {
     main_info: IMainInfo,
     segmentation: ISegmentation,
     notification: INotification
 }
 
-export interface IKeywordBonus {
+export interface IProgramBonus {
     bonus_type: string,
     location: string
     limit: number
@@ -38,14 +38,14 @@ export interface IKeywordBonus {
     bonus_name: string
 }
 
-export interface IKeywordNotification {
+export interface IProgramNotification {
     notification: string,
     via: string
     receiver: number
     transaction_type: number
 }
 
-export interface ICreateKeyword {
+export interface ICreateProgram {
     name: string,
     start_period: string,
     end_period: string,
@@ -62,10 +62,10 @@ export interface ICreateKeyword {
     comment_approval: string,
     status_approval: string,
     notification_type: string,
-    keyword_parent: string,
-    keyword_bonus: IKeywordBonus,
-    keyword_notification: IKeywordNotification,
-    keyword_type:string
+    Program_parent: string,
+    Program_bonus: IProgramBonus,
+    Program_notification: IProgramNotification,
+    program_type:string
 }
 export interface IDefaultListResult {
     total: number,
@@ -73,8 +73,8 @@ export interface IDefaultListResult {
 }
 
 
-export interface IKeywordState {
-    result: IKeywordPageData
+export interface IProgramState {
+    result: IProgramPageData
     loading: boolean
     error: null | string
 }
@@ -85,9 +85,10 @@ export interface IDefaultListState {
     error: null | string
 }
 
-export interface ICreateKeywordState {
-    keywords: ICreateKeyword
+export interface ICreateProgramState {
+    Programs: ICreateProgram
     loading: boolean
     error: null | string
 }
+
 

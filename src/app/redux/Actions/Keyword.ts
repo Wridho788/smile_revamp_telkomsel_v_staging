@@ -3,43 +3,67 @@ import API from "../../services/API/Keyword"
 import {KeywordPageDataInitial} from "../Utils/InitialState/KeywordInitial";
 import {ActionTypes, Types} from "../Types/Types";
 import {ICreateKeywordState} from "../Utils/Interface/IKeyword";
+import {IDefaultListInitial} from "../Utils/InitialState/DefaultListInitial";
+import LOV_API from "../../services/API/Lov";
+import CUSTOMER_API from "../../services/API/Customer";
+import KEYWORD_API from "../../services/API/Program";
+import {IParamsListDefault} from "../Utils/Interface/IParamList";
 
-export const getKeywordType = () => {
+export const getKeywordPage = () => {
     const mainInfo = KeywordPageDataInitial.main_info
     const segmentation = KeywordPageDataInitial.segmentation
     const notification = KeywordPageDataInitial.notification
     return async (dispatch: Dispatch<Types>) => {
         try {
-            dispatch({type: ActionTypes.FETCH_KEYWORDS})
+            dispatch({type: ActionTypes.FETCH_DATA})
 
-            await API.getKeywordType()
+            await LOV_API.getKeywordType()
                 .then((res) => {
                     mainInfo.keyword_type = res.data
                 })
-            await API.getPointType()
+            await LOV_API.getPointType()
                 .then((res) => {
                     mainInfo.point_type = res.data
                 })
-            await API.getMechanism()
+            await LOV_API.getMechanism()
                 .then((res) => {
                     mainInfo.mechanism = res.data
                 })
-            await API.getOwner()
+            await LOV_API.getOwner()
                 .then((res) => {
                     mainInfo.owner = res.data
                 })
-            await API.getProgramType()
+            await LOV_API.getProgramType()
                 .then((res) => {
                     segmentation.program_type = res.data
                     notification.program_type = res.data
                 })
 
             setTimeout(() => {
-                dispatch({type: ActionTypes.FETCH_KEYWORDS_SUCCESS, payload: KeywordPageDataInitial})
+                console.log(KeywordPageDataInitial)
+                dispatch({type: ActionTypes.FETCH_DATA_SUCCESS, payload: KeywordPageDataInitial})
 
             }, 1500)
         } catch (e) {
-            dispatch({type: ActionTypes.FETCH_KEYWORDS_ERROR, payload: 'Error on keywords loading'})
+            dispatch({type: ActionTypes.FETCH_DATA_ERROR, payload: 'Error on keywords loading'})
+        }
+    }
+}
+
+export const customerList = ({limit = 10, skip = 0}: IParamsListDefault) => {
+    return async (dispatch: Dispatch<Types>) => {
+        const params = {limit: limit, skip: skip}
+        try {
+            dispatch({type: ActionTypes.FETCH_DATA})
+            await CUSTOMER_API.customerList(params)
+                .then((res) => {
+                    IDefaultListInitial.data = res.data
+                    IDefaultListInitial.total = res.total
+                    console.log(IDefaultListInitial)
+                    dispatch({type: ActionTypes.FETCH_DATA_SUCCESS, payload: IDefaultListInitial})
+                })
+        } catch (e) {
+            dispatch({type: ActionTypes.FETCH_DATA_ERROR, payload: 'Error on todos loading'});
         }
     }
 }
@@ -47,17 +71,18 @@ export const getKeywordType = () => {
 interface ICreateKeywordProps {
     data: ICreateKeywordState
 }
+
 export const createKeyword = ({data}: ICreateKeywordProps) => {
     return async (dispatch: Dispatch<Types>) => {
         try {
-            dispatch({type: ActionTypes.FETCH_KEYWORDS})
-            const response = await API.createKeyword(data)
+            dispatch({type: ActionTypes.FETCH_DATA})
+            const response = await KEYWORD_API.createKeyword(data)
 
             setTimeout(() => {
-                dispatch({type: ActionTypes.FETCH_KEYWORDS_SUCCESS, payload: response.data})
+                dispatch({type: ActionTypes.FETCH_DATA_SUCCESS, payload: response.data})
             }, 1500)
         } catch (e) {
-            dispatch({type: ActionTypes.FETCH_KEYWORDS_ERROR, payload: 'Error on keywords loading'})
+            dispatch({type: ActionTypes.FETCH_DATA_ERROR, payload: 'Error on keywords loading'})
         }
     }
 }

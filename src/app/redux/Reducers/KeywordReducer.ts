@@ -3,19 +3,19 @@ import {IKeywordState} from "../Utils/Interface/IKeyword";
 import {ActionTypes, Types} from "../Types/Types";
 
 const initialState: IKeywordState = {
-    keywords: KeywordPageDataInitial,
+    result: KeywordPageDataInitial,
     loading: false,
     error: null
 }
 
 export const KeywordReducer = (state: IKeywordState = initialState, action: Types): IKeywordState => {
     switch (action.type) {
-        case ActionTypes.FETCH_KEYWORDS:
-            return {loading: true, error: null, keywords: KeywordPageDataInitial}
-        case ActionTypes.FETCH_KEYWORDS_SUCCESS:
-            return {loading: false, error: null, keywords: action.payload}
-        case ActionTypes.FETCH_KEYWORDS_ERROR:
-            return {loading: true, error: action.payload, keywords: KeywordPageDataInitial}
+        case ActionTypes.FETCH_DATA:
+            return {loading: true, error: null, result: KeywordPageDataInitial}
+        case ActionTypes.FETCH_DATA_SUCCESS:
+            return {loading: false, error: null, result: action.payload}
+        case ActionTypes.FETCH_DATA_ERROR:
+            return {loading: true, error: action.payload, result: KeywordPageDataInitial}
         default:
             return state;
     }
