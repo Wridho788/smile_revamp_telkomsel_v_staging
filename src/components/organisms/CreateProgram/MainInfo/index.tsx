@@ -6,6 +6,8 @@ import {
   OutlinedTextField,
   ResponsiveDateTimePicker,
   H1,
+  BodyCopy,
+  H3,
 } from "../../../atoms";
 
 interface IMainInfoProps {}
@@ -28,8 +30,8 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
   const [cLOSValue, setCLOSValue] = React.useState<string>("");
 
   return (
-    <Box border="0.1vw solid rgba(0, 0, 0, 0.1)" borderRadius="0.3vw" p="3vw">
-      <Stack spacing={"1vw"} maxWidth={"50%"}>
+    <Box pt="1vw">
+      <Stack spacing={"1vw"} maxWidth={"70%"}>
         <Select
           label="Type"
           placeholder="Option"
@@ -86,8 +88,6 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
           value={endPeriod}
           setValue={setEndPeriod}
         />
-      </Stack>
-      <Stack mt={"1vw"} spacing={"1vw"} maxWidth={"100%"}>
         <OutlinedTextField
           label="Description"
           placeholder="Description"
@@ -95,22 +95,18 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
           setValue={setDescription}
           variant={"outlined"}
           multiline
-          rows={10}
-          totalColumn={20}
-          leftColumn={4}
-          rightColumn={16}
+          rows={4}
         />
-        <Grid container columns={10}>
-          <Grid item xs={5}>
-            <Select
-              label="C. Point Balance"
-              placeholder="Option"
-              options={options}
-              value={cPointBalance}
-              setValue={setCPointBalance}
-            />
-          </Grid>
-          <Grid item xs={5} pl="1vw">
+        <Select
+          label="C. Point Balance"
+          placeholder="Option"
+          options={options}
+          value={cPointBalance}
+          setValue={setCPointBalance}
+        />
+        <Grid container columns={11}>
+          <Grid item xs={4}></Grid>
+          <Grid item xs={7}>
             <Stack direction="row" spacing={"1vw"} alignItems="center">
               <OutlinedTextField
                 placeholder="Start Numeric"
@@ -118,7 +114,7 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
                 setValue={setStartNumeric}
                 variant={"outlined"}
               />
-              <H1 lineHeight={0}>-</H1>
+              <H3 lineHeight={0}>-</H3>
               <OutlinedTextField
                 placeholder="End Numeric"
                 value={endNumeric}
@@ -128,8 +124,6 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
             </Stack>
           </Grid>
         </Grid>
-      </Stack>
-      <Stack mt="1vw" spacing={"1vw"} maxWidth={"50%"}>
         <Select
           label="C. LOS Enabled"
           placeholder="Option"

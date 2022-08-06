@@ -1,6 +1,6 @@
 import React from "react";
 import { Box } from "@mui/material";
-import { SingleBreadcrumbs, Stepper, StepperPaper } from "../../components";
+import { H2, Stepper, StepperPaper } from "../../components";
 import {
   MainInfo,
   Notification,
@@ -25,13 +25,16 @@ const CreateProgram = () => {
         paddingInline: "5vw",
       }}
     >
-      <SingleBreadcrumbs
+      {/* <SingleBreadcrumbs
         firstTitle="Dashboard"
         secondTitle="Program"
         title="Create Program"
         sx={{ mb: "3vw" }}
-      />
-      <StepperPaper sx={{ paddingBlock: "3vw", paddingInline: "4vw" }}>
+      /> */}
+      <StepperPaper sx={{ paddingTop: "4vw" }}>
+        <H2 textAlign="center" mb="2vw">
+          Create Program
+        </H2>
         <Stepper
           steps={steps}
           activeStep={activeStep}

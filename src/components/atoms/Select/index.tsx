@@ -16,9 +16,9 @@ const Index: React.FunctionComponent<ISelectProps> = ({
   options,
   value,
   setValue,
-  totalColumn = 10,
+  totalColumn = 11,
   leftColumn = 4,
-  rightColumn = 6,
+  rightColumn = 7,
   direction = "row",
   ...props
 }) => {

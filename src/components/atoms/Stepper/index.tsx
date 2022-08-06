@@ -9,6 +9,88 @@ import { BodyCopy } from "../Typography";
 import ArrowLeftIcon from "@mui/icons-material/ArrowLeft";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 import TelegramIcon from "@mui/icons-material/Telegram";
+import { styled } from "@mui/material/styles";
+import StepConnector, {
+  stepConnectorClasses,
+} from "@mui/material/StepConnector";
+import { StepIconProps } from "@mui/material/StepIcon";
+
+const ColorlibConnector = styled(StepConnector)(({ theme }) => ({
+  [`&.${stepConnectorClasses.alternativeLabel}`]: {
+    top: 33,
+  },
+  [`&.${stepConnectorClasses.active}`]: {
+    [`& .${stepConnectorClasses.line}`]: {
+      backgroundColor: theme.palette.secondary.dark,
+    },
+  },
+  [`&.${stepConnectorClasses.completed}`]: {
+    [`& .${stepConnectorClasses.line}`]: {
+      backgroundColor: theme.palette.secondary.dark,
+    },
+  },
+  [`& .${stepConnectorClasses.line}`]: {
+    height: 5,
+    border: 0,
+    backgroundColor: theme.palette.secondary.main,
+    borderRadius: 1,
+  },
+}));
+
+const ColorlibStepIconRoot = styled("div")<{
+  ownerState: { completed?: boolean; active?: boolean };
+}>(({ theme, ownerState }) => ({
+  backgroundColor: theme.palette.background.paper,
+  zIndex: 1,
+  color: "rgba(0, 26, 65, 0.2)",
+  fontFamily: "sans-serif",
+  fontSize: 24,
+  fontWeight: "bold",
+  width: 70,
+  height: 70,
+  display: "flex",
+  border: "5px solid",
+  borderColor: theme.palette.secondary.main,
+  borderRadius: "50%",
+  justifyContent: "center",
+  alignItems: "center",
+  ...(ownerState.active && {
+    color: theme.palette.background.paper,
+    backgroundColor: theme.palette.secondary.dark,
+    border: "5px solid",
+    borderColor: theme.palette.secondary.dark,
+  }),
+  ...(ownerState.completed && {
+    color: theme.palette.background.paper,
+    backgroundColor: theme.palette.secondary.dark,
+    border: "5px solid",
+    borderColor: theme.palette.secondary.dark,
+  }),
+}));
+
+function ColorlibStepIcon(props: StepIconProps) {
+  const { active, completed, className } = props;
+
+  const icons: { [index: string]: React.ReactElement | number | string } = {
+    // If you want to change the number to be an Icon, you can use the example below
+    // 1: <SettingsIcon />,
+    // 2: <GroupAddIcon />,
+    // 3: <VideoLabelIcon />,
+    1: "1",
+    2: "2",
+    3: "3",
+    4: "4",
+  };
+
+  return (
+    <ColorlibStepIconRoot
+      ownerState={{ completed, active }}
+      className={className}
+    >
+      {icons[String(props.icon)]}
+    </ColorlibStepIconRoot>
+  );
+}
 
 export default function HorizontalLinearStepper({
   children,
@@ -69,35 +151,38 @@ export default function HorizontalLinearStepper({
 
   return (
     <Box sx={{ width: "100%" }}>
-      <Stepper activeStep={activeStep} sx={{ mb: "3vw" }}>
-        {steps.map((label: any, index: any) => {
-          const stepProps: { completed?: boolean } = {};
-          const labelProps: {
-            optional?: React.ReactNode;
-          } = {};
-          if (isStepOptional(index)) {
-            labelProps.optional = (
-              <Typography variant="caption">Optional</Typography>
+      <Box px="10%">
+        <Stepper
+          alternativeLabel
+          activeStep={activeStep}
+          connector={<ColorlibConnector />}
+          sx={{ mb: "3vw" }}
+        >
+          {steps.map((label: any, index: any) => {
+            const stepProps: { completed?: boolean } = {};
+            const labelProps: {
+              optional?: React.ReactNode;
+            } = {};
+            if (isStepOptional(index)) {
+              labelProps.optional = (
+                <Typography variant="caption">Optional</Typography>
+              );
+            }
+            if (isStepSkipped(index)) {
+              stepProps.completed = false;
+            }
+            return (
+              <Step key={label} {...stepProps}>
+                <StepLabel StepIconComponent={ColorlibStepIcon} {...labelProps}>
+                  <BodyCopy>{label}</BodyCopy>
+                </StepLabel>
+              </Step>
             );
-          }
-          if (isStepSkipped(index)) {
-            stepProps.completed = false;
-          }
-          return (
-            <Step key={label} {...stepProps}>
-              <Box display="flex" justifyContent="center" mb="1vw">
-                <StepLabel {...labelProps} />
-              </Box>
-              <BodyCopy>{label}</BodyCopy>
-            </Step>
-          );
-        })}
-      </Stepper>
+          })}
+        </Stepper>
+      </Box>
       {activeStep === steps.length ? (
         <React.Fragment>
-          <Typography sx={{ mt: "1vw", mb: 1 }}>
-            All steps completed - your inputs are submitted
-          </Typography>
           <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
             <Box sx={{ flex: "1 1 auto" }} />
             <Button onClick={handleReset}>Reset</Button>
@@ -105,18 +190,19 @@ export default function HorizontalLinearStepper({
         </React.Fragment>
       ) : (
         <React.Fragment>
-          {children}
-          <Box sx={{ display: "flex", flexDirection: "row", pt: 2, mt: "1vw" }}>
+          <Box px="17.8%">{children}</Box>
+          <Box sx={{ display: "flex", flexDirection: "row", mt: "3vw" }}>
             <Button
               disabled={activeStep === 0}
               onClick={handleBack}
-              color="primary"
-              variant="contained"
-              startIcon={<ArrowLeftIcon fontSize="large" />}
+              color="inherit"
               sx={{
-                borderRadius: "0.3vw",
-                paddingInline: "1.5vw",
-                paddingBlock: "0.5vw",
+                width: "50%",
+                borderTop: "3px solid",
+                borderRight: "1.5px solid",
+                borderColor: "secondary.main",
+                borderRadius: 0,
+                paddingBlock: "1vw",
               }}
             >
               Back
@@ -130,21 +216,16 @@ export default function HorizontalLinearStepper({
             <Button
               onClick={handleNext}
               color="primary"
-              variant="contained"
-              endIcon={
-                activeStep === steps.length - 1 ? (
-                  <TelegramIcon fontSize="large" />
-                ) : (
-                  <ArrowRightIcon fontSize="large" />
-                )
-              }
               sx={{
-                borderRadius: "0.3vw",
-                paddingInline: "1.5vw",
-                paddingBlock: "0.5vw",
+                width: "50%",
+                borderTop: "3px solid",
+                borderLeft: "1.5px solid",
+                borderColor: "secondary.main",
+                borderRadius: 0,
+                paddingBlock: "1vw",
               }}
             >
-              {activeStep === steps.length - 1 ? "Submit" : "Next"}
+              {activeStep === steps.length - 1 ? "Create" : "Next"}
             </Button>
           </Box>
         </React.Fragment>

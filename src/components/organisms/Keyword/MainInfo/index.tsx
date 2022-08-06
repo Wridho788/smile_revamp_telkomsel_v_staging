@@ -29,8 +29,8 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
   const [parent, setParent] = React.useState<string>("");
 
   return (
-    <Box border="0.1vw solid rgba(0, 0, 0, 0.1)" borderRadius="0.3vw" p="3vw">
-      <Stack spacing={"1vw"} maxWidth={"50%"}>
+    <Box pt="1vw">
+      <Stack spacing={"1vw"} maxWidth={"70%"}>
         <Select
           label="Type"
           placeholder="Option"

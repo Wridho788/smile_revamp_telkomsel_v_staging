@@ -17,7 +17,7 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
   const [totalRow, setTotalRow] = React.useState<number[]>([1]);
 
   return (
-    <Box border="0.1vw solid rgba(0, 0, 0, 0.1)" borderRadius="0.3vw" p="3vw">
+    <Box pt="1vw">
       <Stack maxWidth={"100%"} spacing="3vw">
         {totalRow.map((_, idx) => (
           <Grid
