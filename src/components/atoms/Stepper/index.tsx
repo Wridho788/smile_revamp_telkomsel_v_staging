@@ -6,9 +6,6 @@ import StepLabel from "@mui/material/StepLabel";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { BodyCopy } from "../Typography";
-import ArrowLeftIcon from "@mui/icons-material/ArrowLeft";
-import ArrowRightIcon from "@mui/icons-material/ArrowRight";
-import TelegramIcon from "@mui/icons-material/Telegram";
 import { styled } from "@mui/material/styles";
 import StepConnector, {
   stepConnectorClasses,

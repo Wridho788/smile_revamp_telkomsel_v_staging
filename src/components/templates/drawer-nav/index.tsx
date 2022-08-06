@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/alt-text */
 import * as React from "react";
 import { styled, useTheme, Theme, CSSObject } from "@mui/material/styles";
 import Box from "@mui/material/Box";
@@ -128,9 +129,7 @@ const Index: React.FC<LayoutProps> = ({ children }: LayoutProps) => {
             bottom: 35,
             left: -10,
           }}
-          onClick={() => {
-            setOpenList(!open);
-          }}
+          // onClick={handleClick}
         >
           <img
             src={open ? BtnArrowRight : BtnArrowLeft}
@@ -179,7 +178,6 @@ const Index: React.FC<LayoutProps> = ({ children }: LayoutProps) => {
         </Box>
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3, marginBottom: 40 }}>
-        <DrawerHeader />
         {children}
       </Box>
     </Box>
