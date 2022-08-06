@@ -1,5 +1,5 @@
 import {AxiosGet, AxiosPost} from "../../Axios";
-import {ICreateKeywordState} from "../../../redux/Types/keyword";
+import {ICreateKeywordState} from "../../../redux/Utils/Interface/IKeyword";
 
 const getDataTes = (params?: string) => AxiosGet('/tes', params)
 const getKeywordType = () => AxiosGet('/lov/keyword_type')

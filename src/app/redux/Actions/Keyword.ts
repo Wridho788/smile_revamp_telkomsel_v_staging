@@ -1,19 +1,16 @@
 ﻿import {Dispatch} from "redux"
 import API from "../../services/API/Keyword"
-import {
-    ICreateKeywordState,
-    KeywordAction,
-    KeywordActionTypes,
-} from "../Types/keyword"
-import {KeywordPageDataInitial} from "../Reducers/keywordReducer";
+import {KeywordPageDataInitial} from "../Utils/InitialState/KeywordInitial";
+import {ActionTypes, Types} from "../Types/Types";
+import {ICreateKeywordState} from "../Utils/Interface/IKeyword";
 
 export const getKeywordType = () => {
     const mainInfo = KeywordPageDataInitial.main_info
     const segmentation = KeywordPageDataInitial.segmentation
     const notification = KeywordPageDataInitial.notification
-    return async (dispatch: Dispatch<KeywordAction>) => {
+    return async (dispatch: Dispatch<Types>) => {
         try {
-            dispatch({type: KeywordActionTypes.FETCH_KEYWORDS})
+            dispatch({type: ActionTypes.FETCH_KEYWORDS})
 
             await API.getKeywordType()
                 .then((res) => {
@@ -38,11 +35,11 @@ export const getKeywordType = () => {
                 })
 
             setTimeout(() => {
-                dispatch({type: KeywordActionTypes.FETCH_KEYWORDS_SUCCESS, payload: KeywordPageDataInitial})
+                dispatch({type: ActionTypes.FETCH_KEYWORDS_SUCCESS, payload: KeywordPageDataInitial})
 
             }, 1500)
         } catch (e) {
-            dispatch({type: KeywordActionTypes.FETCH_KEYWORDS_ERROR, payload: 'Error on keywords loading'})
+            dispatch({type: ActionTypes.FETCH_KEYWORDS_ERROR, payload: 'Error on keywords loading'})
         }
     }
 }
@@ -51,16 +48,16 @@ interface ICreateKeywordProps {
     data: ICreateKeywordState
 }
 export const createKeyword = ({data}: ICreateKeywordProps) => {
-    return async (dispatch: Dispatch<KeywordAction>) => {
+    return async (dispatch: Dispatch<Types>) => {
         try {
-            dispatch({type: KeywordActionTypes.FETCH_KEYWORDS})
+            dispatch({type: ActionTypes.FETCH_KEYWORDS})
             const response = await API.createKeyword(data)
 
             setTimeout(() => {
-                dispatch({type: KeywordActionTypes.FETCH_KEYWORDS_SUCCESS, payload: response.data})
+                dispatch({type: ActionTypes.FETCH_KEYWORDS_SUCCESS, payload: response.data})
             }, 1500)
         } catch (e) {
-            dispatch({type: KeywordActionTypes.FETCH_KEYWORDS_ERROR, payload: 'Error on keywords loading'})
+            dispatch({type: ActionTypes.FETCH_KEYWORDS_ERROR, payload: 'Error on keywords loading'})
         }
     }
 }

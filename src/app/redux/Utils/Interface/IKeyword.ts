@@ -1,4 +1,4 @@
-﻿export interface IMainInfo {
+export interface IMainInfo {
     keyword_type: any[]
     point_type: any[]
     mechanism: any[]
@@ -81,25 +81,3 @@ export interface ICreateKeywordState {
     loading: boolean
     error: null | string
 }
-
-export enum KeywordActionTypes {
-    FETCH_KEYWORDS = 'FETCH_KEYWORDS',
-    FETCH_KEYWORDS_SUCCESS = 'FETCH_KEYWORDS_SUCCESS',
-    FETCH_KEYWORDS_ERROR = 'FETCH_KEYWORDS_ERROR'
-}
-
-interface IFetchKeywordsAction {
-    type: KeywordActionTypes.FETCH_KEYWORDS;
-}
-
-interface IFetchKeywordsSuccessAction {
-    type: KeywordActionTypes.FETCH_KEYWORDS_SUCCESS;
-    payload: IKeywordPageData;
-}
-
-interface IFetchKEYWORDsErrorAction {
-    type: KeywordActionTypes.FETCH_KEYWORDS_ERROR;
-    payload: string;
-}
-
-export type KeywordAction = IFetchKeywordsAction | IFetchKeywordsSuccessAction | IFetchKEYWORDsErrorAction;

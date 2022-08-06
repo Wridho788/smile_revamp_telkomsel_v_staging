@@ -1,5 +1,5 @@
 import Instance from "./Instance";
-import {ICreateKeywordState} from "../../redux/Types/keyword";
+import {ICreateKeywordState} from "../../redux/Utils/Interface/IKeyword";
 
 const baseUrl = process.env.REACT_APP_BASE_URL
 
