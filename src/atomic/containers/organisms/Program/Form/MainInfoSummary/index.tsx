@@ -7,8 +7,10 @@ import TextFieldApp from "../../../../../components/atoms/TextFieldApp";
 import ButtonApp from "../../../../../components/atoms/ButtonApp";
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import useGeneralProgramRegistration from "../../../../pages/GeneralProgramRegistration/useGeneralProgramRegistration";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import {MainInfoSummaryProps} from "./MainInfoSummary.type";
 
-const MainInfoSummary: FC = () => {
+const MainInfoSummary: FC<MainInfoSummaryProps> = ({step, setStep}) => {
     const Dummy = [
         {
             id: 1,
@@ -63,6 +65,22 @@ const MainInfoSummary: FC = () => {
                     </Box>
                     <Box component={Grid} item xs={4} p={2}>
                         <SelectField data={Dummy} label={'C. LOS Value'}/>
+                    </Box>
+                </Grid>
+
+                <Grid container justifyContent={"center"} alignContent={'center'} alignItems={'center'}>
+                    <Box mt={2} component={Grid} xs={11} pb={2}>
+                        <Grid container justifyContent={"space-between"}>
+                            <Box component={Grid} item xs={2}>
+                                {
+                                    step !== 0 &&
+                                    <ButtonApp onClick={() => {step > 0 && setStep(step - 1)}} icon={<ArrowBackIcon />} label={"Back"}/>
+                                }
+                            </Box>
+                            <Box component={Grid} item xs={2}>
+                                <ButtonApp onClick={() => {step < 4 && setStep(step + 1)}} icon={<ArrowForwardIcon />} label={"Next"}/>
+                            </Box>
+                        </Grid>
                     </Box>
                 </Grid>
             </>
