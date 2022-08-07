@@ -40,7 +40,7 @@ const Segmentation: React.FunctionComponent<ISegmentationProps> = (props) => {
         centered
       >
         {tabTitles.map((tabTitle, idx) => (
-          <Tab key={`tabTitle__${idx}`} label={tabTitle} sx={{ px: "2vw" }} />
+          <Tab key={`tabTitle__${idx}`} label={tabTitle} />
         ))}
       </Tabs>
       <Grid container columns={11} mt="2vw" position="relative">
