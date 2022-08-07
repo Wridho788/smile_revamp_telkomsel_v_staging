@@ -1,10 +1,10 @@
 import React, { FC } from 'react'
 import { ButtonCustom } from "./ButtonApp.style";
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import {ButtonAppProps} from "./ButtonApp.type";
 
-const ButtonApp: FC = () => {
+const ButtonApp: FC<ButtonAppProps> = ({icon, label, onClick}) => {
     return (
-        <ButtonCustom variant="contained" endIcon={<ArrowForwardIcon />}> Next </ButtonCustom>
+        <ButtonCustom variant="contained" endIcon={icon} onClick={onClick}> {label} </ButtonCustom>
     )
 }
 
