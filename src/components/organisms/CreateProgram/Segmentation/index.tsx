@@ -3,6 +3,7 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import {
   Box,
+  Button,
   Checkbox,
   FormControlLabel,
   FormGroup,
@@ -123,28 +124,32 @@ const Segmentation: React.FunctionComponent<ISegmentationProps> = (props) => {
           alignItems="center"
         >
           <Stack spacing="1vw">
-            <IconButton
+            <Button
               aria-label="rightArrow"
               size="large"
+              color="primary"
+              variant="contained"
               sx={{
-                color: "background.paper",
-                bgcolor: "primary.main",
+                fontSize: "1.2vw",
+                paddingBlock: "1vw",
                 borderRadius: "0.3vw",
               }}
             >
               <KeyboardDoubleArrowRightIcon fontSize="inherit" />
-            </IconButton>
-            <IconButton
+            </Button>
+            <Button
               aria-label="leftArrow"
               size="large"
+              color="primary"
+              variant="contained"
               sx={{
-                color: "background.paper",
-                bgcolor: "primary.main",
+                fontSize: "1.2vw",
+                paddingBlock: "1vw",
                 borderRadius: "0.3vw",
               }}
             >
               <KeyboardDoubleArrowLeftIcon fontSize="inherit" />
-            </IconButton>
+            </Button>
           </Stack>
         </Grid>
         <Grid item xs={5} px="1vw">
