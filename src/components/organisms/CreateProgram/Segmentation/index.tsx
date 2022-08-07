@@ -44,13 +44,7 @@ const Segmentation: React.FunctionComponent<ISegmentationProps> = (props) => {
         ))}
       </Tabs>
       <Grid container columns={11} mt="2vw" position="relative">
-        <Grid
-          item
-          xs={5}
-          border="0.1vw solid rgba(0, 0, 0, 0.1)"
-          borderRadius="0.3vw"
-          p="3vw"
-        >
+        <Grid item xs={5} px="1vw">
           <Stack spacing={"1vw"}>
             <BodyCopy pl="0.5vw">List of {tabTitles[activeTab]} Items</BodyCopy>
             <Grid container columns={10}>
@@ -153,13 +147,7 @@ const Segmentation: React.FunctionComponent<ISegmentationProps> = (props) => {
             </IconButton>
           </Stack>
         </Grid>
-        <Grid
-          item
-          xs={5}
-          border="0.1vw solid rgba(0, 0, 0, 0.1)"
-          borderRadius="0.3vw"
-          p="3vw"
-        >
+        <Grid item xs={5} px="1vw">
           <Stack spacing={"1vw"}>
             <BodyCopy pl="0.5vw">List of Choose Items</BodyCopy>
             <Grid container columns={10}>
