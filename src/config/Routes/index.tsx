@@ -7,7 +7,9 @@ import {
     ProgramPage,
     CreateProgram,
     Keyword,
-    ApiTest
+    ApiKeyword,
+    ApiProgram,
+    ApiList,
 } from "../../pages";
 
 
@@ -20,7 +22,9 @@ const Index = () => (
         <Route path="/login" element={<LoginPage/>}/>
         <Route path="/create-program" element={<CreateProgram/>}/>
         <Route path="/keyword" element={<Keyword/>}/>
-        <Route path="/api-test" element={<ApiTest/>}/>
+        <Route path="/api-keyword" element={<ApiKeyword/>}/>
+        <Route path="/api-program" element={<ApiProgram/>}/>
+        <Route path="/api-list" element={<ApiList/>}/>
     </Routes>
 );
 export default Index;

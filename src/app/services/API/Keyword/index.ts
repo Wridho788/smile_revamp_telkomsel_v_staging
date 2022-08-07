@@ -1,25 +1,13 @@
-import {AxiosGet} from "../../Axios";
+import {AxiosGet, AxiosPost} from "../../Axios";
+import {ICreateProgramState} from "../../../redux/Utils/Interface/IProgram";
 
-const getDataTes = (params?: string) => AxiosGet('/tes', params)
-const getKeywordType = () => AxiosGet('/lov/keyword_type')
-const getPointType = () => AxiosGet('/lov/point_type')
-const getMechanism= () => AxiosGet('/lov/mechanism')
-const getOwner= () => AxiosGet('/lov/owner')
-const getPointBalance= () => AxiosGet('/lov/c_point_balance')
+
+// Create Data
+const createProgram = (data: ICreateProgramState) => AxiosPost('/Program')
 
 
 
-
-
-const getProgramType = () => AxiosGet('/lov/program_type')
-
-const API = {
-    getDataTes,
-    getKeywordType,
-    getProgramType,
-    getPointType,
-    getMechanism,
-    getOwner,
-    getPointBalance
+const PROGRAM_API = {
+    createProgram,
 }
-export default API
+export default PROGRAM_API
