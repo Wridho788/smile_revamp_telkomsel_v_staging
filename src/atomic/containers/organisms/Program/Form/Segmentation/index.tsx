@@ -7,10 +7,11 @@ import CType from "./CType";
 import ButtonApp from "../../../../../components/atoms/ButtonApp";
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import useGeneralProgramRegistration from "../../../../pages/GeneralProgramRegistration/useGeneralProgramRegistration";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import {SegmentationProps} from "./Segmentation.type";
 
-const Segmentation: FC = () => {
+const Segmentation: FC<SegmentationProps> = ({step,setStep}) => {
     const {tab, changeTab} = useSegmentationLogic()
-    const {setStep} = useGeneralProgramRegistration()
 
     const SegmentationTabToBeRendered = () => {
         switch (tab) {
@@ -50,6 +51,19 @@ const Segmentation: FC = () => {
                                 SegmentationTabToBeRendered()
                             }
                         </Box>
+                    </Box>
+                </Grid>
+
+                <Grid container justifyContent={"center"} alignContent={'center'} alignItems={'center'}>
+                    <Box mt={2} component={Grid} xs={11} pb={2}>
+                        <Grid container justifyContent={"space-between"}>
+                            <Box component={Grid} item xs={2}>
+                                <ButtonApp onClick={() => {step > 0 && setStep(step - 1)}} icon={<ArrowBackIcon />} label={"Back"}/>
+                            </Box>
+                            <Box component={Grid} item xs={2}>
+                                <ButtonApp onClick={() => {step < 4 && setStep(step + 1)}} icon={<ArrowForwardIcon />} label={"Next"}/>
+                            </Box>
+                        </Grid>
                     </Box>
                 </Grid>
             </>

@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React, {FC} from 'react'
 import AppLayout from "../../../components/layouts";
 import MainInfoSummary from "../../organisms/Program/Form/MainInfoSummary";
 import {Box, Grid} from "@mui/material";
@@ -8,19 +8,22 @@ import Segmentation from "../../organisms/Program/Form/Segmentation";
 import ButtonApp from "../../../components/atoms/ButtonApp";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import Notification from "../../organisms/Program/Form/Notification";
 
 const GeneralProgramCreation: FC = () => {
-    const { step, setStep } = useGeneralProgramRegistration()
+    const {step, setStep, notification, setNotification} = useGeneralProgramRegistration()
     const steps = ['Main Info', 'Segmentation', 'Notification', 'Summary'];
 
     const childrenToBeRendered = () => {
         switch (step) {
             case 0:
-                return <MainInfoSummary/>
+                return <MainInfoSummary step={step} setStep={setStep}/>
             case 1:
-                return <Segmentation />
+                return <Segmentation step={step} setStep={setStep}/>
+            case 2:
+                return <Notification step={step} setStep={setStep} notification={notification} setNotification={setNotification}/>
             default:
-                return <MainInfoSummary/>
+                return <MainInfoSummary step={step} setStep={setStep}/>
         }
     }
     return (
@@ -30,23 +33,11 @@ const GeneralProgramCreation: FC = () => {
                     <Box component={Grid} item xs={10}>
                         <CustomStepper steps={steps} activeSteps={step}/>
                     </Box>
+                    <span onClick={() => {console.log(notification)}}>testing</span>
                 </Grid>
                 {
                     childrenToBeRendered()
                 }
-
-                <Grid container justifyContent={"center"} alignContent={'center'} alignItems={'center'}>
-                    <Box mt={2} component={Grid} xs={7}>
-                        <Grid container justifyContent={"space-between"}>
-                            <Box component={Grid} item xs={2} p={1}>
-                                <ButtonApp onClick={() => {step > 0 && setStep(step - 1)}} icon={<ArrowBackIcon />} label={"Back"}/>
-                            </Box>
-                            <Box component={Grid} item xs={2} p={1}>
-                                <ButtonApp onClick={() => {step < 4 && setStep(step + 1)}} icon={<ArrowForwardIcon />} label={"Next"}/>
-                            </Box>
-                        </Grid>
-                    </Box>
-                </Grid>
             </>
         </AppLayout>
     )

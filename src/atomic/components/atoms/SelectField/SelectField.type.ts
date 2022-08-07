@@ -2,7 +2,8 @@ import React from "react";
 
 interface SelectFieldProps {
     label: string,
-    data: any
+    data: any,
+    onChange?: any
 }
 
 export type {
