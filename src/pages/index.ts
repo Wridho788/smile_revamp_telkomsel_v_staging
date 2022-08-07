@@ -8,6 +8,7 @@ import CreateProgram from "./CreateProgram";
 import ApiKeyword from "./ApiKeyword";
 import ApiProgram from "./ApiKeyword";
 import ApiList from "./ApiList";
+import ApiCreateKeyword from "./ApiCreateKeyword";
 
 
 import Keyword from "./Keyword";
@@ -24,4 +25,5 @@ export {
     ApiKeyword,
     ApiProgram,
     ApiList,
+    ApiCreateKeyword
 };

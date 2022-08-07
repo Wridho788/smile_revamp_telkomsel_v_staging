@@ -86,8 +86,12 @@ export interface IDefaultListState {
 }
 
 export interface ICreateKeywordState {
-    keywords: ICreateKeyword
+    result: ICreateKeyword
     loading: boolean
     error: null | string
 }
 
+
+export interface ISetCreateDataKeywordState {
+    data: ICreateKeyword
+}

@@ -10,6 +10,7 @@ import {
     ApiKeyword,
     ApiProgram,
     ApiList,
+    ApiCreateKeyword
 } from "../../pages";
 
 
@@ -25,6 +26,7 @@ const Index = () => (
         <Route path="/api-keyword" element={<ApiKeyword/>}/>
         <Route path="/api-program" element={<ApiProgram/>}/>
         <Route path="/api-list" element={<ApiList/>}/>
+        <Route path="/api-create-keyword" element={<ApiCreateKeyword/>}/>
     </Routes>
 );
 export default Index;
