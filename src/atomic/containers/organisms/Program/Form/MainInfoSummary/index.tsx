@@ -5,6 +5,8 @@ import SelectField from "../../../../../components/atoms/SelectField";
 import DatePicker from "../../../../../components/atoms/Datepicker";
 import TextFieldApp from "../../../../../components/atoms/TextFieldApp";
 import ButtonApp from "../../../../../components/atoms/ButtonApp";
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import useGeneralProgramRegistration from "../../../../pages/GeneralProgramRegistration/useGeneralProgramRegistration";
 
 const MainInfoSummary: FC = () => {
     const Dummy = [
@@ -61,12 +63,6 @@ const MainInfoSummary: FC = () => {
                     </Box>
                     <Box component={Grid} item xs={4} p={2}>
                         <SelectField data={Dummy} label={'C. LOS Value'}/>
-                    </Box>
-                </Grid>
-
-                <Grid container justifyContent={"flex-end"}>
-                    <Box component={Grid} item xs={2} p={4}>
-                        <ButtonApp/>
                     </Box>
                 </Grid>
             </>
