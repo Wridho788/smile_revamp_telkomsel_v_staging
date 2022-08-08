@@ -33,7 +33,37 @@ const AxiosPost = async (
         })
     return response
 }
+const AxiosPut = async (
+    endpoint: string,
+    data: any
+) => {
+    let response: any = []
+    await Instance().put(baseUrl + endpoint + '/edit', data)
+        .then((res) => {
+            response = res.data
+        })
+        .catch((error) => {
+            response = error.response
+        })
+    return response
+}
+
+const AxiosDelete = async (
+    endpoint: string,
+) => {
+    let response: any = []
+    await Instance().delete(baseUrl + endpoint + '/delete')
+        .then((res) => {
+            response = res.data
+        })
+        .catch((error) => {
+            response = error.response
+        })
+    return response
+}
 export {
     AxiosGet,
-    AxiosPost
+    AxiosPost,
+    AxiosPut,
+    AxiosDelete
 }

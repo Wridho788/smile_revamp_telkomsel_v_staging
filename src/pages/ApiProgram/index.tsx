@@ -3,10 +3,10 @@ import { useTypedSelector } from '../../app/hooks/useTypedSelector';
 import { useActions } from '../../app/hooks/useActions';
 
 const Index: FC = () => {
-    const {result, error, loading} = useTypedSelector(state=>state.keyword);
-    const {getKeywordPage} = useActions();
+    const {result, error, loading} = useTypedSelector(state=>state.program);
+    const {getProgramPage} = useActions();
     useEffect(()=>{
-        getKeywordPage();
+        getProgramPage();
     }, [result])
 
     if (error){
@@ -19,21 +19,14 @@ const Index: FC = () => {
         <>
             <p>Keyword Type</p>
             <div>
-                {result.main_info.keyword_type.map(data=>{
-                    return <div key={data} >{data.set_value}</div>
-                })}
-            </div>
-
-            <p>Program Segmentation</p>
-            <div>
-                {result.segmentation.program_type.map(data=>{
+                {result.main_info.program_type.map(data=>{
                     return <div key={data} >{data.set_value}</div>
                 })}
             </div>
 
             <p>Program Notification</p>
             <div>
-                {result.notification.keyword_type.map(data=>{
+                {result.notification.via.map(data=>{
                     return <div key={data} >{data.set_value}</div>
                 })}
             </div>

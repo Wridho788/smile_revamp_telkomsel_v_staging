@@ -1,7 +1,4 @@
-
-
-
-import {IMainInfo, INotification, ISegmentation} from "../Interface/IProgram";
+import {IMainInfo, INotification} from "../Interface/IProgram";
 import {IProgramPageData} from "../Interface/IProgram";
 
 const MainInfoInitial: IMainInfo = {
@@ -14,18 +11,14 @@ const MainInfoInitial: IMainInfo = {
     los_type:[],
 }
 
-const SegmentationInitial: ISegmentation = {
-    program_type: [],
-    point_type: []
-}
-
-const NotificationInitial: INotification = {
-    program_type: [],
-    point_type: []
+export const NotificationInitial: INotification = {
+    via: [],
+    type: [],
+    template: [],
+    transactionType: []
 }
 
 export const ProgramPageDataInitial: IProgramPageData = {
     main_info: MainInfoInitial,
-    segmentation: SegmentationInitial,
     notification: NotificationInitial
 }

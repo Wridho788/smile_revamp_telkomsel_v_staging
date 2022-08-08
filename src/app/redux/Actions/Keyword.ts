@@ -11,7 +11,7 @@ import {ICreateKeyword, ISetCreateDataKeywordState} from "../Utils/Interface/IKe
 
 export const getKeywordPage = () => {
     const mainInfo = KeywordPageDataInitial.main_info
-    const segmentation = KeywordPageDataInitial.segmentation
+    const bonus = KeywordPageDataInitial.bonus
     const notification = KeywordPageDataInitial.notification
     return async (dispatch: Dispatch<Types>) => {
         try {
@@ -25,18 +25,25 @@ export const getKeywordPage = () => {
                 .then((res) => {
                     mainInfo.point_type = res.data
                 })
-            await LOV_API.getMechanism()
+            await LOV_API.getBonusType()
                 .then((res) => {
-                    mainInfo.mechanism = res.data
+                    bonus.bonus_type = res.data
                 })
-            await LOV_API.getOwner()
+            await LOV_API.getNotifVia()
                 .then((res) => {
-                    mainInfo.owner = res.data
+                    notification.via = res.data
                 })
-            await LOV_API.getProgramType()
+            await LOV_API.getNotifVia()
                 .then((res) => {
-                    segmentation.program_type = res.data
-                    notification.program_type = res.data
+                    notification.type = res.data
+                })
+            await LOV_API.getNotifVia()
+                .then((res) => {
+                    notification.template = res.data
+                })
+            await LOV_API.getNotifVia()
+                .then((res) => {
+                    notification.transactionType = res.data
                 })
 
             setTimeout(() => {

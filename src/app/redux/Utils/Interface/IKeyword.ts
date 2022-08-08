@@ -1,26 +1,19 @@
+import {INotification} from "./IProgram";
+
 export interface IMainInfo {
     keyword_type: any[]
     point_type: any[]
     mechanism: any[]
-    owner: any[]
-    c_point_balance: any[]
-    c_los_enable: any[]
-    los_type: any[]
 }
 
-export interface ISegmentation {
-    keyword_type: any[]
-    program_type: any[]
-}
-
-export interface INotification {
-    keyword_type: any[]
-    program_type: any[]
+export interface IBonus {
+    bonus_type: any[]
+    bonus: any[]
 }
 
 export interface IKeywordPageData {
     main_info: IMainInfo,
-    segmentation: ISegmentation,
+    bonus: IBonus,
     notification: INotification
 }
 

@@ -26,14 +26,14 @@ const Index: FC = () => {
 
             <p>Program Segmentation</p>
             <div>
-                {result.segmentation.program_type.map(data=>{
+                {result.bonus.bonus_type.map(data=>{
                     return <div key={data} >{data.set_value}</div>
                 })}
             </div>
 
             <p>Program Notification</p>
             <div>
-                {result.notification.keyword_type.map(data=>{
+                {result.notification.via.map(data=>{
                     return <div key={data} >{data.set_value}</div>
                 })}
             </div>
