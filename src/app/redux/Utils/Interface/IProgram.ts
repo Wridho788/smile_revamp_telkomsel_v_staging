@@ -35,32 +35,40 @@ export interface IProgramBonus {
 export interface IProgramNotification {
     notification: string,
     via: string
-    receiver: number
-    transaction_type: number
+    receiver: string
+    transaction_type: string
+}
+
+export interface IProgramSegmentation {
+    customer_msisdn: string,
+    customer_tier: string
+    customer_los_enable: true,
+    customer_los_type: string,
+    customer_los_value: string,
+    customer_type: string
+    customer_bedges: string
+    customer_location: string
+    customer_brand: string
+    customer_point_balance: number,
+    customer_preferences: string,
+    customer_ARPU: string
 }
 
 export interface ICreateProgram {
     name: string,
+    program: string,
     start_period: string,
     end_period: string,
-    max_redeem_per_msisdn: number,
-    max_redeem_per_msisdn_type: number,
-    max_redeem_per_msisdn_from: string,
-    max_redeem_per_msisdn_to: string,
-    channel_validation: string,
-    telkomsel_los: boolean,
-    telkomsel_los_value: number,
-    enable_coorporate: boolean,
-    customer_tier: string,
     point_type: string,
-    comment_approval: string,
-    status_approval: string,
-    notification_type: string,
-    Program_parent: string,
-    Program_bonus: IProgramBonus,
-    Program_notification: IProgramNotification,
-    program_type:string
+    program_notification:Array<IProgramNotification>,
+    program_segmentation: Array<IProgramSegmentation>,
+    program_mechanism: string,
+    program_owner: string,
+    logic: string,
+    program_parent: string
+
 }
+
 export interface IDefaultListResult {
     total: number,
     data: any[],
@@ -80,7 +88,7 @@ export interface IDefaultListState {
 }
 
 export interface ICreateProgramState {
-    Programs: ICreateProgram
+    result: ICreateProgram
     loading: boolean
     error: null | string
 }

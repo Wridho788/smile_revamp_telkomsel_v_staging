@@ -9,6 +9,7 @@ const Instance = (isAuth?: boolean, timeout?: number) => {
     return axios.create({
         timeout: timeout ?? intervalTimeout,
         headers: {
+            "accept": "*/*",
             "Content-type": "application/json",
             'Authorization': 'Bearer ' + token
         }

@@ -5,9 +5,9 @@ import {IDefaultListInitial} from "../Utils/InitialState/DefaultListInitial";
 import {CreateKeywordInitial} from "../Utils/InitialState/KeywordInitial";
 import LOV_API from "../../services/API/Lov";
 import CUSTOMER_API from "../../services/API/Customer";
-import KEYWORD_API from "../../services/API/Program";
 import {IParamsListDefault} from "../Utils/Interface/IParamList";
 import {ICreateKeyword, ISetCreateDataKeywordState} from "../Utils/Interface/IKeyword";
+import KEYWORD_API from "../../services/API/Keyword";
 
 export const getKeywordPage = () => {
     const mainInfo = KeywordPageDataInitial.main_info
@@ -77,11 +77,11 @@ export const customerList = ({limit = 10, skip = 0}: IParamsListDefault) => {
     }
 }
 
-export const createKeyword = () => {
+export const createKeyword = (data: ICreateKeyword) => {
     return async (dispatch: Dispatch<Types>) => {
         try {
             dispatch({type: ActionTypes.FETCH_DATA})
-            const response = await KEYWORD_API.createKeyword(CreateKeywordInitial).then((res) => {
+            const response = await KEYWORD_API.createKeyword(data).then((res) => {
                 console.log(CreateKeywordInitial)
                 CreateKeywordInitial.keyword_type = res.data
                 dispatch({type: ActionTypes.FETCH_DATA_SUCCESS, payload: CreateKeywordInitial})

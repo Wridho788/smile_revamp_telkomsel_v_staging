@@ -1,14 +1,16 @@
 ﻿import {Dispatch} from "redux"
 import API from "../../services/API/Keyword"
-import {ProgramPageDataInitial} from "../Utils/InitialState/ProgramInitial";
+import {CreateProgramInitial, ProgramPageDataInitial} from "../Utils/InitialState/ProgramInitial";
 import {ActionTypes, Types} from "../Types/Types";
-import {ICreateProgramState} from "../Utils/Interface/IProgram";
+import {ICreateProgram, ICreateProgramState} from "../Utils/Interface/IProgram";
 import {IDefaultListInitial} from "../Utils/InitialState/DefaultListInitial";
 import LOV_API from "../../services/API/Lov";
 import CUSTOMER_API from "../../services/API/Customer";
 import LOCATION_API from "../../services/API/Location";
 import KEYWORD_API from "../../services/API/Keyword";
 import {IParamsListDefault} from "../Utils/Interface/IParamList";
+import {CreateKeywordInitial} from "../Utils/InitialState/KeywordInitial";
+import PROGRAM_API from "../../services/API/Program";
 
 export const getProgramPage = () => {
     const mainInfo = ProgramPageDataInitial.main_info
@@ -168,22 +170,21 @@ export const locationList = ({limit = 10, skip = 0}: IParamsListDefault) => {
     }
 }
 
-
-interface ICreateProgramProps {
-    data: ICreateProgramState
-}
-
-export const createProgram = ({data}: ICreateProgramProps) => {
+export const createKProgram = (data : ICreateProgram) => {
     return async (dispatch: Dispatch<Types>) => {
         try {
             dispatch({type: ActionTypes.FETCH_DATA})
-            const response = await KEYWORD_API.createProgram(data)
+             await PROGRAM_API.createProgram(data)
+                .then((res) => {
+                    console.log(res)
+                    console.log(CreateProgramInitial)
+                })
 
-            setTimeout(() => {
-                dispatch({type: ActionTypes.FETCH_DATA_SUCCESS, payload: response.data})
-            }, 1500)
+            // setTimeout(() => {
+            //     dispatch({type: ActionTypes.FETCH_DATA_SUCCESS, payload: CreateProgramInitial})
+            // }, 1500)
         } catch (e) {
-            dispatch({type: ActionTypes.FETCH_DATA_ERROR, payload: 'Error on Programs loading'})
+            dispatch({type: ActionTypes.FETCH_DATA_ERROR, payload: 'Error on keywords loading'})
         }
     }
 }
