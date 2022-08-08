@@ -8,19 +8,16 @@ export interface IMainInfo {
     los_type: any[]
 }
 
-export interface ISegmentation {
-    program_type: any[]
-    point_type: any[]
-}
 
 export interface INotification {
-    program_type: any[]
-    point_type: any[]
+    via: any[]
+    type: any[]
+    template: any[]
+    transactionType: any[]
 }
 
 export interface IProgramPageData {
     main_info: IMainInfo,
-    segmentation: ISegmentation,
     notification: INotification
 }
 

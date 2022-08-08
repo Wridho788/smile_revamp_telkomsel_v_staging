@@ -12,7 +12,6 @@ import {IParamsListDefault} from "../Utils/Interface/IParamList";
 
 export const getProgramPage = () => {
     const mainInfo = ProgramPageDataInitial.main_info
-    const segmentation = ProgramPageDataInitial.segmentation
     const notification = ProgramPageDataInitial.notification
     return async (dispatch: Dispatch<Types>) => {
         try {
@@ -36,8 +35,22 @@ export const getProgramPage = () => {
                 })
             await LOV_API.getProgramType()
                 .then((res) => {
-                    segmentation.program_type = res.data
-                    notification.program_type = res.data
+                })
+            await LOV_API.getNotifVia()
+                .then((res) => {
+                    notification.via = res.data
+                })
+            await LOV_API.getNotifVia()
+                .then((res) => {
+                    notification.type = res.data
+                })
+            await LOV_API.getNotifVia()
+                .then((res) => {
+                    notification.template = res.data
+                })
+            await LOV_API.getNotifVia()
+                .then((res) => {
+                    notification.transactionType = res.data
                 })
 
             setTimeout(() => {
