@@ -29,22 +29,24 @@ export const getKeywordPage = () => {
                 .then((res) => {
                     bonus.bonus_type = res.data
                 })
+
             await LOV_API.getNotifVia()
                 .then((res) => {
                     notification.via = res.data
                 })
-            await LOV_API.getNotifVia()
+            await LOV_API.getNotifType()
                 .then((res) => {
                     notification.type = res.data
                 })
-            await LOV_API.getNotifVia()
+            await LOV_API.getNotifTemplate()
                 .then((res) => {
                     notification.template = res.data
                 })
-            await LOV_API.getNotifVia()
+            await LOV_API.getTransactionType()
                 .then((res) => {
                     notification.transactionType = res.data
                 })
+
 
             setTimeout(() => {
                 console.log(KeywordPageDataInitial)

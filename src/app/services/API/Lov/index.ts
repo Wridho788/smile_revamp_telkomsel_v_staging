@@ -13,6 +13,7 @@ const getPointType = () => AxiosGet('/lov/point_type')
 const getOwner = () => AxiosGet('/lov/owner')
 const getPointBalance = () => AxiosGet('/lov/c_point_balance')
 const getProgramType = () => AxiosGet('/lov/program_type')
+const getNotifTemplate = () => AxiosGet('/lov/notif_template')
 const getTransactionType = () => AxiosGet('/lov/transaction_type')
 
 
@@ -43,6 +44,7 @@ const LOV_API = {
     getTransactionType,
     lovAdd,
     lovUpdate,
+    getNotifTemplate,
     lovDelete
 }
 export default LOV_API

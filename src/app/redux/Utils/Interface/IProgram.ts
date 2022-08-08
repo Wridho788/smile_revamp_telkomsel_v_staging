@@ -3,9 +3,6 @@ export interface IMainInfo {
     point_type: any[]
     mechanism: any[]
     owner: any[]
-    c_point_balance: any[]
-    c_los_enable: any[]
-    los_type: any[]
 }
 
 
