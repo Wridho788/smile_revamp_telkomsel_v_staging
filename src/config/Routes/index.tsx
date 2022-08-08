@@ -7,8 +7,12 @@ import {
     ProgramPage,
     CreateProgram,
     Keyword,
-    ApiTest
+    ApiKeyword,
+    ApiProgram,
+    ApiList,
+    ApiCreateKeyword
 } from "../../pages";
+import SpecificProgramTemplate from "../../atomic/containers/pages/GeneralProgramRegistration";
 
 
 const Index = () => (
@@ -20,7 +24,11 @@ const Index = () => (
         <Route path="/login" element={<LoginPage/>}/>
         <Route path="/create-program" element={<CreateProgram/>}/>
         <Route path="/keyword" element={<Keyword/>}/>
-        <Route path="/api-test" element={<ApiTest/>}/>
+        <Route path="/api-keyword" element={<ApiKeyword/>}/>
+        <Route path="/api-program" element={<ApiProgram/>}/>
+        <Route path="/api-list" element={<ApiList/>}/>
+        <Route path="/api-create-keyword" element={<ApiCreateKeyword/>}/>
+        <Route path={"general-program-registration"} element={<SpecificProgramTemplate />} />
     </Routes>
 );
 export default Index;

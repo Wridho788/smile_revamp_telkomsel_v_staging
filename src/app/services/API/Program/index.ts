@@ -1,0 +1,13 @@
+import {AxiosPost} from "../../Axios";
+import {ICreateKeyword} from "../../../redux/Utils/Interface/IKeyword";
+
+
+// Create Data
+const createKeyword = (data: any) => AxiosPost('/keyword')
+
+
+
+const KEYWORD_API = {
+    createKeyword,
+}
+export default KEYWORD_API
