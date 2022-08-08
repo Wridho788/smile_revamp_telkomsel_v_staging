@@ -1,5 +1,6 @@
 interface DatePickerProps{
-    label: string
+    label: string,
+    setExternalValue:any
 }
 
 export type {

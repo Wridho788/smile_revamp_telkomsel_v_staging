@@ -10,7 +10,7 @@ const SelectField: FC<SelectFieldProps> = ({label,data, onChange}) => {
             <SelectFieldCustom onChange={onChange} color="primary" label={label}>
                 {data && data.map((item:any) => {
                     return (
-                        <MenuItem value={item.id}>{item.value}</MenuItem>
+                        <MenuItem value={item.id ?? item._id}>{item.value ?? item.set_value ?? "-"}</MenuItem>
                     )
                 })}
             </SelectFieldCustom>
