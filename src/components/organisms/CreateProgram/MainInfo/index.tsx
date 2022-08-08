@@ -1,23 +1,26 @@
 import { Box, Grid, Stack } from "@mui/material";
 import * as React from "react";
+import useCreateProgram from "../../../../app/context/CreateProgram/useCreateProgram";
+import useCreateProgramOptions, {
+  useName,
+  usePointType,
+  useProgramMechanism,
+  useProgramOwner,
+  useProgramType,
+} from "../../../../app/hooks/useCreateProgramOptions";
 import { options } from "../../../../mocks/options";
 import {
   Select,
   OutlinedTextField,
   ResponsiveDateTimePicker,
-  H1,
-  BodyCopy,
   H3,
 } from "../../../atoms";
 
 interface IMainInfoProps {}
 
 const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
-  const [type, setType] = React.useState<string>("");
-  const [name, setName] = React.useState<string>("");
-  const [pointType, setPointType] = React.useState<string>("");
-  const [mechanism, setMechanism] = React.useState<string>("");
-  const [owner, setOwner] = React.useState<string>("");
+  const { programData } = useCreateProgram();
+
   const [ownerDetail, setOwnerDetail] = React.useState<string>("");
   const [startPeriod, setStartPeriod] = React.useState<string>("");
   const [endPeriod, setEndPeriod] = React.useState<string>("");
@@ -28,6 +31,25 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
   const [cLOSEnabled, setCLOSEnabled] = React.useState<string>("");
   const [cLOSType, setCLOSType] = React.useState<string>("");
   const [cLOSValue, setCLOSValue] = React.useState<string>("");
+  const { main_info } = useCreateProgramOptions();
+
+  const { programTypeLabel, handleChangeProgramType } = useProgramType(
+    main_info.program_type
+  );
+  const { nameLabel, handleChangeName } = useName();
+  const { pointTypeLabel, handleChangePointType } = usePointType(
+    main_info.point_type
+  );
+  const { programMechanismLabel, handleChangeProgramMechanism } =
+    useProgramMechanism(main_info.program_mechanism);
+  const { programOwnerLabel, handleChangeProgramOwner } = useProgramOwner(
+    main_info.program_owner
+  );
+
+  React.useEffect(() => {
+    console.log(programData);
+    return;
+  }, [programData]);
 
   return (
     <Box pt="1vw">
@@ -35,43 +57,49 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
         <Select
           label="Type"
           placeholder="Option"
-          options={options}
-          value={type}
-          setValue={setType}
+          options={main_info.program_type ? main_info.program_type : []}
+          optionLabel="set_value"
+          value={programTypeLabel}
+          handleChange={handleChangeProgramType}
         />
         <OutlinedTextField
           label="Name"
           placeholder="Name"
-          value={name}
-          setValue={setName}
           variant={"outlined"}
+          value={nameLabel}
+          handleChange={handleChangeName}
         />
         <Select
           label="Point Type"
           placeholder="Option"
-          options={options}
-          value={pointType}
-          setValue={setPointType}
+          options={main_info.point_type ? main_info.point_type : []}
+          optionLabel="set_value"
+          value={pointTypeLabel}
+          handleChange={handleChangePointType}
         />
         <Select
           label="Mechanism"
           placeholder="Option"
-          options={options}
-          value={mechanism}
-          setValue={setMechanism}
+          options={
+            main_info.program_mechanism ? main_info.program_mechanism : []
+          }
+          optionLabel="set_value"
+          value={programMechanismLabel}
+          handleChange={handleChangeProgramMechanism}
         />
         <Select
           label="Owner"
           placeholder="Option"
-          options={options}
-          value={owner}
-          setValue={setOwner}
+          options={main_info.program_owner ? main_info.program_owner : []}
+          optionLabel="set_value"
+          value={programOwnerLabel}
+          handleChange={handleChangeProgramOwner}
         />
         <OutlinedTextField
           label="Owner Detail"
           placeholder="Owner Detail"
           value={ownerDetail}
-          setValue={setOwnerDetail}
+          // setValue={setOwnerDetail}
           variant={"outlined"}
           multiline
           rows={4}
@@ -80,30 +108,33 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
           label="Start Period"
           placeholder="Start Period"
           value={startPeriod}
-          setValue={setStartPeriod}
+          // setValue={setStartPeriod}
         />
         <ResponsiveDateTimePicker
           label="End Period"
           placeholder="End Period"
           value={endPeriod}
-          setValue={setEndPeriod}
+          // setValue={setEndPeriod}
         />
         <OutlinedTextField
           label="Description"
           placeholder="Description"
           value={description}
-          setValue={setDescription}
+          // setValue={setDescription}
           variant={"outlined"}
           multiline
           rows={4}
         />
-        <Select
+
+        <OutlinedTextField
           label="C. Point Balance"
-          placeholder="Option"
-          options={options}
+          placeholder="C. Point Balance"
           value={cPointBalance}
-          setValue={setCPointBalance}
+          // setValue={setCPointBalance}
+          variant={"outlined"}
+          type="number"
         />
+
         <Grid container columns={11}>
           <Grid item xs={4}></Grid>
           <Grid item xs={7}>
@@ -111,14 +142,14 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
               <OutlinedTextField
                 placeholder="Start Numeric"
                 value={startNumeric}
-                setValue={setStartNumeric}
+                // setValue={setStartNumeric}
                 variant={"outlined"}
               />
               <H3 lineHeight={0}>-</H3>
               <OutlinedTextField
                 placeholder="End Numeric"
                 value={endNumeric}
-                setValue={setEndNumeric}
+                // setValue={setEndNumeric}
                 variant={"outlined"}
               />
             </Stack>
@@ -129,20 +160,20 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
           placeholder="Option"
           options={options}
           value={cLOSEnabled}
-          setValue={setCLOSEnabled}
+          // setValue={setCLOSEnabled}
         />
         <Select
           label="C. LOS Type"
           placeholder="Option"
           options={options}
           value={cLOSType}
-          setValue={setCLOSType}
+          // setValue={setCLOSType}
         />
         <OutlinedTextField
           label="C. LOS Value"
           placeholder="C. LOS Value"
           value={cLOSValue}
-          setValue={setCLOSValue}
+          // setValue={setCLOSValue}
           variant={"outlined"}
         />
       </Stack>

@@ -36,79 +36,79 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
           placeholder="Option"
           options={options}
           value={type}
-          setValue={setType}
+          // setValue={setType}
         />
         <OutlinedTextField
           label="Name"
           placeholder="Name"
           value={name}
-          setValue={setName}
+          // setValue={setName}
           variant={"outlined"}
         />
         <ResponsiveDateTimePicker
           label="Start Period"
           placeholder="Start Period"
           value={startPeriod}
-          setValue={setStartPeriod}
+          // setValue={setStartPeriod}
         />
         <ResponsiveDateTimePicker
           label="End Period"
           placeholder="End Period"
           value={endPeriod}
-          setValue={setEndPeriod}
+          // setValue={setEndPeriod}
         />
         <OutlinedTextField
           label="Max Redeem Permisson"
           placeholder="Max Redeem Permisson"
           value={maxRedeemPermisson}
-          setValue={setMaxRedeemPermisson}
+          // setValue={setMaxRedeemPermisson}
           variant={"outlined"}
         />
         <OutlinedTextField
           label="Max Redeem Permisson Type"
           placeholder="Max Redeem Permisson Type"
           value={maxRedeemPermissonType}
-          setValue={setMaxRedeemPermissonType}
+          // setValue={setMaxRedeemPermissonType}
           variant={"outlined"}
         />
         <ResponsiveDateTimePicker
           label="Max Redeem Permisson From"
           placeholder="Max Redeem Permisson From"
           value={maxRedeemPermissonFrom}
-          setValue={setMaxRedeemPermissonFrom}
+          // setValue={setMaxRedeemPermissonFrom}
         />
         <ResponsiveDateTimePicker
           label="Max Redeem Permisson To"
           placeholder="Max Redeem Permisson To"
           value={maxRedeemPermissonTo}
-          setValue={setMaxRedeemPermissonTo}
+          // setValue={setMaxRedeemPermissonTo}
         />
         <Select
           label="Enable Corporate"
           placeholder="Option"
           options={options}
           value={enableCorporate}
-          setValue={setEnableCorporate}
+          // setValue={setEnableCorporate}
         />
         <Select
           label="Customer Tier"
           placeholder="Option"
           options={options}
           value={customerTier}
-          setValue={setCustomerTier}
+          // setValue={setCustomerTier}
         />
         <Select
           label="Point Type"
           placeholder="Option"
           options={options}
           value={pointType}
-          setValue={setPointType}
+          // setValue={setPointType}
         />
         <OutlinedTextField
           label="Comment Approval"
           placeholder="Comment Approval"
           value={commentApproval}
-          setValue={setCommentApproval}
+          // setValue={setCommentApproval}
           variant={"outlined"}
           multiline
           rows={4}
@@ -118,7 +118,7 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
           placeholder="Option"
           options={options}
           value={parent}
-          setValue={setParent}
+          // setValue={setParent}
         />
       </Stack>
     </Box>

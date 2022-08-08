@@ -33,7 +33,7 @@ const Notification: React.FunctionComponent<INotificationProps> = (props) => {
                 placeholder="Option"
                 options={options}
                 value={via}
-                setValue={setVia}
+                // setValue={setVia}
               />
             </Grid>
             <Grid item xs={5} pr={"1.5vw"}>
@@ -43,7 +43,7 @@ const Notification: React.FunctionComponent<INotificationProps> = (props) => {
                 placeholder="Option"
                 options={options}
                 value={type}
-                setValue={setType}
+                // setValue={setType}
               />
             </Grid>
             <Grid item xs={5} pr={"1.5vw"}>
@@ -53,7 +53,7 @@ const Notification: React.FunctionComponent<INotificationProps> = (props) => {
                 placeholder="Option"
                 options={options}
                 value={template}
-                setValue={setTemplate}
+                // setValue={setTemplate}
               />
             </Grid>
             <Grid item xs={5} pr={"1.5vw"}>
@@ -63,7 +63,7 @@ const Notification: React.FunctionComponent<INotificationProps> = (props) => {
                 placeholder="Option"
                 options={options}
                 value={transactionType}
-                setValue={setTransactionType}
+                // setValue={setTransactionType}
               />
             </Grid>
             <Grid

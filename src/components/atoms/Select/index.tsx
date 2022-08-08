@@ -14,8 +14,10 @@ const Index: React.FunctionComponent<ISelectProps> = ({
   label,
   placeholder,
   options,
+  optionLabel = "set_value",
+  optionValue = "_id",
   value,
-  setValue,
+  handleChange,
   totalColumn = 11,
   leftColumn = 4,
   rightColumn = 7,
@@ -39,7 +41,7 @@ const Index: React.FunctionComponent<ISelectProps> = ({
           <Select
             value={value}
             onChange={(event: SelectChangeEvent) => {
-              setValue(event.target.value);
+              handleChange(event.target.value);
             }}
             displayEmpty
             size="small"
@@ -57,9 +59,12 @@ const Index: React.FunctionComponent<ISelectProps> = ({
               {placeholder}
             </MenuItem>
             {typeof options !== "undefined" &&
-              options.map((option: string) => (
-                <MenuItem key={option} value={option}>
-                  {option}
+              options.map((option: any, idx: number) => (
+                <MenuItem
+                  key={`option__item__${idx}`}
+                  value={option[optionLabel]}
+                >
+                  {option[optionLabel]}
                 </MenuItem>
               ))}
           </Select>

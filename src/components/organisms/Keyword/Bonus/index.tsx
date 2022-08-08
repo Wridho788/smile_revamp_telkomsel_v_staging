@@ -35,7 +35,7 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
                 placeholder="Option"
                 options={options}
                 value={type}
-                setValue={setType}
+                // setValue={setType}
               />
             </Grid>
             <Grid item xs={5} pr={"1.5vw"}>
@@ -45,7 +45,7 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
                 placeholder="Option"
                 options={options}
                 value={bucket}
-                setValue={setBucket}
+                // setValue={setBucket}
               />
             </Grid>
             <Grid item xs={5} pr={"1.5vw"}>
@@ -55,7 +55,7 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
                 placeholder="Option"
                 options={options}
                 value={quantity}
-                setValue={setQuantity}
+                // setValue={setQuantity}
               />
             </Grid>
             <Grid item xs={5} pr={"1.5vw"}>
@@ -65,7 +65,7 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
                 placeholder="Option"
                 options={options}
                 value={granular}
-                setValue={setGranular}
+                // setValue={setGranular}
               />
             </Grid>
             <Grid item xs={5} pr={"1.5vw"}>
@@ -75,7 +75,7 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
                 placeholder="Option"
                 options={options}
                 value={bid}
-                setValue={setBid}
+                // setValue={setBid}
               />
             </Grid>
             <Grid item xs={5} pr={"1.5vw"}>
@@ -85,7 +85,7 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
                 placeholder="Option"
                 options={options}
                 value={bonus}
-                setValue={setBonus}
+                // setValue={setBonus}
               />
             </Grid>
             <Grid

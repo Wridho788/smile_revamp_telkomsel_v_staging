@@ -7,7 +7,7 @@ const Index: React.FunctionComponent<IOutlinedTextFieldProps> = ({
   label,
   placeholder,
   value,
-  setValue,
+  handleChange,
   totalColumn = 11,
   leftColumn = 4,
   rightColumn = 7,
@@ -22,6 +22,7 @@ const Index: React.FunctionComponent<IOutlinedTextFieldProps> = ({
       <Grid
         item
         xs={!label ? 0 : direction === "column" ? rightColumn : leftColumn}
+        pt={0.8}
       >
         <BodyCopy>{label}</BodyCopy>
       </Grid>
@@ -29,7 +30,7 @@ const Index: React.FunctionComponent<IOutlinedTextFieldProps> = ({
         <TextField
           value={value}
           onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-            setValue(event.target.value);
+            handleChange(event.target.value);
           }}
           placeholder={placeholder}
           size="small"

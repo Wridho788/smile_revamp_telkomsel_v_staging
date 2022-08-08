@@ -16,7 +16,7 @@ const Programs: React.FunctionComponent<IProgramsProps> = ({
   programsData,
 }) => {
   const data = programsData.data;
-  console.log(data);
+  // console.log(data);
   const [listForm, setListForm] = React.useState<string>("card");
   return (
     <>
