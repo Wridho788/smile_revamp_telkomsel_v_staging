@@ -148,7 +148,7 @@ export default function HorizontalLinearStepper({
 
   return (
     <Box sx={{ width: "100%" }}>
-      <Box px="10%">
+      <Box>
         <Stepper
           alternativeLabel
           activeStep={activeStep}
@@ -187,7 +187,7 @@ export default function HorizontalLinearStepper({
         </React.Fragment>
       ) : (
         <React.Fragment>
-          <Box px="17.8%">{children}</Box>
+          <Box>{children}</Box>
           <Box sx={{ display: "flex", flexDirection: "row", mt: "3vw" }}>
             <Button
               disabled={activeStep === 0}

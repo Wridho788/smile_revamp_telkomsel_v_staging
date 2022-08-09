@@ -2,11 +2,12 @@ import { Box, Grid, Stack } from "@mui/material";
 import * as React from "react";
 import useCreateProgram from "../../../../app/context/CreateProgram/useCreateProgram";
 import useCreateProgramOptions, {
-  useName,
+  useProgramName,
   usePointType,
   useProgramMechanism,
   useProgramOwner,
   useProgramType,
+  useProgramDescription,
 } from "../../../../app/hooks/useCreateProgramOptions";
 import { options } from "../../../../mocks/options";
 import {
@@ -36,7 +37,7 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
   const { programTypeLabel, handleChangeProgramType } = useProgramType(
     main_info.program_type
   );
-  const { nameLabel, handleChangeName } = useName();
+  const { programNameLabel, handleChangeProgramName } = useProgramName();
   const { pointTypeLabel, handleChangePointType } = usePointType(
     main_info.point_type
   );
@@ -45,6 +46,8 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
   const { programOwnerLabel, handleChangeProgramOwner } = useProgramOwner(
     main_info.program_owner
   );
+  const { programDescriptionLabel, handleChangeProgramDescription } =
+    useProgramDescription();
 
   React.useEffect(() => {
     console.log(programData);
@@ -52,8 +55,8 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
   }, [programData]);
 
   return (
-    <Box pt="1vw">
-      <Stack spacing={"1vw"} maxWidth={"70%"}>
+    <Box display="flex" justifyContent="center" px="20%" py="1vw">
+      <Stack spacing={"1vw"} width={"100%"}>
         <Select
           label="Type"
           placeholder="Option"
@@ -66,8 +69,8 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
           label="Name"
           placeholder="Name"
           variant={"outlined"}
-          value={nameLabel}
-          handleChange={handleChangeName}
+          value={programNameLabel}
+          handleChange={handleChangeProgramName}
         />
         <Select
           label="Point Type"
@@ -119,9 +122,9 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
         <OutlinedTextField
           label="Description"
           placeholder="Description"
-          value={description}
-          // setValue={setDescription}
           variant={"outlined"}
+          value={programDescriptionLabel}
+          handleChange={handleChangeProgramDescription}
           multiline
           rows={4}
         />

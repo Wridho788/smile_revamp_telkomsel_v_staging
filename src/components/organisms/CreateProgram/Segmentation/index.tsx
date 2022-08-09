@@ -38,7 +38,8 @@ const Segmentation: React.FunctionComponent<ISegmentationProps> = (props) => {
         onChange={(event: React.SyntheticEvent, newValue: number) => {
           setActiveTab(newValue);
         }}
-        centered
+        variant="scrollable"
+        scrollButtons="auto"
       >
         {tabTitles.map((tabTitle, idx) => (
           <Tab key={`tabTitle__${idx}`} label={tabTitle} />

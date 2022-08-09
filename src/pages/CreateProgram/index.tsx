@@ -24,7 +24,7 @@ const CreateProgram = () => {
       <Box
         sx={{
           paddingBlock: "3vw",
-          paddingInline: "5vw",
+          paddingInline: "20vw",
         }}
       >
         {/* <SingleBreadcrumbs
