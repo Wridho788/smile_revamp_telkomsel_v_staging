@@ -4,7 +4,7 @@ export interface IOutlinedTextFieldProps extends OutlinedTextFieldProps {
   label?: string;
   placeholder?: string;
   value?: any;
-  setValue?: any;
+  handleChange?: any;
   totalColumn?: number;
   leftColumn?: number;
   rightColumn?: number;

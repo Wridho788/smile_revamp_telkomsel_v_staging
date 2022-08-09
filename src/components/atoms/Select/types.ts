@@ -4,8 +4,10 @@ export interface ISelectProps extends SelectProps {
   label?: string;
   placeholder?: string;
   options?: string[];
+  optionLabel?: string;
+  optionValue?: string;
   value?: any;
-  setValue?: any;
+  handleChange?: any;
   totalColumn?: number;
   leftColumn?: number;
   rightColumn?: number;

@@ -13,7 +13,7 @@ interface IReportProps {
 
 const Report: React.FunctionComponent<IReportProps> = ({ resultData }) => {
   const datePickerRef = React.useRef<any>();
-  const [filterValue, setFilterValue] = React.useState("");
+  const [filterValue, setFilterValue] = React.useState<string>("");
 
   return (
     <>

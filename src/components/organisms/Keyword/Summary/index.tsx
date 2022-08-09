@@ -7,7 +7,7 @@ interface ISummaryProps {}
 const Summary: React.FunctionComponent<ISummaryProps> = (props) => {
   const titles = ["Main Info", "Bonus", "Notification"];
   return (
-    <Box border="0.1vw solid rgba(0, 0, 0, 0.1)" borderRadius="0.3vw" p="3vw">
+    <Box pt="1vw">
       <Stack spacing={"3vw"} maxWidth={"100%"}>
         {titles.map((title, idx) => (
           <Stack key={`summaryTitle__${idx}`} spacing="1vw">

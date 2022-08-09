@@ -1,5 +1,6 @@
 import { Box, Stack } from "@mui/material";
 import * as React from "react";
+import { options } from "../../../../mocks/options";
 import {
   Select,
   OutlinedTextField,
@@ -9,105 +10,105 @@ import {
 interface IMainInfoProps {}
 
 const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
-  const [type, setType] = React.useState("");
-  const [name, setName] = React.useState("");
-  const [startPeriod, setStartPeriod] = React.useState("");
-  const [endPeriod, setEndPeriod] = React.useState("");
-  const [maxRedeemPermisson, setMaxRedeemPermisson] = React.useState("");
+  const [type, setType] = React.useState<string>("");
+  const [name, setName] = React.useState<string>("");
+  const [startPeriod, setStartPeriod] = React.useState<string>("");
+  const [endPeriod, setEndPeriod] = React.useState<string>("");
+  const [maxRedeemPermisson, setMaxRedeemPermisson] =
+    React.useState<string>("");
   const [maxRedeemPermissonType, setMaxRedeemPermissonType] =
-    React.useState("");
+    React.useState<string>("");
   const [maxRedeemPermissonFrom, setMaxRedeemPermissonFrom] =
-    React.useState("");
-  const [maxRedeemPermissonTo, setMaxRedeemPermissonTo] = React.useState("");
-  const [enableCorporate, setEnableCorporate] = React.useState("");
-  const [customerTier, setCustomerTier] = React.useState("");
-  const [pointType, setPointType] = React.useState("");
-  const [commentApproval, setCommentApproval] = React.useState("");
-  const [parent, setParent] = React.useState("");
-
-  const Options = ["Option 1", "Option 2", "Option 3"];
+    React.useState<string>("");
+  const [maxRedeemPermissonTo, setMaxRedeemPermissonTo] =
+    React.useState<string>("");
+  const [enableCorporate, setEnableCorporate] = React.useState<string>("");
+  const [customerTier, setCustomerTier] = React.useState<string>("");
+  const [pointType, setPointType] = React.useState<string>("");
+  const [commentApproval, setCommentApproval] = React.useState<string>("");
+  const [parent, setParent] = React.useState<string>("");
 
   return (
-    <Box border="0.1vw solid rgba(0, 0, 0, 0.1)" borderRadius="0.3vw" p="3vw">
-      <Stack spacing={"1vw"} maxWidth={"50%"}>
+    <Box pt="1vw">
+      <Stack spacing={"1vw"} maxWidth={"70%"}>
         <Select
           label="Type"
           placeholder="Option"
-          options={Options}
+          options={options}
           value={type}
-          setValue={setType}
+          // setValue={setType}
         />
         <OutlinedTextField
           label="Name"
           placeholder="Name"
           value={name}
-          setValue={setName}
+          // setValue={setName}
           variant={"outlined"}
         />
         <ResponsiveDateTimePicker
           label="Start Period"
           placeholder="Start Period"
           value={startPeriod}
-          setValue={setStartPeriod}
+          // setValue={setStartPeriod}
         />
         <ResponsiveDateTimePicker
           label="End Period"
           placeholder="End Period"
           value={endPeriod}
-          setValue={setEndPeriod}
+          // setValue={setEndPeriod}
         />
         <OutlinedTextField
           label="Max Redeem Permisson"
           placeholder="Max Redeem Permisson"
           value={maxRedeemPermisson}
-          setValue={setMaxRedeemPermisson}
+          // setValue={setMaxRedeemPermisson}
           variant={"outlined"}
         />
         <OutlinedTextField
           label="Max Redeem Permisson Type"
           placeholder="Max Redeem Permisson Type"
           value={maxRedeemPermissonType}
-          setValue={setMaxRedeemPermissonType}
+          // setValue={setMaxRedeemPermissonType}
           variant={"outlined"}
         />
         <ResponsiveDateTimePicker
           label="Max Redeem Permisson From"
           placeholder="Max Redeem Permisson From"
           value={maxRedeemPermissonFrom}
-          setValue={setMaxRedeemPermissonFrom}
+          // setValue={setMaxRedeemPermissonFrom}
         />
         <ResponsiveDateTimePicker
           label="Max Redeem Permisson To"
           placeholder="Max Redeem Permisson To"
           value={maxRedeemPermissonTo}
-          setValue={setMaxRedeemPermissonTo}
+          // setValue={setMaxRedeemPermissonTo}
         />
         <Select
           label="Enable Corporate"
           placeholder="Option"
-          options={Options}
+          options={options}
           value={enableCorporate}
-          setValue={setEnableCorporate}
+          // setValue={setEnableCorporate}
         />
         <Select
           label="Customer Tier"
           placeholder="Option"
-          options={Options}
+          options={options}
           value={customerTier}
-          setValue={setCustomerTier}
+          // setValue={setCustomerTier}
         />
         <Select
           label="Point Type"
           placeholder="Option"
-          options={Options}
+          options={options}
           value={pointType}
-          setValue={setPointType}
+          // setValue={setPointType}
         />
         <OutlinedTextField
           label="Comment Approval"
           placeholder="Comment Approval"
           value={commentApproval}
-          setValue={setCommentApproval}
+          // setValue={setCommentApproval}
           variant={"outlined"}
           multiline
           rows={4}
@@ -115,9 +116,9 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
         <Select
           label="Parent"
           placeholder="Option"
-          options={Options}
+          options={options}
           value={parent}
-          setValue={setParent}
+          // setValue={setParent}
         />
       </Stack>
     </Box>
