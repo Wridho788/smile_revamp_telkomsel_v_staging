@@ -6,7 +6,7 @@ export const CreateProgramProvider = ({ children }: any) => {
   const [programData, setProgramData] = React.useState<IProgramData>({
     program_type: "",
     name: "",
-    program: "This program description",
+    program: "",
     start_period: "YYYY-MM-DD",
     end_period: "YYYY-MM-DD",
     point_type: "",

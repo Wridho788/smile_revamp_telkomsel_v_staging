@@ -2,10 +2,10 @@ import * as React from "react";
 import TextField from "@mui/material/TextField";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { IResponsiveDateTimePickerProps } from "./types";
 import { Grid } from "@mui/material";
 import { BodyCopy } from "../Typography";
+import { DatePicker } from "@mui/x-date-pickers";
 
 const Index: React.FunctionComponent<IResponsiveDateTimePickerProps> = ({
   label,
@@ -27,7 +27,7 @@ const Index: React.FunctionComponent<IResponsiveDateTimePickerProps> = ({
       </Grid>
       <Grid item xs={rightColumn}>
         <LocalizationProvider dateAdapter={AdapterDateFns}>
-          <DateTimePicker
+          <DatePicker
             value={value}
             onChange={(newValue) => {
               setValue(newValue);

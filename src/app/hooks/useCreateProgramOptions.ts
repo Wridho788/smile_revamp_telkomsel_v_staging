@@ -49,19 +49,20 @@ export const useProgramType = (options: any) => {
   return { programTypeLabel, handleChangeProgramType };
 };
 
-export const useName = () => {
+export const useProgramName = () => {
   const { programData, setProgramData } = useCreateProgram();
 
-  const nameLabel = programData.name !== undefined ? programData.name : "";
+  const programNameLabel =
+    programData.name !== undefined ? programData.name : "";
 
-  const handleChangeName = async (value: string) => {
+  const handleChangeProgramName = async (value: string) => {
     await setProgramData((prevState: any) => ({
       ...prevState,
       name: value,
     }));
   };
 
-  return { nameLabel, handleChangeName };
+  return { programNameLabel, handleChangeProgramName };
 };
 
 export const usePointType = (options: any) => {
@@ -140,6 +141,22 @@ export const useProgramOwner = (options: any) => {
   };
 
   return { programOwnerLabel, handleChangeProgramOwner };
+};
+
+export const useProgramDescription = () => {
+  const { programData, setProgramData } = useCreateProgram();
+
+  const programDescriptionLabel =
+    programData.program !== undefined ? programData.program : "";
+
+  const handleChangeProgramDescription = async (value: string) => {
+    await setProgramData((prevState: any) => ({
+      ...prevState,
+      program: value,
+    }));
+  };
+
+  return { programDescriptionLabel, handleChangeProgramDescription };
 };
 
 export default useCreateProgramOptions;
