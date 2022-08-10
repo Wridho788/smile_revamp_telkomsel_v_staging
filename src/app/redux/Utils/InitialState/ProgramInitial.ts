@@ -44,18 +44,18 @@ export const ProgramNotificationInitial: IProgramNotification =
 
 export const ProgramSegmentationInitial: IProgramSegmentation =
     {
-        customer_msisdn: "62e8bd5415a463e4709ab5a0",
-        customer_tier: "62e8bd5415a463e4709ab5a0",
-        customer_los_enable: true,
-        customer_los_type: "string",
-        customer_los_value: "string",
-        customer_type: "62e8bd5415a463e4709ab5a0",
-        customer_badges: "62e8bd5415a463e4709ab5a0",
-        customer_location: "62e8bd5415a463e4709ab5a0",
-        customer_brand: "62e8bd5415a463e4709ab5a0",
+        customer_msisdn: "",
+        customer_tier: "",
+        customer_los_enable: false,
+        customer_los_type: "",
+        customer_los_value: "",
         customer_point_balance: 0,
-        customer_preferences: "string",
-        customer_ARPU: "string"
+        customer_type: "",
+        customer_badges: "",
+        customer_location: "",
+        customer_brand: "",
+        customer_preferences: "",
+        customer_ARPU: ""
     }
 export const ProgramPageDataInitial: IProgramPageData = {
     main_info: MainInfoInitial,
