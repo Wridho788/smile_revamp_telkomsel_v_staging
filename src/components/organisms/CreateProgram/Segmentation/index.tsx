@@ -32,13 +32,24 @@ interface ISegmentationProps {
 const Segmentation: React.FunctionComponent<ISegmentationProps> = ({segmentation}: ISegmentationProps) => {
     const [activeTab, setActiveTab] = React.useState<number>(0);
     const programSegmentation = ProgramSegmentationInitial
-    const [msisdn, setMsisdn] = React.useState<string>(programSegmentation.customer_msisdn);
-
+    const [msisdn, setMsisdn] = React.useState(segmentation.customer_msisdn);
+    const [badges, setBadges] = React.useState(segmentation.customer_badges);
+    const [location, setLocation] = React.useState(segmentation.customer_location);
+    const [brand, setBrand] = React.useState(segmentation.customer_brand);
+    const [preferences, setPreferences] = React.useState(segmentation.customer_preferences);
+    const [type, setType] = React.useState(segmentation.customer_type);
+    const [state, setState] = useState(segmentation.customer_badges);
     const onClickCard = (id: number) => {
         setActiveTab(id)
         switch (id) {
             case 0 :
-                return setMsisdn(programSegmentation.customer_msisdn)
+               return setState(badges)
+            case 1 :
+               return setState(location)
+            case 2 :
+                return setState(brand)
+            case 3 :
+                return setState(preferences)
         }
     }
     React.useEffect(() => {
@@ -104,7 +115,7 @@ const Segmentation: React.FunctionComponent<ISegmentationProps> = ({segmentation
                             </Grid>
                         </Grid>
                         <FormGroup>
-                            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14].map((_, idx) => (
+                            {state.map((data: any, idx: any) => (
                                 <Grid container columns={10} key={`checkActiveItem__${idx}`}>
                                     <Grid
                                         item
@@ -116,7 +127,7 @@ const Segmentation: React.FunctionComponent<ISegmentationProps> = ({segmentation
                                         <FormControlLabel
                                             key={`checkBox__${idx}`}
                                             control={<Checkbox/>}
-                                            label="Item List"
+                                            label={data['name']}
                                         />
                                     </Grid>
                                     <Grid
