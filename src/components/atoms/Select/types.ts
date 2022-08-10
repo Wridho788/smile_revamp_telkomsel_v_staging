@@ -3,7 +3,7 @@ import { SelectProps } from "@mui/material";
 export interface ISelectProps extends SelectProps {
   label?: string;
   placeholder?: string;
-  options?: string[];
+  options?: any[];
   optionLabel?: string;
   optionValue?: string;
   value?: any;

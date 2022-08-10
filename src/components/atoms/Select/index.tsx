@@ -36,7 +36,7 @@ const Index: React.FunctionComponent<ISelectProps> = ({
       >
         <BodyCopy>{label}</BodyCopy>
       </Grid>
-      <Grid item xs={rightColumn} mt={direction === "column" ? "1vw" : 0}>
+      <Grid item xs={rightColumn} mt={direction === "column" ? "0.3vw" : 0}>
         <FormControl sx={{ minWidth: "100%" }}>
           <Select
             value={value}
