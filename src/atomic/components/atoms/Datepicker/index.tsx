@@ -5,7 +5,7 @@ import {AdapterDateFns} from "@mui/x-date-pickers/AdapterDateFns";
 import {FormControl, TextField} from "@mui/material";
 import {DatePickerProps} from './Datepicker.type'
 
-const Datepicker: FC<DatePickerProps> = ({label}) => {
+const Datepicker: FC<DatePickerProps> = ({label, setExternalValue}) => {
     const [value, setValue] = useState()
     return (
         <FormControl fullWidth>
@@ -15,6 +15,7 @@ const Datepicker: FC<DatePickerProps> = ({label}) => {
                     value={value}
                     onChange={(newValue:any) => {
                         setValue(newValue);
+                        setExternalValue(newValue)
                     }}
                     renderInput={(params) => <TextField {...params} />}
                 />

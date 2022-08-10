@@ -8,6 +8,7 @@ import CUSTOMER_API from "../../services/API/Customer";
 import {IParamsListDefault} from "../Utils/Interface/IParamList";
 import {ICreateKeyword, ISetCreateDataKeywordState} from "../Utils/Interface/IKeyword";
 import KEYWORD_API from "../../services/API/Keyword";
+import NOTIFICATION_API from "../../services/API/Notification";
 
 export const getKeywordPage = () => {
     const mainInfo = KeywordPageDataInitial.main_info
@@ -30,23 +31,24 @@ export const getKeywordPage = () => {
                     bonus.bonus_type = res.data
                 })
 
+
             await LOV_API.getNotifVia()
                 .then((res) => {
                     notification.via = res.data
                 })
-            await LOV_API.getNotifType()
+            const params = {limit: 100, skip: 0};
+            await NOTIFICATION_API.notificationList(params)
                 .then((res) => {
-                    notification.type = res.data
+                    notification.notification = res.data
                 })
-            await LOV_API.getNotifTemplate()
+            await LOV_API.getNotifReceiver()
                 .then((res) => {
-                    notification.template = res.data
+                    notification.receiver = res.data
                 })
             await LOV_API.getTransactionType()
                 .then((res) => {
                     notification.transactionType = res.data
                 })
-
 
             setTimeout(() => {
                 console.log(KeywordPageDataInitial)

@@ -11,19 +11,19 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import Notification from "../../organisms/Program/Form/Notification";
 
 const GeneralProgramCreation: FC = () => {
-    const {step, setStep, notification, setNotification} = useGeneralProgramRegistration()
+    const {step, setStep, notification, setNotification, mainInfoSummaryInput, setMainInfoSummaryInput, result} = useGeneralProgramRegistration()
     const steps = ['Main Info', 'Segmentation', 'Notification', 'Summary'];
 
     const childrenToBeRendered = () => {
         switch (step) {
             case 0:
-                return <MainInfoSummary step={step} setStep={setStep}/>
+                return <MainInfoSummary mainInfoSummaryInput={mainInfoSummaryInput} setMainInfoSummaryInput={setMainInfoSummaryInput} step={step} setStep={setStep} data={result}/>
             case 1:
                 return <Segmentation step={step} setStep={setStep}/>
             case 2:
                 return <Notification step={step} setStep={setStep} notification={notification} setNotification={setNotification}/>
             default:
-                return <MainInfoSummary step={step} setStep={setStep}/>
+                return <MainInfoSummary mainInfoSummaryInput={mainInfoSummaryInput} setMainInfoSummaryInput={setMainInfoSummaryInput} step={step} setStep={setStep} data={result}/>
         }
     }
     return (

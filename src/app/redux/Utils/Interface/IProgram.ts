@@ -7,14 +7,31 @@ export interface IMainInfo {
 
 
 export interface INotification {
+    notification: any[]
     via: any[]
-    type: any[]
-    template: any[]
+    receiver: any[]
     transactionType: any[]
+}
+
+export interface ISegmentation {
+    customer_msisdn: any,
+    customer_tier: any
+    customer_los_enable: any
+    customer_los_type: any
+    customer_los_value: any
+    customer_type: any
+    customer_badges: any
+    customer_location: any
+    customer_brand: any
+    customer_point_balance: any
+    customer_preferences: any
+    customer_ARPU: any
+
 }
 
 export interface IProgramPageData {
     main_info: IMainInfo,
+    segmentation: ISegmentation
     notification: INotification
 }
 
@@ -40,17 +57,17 @@ export interface IProgramNotification {
 }
 
 export interface IProgramSegmentation {
-    customer_msisdn: string,
+    customer_msisdn: string
     customer_tier: string
-    customer_los_enable: true,
-    customer_los_type: string,
-    customer_los_value: string,
+    customer_los_enable: true
+    customer_los_type: string
+    customer_los_value: string
     customer_type: string
-    customer_bedges: string
+    customer_badges: string
     customer_location: string
     customer_brand: string
-    customer_point_balance: number,
-    customer_preferences: string,
+    customer_point_balance: number
+    customer_preferences: string
     customer_ARPU: string
 }
 
@@ -59,13 +76,18 @@ export interface ICreateProgram {
     program: string,
     start_period: string,
     end_period: string,
+    program_type: string,
     point_type: string,
-    program_notification:Array<IProgramNotification>,
+    program_notification: Array<IProgramNotification>,
     program_segmentation: Array<IProgramSegmentation>,
     program_mechanism: string,
     program_owner: string,
+    program_owner_detail: string,
     logic: string,
-    program_parent: string
+    program_parent: string,
+    c_los_enable: boolean,
+    c_los_value: number,
+    c_point_balance: number,
 
 }
 

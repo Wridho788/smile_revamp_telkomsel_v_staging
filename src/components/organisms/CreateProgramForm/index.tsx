@@ -22,35 +22,15 @@ interface ICreateProgramFormProps {}
 const CreateProgramForm: React.FunctionComponent<ICreateProgramFormProps> = (
   props
 ) => {
-  const [name, setName] = React.useState("Combo Sakti");
-  const [pointType, setPointType] = React.useState("Digistar");
+  const [name, setName] = React.useState<string>("Combo Sakti");
+  const [pointType, setPointType] = React.useState<string>("Digistar");
   const [programMechanism, setProgramMechanism] =
-    React.useState("Rule Options");
-  const [programOwner, setProgramOwner] = React.useState("HQ");
-  const [parentProgram, setParentProgram] = React.useState("GigaMax");
+    React.useState<string>("Rule Options");
+  const [programOwner, setProgramOwner] = React.useState<string>("HQ");
+  const [parentProgram, setParentProgram] = React.useState<string>("GigaMax");
   const [dateTimeValue, setDateTimeValue] = React.useState<Date | null>(
     new Date()
   );
-
-  const handleChangeName = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setName(event.target.value);
-  };
-
-  const handleChangePointType = (event: SelectChangeEvent) => {
-    setPointType(event.target.value);
-  };
-
-  const handleChangeProgramMechanism = (event: SelectChangeEvent) => {
-    setProgramMechanism(event.target.value);
-  };
-
-  const handleChangeProgramOwner = (event: SelectChangeEvent) => {
-    setProgramOwner(event.target.value);
-  };
-
-  const handleChangeParentProgram = (event: SelectChangeEvent) => {
-    setParentProgram(event.target.value);
-  };
 
   return (
     <Card sx={{ borderRadius: "0.3vw", px: "0.5vw" }}>
@@ -67,7 +47,9 @@ const CreateProgramForm: React.FunctionComponent<ICreateProgramFormProps> = (
               <TextField
                 id="outlined-basic"
                 value={name}
-                onChange={handleChangeName}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                  setName(event.target.value);
+                }}
                 variant="outlined"
                 size="small"
                 sx={{ width: "100%" }}
@@ -83,7 +65,9 @@ const CreateProgramForm: React.FunctionComponent<ICreateProgramFormProps> = (
               <FormControl sx={{ minWidth: "100%" }}>
                 <Select
                   value={pointType}
-                  onChange={handleChangePointType}
+                  onChange={(event: SelectChangeEvent) => {
+                    setPointType(event.target.value);
+                  }}
                   displayEmpty
                   inputProps={{ "aria-label": "Without label" }}
                   size="small"
@@ -102,7 +86,9 @@ const CreateProgramForm: React.FunctionComponent<ICreateProgramFormProps> = (
               <FormControl sx={{ minWidth: "100%" }}>
                 <Select
                   value={programMechanism}
-                  onChange={handleChangeProgramMechanism}
+                  onChange={(event: SelectChangeEvent) => {
+                    setProgramMechanism(event.target.value);
+                  }}
                   displayEmpty
                   inputProps={{ "aria-label": "Without label" }}
                   size="small"
@@ -121,7 +107,9 @@ const CreateProgramForm: React.FunctionComponent<ICreateProgramFormProps> = (
               <FormControl sx={{ minWidth: "100%" }}>
                 <Select
                   value={programOwner}
-                  onChange={handleChangeProgramOwner}
+                  onChange={(event: SelectChangeEvent) => {
+                    setProgramOwner(event.target.value);
+                  }}
                   displayEmpty
                   inputProps={{ "aria-label": "Without label" }}
                   size="small"
@@ -140,7 +128,9 @@ const CreateProgramForm: React.FunctionComponent<ICreateProgramFormProps> = (
               <FormControl sx={{ minWidth: "100%" }}>
                 <Select
                   value={parentProgram}
-                  onChange={handleChangeParentProgram}
+                  onChange={(event: SelectChangeEvent) => {
+                    setParentProgram(event.target.value);
+                  }}
                   displayEmpty
                   inputProps={{ "aria-label": "Without label" }}
                   size="small"

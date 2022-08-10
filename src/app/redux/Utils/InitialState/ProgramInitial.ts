@@ -3,29 +3,43 @@ import {
     IMainInfo,
     INotification,
     IProgramNotification,
-    IProgramSegmentation
+    IProgramSegmentation, ISegmentation
 } from "../Interface/IProgram";
 import {IProgramPageData} from "../Interface/IProgram";
 
-const MainInfoInitial: IMainInfo = {
+export const MainInfoInitial: IMainInfo = {
     program_type: [],
     point_type: [],
     mechanism: [],
     owner: [],
 }
 
+export const SegmentationInitial: ISegmentation = {
+    customer_msisdn: [],
+    customer_tier: [],
+    customer_los_enable: [],
+    customer_los_type: [],
+    customer_los_value: [],
+    customer_point_balance: [],
+    customer_type: [],
+    customer_badges: [],
+    customer_location: [],
+    customer_brand: [],
+    customer_preferences: [],
+    customer_ARPU: [],
+}
 export const NotificationInitial: INotification = {
+    notification: [],
     via: [],
-    type: [],
-    template: [],
+    receiver: [],
     transactionType: []
 }
 export const ProgramNotificationInitial: IProgramNotification =
     {
-        notification: "Notification template id",
-        via: "LOV NOTIF_VIA",
-        receiver: "LOV NOTIF_RECEIVER",
-        transaction_type: "LOV TRANSACTION_TYPE"
+        notification: "",
+        via: "",
+        receiver: "",
+        transaction_type: ""
     }
 
 export const ProgramSegmentationInitial: IProgramSegmentation =
@@ -36,7 +50,7 @@ export const ProgramSegmentationInitial: IProgramSegmentation =
         customer_los_type: "string",
         customer_los_value: "string",
         customer_type: "62e8bd5415a463e4709ab5a0",
-        customer_bedges: "62e8bd5415a463e4709ab5a0",
+        customer_badges: "62e8bd5415a463e4709ab5a0",
         customer_location: "62e8bd5415a463e4709ab5a0",
         customer_brand: "62e8bd5415a463e4709ab5a0",
         customer_point_balance: 0,
@@ -45,18 +59,24 @@ export const ProgramSegmentationInitial: IProgramSegmentation =
     }
 export const ProgramPageDataInitial: IProgramPageData = {
     main_info: MainInfoInitial,
-    notification: NotificationInitial
+    segmentation : SegmentationInitial,
+    notification: NotificationInitial,
 }
 export const CreateProgramInitial: ICreateProgram = {
-    name: "PRG001",
-    program: "This program description",
+    name: "",
+    program: "",
     start_period: "2022-01-01",
     end_period: "2022-01-01",
-    point_type: "62e928517569a65dd3f50c50",
+    program_type: "",
+    point_type: "",
     program_notification: [ProgramNotificationInitial],
     program_segmentation: [ProgramSegmentationInitial],
-    program_mechanism: "62e96b6ed390cec33fbc9941",
-    program_owner: "62ebf2a43058d812df93ed47",
-    logic: "Just type the program segmentation logic",
-    program_parent: "62f1436fbbdf15809f92c01c"
+    program_mechanism: "",
+    program_owner: "",
+    program_owner_detail: "",
+    logic: "",
+    c_los_enable : false,
+    c_los_value: 0,
+    c_point_balance :0,
+    program_parent: "62f1436fbbdf15809f92c01c",
 }
