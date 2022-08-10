@@ -1,13 +1,13 @@
 import React, { FC, useEffect } from 'react';
 import { useTypedSelector } from '../../app/hooks/useTypedSelector';
 import { useActions } from '../../app/hooks/useActions';
-import {CreateKeywordInitial} from "../../app/redux/Utils/InitialState/KeywordInitial"
+import {CreateProgramInitial} from "../../app/redux/Utils/InitialState/ProgramInitial";
 
 const Index: FC = () => {
-    const {result, error, loading} = useTypedSelector(state=>state.createKeyword);
-    const {createKeyword} = useActions();
+    const {result, error, loading} = useTypedSelector(state=>state.createProgram);
+    const {createKProgram} = useActions();
     useEffect(()=>{
-        createKeyword(CreateKeywordInitial);
+        createKProgram(CreateProgramInitial);
     }, [result])
 
     if (error){
@@ -18,7 +18,7 @@ const Index: FC = () => {
     }
     return (
         <>
-            <p>Keyword Type</p>
+            <p> Program Name</p>
             <p>{result.name}</p>
         </>
     );
