@@ -7,7 +7,10 @@ import {
 } from "../../../atoms";
 import {IMainInfo} from "../../../../app/redux/Utils/Interface/IProgram";
 import {useState} from "react";
-import {CreateProgramInitial} from "../../../../app/redux/Utils/InitialState/ProgramInitial";
+import {
+    CreateProgramInitial,
+    ProgramSegmentationInitial
+} from "../../../../app/redux/Utils/InitialState/ProgramInitial";
 
 interface IMainInfoProps {
     mainInfo: IMainInfo
@@ -17,6 +20,7 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({mainInfo}: IMainInfo
     const optionStatic = [{_id: "1", set_value: "True"}, {_id: "2", set_value: "False"}]
     const logicStatic = [{_id: "intercept", set_value: "Intercept"}, {_id: "union", set_value: "Union"}]
     const programData = CreateProgramInitial
+    const programSegmentation =ProgramSegmentationInitial
 
     const [programTypeLabel, handleChangeProgramType] = useState(programData.program_type);
     const [pointTypeLabel, handleChangePointType] = useState(programData.point_type)
@@ -31,7 +35,7 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({mainInfo}: IMainInfo
     let cLOSEnableInitial = programData.c_los_enable === true ? "True" : "False"
     const [cLOSEnabled, setCLOSEnabled] = useState(cLOSEnableInitial);
 
-    const [cLOSValue, setCLOSValue] = useState(programData.c_los_value);
+    const [cLOSValue, setCLOSValue] = useState<number>(programData.c_los_value);
     const [logicValue, setLogicValue] = useState(programData.logic);
     const [cPointBalance, setCPointBalance] = React.useState<number>(programData.c_point_balance);
 
@@ -48,8 +52,13 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({mainInfo}: IMainInfo
         programData.logic = logicValue
 
         programData.c_los_enable = cLOSEnabled === "True" ? true : false
-        programData.c_los_value = cLOSValue
-        programData.c_point_balance = cPointBalance
+        programSegmentation.customer_los_enable = cLOSEnabled === "True" ? true : false
+
+        programData.c_los_value = Number(cLOSValue)
+        programSegmentation.customer_los_value = String(cLOSValue)
+
+        programData.c_point_balance = Number(cPointBalance)
+        programSegmentation.customer_point_balance = Number(cPointBalance)
 
         return;
     }, [

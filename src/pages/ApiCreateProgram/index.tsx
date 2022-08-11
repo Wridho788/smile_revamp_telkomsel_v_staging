@@ -5,9 +5,9 @@ import {CreateProgramInitial} from "../../app/redux/Utils/InitialState/ProgramIn
 
 const Index: FC = () => {
     const {result, error, loading} = useTypedSelector(state=>state.createProgram);
-    const {createKProgram} = useActions();
+    const {createProgram} = useActions();
     useEffect(()=>{
-        createKProgram(CreateProgramInitial);
+        createProgram(CreateProgramInitial);
     }, [result])
 
     if (error){

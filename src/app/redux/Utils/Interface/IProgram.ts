@@ -59,7 +59,7 @@ export interface IProgramNotification {
 export interface IProgramSegmentation {
     customer_msisdn: string
     customer_tier: string
-    customer_los_enable: true
+    customer_los_enable: boolean
     customer_los_type: string
     customer_los_value: string
     customer_type: string

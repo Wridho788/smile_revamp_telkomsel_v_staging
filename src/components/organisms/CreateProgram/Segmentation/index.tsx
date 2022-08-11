@@ -30,35 +30,95 @@ interface ISegmentationProps {
 }
 
 const Segmentation: React.FunctionComponent<ISegmentationProps> = ({segmentation}: ISegmentationProps) => {
-    const [activeTab, setActiveTab] = React.useState<number>(0);
+
     const programSegmentation = ProgramSegmentationInitial
-    const [msisdn, setMsisdn] = React.useState(segmentation.customer_msisdn);
-    const [badges, setBadges] = React.useState(segmentation.customer_badges);
-    const [location, setLocation] = React.useState(segmentation.customer_location);
-    const [brand, setBrand] = React.useState(segmentation.customer_brand);
-    const [preferences, setPreferences] = React.useState(segmentation.customer_preferences);
-    const [type, setType] = React.useState(segmentation.customer_type);
-    const [state, setState] = useState(segmentation.customer_badges);
-    const onClickCard = (id: number) => {
+    const [type, setType] = React.useState(programSegmentation.customer_type);
+    const [tier, setTier] = React.useState(programSegmentation.customer_tier);
+    const [badges, setBadges] = React.useState(programSegmentation.customer_badges);
+    const [location, setLocation] = React.useState(programSegmentation.customer_location);
+    const [brand, setBrand] = React.useState(programSegmentation.customer_brand);
+    const [arpu, setArpu] = React.useState(programSegmentation.customer_ARPU);
+    const [msisdn, setMsisdn] = React.useState(programSegmentation.customer_msisdn);
+
+    const [activeTab, setActiveTab] = React.useState<number>(0);
+    const [state, setState] = useState(segmentation.customer_type);
+    const [optionLabel, setOptionLabel] = useState('set_value');
+    const [initialId, setInitialId] = useState(programSegmentation.customer_type);
+    const setCheckbox = (id: string) => {
+        setInitialId(id)
+        switch (activeTab) {
+            case 0 :
+                return setType(id)
+            case 1 :
+                return setTier(id)
+            case 2 :
+                return setBadges(id)
+            case 3 :
+                return setLocation(id)
+            case 4 :
+                return setBrand(id)
+            case 5 :
+                return setArpu(id)
+            case 6 :
+                return setMsisdn(id)
+        }
+    }
+    const onClickTab = (id: number) => {
         setActiveTab(id)
         switch (id) {
             case 0 :
-               return setState(badges)
+                setOptionLabel('set_value')
+                setInitialId(type)
+                return setState(segmentation.customer_type)
             case 1 :
-               return setState(location)
+                setInitialId(tier)
+                setOptionLabel('name')
+                return setState(segmentation.customer_tier)
             case 2 :
-                return setState(brand)
+                setInitialId(badges)
+                setOptionLabel('name')
+                return setState(segmentation.customer_badges)
             case 3 :
-                return setState(preferences)
+                setInitialId(location)
+                setOptionLabel('name')
+                return setState(segmentation.customer_location)
+            case 4 :
+                setInitialId(brand)
+                setOptionLabel('name')
+                return setState(segmentation.customer_brand)
+            case 5 :
+                setInitialId(arpu)
+                setOptionLabel('name')
+                return setState(segmentation.customer_ARPU)
+            case 6 :
+                setInitialId(msisdn)
+                setOptionLabel('msisdn')
+                return setState(segmentation.customer_msisdn)
         }
     }
     React.useEffect(() => {
-        programSegmentation.customer_msisdn = msisdn
+        programSegmentation.customer_msisdn = state
 
+        programSegmentation.customer_type = type
+        programSegmentation.customer_tier = tier
+        programSegmentation.customer_badges = badges
+        programSegmentation.customer_location = location
+        programSegmentation.customer_brand = brand
+        programSegmentation.customer_ARPU = arpu
+        programSegmentation.customer_msisdn = msisdn
         return;
     }, [
+        activeTab,
+        initialId,
         programSegmentation,
-        msisdn,
+        state,
+        tier,
+        type,
+        badges,
+        location,
+        brand,
+        arpu,
+        msisdn
     ]);
 
 
@@ -73,7 +133,7 @@ const Segmentation: React.FunctionComponent<ISegmentationProps> = ({segmentation
             <Tabs
                 value={activeTab}
                 onChange={(event: React.SyntheticEvent, newValue: number) => {
-                    onClickCard(newValue);
+                    onClickTab(newValue);
                 }}
                 variant="scrollable"
                 scrollButtons="auto"
@@ -125,9 +185,11 @@ const Segmentation: React.FunctionComponent<ISegmentationProps> = ({segmentation
                                         pl="0.5vw"
                                     >
                                         <FormControlLabel
-                                            key={`checkBox__${idx}`}
+                                            checked={initialId == data['_id']}
+                                            onClick={ () => setCheckbox(data['_id'])}
+                                            key={initialId}
                                             control={<Checkbox/>}
-                                            label={data['name']}
+                                            label={data[optionLabel]}
                                         />
                                     </Grid>
                                     <Grid

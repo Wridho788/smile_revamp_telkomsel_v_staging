@@ -14,7 +14,7 @@ import NOTIFICATION_API from "../../services/API/Notification";
 
 export const getProgramPage = () => {
 
-    const params = {limit: 10, skip: 0, filter:{}, sort:{}};
+    const params = {limit: 10, skip: 0, filter: {}, sort: {}};
 
     const mainInfo = ProgramPageDataInitial.main_info
     const segmentation = ProgramPageDataInitial.segmentation
@@ -68,6 +68,7 @@ export const getProgramPage = () => {
             });
             await CUSTOMER_API.customerTierList(params).then((res) => {
                 segmentation.customer_tier = res.data;
+                segmentation.customer_ARPU = res.data;
             });
             await CUSTOMER_API.customerBadgeList(params).then((res) => {
                 segmentation.customer_badges = res.data;
@@ -94,7 +95,7 @@ export const getProgramPage = () => {
 
 export const customerList = ({limit = 10, skip = 0}: IParamsListDefault) => {
     return async (dispatch: Dispatch<Types>) => {
-        const params = {limit: limit, skip: skip, filter:{}, sort:{}};
+        const params = {limit: limit, skip: skip, filter: {}, sort: {}};
         try {
             dispatch({type: ActionTypes.FETCH_DATA});
             await CUSTOMER_API.customerList(params).then((res) => {
@@ -111,6 +112,7 @@ export const customerList = ({limit = 10, skip = 0}: IParamsListDefault) => {
                 });
             }, 1500);
         } catch (e) {
+            alert(e)
             dispatch({
                 type: ActionTypes.FETCH_DATA_ERROR,
                 payload: "Error on todos loading",
@@ -207,7 +209,7 @@ export const customerBrandList = ({
 
 export const locationList = ({limit = 10, skip = 0}: IParamsListDefault) => {
     return async (dispatch: Dispatch<Types>) => {
-        const params = {limit: limit, skip: skip, filter:{}, sort:{}};
+        const params = {limit: limit, skip: skip, filter: {}, sort: {}};
         try {
             dispatch({type: ActionTypes.FETCH_DATA});
             await LOCATION_API.locationList(params).then((res) => {
@@ -230,7 +232,34 @@ export const locationList = ({limit = 10, skip = 0}: IParamsListDefault) => {
         }
     }
 }
-export const createKProgram = (data: ICreateProgram) => {
+
+export const getProgramList = ({limit = 100, skip = 0}: IParamsListDefault) => {
+    return async (dispatch: Dispatch<Types>) => {
+        const params = {limit: limit, skip: skip, filter: {}, sort: {}};
+        try {
+            dispatch({type: ActionTypes.FETCH_DATA});
+            await PROGRAM_API.getProgramList(params).then((res) => {
+                IDefaultListInitial.data = res.data;
+                IDefaultListInitial.total = res.total;
+            });
+
+            setTimeout(() => {
+                console.log(IDefaultListInitial);
+                dispatch({
+                    type: ActionTypes.FETCH_DATA_SUCCESS,
+                    payload: IDefaultListInitial,
+                });
+            }, 1500);
+        } catch (e) {
+            dispatch({
+                type: ActionTypes.FETCH_DATA_ERROR,
+                payload: "Error on todos loading",
+            });
+        }
+    }
+
+}
+export const createProgram = (data: ICreateProgram) => {
     return async (dispatch: Dispatch<Types>) => {
         try {
             dispatch({type: ActionTypes.FETCH_DATA})
