@@ -1,7 +1,11 @@
 import { Box, Stack } from "@mui/material";
 import * as React from "react";
 import { MainInfoAuction } from "..";
-import { keywordTypeOptions, options } from "../../../../mocks/options";
+import {
+  keywordTypeOptions,
+  options,
+  optionsObj,
+} from "../../../../mocks/options";
 import {
   Select,
   OutlinedTextField,
@@ -11,7 +15,7 @@ import {
 interface IMainInfoProps {}
 
 const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
-  const [type, setType] = React.useState<string>("");
+  const [type, setType] = React.useState<string>("General");
   const [name, setName] = React.useState<string>("");
   const [startPeriod, setStartPeriod] = React.useState<string>("");
   const [endPeriod, setEndPeriod] = React.useState<string>("");
@@ -38,97 +42,94 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
             placeholder="Option"
             options={keywordTypeOptions}
             value={type}
-            handleChange={(val: any) => setType(val)}
+            handleChange={setType}
           />
         </Box>
-        {type === "Auction" ? (
-          <MainInfoAuction />
-        ) : (
-          <Stack spacing={"1vw"} px="7vw">
-            <OutlinedTextField
-              label="Name"
-              placeholder="Name"
-              value={name}
-              // setValue={setName}
-              variant={"outlined"}
-            />
-            <ResponsiveDateTimePicker
-              label="Start Period"
-              placeholder="Start Period"
-              value={startPeriod}
-              // setValue={setStartPeriod}
-            />
-            <ResponsiveDateTimePicker
-              label="End Period"
-              placeholder="End Period"
-              value={endPeriod}
-              // setValue={setEndPeriod}
-            />
-            <OutlinedTextField
-              label="Max Redeem Permisson"
-              placeholder="Max Redeem Permisson"
-              value={maxRedeemPermisson}
-              // setValue={setMaxRedeemPermisson}
-              variant={"outlined"}
-            />
-            <OutlinedTextField
-              label="Max Redeem Permisson Type"
-              placeholder="Max Redeem Permisson Type"
-              value={maxRedeemPermissonType}
-              // setValue={setMaxRedeemPermissonType}
-              variant={"outlined"}
-            />
-            <ResponsiveDateTimePicker
-              label="Max Redeem Permisson From"
-              placeholder="Max Redeem Permisson From"
-              value={maxRedeemPermissonFrom}
-              // setValue={setMaxRedeemPermissonFrom}
-            />
-            <ResponsiveDateTimePicker
-              label="Max Redeem Permisson To"
-              placeholder="Max Redeem Permisson To"
-              value={maxRedeemPermissonTo}
-              // setValue={setMaxRedeemPermissonTo}
-            />
-            <Select
-              label="Enable Corporate"
-              placeholder="Option"
-              options={options}
-              value={enableCorporate}
-              // setValue={setEnableCorporate}
-            />
-            <Select
-              label="Customer Tier"
-              placeholder="Option"
-              options={options}
-              value={customerTier}
-              // setValue={setCustomerTier}
-            />
-            <Select
-              label="Point Type"
-              placeholder="Option"
-              options={options}
-              value={pointType}
-              // setValue={setPointType}
-            />
-            <OutlinedTextField
-              label="Comment Approval"
-              placeholder="Comment Approval"
-              value={commentApproval}
-              // setValue={setCommentApproval}
-              variant={"outlined"}
-              multiline
-              rows={4}
-            />
-            <Select
-              label="Parent"
-              placeholder="Option"
-              options={options}
-              value={parent}
-              // setValue={setParent}
-            />
-          </Stack>
-        )}
+        <Stack spacing={"1vw"} px="7vw" pb="3vw">
+          <OutlinedTextField
+            label="Name"
+            placeholder="Name"
+            value={name}
+            handleChange={setName}
+            variant={"outlined"}
+          />
+          <ResponsiveDateTimePicker
+            label="Start Period"
+            placeholder="Start Period"
+            value={startPeriod}
+            handleChange={setStartPeriod}
+          />
+          <ResponsiveDateTimePicker
+            label="End Period"
+            placeholder="End Period"
+            value={endPeriod}
+            handleChange={setEndPeriod}
+          />
+          <OutlinedTextField
+            label="Max Redeem Permisson"
+            placeholder="Max Redeem Permisson"
+            value={maxRedeemPermisson}
+            handleChange={setMaxRedeemPermisson}
+            variant={"outlined"}
+          />
+          <OutlinedTextField
+            label="Max Redeem Permisson Type"
+            placeholder="Max Redeem Permisson Type"
+            value={maxRedeemPermissonType}
+            handleChange={setMaxRedeemPermissonType}
+            variant={"outlined"}
+          />
+          <ResponsiveDateTimePicker
+            label="Max Redeem Permisson From"
+            placeholder="Max Redeem Permisson From"
+            value={maxRedeemPermissonFrom}
+            handleChange={setMaxRedeemPermissonFrom}
+          />
+          <ResponsiveDateTimePicker
+            label="Max Redeem Permisson To"
+            placeholder="Max Redeem Permisson To"
+            value={maxRedeemPermissonTo}
+            handleChange={setMaxRedeemPermissonTo}
+          />
+          <Select
+            label="Enable Corporate"
+            placeholder="Option"
+            options={optionsObj}
+            value={enableCorporate}
+            handleChange={setEnableCorporate}
+          />
+          <Select
+            label="Customer Tier"
+            placeholder="Option"
+            options={optionsObj}
+            value={customerTier}
+            handleChange={setCustomerTier}
+          />
+          <Select
+            label="Point Type"
+            placeholder="Option"
+            options={optionsObj}
+            value={pointType}
+            handleChange={setPointType}
+          />
+          <OutlinedTextField
+            label="Comment Approval"
+            placeholder="Comment Approval"
+            value={commentApproval}
+            handleChange={setCommentApproval}
+            variant={"outlined"}
+            multiline
+            rows={4}
+          />
+          <Select
+            label="Parent"
+            placeholder="Option"
+            options={optionsObj}
+            value={parent}
+            handleChange={setParent}
+          />
+        </Stack>
+        {type === "Auction" ? <MainInfoAuction /> : <></>}
       </Stack>
     </Box>
   );

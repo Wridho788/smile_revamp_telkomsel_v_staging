@@ -1,6 +1,6 @@
 import { Paper } from "@mui/material";
 import * as React from "react";
-import { ICustomPaperProps } from "./types";
+import { ICustomPaperProps } from "./type";
 
 const CustomPaper: React.FunctionComponent<ICustomPaperProps> = ({
   children,

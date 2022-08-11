@@ -1,47 +1,44 @@
-import { Box, Divider, Grid, Stack } from "@mui/material";
+import { Box, Button, Divider, Grid, Stack } from "@mui/material";
 import * as React from "react";
-import useKeywordAuction from "../../../../../../app/context/KeywordAuction/useKeywordAuction";
 import { optionsObj } from "../../../../../../mocks/options";
-import { H1, H2, OutlinedTextField, Select } from "../../../../../atoms";
+import {
+  BodyCopy,
+  H2,
+  OutlinedTextField,
+  ResponsiveDateTimePicker,
+  Select,
+} from "../../../../../atoms";
 import BasicFormCard from "../../../../../atoms/BasicFormCard";
-import CustomPaper from "../../../../../atoms/CustomPaper";
+import BasicFormCardWithRightSwitch from "../../../../../atoms/BasicFormCardWithRightSwitch";
 import { IMainInfoProps } from "./type";
-import useKeywordAuctionOptions, {
-  useAuctionNotifBidding,
-  useAuctionNotifOutbid,
-  useAuctionNotifRefundSuccess,
-  useAuctionNotifWinning,
-} from "./useKeywordAuctionMainInfoTab";
+import AddIcon from "@mui/icons-material/Add";
+import { Image } from "@mui/icons-material";
 
 const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
-  const { keywordAuctionData } = useKeywordAuction();
-  const { main_info } = useKeywordAuctionOptions();
+  const [outbit, setOutbit] = React.useState("");
+  const [winning, setWinning] = React.useState("");
+  const [bidding, setBidding] = React.useState("");
+  const [poinRefund, setPoinRefund] = React.useState("");
+  const [keywordBidding, setKeywordBidding] = React.useState("");
+  const [startBidding, setStartBidding] = React.useState("");
+  const [endBidding, setEndBidding] = React.useState("");
+  const [minBiddingPoin, setMinBiddingPoin] = React.useState("");
+  const [multipliePoin, setMultipliePoin] = React.useState("");
+  const [winnerPhase, setWinnerPhase] = React.useState("");
+  const [maxWinnerInAPhase, setMaxWinnerInAPhase] = React.useState("");
+  const [title, setTitle] = React.useState("");
+  const [description, setDescription] = React.useState("");
+  const [prizeName, setPrizeName] = React.useState("");
+  const [prizeDescription, setPrizeDescription] = React.useState("");
 
-  const { AuctionNotifOutbidLabel, handleChangeAuctionNotifOutbid } =
-    useAuctionNotifOutbid(main_info.auction_notif_outbid);
-  const { AuctionNotifWinningLabel, handleChangeAuctionNotifWinning } =
-    useAuctionNotifWinning(main_info.auction_notif_winning);
-  const { AuctionNotifBiddingLabel, handleChangeAuctionNotifBidding } =
-    useAuctionNotifBidding(main_info.auction_notif_bidding);
-  const {
-    AuctionNotifRefundSuccessLabel,
-    handleChangeAuctionNotifRefundSuccess,
-  } = useAuctionNotifRefundSuccess(main_info.auction_notif_refund_success);
-
-  React.useEffect(() => {
-    console.log(keywordAuctionData);
-    return;
-  }, [keywordAuctionData]);
   return (
-    // <Box py="2vw" px="10vw">
-    // <CustomPaper sx={{ paddingBlock: "3vw", paddingInline: "3vw" }}>
     <Box pt="2vw">
       <Divider textAlign="left">
         <H2 textTransform="uppercase">
           auction specific main info configuration
         </H2>
       </Divider>
-      <Grid container columns={10} py="3vw">
+      <Grid container columns={9} columnSpacing="3vw" pt="3vw">
         <Grid item xs={4}>
           <BasicFormCard title="notification configuration">
             <Stack direction="column" spacing="1vw">
@@ -51,8 +48,8 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
                 placeholder="Option"
                 options={optionsObj}
                 optionLabel="set_value"
-                value={AuctionNotifOutbidLabel}
-                handleChange={handleChangeAuctionNotifOutbid}
+                value={outbit}
+                handleChange={setOutbit}
               />
               <Select
                 direction="column"
@@ -60,8 +57,8 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
                 placeholder="Option"
                 options={optionsObj}
                 optionLabel="set_value"
-                value={AuctionNotifWinningLabel}
-                handleChange={handleChangeAuctionNotifWinning}
+                value={winning}
+                handleChange={setWinning}
               />
               <Select
                 direction="column"
@@ -69,8 +66,8 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
                 placeholder="Option"
                 options={optionsObj}
                 optionLabel="set_value"
-                value={AuctionNotifBiddingLabel}
-                handleChange={handleChangeAuctionNotifBidding}
+                value={bidding}
+                handleChange={setBidding}
               />
               <Select
                 direction="column"
@@ -78,16 +75,153 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
                 placeholder="Option"
                 options={optionsObj}
                 optionLabel="set_value"
-                value={AuctionNotifRefundSuccessLabel}
-                handleChange={handleChangeAuctionNotifRefundSuccess}
+                value={poinRefund}
+                handleChange={setPoinRefund}
               />
             </Stack>
           </BasicFormCard>
+          <Stack direction="column" spacing="1vw" mt="3vw">
+            <Select
+              direction="column"
+              label="Keyword Bidding"
+              placeholder="Option"
+              options={optionsObj}
+              optionLabel="set_value"
+              value={keywordBidding}
+              handleChange={setKeywordBidding}
+            />
+            <ResponsiveDateTimePicker
+              direction="column"
+              label="Start Bidding"
+              placeholder="Start Bidding"
+              value={startBidding}
+              handleChange={setStartBidding}
+            />
+            <ResponsiveDateTimePicker
+              direction="column"
+              label="End Bidding"
+              placeholder="End Bidding"
+              value={endBidding}
+              handleChange={setEndBidding}
+            />
+            <OutlinedTextField
+              direction="column"
+              label="Min Bidding Poin"
+              placeholder="Min Bidding Poin"
+              variant={"outlined"}
+              value={minBiddingPoin}
+              handleChange={setMinBiddingPoin}
+            />
+            <OutlinedTextField
+              direction="column"
+              label="Multiplie Poin"
+              placeholder="Multiplie Poin"
+              variant={"outlined"}
+              value={multipliePoin}
+              handleChange={setMultipliePoin}
+            />
+            <Select
+              direction="column"
+              label="Winner Phase"
+              placeholder="Option"
+              options={optionsObj}
+              optionLabel="set_value"
+              value={winnerPhase}
+              handleChange={setWinnerPhase}
+            />
+            <OutlinedTextField
+              direction="column"
+              label="Max Winner in a Phase"
+              placeholder="Max Winner in a Phase"
+              variant={"outlined"}
+              value={maxWinnerInAPhase}
+              handleChange={setMaxWinnerInAPhase}
+            />
+          </Stack>
+        </Grid>
+        <Grid item xs={5}>
+          <BasicFormCardWithRightSwitch title="how to redeem">
+            <Stack direction="column" spacing="1vw">
+              <OutlinedTextField
+                direction="column"
+                label="Title"
+                placeholder="Title"
+                variant={"outlined"}
+                value={title}
+                handleChange={setTitle}
+              />
+              <OutlinedTextField
+                direction="column"
+                label="Description"
+                placeholder="Description"
+                variant={"outlined"}
+                value={description}
+                handleChange={setDescription}
+                multiline
+                rows={3}
+              />
+            </Stack>
+          </BasicFormCardWithRightSwitch>
+          <BasicFormCardWithRightSwitch title="term & condition" mt="3vw">
+            <Stack direction="column" spacing="1vw">
+              <OutlinedTextField
+                direction="column"
+                label="Title"
+                placeholder="Title"
+                variant={"outlined"}
+                value={title}
+                handleChange={setTitle}
+              />
+              <OutlinedTextField
+                direction="column"
+                label="Description"
+                placeholder="Description"
+                variant={"outlined"}
+                value={description}
+                handleChange={setDescription}
+                multiline
+                rows={3}
+              />
+              <Box display="flex" justifyContent="center">
+                <Button variant="contained" startIcon={<AddIcon />}>
+                  <BodyCopy textTransform="capitalize">add more</BodyCopy>
+                </Button>
+              </Box>
+            </Stack>
+          </BasicFormCardWithRightSwitch>
+          <Divider textAlign="left" sx={{ mt: "3vw" }}>
+            <H2 textTransform="uppercase">prize configuration</H2>
+          </Divider>
+          <Stack direction="row" spacing="1vw" mt="1vw">
+            <OutlinedTextField
+              direction="column"
+              label="Prize Name"
+              placeholder="Prize Name"
+              variant={"outlined"}
+              value={prizeName}
+              handleChange={setPrizeName}
+            />
+            <OutlinedTextField
+              direction="column"
+              label="Prize Name"
+              placeholder="Prize Name"
+              variant={"outlined"}
+              value={prizeDescription}
+              handleChange={setPrizeDescription}
+            />
+          </Stack>
+          <Box mt="1vw">
+            <BodyCopy mb="0.5vw">Prize Image</BodyCopy>
+            <img
+              src="https://images.assetsdelivery.com/compings_v2/yehorlisnyi/yehorlisnyi2104/yehorlisnyi210400016.jpg"
+              width="120px"
+              height="120px"
+              alt=""
+            />
+          </Box>
         </Grid>
       </Grid>
     </Box>
-    // </CustomPaper>
-    // </Box>
   );
 };
 
