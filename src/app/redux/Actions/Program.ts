@@ -233,7 +233,7 @@ export const locationList = ({limit = 10, skip = 0}: IParamsListDefault) => {
     }
 }
 
-export const getProgramList = ({limit = 10, skip = 0}: IParamsListDefault) => {
+export const getProgramList = ({limit = 100, skip = 0}: IParamsListDefault) => {
     return async (dispatch: Dispatch<Types>) => {
         const params = {limit: limit, skip: skip, filter: {}, sort: {}};
         try {
