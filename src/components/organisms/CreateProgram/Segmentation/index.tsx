@@ -292,10 +292,9 @@ const Segmentation: React.FunctionComponent<ISegmentationProps> = ({
             Upload File
             <input type="file" onChange={importExcel} hidden />
           </Button>
-          <BodyCopy>No file uploaded</BodyCopy>
         </Stack>
         <Select
-          placeholder="Option"
+          placeholder="Select"
           options={programSegmentationOptions}
           optionValue="set_value"
           value={typeMSSIDN}
