@@ -16,6 +16,7 @@ import {useActions} from "../../../app/hooks/useActions";
 import {useEffect} from "react";
 import {CreateProgramInitial} from "../../../app/redux/Utils/InitialState/ProgramInitial";
 import {useNavigate} from "react-router-dom";
+import {CircularProgress} from "@mui/material";
 
 const ColorlibConnector = styled(StepConnector)(({theme}) => ({
     [`&.${stepConnectorClasses.alternativeLabel}`]: {
@@ -121,10 +122,20 @@ export default function HorizontalLinearStepper({
     useEffect(() => {
     }, [result])
 
+
     const handleNext = () => {
-        if (activeStep === 3) {
-            console.log(CreateProgramInitial)
+        if (activeStep === 2) {
             createProgram(CreateProgramInitial);
+            if (error) {
+                return alert(error)
+            }
+            if (loading) {
+                return (
+                    <Box sx={{display: 'flex'}}>
+                        <CircularProgress/>
+                    </Box>
+                );
+            }
         }
 
         let newSkipped = skipped;
@@ -157,9 +168,9 @@ export default function HorizontalLinearStepper({
     };
 
     let navigate = useNavigate();
-    const handleReset = () => {
+    const handleShowList = () => {
         // setActiveStep(0);
-        navigate("/api-program")
+        navigate("/program-management")
     };
 
     return (
@@ -198,7 +209,7 @@ export default function HorizontalLinearStepper({
                 <React.Fragment>
                     <Box sx={{display: "flex", flexDirection: "row", pt: 2}}>
                         <Box sx={{flex: "1 1 auto"}}/>
-                        <Button onClick={handleReset}>Show List</Button>
+                        <Button onClick={handleShowList}>Show List</Button>
                     </Box>
                 </React.Fragment>
             ) : (

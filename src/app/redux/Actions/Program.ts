@@ -265,8 +265,12 @@ export const createProgram = (data: ICreateProgram) => {
             dispatch({type: ActionTypes.FETCH_DATA})
             await PROGRAM_API.createProgram(data)
                 .then((res) => {
-                    console.log(res)
-                    console.log(CreateProgramInitial)
+                    if (res.status != 200) {
+                        alert(res.statusText)
+                        dispatch({type: ActionTypes.FETCH_DATA_ERROR, payload: res.statusText})
+                    } else {
+                        alert("Data berhasil ditambah")
+                    }
                 })
 
             // setTimeout(() => {

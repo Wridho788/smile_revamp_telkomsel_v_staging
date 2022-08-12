@@ -142,11 +142,11 @@ const Segmentation: React.FunctionComponent<ISegmentationProps> = ({segmentation
                     <Tab key={`tabTitle__${idx}`} label={tabTitle}/>
                 ))}
             </Tabs>
-            <Grid container columns={11} mt="2vw" position="relative">
+            <Grid container  mt="2vw" position="relative">
                 <Grid item xs={5} px="1vw">
                     <Stack spacing={"1vw"}>
                         <BodyCopy pl="0.5vw">List of {tabTitles[activeTab]} Items</BodyCopy>
-                        <Grid container columns={10}>
+                        <Grid container>
                             <Grid
                                 item
                                 xs={8}
@@ -212,115 +212,11 @@ const Segmentation: React.FunctionComponent<ISegmentationProps> = ({segmentation
                             ))}
                         </FormGroup>
                     </Stack>
-                    <Stack direction="row" justifyContent="center" mt="2vw">
-                        <Pagination count={10} color="primary" shape="rounded"/>
-                    </Stack>
+                    {/*<Stack direction="row" justifyContent="center" mt="2vw">*/}
+                    {/*    <Pagination count={10} color="primary" shape="rounded"/>*/}
+                    {/*</Stack>*/}
                 </Grid>
-                <Grid
-                    item
-                    xs={1}
-                    display="flex"
-                    justifyContent="center"
-                    alignItems="center"
-                >
-                    <Stack spacing="1vw">
-                        <Button
-                            aria-label="rightArrow"
-                            size="large"
-                            color="primary"
-                            variant="contained"
-                            sx={{
-                                fontSize: "1.2vw",
-                                paddingBlock: "1vw",
-                                borderRadius: "0.3vw",
-                            }}
-                        >
-                            <KeyboardDoubleArrowRightIcon fontSize="inherit"/>
-                        </Button>
-                        <Button
-                            aria-label="leftArrow"
-                            size="large"
-                            color="primary"
-                            variant="contained"
-                            sx={{
-                                fontSize: "1.2vw",
-                                paddingBlock: "1vw",
-                                borderRadius: "0.3vw",
-                            }}
-                        >
-                            <KeyboardDoubleArrowLeftIcon fontSize="inherit"/>
-                        </Button>
-                    </Stack>
-                </Grid>
-                <Grid item xs={5} px="1vw">
-                    <Stack spacing={"1vw"}>
-                        <BodyCopy pl="0.5vw">List of Choose Items</BodyCopy>
-                        <Grid container columns={10}>
-                            <Grid
-                                item
-                                xs={8}
-                                display="flex"
-                                justifyContent="center"
-                                alignItems="center"
-                            >
-                                <KeywordSearch
-                                    sx={{minWidth: "100%", borderRadius: "0.3vw"}}
-                                />
-                            </Grid>
-                            <Grid
-                                item
-                                xs={2}
-                                display="flex"
-                                justifyContent="center"
-                                alignItems="center"
-                            >
-                                <IconButton
-                                    aria-label="filter"
-                                    size="large"
-                                    sx={{color: "primary.main"}}
-                                >
-                                    <FilterAltIcon color="disabled" fontSize="inherit"/>
-                                </IconButton>
-                            </Grid>
-                        </Grid>
-                        <FormGroup>
-                            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].map(
-                                (_, idx) => (
-                                    <Grid container columns={10} key={`checkChooseItem__${idx}`}>
-                                        <Grid
-                                            item
-                                            xs={8}
-                                            display="flex"
-                                            alignItems="center"
-                                            pl="0.5vw"
-                                        >
-                                            <FormControlLabel
-                                                key={`checkBox__${idx}`}
-                                                control={<Checkbox/>}
-                                                label="Item List"
-                                            />
-                                        </Grid>
-                                        <Grid
-                                            item
-                                            xs={2}
-                                            display="flex"
-                                            justifyContent="center"
-                                            alignItems="center"
-                                        >
-                                            <IconButton
-                                                aria-label="delete"
-                                                size="large"
-                                                sx={{color: "primary.main"}}
-                                            >
-                                                <DeleteIcon fontSize="inherit"/>
-                                            </IconButton>
-                                        </Grid>
-                                    </Grid>
-                                )
-                            )}
-                        </FormGroup>
-                    </Stack>
-                </Grid>
+
             </Grid>
         </Box>
     );

@@ -19,12 +19,12 @@ const CreateProgram = () => {
   }, [result])
 
   const [activeStep, setActiveStep] = React.useState<number>(0);
-  const steps = ["Main Info", "Segmentation", "Notification", "Summary"];
+  const steps = ["Main Info", "Segmentation", "Notification"];
   const stepsItem = [
     <MainInfo mainInfo={result.main_info}/>,
     <Segmentation segmentation={result.segmentation}/>,
     <Notification notification={result.notification}/>,
-    <Summary />,
+    // <Summary />,
   ];
 
   return (
