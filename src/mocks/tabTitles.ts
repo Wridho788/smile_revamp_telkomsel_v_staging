@@ -5,6 +5,5 @@ export const tabTitles = [
   "C. Location",
   "C. Brand",
   "C. ARPU",
-  "C. Outlet",
   "MSSIDN",
 ];

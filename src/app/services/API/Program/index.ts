@@ -1,13 +1,17 @@
-import {AxiosPost} from "../../Axios";
-import {ICreateKeyword} from "../../../redux/Utils/Interface/IKeyword";
 
+import {AxiosGet, AxiosPost} from "../../Axios";
+import {ICreateProgram} from "../../../redux/Utils/Interface/IProgram";
+
+// Get Data
+const getProgramList = (params: any) => AxiosGet('/program', params)
 
 // Create Data
-const createKeyword = (data: any) => AxiosPost('/keyword')
+const createProgram = (data: ICreateProgram) => AxiosPost('/program', data)
 
 
 
-const KEYWORD_API = {
-    createKeyword,
+const PROGRAM_API = {
+    createProgram,
+    getProgramList
 }
-export default KEYWORD_API
+export default PROGRAM_API

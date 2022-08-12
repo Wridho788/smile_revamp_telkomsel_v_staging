@@ -1,14 +1,14 @@
 import React, { FC, useEffect } from 'react';
 import { useTypedSelector } from '../../app/hooks/useTypedSelector';
 import { useActions } from '../../app/hooks/useActions';
+import {CreateProgramInitial} from "../../app/redux/Utils/InitialState/ProgramInitial";
 
 const Index: FC = () => {
-    const {result, error, loading} = useTypedSelector(state=>state.defaultList);
-    const {getProgramList} = useActions();
+    const {result, error, loading} = useTypedSelector(state=>state.createProgram);
+    const {createProgram} = useActions();
     useEffect(()=>{
-        getProgramList({});
+        createProgram(CreateProgramInitial);
     }, [result])
-
 
     if (error){
         return <h1 style={{color: 'red', fontWeight: '700'}}>{error}</h1>
@@ -18,14 +18,10 @@ const Index: FC = () => {
     }
     return (
         <>
-            <p>Program List</p>
-            <div>
-                {result.data.map(data => {
-                    return <div key={data}>{data.name}</div>
-                })} <br/>
-            </div>
-         </>
+            <p> Program Name</p>
+            <p>{result.name}</p>
+        </>
     );
 };
 
-export default Index
+export default Index;

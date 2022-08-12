@@ -13,14 +13,9 @@ const ProgramManagement = () => {
         paddingRight: "50px",
       }}
     >
-      <Grid container columns={10} spacing={"3vw"}>
         <Grid item xs={7}>
-          <Programs programsData={programsData} />
+          <Programs  />
         </Grid>
-        <Grid item xs={3}>
-          <CreateProgramForm />
-        </Grid>
-      </Grid>
     </Box>
   );
 };

@@ -5,9 +5,10 @@ import {IDefaultListInitial} from "../Utils/InitialState/DefaultListInitial";
 import {CreateKeywordInitial} from "../Utils/InitialState/KeywordInitial";
 import LOV_API from "../../services/API/Lov";
 import CUSTOMER_API from "../../services/API/Customer";
-import KEYWORD_API from "../../services/API/Program";
 import {IParamsListDefault} from "../Utils/Interface/IParamList";
 import {ICreateKeyword, ISetCreateDataKeywordState} from "../Utils/Interface/IKeyword";
+import KEYWORD_API from "../../services/API/Keyword";
+import NOTIFICATION_API from "../../services/API/Notification";
 
 export const getKeywordPage = () => {
     const mainInfo = KeywordPageDataInitial.main_info
@@ -29,19 +30,22 @@ export const getKeywordPage = () => {
                 .then((res) => {
                     bonus.bonus_type = res.data
                 })
+
+
             await LOV_API.getNotifVia()
                 .then((res) => {
                     notification.via = res.data
                 })
-            await LOV_API.getNotifVia()
+            const params = {limit: 100, skip: 0};
+            await NOTIFICATION_API.notificationList(params)
                 .then((res) => {
-                    notification.type = res.data
+                    notification.notification = res.data
                 })
-            await LOV_API.getNotifVia()
+            await LOV_API.getNotifReceiver()
                 .then((res) => {
-                    notification.template = res.data
+                    notification.receiver = res.data
                 })
-            await LOV_API.getNotifVia()
+            await LOV_API.getTransactionType()
                 .then((res) => {
                     notification.transactionType = res.data
                 })
@@ -75,11 +79,11 @@ export const customerList = ({limit = 10, skip = 0}: IParamsListDefault) => {
     }
 }
 
-export const createKeyword = () => {
+export const createKeyword = (data: ICreateKeyword) => {
     return async (dispatch: Dispatch<Types>) => {
         try {
             dispatch({type: ActionTypes.FETCH_DATA})
-            const response = await KEYWORD_API.createKeyword(CreateKeywordInitial).then((res) => {
+            const response = await KEYWORD_API.createKeyword(data).then((res) => {
                 console.log(CreateKeywordInitial)
                 CreateKeywordInitial.keyword_type = res.data
                 dispatch({type: ActionTypes.FETCH_DATA_SUCCESS, payload: CreateKeywordInitial})

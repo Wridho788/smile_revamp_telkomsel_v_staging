@@ -20,7 +20,7 @@ const AxiosGet = async (
 }
 const AxiosPost = async (
     endpoint: string,
-    data?: ICreateKeywordState,
+    data: any,
     isAuth?: boolean
 ) => {
     let response: any = []

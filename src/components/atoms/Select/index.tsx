@@ -47,24 +47,18 @@ const Index: React.FunctionComponent<ISelectProps> = ({
             size="small"
             input={<OutlinedInput />}
             inputProps={{ "aria-label": "Without label" }}
-            renderValue={(selected) => {
-              if (selected.length === 0) {
-                return <>{placeholder}</>;
-              }
-              return selected;
-            }}
             {...props}
           >
             <MenuItem disabled value="">
               {placeholder}
             </MenuItem>
             {typeof options !== "undefined" &&
-              options.map((option: any, idx: number) => (
+              options.map((data: any, idx: number) => (
                 <MenuItem
                   key={`option__item__${idx}`}
-                  value={option[optionLabel]}
+                  value={data[optionValue]}
                 >
-                  {option[optionLabel]}
+                  {data[optionLabel]}
                 </MenuItem>
               ))}
           </Select>

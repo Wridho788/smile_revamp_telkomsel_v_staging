@@ -9,6 +9,7 @@ const getLocationType = () => AxiosGet('/lov/location_type')
 const getMechanism = () => AxiosGet('/lov/mechanism')
 const getNotifVia = () => AxiosGet('/lov/notif_via')
 const getNotifType = () => AxiosGet('/lov/notif_type')
+const getNotifReceiver = () => AxiosGet('/lov/notif_receiver')
 const getPointType = () => AxiosGet('/lov/point_type')
 const getOwner = () => AxiosGet('/lov/owner')
 const getPointBalance = () => AxiosGet('/lov/c_point_balance')
@@ -36,6 +37,7 @@ const LOV_API = {
     getMechanism,
     getNotifVia,
     getNotifType,
+    getNotifReceiver,
     getProgramType,
     getPointType,
     getOwner,

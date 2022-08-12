@@ -7,7 +7,7 @@ const Index: FC = () => {
     const {result, error, loading} = useTypedSelector(state=>state.createKeyword);
     const {createKeyword} = useActions();
     useEffect(()=>{
-        createKeyword();
+        createKeyword(CreateKeywordInitial);
     }, [result])
 
     if (error){

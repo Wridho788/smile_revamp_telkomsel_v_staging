@@ -35,7 +35,7 @@ export interface IKeywordNotification {
     notification: string,
     via: string
     receiver: number
-    transaction_type: number
+    transaction_type: string
 }
 
 export interface ICreateKeyword {
@@ -56,8 +56,8 @@ export interface ICreateKeyword {
     status_approval: string,
     notification_type: string,
     keyword_parent: string,
-    keyword_bonus: IKeywordBonus,
-    keyword_notification: IKeywordNotification,
+    keyword_bonus: Array<IKeywordBonus>,
+    keyword_notification: Array<IKeywordNotification>,
     keyword_type:string
 }
 export interface IDefaultListResult {
@@ -79,7 +79,7 @@ export interface IDefaultListState {
 }
 
 export interface ICreateKeywordState {
-    result: ICreateKeyword
+    result: any
     loading: boolean
     error: null | string
 }

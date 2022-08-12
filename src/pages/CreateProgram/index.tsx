@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import { Box } from "@mui/material";
 import { H2, Stepper, StepperPaper } from "../../components";
 import {
@@ -8,15 +8,23 @@ import {
   Summary,
 } from "../../components/organisms/CreateProgram";
 import { CreateProgramProvider } from "../../app/context/CreateProgram/Provider";
+import {useTypedSelector} from "../../app/hooks/useTypedSelector";
+import {useActions} from "../../app/hooks/useActions";
 
 const CreateProgram = () => {
+  const {result, error, loading} = useTypedSelector(state=>state.program);
+  const {getProgramPage} = useActions();
+  useEffect(()=>{
+    getProgramPage();
+  }, [result])
+
   const [activeStep, setActiveStep] = React.useState<number>(0);
-  const steps = ["Main Info", "Segmentation", "Notification", "Summary"];
+  const steps = ["Main Info", "Segmentation", "Notification"];
   const stepsItem = [
-    <MainInfo />,
-    <Segmentation />,
-    <Notification />,
-    <Summary />,
+    <MainInfo mainInfo={result.main_info}/>,
+    <Segmentation segmentation={result.segmentation}/>,
+    <Notification notification={result.notification}/>,
+    // <Summary />,
   ];
 
   return (

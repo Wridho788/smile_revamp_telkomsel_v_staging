@@ -27,7 +27,7 @@ export const KeywordPageDataInitial: IKeywordPageData = {
 }
 
 export const KeywordBonusInitial: IKeywordBonus = {
-    bonus_type: "tes",
+    bonus_type: "62ec176c0c884b4e4c5b6059",
     location: "tes",
     limit: 1,
     stock: 1,
@@ -44,13 +44,13 @@ export const KeywordNotificationInitial: IKeywordNotification = {
     notification: "tes",
     via: "tes",
     receiver: 1,
-    transaction_type: 1
+    transaction_type: "62f142b6bbdf15809f92c004"
 }
 
 export const CreateKeywordInitial: ICreateKeyword = {
     name: "tes",
-    start_period: "tes",
-    end_period: "tes",
+    start_period: "2022-01-01",
+    end_period: "2022-01-01",
     max_redeem_per_msisdn: 1,
     max_redeem_per_msisdn_type: 1,
     max_redeem_per_msisdn_from: "tes",
@@ -65,7 +65,7 @@ export const CreateKeywordInitial: ICreateKeyword = {
     status_approval: "tes",
     notification_type: "tes",
     keyword_parent: "tes",
-    keyword_bonus: KeywordBonusInitial,
-    keyword_notification: KeywordNotificationInitial,
+    keyword_bonus: [KeywordBonusInitial],
+    keyword_notification: [KeywordNotificationInitial],
     keyword_type: "tes"
 }
