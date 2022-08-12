@@ -25,3 +25,14 @@ export const keywordTypeOptions = [
     set_value: "Auction",
   },
 ];
+
+export const programSegmentationOptions = [
+  {
+    _id: "1",
+    set_value: "Whitelist",
+  },
+  {
+    _id: "2",
+    set_value: "Blacklist",
+  },
+];
