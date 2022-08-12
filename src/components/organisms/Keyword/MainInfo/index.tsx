@@ -41,6 +41,7 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
             label="Type"
             placeholder="Option"
             options={keywordTypeOptions}
+            optionValue="set_value"
             value={type}
             handleChange={setType}
           />
@@ -129,7 +130,7 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
             handleChange={setParent}
           />
         </Stack>
-        {type === "Auction" ? <MainInfoAuction /> : <></>}
+        {type === "Auction" && <MainInfoAuction />}
       </Stack>
     </Box>
   );
