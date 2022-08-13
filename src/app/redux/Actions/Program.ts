@@ -1,8 +1,13 @@
 import {Dispatch} from "redux"
-import {CreateProgramInitial, ProgramPageDataInitial} from "../Utils/InitialState/ProgramInitial";
+import {
+    CreateProgramInitial,
+    ProgramItemInitial,
+    ProgramListInitial,
+    ProgramPageDataInitial
+} from "../Utils/InitialState/ProgramInitial";
 import {ActionTypes, Types} from "../Types/Types";
-import {ICreateProgram, ICreateProgramState} from "../Utils/Interface/IProgram";
-import {IDefaultListInitial} from "../Utils/InitialState/DefaultListInitial";
+import {ICreateProgram, ICreateProgramReducer, IProgramItem, IProgramList} from "../Utils/Interface/IProgram";
+import {DefaultListInitial} from "../Utils/InitialState/DefaultListInitial";
 
 import LOV_API from "../../services/API/Lov";
 import CUSTOMER_API from "../../services/API/Customer";
@@ -11,6 +16,8 @@ import KEYWORD_API from "../../services/API/Keyword";
 import {IParamsListDefault} from "../Utils/Interface/IParamList";
 import PROGRAM_API from "../../services/API/Program";
 import NOTIFICATION_API from "../../services/API/Notification";
+import Instance from "../../services/Axios/Instance";
+
 
 export const getProgramPage = () => {
 
@@ -99,23 +106,23 @@ export const customerList = ({limit = 10, skip = 0}: IParamsListDefault) => {
         try {
             dispatch({type: ActionTypes.FETCH_DATA});
             await CUSTOMER_API.customerList(params).then((res) => {
-                IDefaultListInitial.data = res.data;
-                IDefaultListInitial.total = res.total;
+                DefaultListInitial.data = res.data;
+                DefaultListInitial.total = res.total;
             });
 
             setTimeout(() => {
                 console.log("customer list")
-                console.log(IDefaultListInitial);
+                console.log(DefaultListInitial);
                 dispatch({
                     type: ActionTypes.FETCH_DATA_SUCCESS,
-                    payload: IDefaultListInitial,
+                    payload: DefaultListInitial,
                 });
             }, 1500);
         } catch (e) {
             alert(e)
             dispatch({
                 type: ActionTypes.FETCH_DATA_ERROR,
-                payload: "Error on todos loading",
+                payload: "Error on loading",
             });
         }
     };
@@ -129,21 +136,21 @@ export const customerTierList = ({
         try {
             dispatch({type: ActionTypes.FETCH_DATA});
             await CUSTOMER_API.customerTierList(params).then((res) => {
-                IDefaultListInitial.data = res.data;
-                IDefaultListInitial.total = res.total;
+                DefaultListInitial.data = res.data;
+                DefaultListInitial.total = res.total;
             });
 
             setTimeout(() => {
-                console.log(IDefaultListInitial);
+                console.log(DefaultListInitial);
                 dispatch({
                     type: ActionTypes.FETCH_DATA_SUCCESS,
-                    payload: IDefaultListInitial,
+                    payload: DefaultListInitial,
                 });
             }, 1500);
         } catch (e) {
             dispatch({
                 type: ActionTypes.FETCH_DATA_ERROR,
-                payload: "Error on todos loading",
+                payload: "Error on loading",
             });
         }
     };
@@ -158,21 +165,21 @@ export const customerBadgeList = ({
         try {
             dispatch({type: ActionTypes.FETCH_DATA});
             await CUSTOMER_API.customerBadgeList(params).then((res) => {
-                IDefaultListInitial.data = res.data;
-                IDefaultListInitial.total = res.total;
+                DefaultListInitial.data = res.data;
+                DefaultListInitial.total = res.total;
             });
 
             setTimeout(() => {
-                console.log(IDefaultListInitial);
+                console.log(DefaultListInitial);
                 dispatch({
                     type: ActionTypes.FETCH_DATA_SUCCESS,
-                    payload: IDefaultListInitial,
+                    payload: DefaultListInitial,
                 });
             }, 1500);
         } catch (e) {
             dispatch({
                 type: ActionTypes.FETCH_DATA_ERROR,
-                payload: "Error on todos loading",
+                payload: "Error on loading",
             });
         }
     };
@@ -187,21 +194,21 @@ export const customerBrandList = ({
         try {
             dispatch({type: ActionTypes.FETCH_DATA});
             await CUSTOMER_API.customerBrandList(params).then((res) => {
-                IDefaultListInitial.data = res.data;
-                IDefaultListInitial.total = res.total;
+                DefaultListInitial.data = res.data;
+                DefaultListInitial.total = res.total;
             });
 
             setTimeout(() => {
-                console.log(IDefaultListInitial);
+                console.log(DefaultListInitial);
                 dispatch({
                     type: ActionTypes.FETCH_DATA_SUCCESS,
-                    payload: IDefaultListInitial,
+                    payload: DefaultListInitial,
                 });
             }, 1500);
         } catch (e) {
             dispatch({
                 type: ActionTypes.FETCH_DATA_ERROR,
-                payload: "Error on todos loading",
+                payload: "Error on loading",
             });
         }
     };
@@ -213,21 +220,21 @@ export const locationList = ({limit = 10, skip = 0}: IParamsListDefault) => {
         try {
             dispatch({type: ActionTypes.FETCH_DATA});
             await LOCATION_API.locationList(params).then((res) => {
-                IDefaultListInitial.data = res.data;
-                IDefaultListInitial.total = res.total;
+                DefaultListInitial.data = res.data;
+                DefaultListInitial.total = res.total;
             });
 
             setTimeout(() => {
-                console.log(IDefaultListInitial);
+                console.log(DefaultListInitial);
                 dispatch({
                     type: ActionTypes.FETCH_DATA_SUCCESS,
-                    payload: IDefaultListInitial,
+                    payload: DefaultListInitial,
                 });
             }, 1500);
         } catch (e) {
             dispatch({
                 type: ActionTypes.FETCH_DATA_ERROR,
-                payload: "Error on todos loading",
+                payload: "Error on loading",
             });
         }
     }
@@ -238,22 +245,21 @@ export const getProgramList = ({limit = 100, skip = 0}: IParamsListDefault) => {
         const params = {limit: limit, skip: skip, filter: {}, sort: {}};
         try {
             dispatch({type: ActionTypes.FETCH_DATA});
-            await PROGRAM_API.getProgramList(params).then((res) => {
-                IDefaultListInitial.data = res.data;
-                IDefaultListInitial.total = res.total;
-            });
-
+            const response = await PROGRAM_API.getProgramList(params)
+            ProgramListInitial.data = response.data
+            ProgramListInitial.total = response.total
             setTimeout(() => {
-                console.log(IDefaultListInitial);
+                console.log(response)
                 dispatch({
                     type: ActionTypes.FETCH_DATA_SUCCESS,
-                    payload: IDefaultListInitial,
+                    payload: ProgramListInitial,
                 });
-            }, 1500);
+            }, 1500)
+
         } catch (e) {
             dispatch({
                 type: ActionTypes.FETCH_DATA_ERROR,
-                payload: "Error on todos loading",
+                payload: "Error on loading",
             });
         }
     }
@@ -268,16 +274,53 @@ export const createProgram = (data: ICreateProgram) => {
                     if (res.status != 200) {
                         alert(res.statusText)
                         dispatch({type: ActionTypes.FETCH_DATA_ERROR, payload: res.statusText})
-                    } else {
-                        alert("Data berhasil ditambah")
                     }
+                    return res
                 })
-
-            // setTimeout(() => {
-            //     dispatch({type: ActionTypes.FETCH_DATA_SUCCESS, payload: CreateProgramInitial})
-            // }, 1500)
         } catch (e) {
             dispatch({type: ActionTypes.FETCH_DATA_ERROR, payload: 'Error on keywords loading'})
         }
     }
-};
+}
+export const deleteProgram = (_id: string) => {
+    return async (dispatch: Dispatch<Types>) => {
+        try {
+            dispatch({type: ActionTypes.FETCH_DATA})
+            await PROGRAM_API.deleteProgram(_id)
+                .then((res) => {
+                    if (res.status != 200) {
+                        alert(res.statusText)
+                        dispatch({type: ActionTypes.FETCH_DATA_ERROR, payload: res.statusText})
+                    }
+                    getProgramList({})
+                })
+        } catch (e) {
+            dispatch({type: ActionTypes.FETCH_DATA_ERROR, payload: 'Error on keywords loading'})
+        }
+    }
+}
+export const programDetail = (_id: string ) => {
+    return async (dispatch: Dispatch<Types>) => {
+        try {
+
+            const baseUrl = process.env.REACT_APP_BASE_URL
+            dispatch({type: ActionTypes.FETCH_DATA});
+            await PROGRAM_API.detailProgram(_id)
+                .then((res) => {
+                    dispatch({
+                        type: ActionTypes.FETCH_DATA_SUCCESS,
+                        payload: res.data,
+                    });
+                })
+                .catch((error) => {
+                    console.log(error)
+                })
+        } catch (e) {
+            dispatch({
+                type: ActionTypes.FETCH_DATA_ERROR,
+                payload: "Error on loading",
+            });
+        }
+    }
+}
+

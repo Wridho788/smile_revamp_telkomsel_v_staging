@@ -1,7 +1,7 @@
 ﻿import {Dispatch} from "redux"
 import {KeywordPageDataInitial} from "../Utils/InitialState/KeywordInitial";
 import {ActionTypes, Types} from "../Types/Types";
-import {IDefaultListInitial} from "../Utils/InitialState/DefaultListInitial";
+import {DefaultListInitial} from "../Utils/InitialState/DefaultListInitial";
 import {CreateKeywordInitial} from "../Utils/InitialState/KeywordInitial";
 import LOV_API from "../../services/API/Lov";
 import CUSTOMER_API from "../../services/API/Customer";
@@ -68,10 +68,10 @@ export const customerList = ({limit = 10, skip = 0}: IParamsListDefault) => {
             dispatch({type: ActionTypes.FETCH_DATA})
             await CUSTOMER_API.customerList(params)
                 .then((res) => {
-                    IDefaultListInitial.data = res.data
-                    IDefaultListInitial.total = res.total
-                    console.log(IDefaultListInitial)
-                    dispatch({type: ActionTypes.FETCH_DATA_SUCCESS, payload: IDefaultListInitial})
+                    DefaultListInitial.data = res.data
+                    DefaultListInitial.total = res.total
+                    console.log(DefaultListInitial)
+                    dispatch({type: ActionTypes.FETCH_DATA_SUCCESS, payload: DefaultListInitial})
                 })
         } catch (e) {
             dispatch({type: ActionTypes.FETCH_DATA_ERROR, payload: 'Error on todos loading'});

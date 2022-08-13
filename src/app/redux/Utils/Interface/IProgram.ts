@@ -5,7 +5,6 @@ export interface IMainInfo {
     owner: any[]
 }
 
-
 export interface INotification {
     notification: any[]
     via: any[]
@@ -97,22 +96,48 @@ export interface IDefaultListResult {
 }
 
 
-export interface IProgramState {
-    result: IProgramPageData
-    loading: boolean
-    error: null | string
+export interface IProgramItem{
+    _id: string
+    name: string
+    start_period: Date
+    end_period: Date
+    point_type: string
+    program_mechanism: string
+    program_owner: string
+    logic: string
+    program_parent: string
+    createdAt: Date
+    updatedAt: Date
+    deletedAt: Date
+    __v: 0,
+    program_bonus: any[]
+}
+export interface IProgramList {
+    data: Array<IProgramItem>
+    total: number
 }
 
-export interface IDefaultListState {
-    result: IDefaultListResult
-    loading: boolean
-    error: null | string
-}
 
-export interface ICreateProgramState {
+// Interface Reducer
+export interface ICreateProgramReducer {
     result: ICreateProgram
     loading: boolean
     error: null | string
 }
 
+export interface IProgramReducer {
+    result: IProgramPageData
+    loading: boolean
+    error: null | string
+}
 
+export interface IProgramListReducer {
+    result: IProgramList
+    loading: boolean
+    error: null | string
+}
+export interface IProgramDetailReducer {
+    result: IProgramItem
+    loading: boolean
+    error: null | string
+}

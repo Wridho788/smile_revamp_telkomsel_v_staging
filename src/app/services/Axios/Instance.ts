@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const intervalTimeout = 1000
+const intervalTimeout = 10000
 
 const Instance = (isAuth?: boolean, timeout?: number) => {
     // TODO if get token with localstorage

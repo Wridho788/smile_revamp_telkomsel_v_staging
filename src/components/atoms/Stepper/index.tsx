@@ -123,9 +123,16 @@ export default function HorizontalLinearStepper({
     }, [result])
 
 
-    const handleNext = () => {
+    let navigate = useNavigate();
+    const handleNext = async () => {
         if (activeStep === 2) {
-            createProgram(CreateProgramInitial);
+            try {
+                await createProgram(CreateProgramInitial)
+                navigate("/program-management")
+                return
+            } catch (e) {
+                console.log(e)
+            }
             if (error) {
                 return alert(error)
             }
@@ -136,6 +143,7 @@ export default function HorizontalLinearStepper({
                     </Box>
                 );
             }
+
         }
 
         let newSkipped = skipped;
@@ -167,7 +175,6 @@ export default function HorizontalLinearStepper({
         });
     };
 
-    let navigate = useNavigate();
     const handleShowList = () => {
         // setActiveStep(0);
         navigate("/program-management")

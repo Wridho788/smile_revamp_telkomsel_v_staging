@@ -1,5 +1,5 @@
 import * as React from "react";
-import {Box, Card, CardContent, Grid, IconButton, Stack} from "@mui/material";
+import {Box, Button, Card, CardContent, Grid, IconButton, Stack} from "@mui/material";
 import {BodyCopy, H2, SmallCopy, PreTitle} from "../..";
 import KeywordSearch from "../../atoms/KeywordSearch";
 import FilterListIcon from "@mui/icons-material/FilterList";
@@ -10,16 +10,25 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import {useTypedSelector} from "../../../app/hooks/useTypedSelector";
 import {useActions} from "../../../app/hooks/useActions";
 import {useEffect} from "react";
+import {programDetail} from "../../../app/redux/Actions/Program";
+import {useNavigate} from "react-router-dom";
 
 const Programs: React.FunctionComponent = () => {
-
-    const [listForm, setListForm] = React.useState<string>("card");
-        const {result, error, loading} = useTypedSelector(state => state.defaultList);
-        const {getProgramList} = useActions();
+        const navigate = useNavigate()
+        const [listForm, setListForm] = React.useState<string>("card");
+        const {result, error, loading} = useTypedSelector(state => state.programList);
+        const {getProgramList, programDetail} = useActions();
         useEffect(() => {
             getProgramList({});
         }, [result])
-
+        const handleButtonDelete = async (_id: string) => {
+            const tes = await programDetail(_id)
+            console.log(tes)
+            getProgramList({});
+        }
+        const handleButtonDetail = async (_id: string) => {
+            navigate('/program-management/' + _id)
+        }
         const data = result.data;
         if (error) {
             return <h1 style={{color: 'red', fontWeight: '700'}}>{error}</h1>
@@ -73,7 +82,7 @@ const Programs: React.FunctionComponent = () => {
                                                         color={"secondary.light"}
                                                         sx={{opacity: 0.5}}
                                                     >
-                                                        {_['name']}
+                                                        {_.name}
                                                     </PreTitle>
                                                 </Grid>
                                                 <Grid item xs={1}>
@@ -91,26 +100,8 @@ const Programs: React.FunctionComponent = () => {
                                             </Grid>
                                             <H2 mt={"2.5vw"}>{_['name']}</H2>
                                             <Stack direction={"row"} spacing={"0.1vw"} mt={"0.5vw"}>
-                                                <Box
-                                                    bgcolor={"secondary.main"}
-                                                    color={"secondary.light"}
-                                                    borderRadius={"1vw"}
-                                                    px={"0.9vw"}
-                                                    py={"0.2vw"}
-                                                    sx={{opacity: 0.8}}
-                                                >
-                                                    <SmallCopy>{_['name']}</SmallCopy>
-                                                </Box>
-                                                <Box
-                                                    bgcolor={"secondary.main"}
-                                                    color={"secondary.light"}
-                                                    borderRadius={"1vw"}
-                                                    px={"0.9vw"}
-                                                    py={"0.2vw"}
-                                                    sx={{opacity: 0.8}}
-                                                >
-                                                    <SmallCopy>{_['name']}</SmallCopy>
-                                                </Box>
+                                                <Button variant={"outlined"} onClick={() => handleButtonDelete(_['_id'])}>Delete</Button>
+                                                <Button variant={"outlined"}  onClick={() => handleButtonDetail(_['_id'])}>Detail</Button>
                                             </Stack>
                                         </CardContent>
                                     </Card>
