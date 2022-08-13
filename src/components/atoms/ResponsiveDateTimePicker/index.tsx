@@ -11,26 +11,30 @@ const Index: React.FunctionComponent<IResponsiveDateTimePickerProps> = ({
   label,
   placeholder,
   value,
-  setValue,
+  handleChange,
   totalColumn = 11,
   leftColumn = 4,
   rightColumn = 7,
+  direction = "row",
 }) => {
   return (
     <Grid
       container
-      columns={label ? totalColumn : rightColumn}
+      columns={!label || direction === "column" ? rightColumn : totalColumn}
       alignItems={"center"}
     >
-      <Grid item xs={label ? leftColumn : 0}>
+      <Grid
+        item
+        xs={!label ? 0 : direction === "column" ? rightColumn : leftColumn}
+      >
         <BodyCopy>{label}</BodyCopy>
       </Grid>
-      <Grid item xs={rightColumn}>
+      <Grid item xs={rightColumn} mt={direction === "column" ? "0.3vw" : 0}>
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <DatePicker
             value={value}
             onChange={(newValue) => {
-              setValue(newValue);
+              handleChange(newValue);
             }}
             renderInput={({ error, ...params }) => (
               <TextField
