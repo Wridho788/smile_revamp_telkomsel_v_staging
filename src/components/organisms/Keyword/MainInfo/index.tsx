@@ -1,6 +1,7 @@
 import { Box, Stack } from "@mui/material";
 import * as React from "react";
-import { MainInfoAuction } from "..";
+import { MainInfoAuction, MainInfoLuckyDraw } from "..";
+import { MainInfoCoreProduct } from "..";
 import {
   keywordTypeOptions,
   options,
@@ -131,6 +132,8 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
           />
         </Stack>
         {type === "Auction" && <MainInfoAuction />}
+        {type === "Core Product" && <MainInfoCoreProduct />}
+        {type === "Lucky Draw" && <MainInfoLuckyDraw />}
       </Stack>
     </Box>
   );

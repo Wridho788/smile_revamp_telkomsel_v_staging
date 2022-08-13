@@ -24,6 +24,14 @@ export const keywordTypeOptions = [
     _id: "2",
     set_value: "Auction",
   },
+  {
+    _id: "3",
+    set_value: "Core Product",
+  },
+  {
+    _id: "3",
+    set_value: "Lucky Draw",
+  },
 ];
 
 export const programSegmentationOptions = [
