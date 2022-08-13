@@ -14,7 +14,7 @@ import {
     ApiCreateProgram, DetailProgramPage
 } from "../../pages";
 import SpecificProgramTemplate from "../../atomic/containers/pages/GeneralProgramRegistration";
-
+import KeywordAuction from "../../pages/Keyword/auction/registration";
 
 const Index = () => (
     <Routes>
@@ -31,7 +31,10 @@ const Index = () => (
         <Route path="/api-list" element={<ApiList/>}/>
         <Route path="/api-create-keyword" element={<ApiCreateKeyword/>}/>
         <Route path="/api-create-program" element={<ApiCreateProgram/>}/>
-        <Route path={"general-program-registration"} element={<SpecificProgramTemplate />} />
+        <Route
+            path={"general-program-registration"}
+            element={<SpecificProgramTemplate/>}
+        />
     </Routes>
 );
 export default Index;
