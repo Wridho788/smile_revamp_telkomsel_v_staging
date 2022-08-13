@@ -1,17 +1,14 @@
-import { Box, Button, Divider, Grid, Stack, Switch } from "@mui/material";
+import { Box, Divider, Grid, Stack, Switch } from "@mui/material";
 import * as React from "react";
 import { optionsObj } from "../../../../../../mocks/options";
 import {
   BodyCopy,
   H2,
-  OutlinedTextField,
   ResponsiveDateTimePicker,
   Select,
 } from "../../../../../atoms";
 import BasicFormCard from "../../../../../atoms/BasicFormCard";
-import BasicFormCardWithRightSwitch from "../../../../../atoms/BasicFormCardWithRightSwitch";
 import { IMainInfoProps } from "./type";
-import AddIcon from "@mui/icons-material/Add";
 
 const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
   const label = { inputProps: { "aria-label": "Switch demo" } };
@@ -24,14 +21,6 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
   const [enableInjectKeyword, setEnableInjectKeyword] = React.useState("");
   const [couponStartPeriod, setCouponStartPeriod] = React.useState("");
   const [couponEndPeriod, setCouponEndPeriod] = React.useState("");
-  const [minBiddingPoin, setMinBiddingPoin] = React.useState("");
-  const [multipliePoin, setMultipliePoin] = React.useState("");
-  const [winnerPhase, setWinnerPhase] = React.useState("");
-  const [maxWinnerInAPhase, setMaxWinnerInAPhase] = React.useState("");
-  const [title, setTitle] = React.useState("");
-  const [description, setDescription] = React.useState("");
-  const [prizeName, setPrizeName] = React.useState("");
-  const [prizeDescription, setPrizeDescription] = React.useState("");
 
   return (
     <Box pt="2vw">

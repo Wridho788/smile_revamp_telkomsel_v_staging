@@ -29,8 +29,12 @@ export const keywordTypeOptions = [
     set_value: "Core Product",
   },
   {
-    _id: "3",
+    _id: "4",
     set_value: "Lucky Draw",
+  },
+  {
+    _id: "5",
+    set_value: "Direct Redeem",
   },
 ];
 
