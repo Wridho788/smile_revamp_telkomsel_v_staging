@@ -7,6 +7,7 @@ import {
   Bonus,
   Summary,
 } from "../../components/organisms/Keyword";
+import { KeywordAuctionProvider } from "../../app/context/KeywordAuction/Provider";
 
 const Keyword = () => {
   const [activeStep, setActiveStep] = React.useState<number>(0);
@@ -14,31 +15,33 @@ const Keyword = () => {
   const stepsItem = [<MainInfo />, <Bonus />, <Notification />, <Summary />];
 
   return (
-    <Box
-      sx={{
-        paddingBlock: "3vw",
-        paddingInline: "5vw",
-      }}
-    >
-      {/* <SingleBreadcrumbs
+    <KeywordAuctionProvider>
+      <Box
+        sx={{
+          paddingBlock: "3vw",
+          paddingInline: "20vw",
+        }}
+      >
+        {/* <SingleBreadcrumbs
         firstTitle="Dashboard"
         secondTitle="Program"
         title="Create Program"
         sx={{ mb: "3vw" }}
       /> */}
-      <StepperPaper sx={{ paddingTop: "4vw" }}>
-        <H2 textAlign="center" mb="2vw">
-          Keyword
-        </H2>
-        <Stepper
-          steps={steps}
-          activeStep={activeStep}
-          setActiveStep={setActiveStep}
-        >
-          {stepsItem[activeStep]}
-        </Stepper>
-      </StepperPaper>
-    </Box>
+        <StepperPaper sx={{ paddingTop: "4vw" }}>
+          <H2 textAlign="center" mb="2vw">
+            Keyword
+          </H2>
+          <Stepper
+            steps={steps}
+            activeStep={activeStep}
+            setActiveStep={setActiveStep}
+          >
+            {stepsItem[activeStep]}
+          </Stepper>
+        </StepperPaper>
+      </Box>
+    </KeywordAuctionProvider>
   );
 };
 
