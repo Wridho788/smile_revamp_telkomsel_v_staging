@@ -4,8 +4,8 @@ import Dashboard from "./Dashboard";
 import ProgramManagement from "./ProgramManagement";
 import LoginPage from "./Login";
 import ProgramPage from "./ProgramPage/index"
-import DetailProgramPage from "./ProgramPage/detail"
 import CreateProgram from "./CreateProgram";
+import EditProgram from "./CreateProgram/edit";
 import ApiKeyword from "./ApiKeyword";
 import ApiProgram from "./ApiProgram";
 import ApiList from "./ApiList";
@@ -21,8 +21,8 @@ export {
     LoginPage,
     ProgramManagement,
     ProgramPage,
-    DetailProgramPage,
     CreateProgram,
+    EditProgram,
     Keyword,
     ApiKeyword,
     ApiProgram,

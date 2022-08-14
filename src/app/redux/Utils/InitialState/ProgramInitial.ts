@@ -1,5 +1,5 @@
 import {
-    ICreateProgram,
+    ICreateProgram, IFindProgram,
     IMainInfo,
     INotification, IProgramItem, IProgramList,
     IProgramNotification,
@@ -64,13 +64,11 @@ export const ProgramPageDataInitial: IProgramPageData = {
 }
 export const CreateProgramInitial: ICreateProgram = {
     name: "",
-    program: "",
+    desc: "",
     start_period: "2022-01-01",
     end_period: "2022-01-01",
-    program_type: "",
     point_type: "",
     program_notification: [ProgramNotificationInitial],
-    program_segmentation: [ProgramSegmentationInitial],
     program_mechanism: "",
     program_owner: "",
     program_owner_detail: "",
@@ -99,4 +97,7 @@ export const ProgramItemInitial: IProgramItem = {
 export const ProgramListInitial : IProgramList= {
     data:[ProgramItemInitial],
     total:0
+}
+export const ProgramDetailInitial : IFindProgram= {
+    data:CreateProgramInitial,
 }

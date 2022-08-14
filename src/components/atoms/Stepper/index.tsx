@@ -14,9 +14,10 @@ import {StepIconProps} from "@mui/material/StepIcon";
 import {useTypedSelector} from "../../../app/hooks/useTypedSelector";
 import {useActions} from "../../../app/hooks/useActions";
 import {useEffect} from "react";
-import {CreateProgramInitial} from "../../../app/redux/Utils/InitialState/ProgramInitial";
+import {CreateProgramInitial, ProgramDetailInitial} from "../../../app/redux/Utils/InitialState/ProgramInitial";
 import {useNavigate} from "react-router-dom";
 import {CircularProgress} from "@mui/material";
+import {updateProgram} from "../../../app/redux/Actions/Program";
 
 const ColorlibConnector = styled(StepConnector)(({theme}) => ({
     [`&.${stepConnectorClasses.alternativeLabel}`]: {
@@ -101,12 +102,14 @@ export default function HorizontalLinearStepper({
                                                     steps,
                                                     activeStep,
                                                     setActiveStep,
+                                                    slug
                                                 }: {
     children?: any;
     optionalStep?: number;
     steps?: any;
     activeStep?: any;
     setActiveStep?: any;
+    slug?: string
 }) {
     const [skipped, setSkipped] = React.useState<Set<number>>(new Set<number>());
 
@@ -127,8 +130,8 @@ export default function HorizontalLinearStepper({
     const handleNext = async () => {
         if (activeStep === 2) {
             try {
-                await createProgram(CreateProgramInitial)
-                navigate("/program-management")
+                slug === "insert" ? await createProgram(CreateProgramInitial) : await updateProgram(ProgramDetailInitial.data)
+                // navigate("/program-management")
                 return
             } catch (e) {
                 console.log(e)
@@ -143,7 +146,6 @@ export default function HorizontalLinearStepper({
                     </Box>
                 );
             }
-
         }
 
         let newSkipped = skipped;

@@ -13,10 +13,11 @@ import {useEffect, useState} from "react";
 import mock from "../../../mock-data/programs-data.json";
 import {useNavigate} from "react-router-dom";
 import Moment from 'moment';
-import {Delete, Visibility} from "@mui/icons-material";
+import {Add, Delete, Edit, Visibility} from "@mui/icons-material";
 import Modal from "../../../atomic/components/atoms/Modal";
 import {IProgramItem} from "../../../app/redux/Utils/Interface/IProgram";
 import {ProgramItemInitial} from "../../../app/redux/Utils/InitialState/ProgramInitial";
+import {programDetail} from "../../../app/redux/Actions/Program";
 
 const Programs: React.FunctionComponent = () => {
     const navigate = useNavigate()
@@ -30,13 +31,13 @@ const Programs: React.FunctionComponent = () => {
     useEffect(() => {
         getProgramList({});
     }, [result])
+
     const handleButtonDelete = async (_id: string) => {
         const tes = await deleteProgram(_id)
         console.log(tes)
         getProgramList({});
     }
     const handleButtonDetail = async (item: IProgramItem) => {
-        // navigate('/program-management/' + _id)
         setItem(item)
         handleOpen()
     }
@@ -71,6 +72,19 @@ const Programs: React.FunctionComponent = () => {
             <Stack direction={"row"} justifyContent={"space-between"}>
                 <H2 color={"secondary.dark"}>Program</H2>
                 <Stack direction="row" alignItems="center" spacing={"1vw"}>
+                    <IconButton
+                        href="/create-program/"
+                        size="small"
+                        sx={{
+                            bgcolor: "primary",
+                            borderRadius: "0.4vw",
+                            opacity: 0.8,
+                            width: "2.1vw",
+                            height: "2.1vw",
+                        }}
+                    >
+                        <Add fontSize="inherit"/>
+                    </IconButton>
                     <ListButton
                         onClick={() => setListForm("list")}
                         sx={{
@@ -259,7 +273,7 @@ const Programs: React.FunctionComponent = () => {
                                         </Grid>
                                         <Grid item xs={4}>
                                             <Grid container display="flex" alignItems="center">
-                                                <Grid item xs={6}>
+                                                <Grid item xs={4}>
                                                     <IconButton
                                                         onClick={() => handleButtonDetail(_)}
                                                         size="small"
@@ -274,7 +288,22 @@ const Programs: React.FunctionComponent = () => {
                                                         <Visibility fontSize="inherit"/>
                                                     </IconButton>
                                                 </Grid>
-                                                <Grid item xs={5}>
+                                                <Grid item xs={4}>
+                                                    <IconButton
+                                                        href={"/edit-program/" + _._id}
+                                                        size="small"
+                                                        sx={{
+                                                            bgcolor: "secondary.main",
+                                                            borderRadius: "0.4vw",
+                                                            opacity: 0.8,
+                                                            width: "2.1vw",
+                                                            height: "2.1vw",
+                                                        }}
+                                                    >
+                                                        <Edit fontSize="inherit"/>
+                                                    </IconButton>
+                                                </Grid>
+                                                <Grid item xs={4}>
                                                     <IconButton
                                                         onClick={() => handleButtonDelete(_._id)}
                                                         size="small"

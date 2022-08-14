@@ -38,7 +38,7 @@ const AxiosPut = async (
     data: any
 ) => {
     let response: any = []
-    await Instance().put(baseUrl + endpoint + '/edit', data)
+    await Instance().put(baseUrl + endpoint, data)
         .then((res) => {
             response = res.data
         })
@@ -52,7 +52,7 @@ const AxiosDelete = async (
     endpoint: string,
 ) => {
     let response: any = []
-    await Instance().delete(baseUrl + endpoint + '/delete')
+    await Instance().delete(baseUrl + endpoint)
         .then((res) => {
             response = res.data
         })

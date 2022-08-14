@@ -1,6 +1,6 @@
 import {Dispatch} from "redux"
 import {
-    CreateProgramInitial,
+    CreateProgramInitial, ProgramDetailInitial,
     ProgramItemInitial,
     ProgramListInitial,
     ProgramPageDataInitial
@@ -24,13 +24,12 @@ import PROGRAM_API from "../../services/API/Program";
 import NOTIFICATION_API from "../../services/API/Notification";
 import Instance from "../../services/Axios/Instance";
 
-const params = {limit: 100, skip: 10, filter: {}, sort: {}};
+const params = {limit: 10, skip: 0, filter: {}, sort: {}};
+const mainInfo = ProgramPageDataInitial.main_info
+const segmentation = ProgramPageDataInitial.segmentation
+const notification = ProgramPageDataInitial.notification
 // GET
 export const getProgramPage = () => {
-    const params = {limit: 10, skip: 0, filter: {}, sort: {}};
-    const mainInfo = ProgramPageDataInitial.main_info
-    const segmentation = ProgramPageDataInitial.segmentation
-    const notification = ProgramPageDataInitial.notification
     return async (dispatch: Dispatch<Types>) => {
         try {
             dispatch({type: ActionTypes.FETCH_DATA})
@@ -253,46 +252,62 @@ export const getProgramList = ({limit = 100, skip = 0}: IParamsListDefault) => {
 export const programDetail = (_id: string) => {
     return async (dispatch: Dispatch<Types>) => {
         try {
+            dispatch({type: ActionTypes.FETCH_DATA})
 
-            const baseUrl = process.env.REACT_APP_BASE_URL
-            dispatch({type: ActionTypes.FETCH_DATA});
-            await PROGRAM_API.detailProgram(_id)
+            await PROGRAM_API.detailProgram(_id).then((res) => {
+                ProgramDetailInitial.data = res
+            })
+            await LOV_API.getProgramType()
                 .then((res) => {
-                    dispatch({
-                        type: ActionTypes.FETCH_DATA_SUCCESS,
-                        payload: res.data,
-                    });
+                    mainInfo.program_type = res.data
                 })
-                .catch((error) => {
-                    console.log(error)
+            await LOV_API.getPointType()
+                .then((res) => {
+                    mainInfo.point_type = res.data
                 })
+            await LOV_API.getMechanism()
+                .then((res) => {
+                    mainInfo.mechanism = res.data
+                })
+            await LOV_API.getOwner()
+                .then((res) => {
+                    mainInfo.owner = res.data
+                })
+            await LOV_API.getCustomerType()
+                .then((res) => {
+                    segmentation.customer_type = res.data
+                })
+
+            // const params = {limit: 100, skip: 0};
+            await NOTIFICATION_API.notificationList(params)
+                .then((res) => {
+                    notification.notification = res.data
+                })
+            await LOV_API.getNotifVia()
+                .then((res) => {
+                    notification.via = res.data
+                })
+            await LOV_API.getNotifReceiver()
+                .then((res) => {
+                    notification.receiver = res.data
+                })
+            await LOV_API.getTransactionType()
+                .then((res) => {
+                    notification.transactionType = res.data
+                })
+
+            setTimeout(() => {
+                console.log(ProgramPageDataInitial)
+                dispatch({type: ActionTypes.FETCH_DATA_SUCCESS, payload: ProgramPageDataInitial})
+
+            }, 1500)
         } catch (e) {
-            dispatch({
-                type: ActionTypes.FETCH_DATA_ERROR,
-                payload: "Error on loading",
-            });
+            dispatch({type: ActionTypes.FETCH_DATA_ERROR, payload: 'Error on Programs loading'})
         }
     }
-}
-// export const getProgramTempList = ({limit = 10, skip = 0}: IParamsListDefault) => {
-//     return async (dispatch: Dispatch<Types>) => {
-//         try {
-//             dispatch({type: ActionTypes.FETCH_DATA});
-//            const response = await PROGRAM_API.getProgramTempList(params)
-//             setTimeout(() => {
-//                 dispatch({
-//                     type: ActionTypes.FETCH_DATA_SUCCESS,
-//                     payload: response.data,
-//                 });
-//             }, 1500)
-//         } catch (e) {
-//             dispatch({
-//                 type: ActionTypes.FETCH_DATA_ERROR,
-//                 payload: "Error on loading",
-//             });
-//         }
-//     }
-// }
+};
+
+
 export const getProgramSegmentationList = ({limit = 100, skip = 0}: IParamsListDefault, _id: string) => {
     return async (dispatch: Dispatch<Types>) => {
         const params = {limit: limit, skip: skip, filter: {}, sort: {}};
@@ -396,3 +411,15 @@ export const deleteProgramTempList = (_id: string) => {
         }
     }
 }
+
+// PUT
+export const updateProgram = (data: ICreateProgram,) => {
+    PROGRAM_API.updateProgram(data, ProgramDetailInitial.data._id ?? '')
+        .then((res) => {
+            if (res.status != 200) {
+                alert(res.statusText)
+            }
+            return res
+        })
+}
+

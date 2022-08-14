@@ -71,14 +71,13 @@ export interface IProgramSegmentation {
 }
 
 export interface ICreateProgram {
+    _id?: string
     name: string,
-    program: string,
+    desc: string,
     start_period: string,
     end_period: string,
-    program_type: string,
     point_type: string,
     program_notification: Array<IProgramNotification>,
-    program_segmentation: Array<IProgramSegmentation>,
     program_mechanism: string,
     program_owner: string,
     program_owner_detail: string,
@@ -123,6 +122,10 @@ export interface IProgramList {
     total: number
 }
 
+export interface IFindProgram {
+    data: ICreateProgram
+}
+
 
 // Interface Reducer
 export interface ICreateProgramReducer {
@@ -143,8 +146,3 @@ export interface IProgramListReducer {
     error: null | string
 }
 
-export interface IProgramDetailReducer {
-    result: IProgramItem
-    loading: boolean
-    error: null | string
-}
