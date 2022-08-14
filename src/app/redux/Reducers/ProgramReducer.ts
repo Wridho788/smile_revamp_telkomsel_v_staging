@@ -80,3 +80,20 @@ export const ProgramDetailReducer = (state: IProgramDetailReducer = initialProgr
             return state;
     }
 }
+const initialProgramTempList: IProgramDetailReducer = {
+    result: ProgramItemInitial,
+    loading: false,
+    error: null
+}
+export const ProgramTempListReducer = (state: IProgramDetailReducer = initialProgramTempList, action: Types): IProgramDetailReducer => {
+    switch (action.type) {
+        case ActionTypes.FETCH_DATA:
+            return {loading: true, error: null, result: ProgramItemInitial}
+        case ActionTypes.FETCH_DATA_SUCCESS:
+            return {loading: false, error: null, result: action.payload}
+        case ActionTypes.FETCH_DATA_ERROR:
+            return {loading: true, error: action.payload, result: ProgramItemInitial}
+        default:
+            return state;
+    }
+}

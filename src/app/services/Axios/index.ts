@@ -5,7 +5,7 @@ const baseUrl = process.env.REACT_APP_BASE_URL
 
 const AxiosGet = async (
     endpoint: string,
-    params?: string,
+    params?: any,
     isAuth?: boolean
 ) => {
     let response: any = []

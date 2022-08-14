@@ -90,13 +90,18 @@ export interface ICreateProgram {
 
 }
 
+export interface IProgramImportFile {
+    file: any
+    type: string
+}
+
 export interface IDefaultListResult {
     total: number,
     data: any[],
 }
 
 
-export interface IProgramItem{
+export interface IProgramItem {
     _id: string
     name: string
     start_period: Date
@@ -112,6 +117,7 @@ export interface IProgramItem{
     __v: 0,
     program_bonus: any[]
 }
+
 export interface IProgramList {
     data: Array<IProgramItem>
     total: number
@@ -136,6 +142,7 @@ export interface IProgramListReducer {
     loading: boolean
     error: null | string
 }
+
 export interface IProgramDetailReducer {
     result: IProgramItem
     loading: boolean

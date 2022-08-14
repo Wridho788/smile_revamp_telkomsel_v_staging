@@ -22,7 +22,7 @@ const CreateProgram = () => {
   const steps = ["Main Info", "Segmentation", "Notification"];
   const stepsItem = [
     <MainInfo mainInfo={result.main_info}/>,
-    <Segmentation segmentation={result.segmentation}/>,
+    <Segmentation/>,
     <Notification notification={result.notification}/>,
     // <Summary />,
   ];

@@ -6,7 +6,13 @@ import {
     ProgramPageDataInitial
 } from "../Utils/InitialState/ProgramInitial";
 import {ActionTypes, Types} from "../Types/Types";
-import {ICreateProgram, ICreateProgramReducer, IProgramItem, IProgramList} from "../Utils/Interface/IProgram";
+import {
+    ICreateProgram,
+    ICreateProgramReducer,
+    IProgramImportFile,
+    IProgramItem,
+    IProgramList
+} from "../Utils/Interface/IProgram";
 import {DefaultListInitial} from "../Utils/InitialState/DefaultListInitial";
 
 import LOV_API from "../../services/API/Lov";
@@ -18,11 +24,10 @@ import PROGRAM_API from "../../services/API/Program";
 import NOTIFICATION_API from "../../services/API/Notification";
 import Instance from "../../services/Axios/Instance";
 
-
+const params = {limit: 100, skip: 10, filter: {}, sort: {}};
+// GET
 export const getProgramPage = () => {
-
     const params = {limit: 10, skip: 0, filter: {}, sort: {}};
-
     const mainInfo = ProgramPageDataInitial.main_info
     const segmentation = ProgramPageDataInitial.segmentation
     const notification = ProgramPageDataInitial.notification
@@ -69,26 +74,6 @@ export const getProgramPage = () => {
                     notification.transactionType = res.data
                 })
 
-
-            await CUSTOMER_API.customerList(params).then((res) => {
-                segmentation.customer_msisdn = res.data;
-            });
-            await CUSTOMER_API.customerTierList(params).then((res) => {
-                segmentation.customer_tier = res.data;
-                segmentation.customer_ARPU = res.data;
-            });
-            await CUSTOMER_API.customerBadgeList(params).then((res) => {
-                segmentation.customer_badges = res.data;
-            });
-            await LOCATION_API.locationList(params).then((res) => {
-                segmentation.customer_location = res.data;
-            });
-            await LOCATION_API.locationList(params).then((res) => {
-                segmentation.customer_preferences = res.data;
-            });
-            await CUSTOMER_API.customerBrandList(params).then((res) => {
-                segmentation.customer_brand = res.data;
-            });
             setTimeout(() => {
                 console.log(ProgramPageDataInitial)
                 dispatch({type: ActionTypes.FETCH_DATA_SUCCESS, payload: ProgramPageDataInitial})
@@ -263,43 +248,9 @@ export const getProgramList = ({limit = 100, skip = 0}: IParamsListDefault) => {
             });
         }
     }
+}
 
-}
-export const createProgram = (data: ICreateProgram) => {
-    return async (dispatch: Dispatch<Types>) => {
-        try {
-            dispatch({type: ActionTypes.FETCH_DATA})
-            await PROGRAM_API.createProgram(data)
-                .then((res) => {
-                    if (res.status != 200) {
-                        alert(res.statusText)
-                        dispatch({type: ActionTypes.FETCH_DATA_ERROR, payload: res.statusText})
-                    }
-                    return res
-                })
-        } catch (e) {
-            dispatch({type: ActionTypes.FETCH_DATA_ERROR, payload: 'Error on keywords loading'})
-        }
-    }
-}
-export const deleteProgram = (_id: string) => {
-    return async (dispatch: Dispatch<Types>) => {
-        try {
-            dispatch({type: ActionTypes.FETCH_DATA})
-            await PROGRAM_API.deleteProgram(_id)
-                .then((res) => {
-                    if (res.status != 200) {
-                        alert(res.statusText)
-                        dispatch({type: ActionTypes.FETCH_DATA_ERROR, payload: res.statusText})
-                    }
-                    getProgramList({})
-                })
-        } catch (e) {
-            dispatch({type: ActionTypes.FETCH_DATA_ERROR, payload: 'Error on keywords loading'})
-        }
-    }
-}
-export const programDetail = (_id: string ) => {
+export const programDetail = (_id: string) => {
     return async (dispatch: Dispatch<Types>) => {
         try {
 
@@ -323,4 +274,125 @@ export const programDetail = (_id: string ) => {
         }
     }
 }
+// export const getProgramTempList = ({limit = 10, skip = 0}: IParamsListDefault) => {
+//     return async (dispatch: Dispatch<Types>) => {
+//         try {
+//             dispatch({type: ActionTypes.FETCH_DATA});
+//            const response = await PROGRAM_API.getProgramTempList(params)
+//             setTimeout(() => {
+//                 dispatch({
+//                     type: ActionTypes.FETCH_DATA_SUCCESS,
+//                     payload: response.data,
+//                 });
+//             }, 1500)
+//         } catch (e) {
+//             dispatch({
+//                 type: ActionTypes.FETCH_DATA_ERROR,
+//                 payload: "Error on loading",
+//             });
+//         }
+//     }
+// }
+export const getProgramSegmentationList = ({limit = 100, skip = 0}: IParamsListDefault, _id: string) => {
+    return async (dispatch: Dispatch<Types>) => {
+        const params = {limit: limit, skip: skip, filter: {}, sort: {}};
+        try {
+            dispatch({type: ActionTypes.FETCH_DATA});
+            const response = await PROGRAM_API.getProgramSegmentationList(params, _id)
+            ProgramListInitial.data = response.data
+            ProgramListInitial.total = response.total
+            setTimeout(() => {
+                console.log(response)
+                dispatch({
+                    type: ActionTypes.FETCH_DATA_SUCCESS,
+                    payload: ProgramListInitial,
+                });
+            }, 1500)
 
+        } catch (e) {
+            dispatch({
+                type: ActionTypes.FETCH_DATA_ERROR,
+                payload: "Error on loading",
+            });
+        }
+    }
+}
+
+
+// POST
+export const createProgram = (data: ICreateProgram) => {
+    return async (dispatch: Dispatch<Types>) => {
+        try {
+            dispatch({type: ActionTypes.FETCH_DATA})
+            await PROGRAM_API.createProgram(data)
+                .then((res) => {
+                    if (res.status != 200) {
+                        alert(res.statusText)
+                        dispatch({type: ActionTypes.FETCH_DATA_ERROR, payload: res.statusText})
+                    }
+                    return res
+                })
+        } catch (e) {
+            dispatch({type: ActionTypes.FETCH_DATA_ERROR, payload: 'Error on keywords loading'})
+        }
+    }
+}
+export const programImportFile = (data: IProgramImportFile) => {
+    return async (dispatch: Dispatch<Types>) => {
+        try {
+            await PROGRAM_API.programImportFile(data)
+                .then(async (res) => {
+                    if (res != 200) {
+                        alert("Invalid load API")
+                    }
+                    await PROGRAM_API.getProgramTempList(params)
+                        .then((res) => {
+                            DefaultListInitial.data = res.data;
+                            DefaultListInitial.total = res.total;
+                        });
+                })
+        } catch (e) {
+            dispatch({type: ActionTypes.FETCH_DATA_ERROR, payload: 'Error on program loading'})
+        }
+    }
+}
+
+
+// DELETE
+export const deleteProgram = (_id: string) => {
+    return async (dispatch: Dispatch<Types>) => {
+        try {
+            dispatch({type: ActionTypes.FETCH_DATA})
+            await PROGRAM_API.deleteProgram(_id)
+                .then((res) => {
+                    if (res.status != 200) {
+                        alert(res.statusText)
+                        dispatch({type: ActionTypes.FETCH_DATA_ERROR, payload: res.statusText})
+                    }
+                    getProgramList({})
+                })
+        } catch (e) {
+            dispatch({type: ActionTypes.FETCH_DATA_ERROR, payload: 'Error on program loading'})
+        }
+    }
+}
+export const deleteProgramTempList = (_id: string) => {
+    return async (dispatch: Dispatch<Types>) => {
+        try {
+            dispatch({type: ActionTypes.FETCH_DATA})
+            await PROGRAM_API.deleteProgramTempList(_id)
+                .then(async (res) => {
+                    if (res.status != 200) {
+                        alert(res)
+                    }
+                    await PROGRAM_API.getProgramTempList(params)
+                        .then((res) => {
+                            DefaultListInitial.data = res.data;
+                            DefaultListInitial.total = res.total;
+                        });
+                })
+        } catch (e) {
+            dispatch({type: ActionTypes.FETCH_DATA_ERROR, payload: 'Error on program loading'})
+        }
+    }
+}

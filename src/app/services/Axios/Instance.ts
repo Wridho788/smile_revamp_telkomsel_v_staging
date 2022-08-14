@@ -5,12 +5,13 @@ const intervalTimeout = 10000
 const Instance = (isAuth?: boolean, timeout?: number) => {
     // TODO if get token with localstorage
     // const token = isAuth ? localStorage.getItem('token') : ""
+
     const token = isAuth ? process.env.TOKEN : ""
     return axios.create({
         timeout: timeout ?? intervalTimeout,
         headers: {
             "accept": "*/*",
-            "Content-type": "application/json",
+            'Content-type': 'multipart/form-data',
             'Authorization': 'Bearer ' + token
         }
     });
