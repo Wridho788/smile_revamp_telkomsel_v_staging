@@ -6,11 +6,6 @@ import LoginPage from "./Login";
 import ProgramPage from "./ProgramPage/index"
 import CreateProgram from "./CreateProgram";
 import EditProgram from "./CreateProgram/edit";
-import ApiKeyword from "./ApiKeyword";
-import ApiProgram from "./ApiProgram";
-import ApiList from "./ApiList";
-import ApiCreateKeyword from "./ApiCreateKeyword";
-import ApiCreateProgram from "./ApiCreateProgram";
 
 import Keyword from "./Keyword";
 
@@ -24,9 +19,4 @@ export {
     CreateProgram,
     EditProgram,
     Keyword,
-    ApiKeyword,
-    ApiProgram,
-    ApiList,
-    ApiCreateKeyword,
-    ApiCreateProgram
 };

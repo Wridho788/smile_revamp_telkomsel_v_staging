@@ -413,8 +413,8 @@ export const deleteProgramTempList = (_id: string) => {
 }
 
 // PUT
-export const updateProgram = (data: ICreateProgram,) => {
-    PROGRAM_API.updateProgram(data, ProgramDetailInitial.data._id ?? '')
+export const updateProgram = async (data: ICreateProgram,) => {
+    await PROGRAM_API.updateProgram(data, ProgramDetailInitial.data._id ?? '')
         .then((res) => {
             if (res.status != 200) {
                 alert(res.statusText)

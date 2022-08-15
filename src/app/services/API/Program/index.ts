@@ -1,5 +1,6 @@
 import {AxiosDelete, AxiosGet, AxiosPost, AxiosPut} from "../../Axios";
 import {ICreateProgram} from "../../../redux/Utils/Interface/IProgram";
+import {HEADER_CUSTOM} from "../../Axios/utils";
 
 // Get Data
 const getProgramList = (params: any) => AxiosGet('/program', params)
@@ -9,7 +10,7 @@ const detailProgram = (_id: string) => AxiosGet('/program/' + _id + "/detail")
 
 // Create Data
 const createProgram = (data: ICreateProgram) => AxiosPost('/program', data)
-const programImportFile = (data: any) => AxiosPost('/program/import_list', data)
+const programImportFile = (data: any) => AxiosPost('/program/import_list', data, HEADER_CUSTOM)
 
 // Update Data
 const updateProgram = (data: ICreateProgram, _id: string) => AxiosPut('/program/' + _id + '/edit', data)

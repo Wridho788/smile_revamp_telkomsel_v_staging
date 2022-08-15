@@ -1,17 +1,17 @@
-import axios from 'axios'
+import axios, {AxiosRequestHeaders} from 'axios'
 
 const intervalTimeout = 10000
 
-const Instance = (isAuth?: boolean, timeout?: number) => {
+const Instance = (isAuth?: boolean, header? : AxiosRequestHeaders, timeout?: number) => {
     // TODO if get token with localstorage
     // const token = isAuth ? localStorage.getItem('token') : ""
 
     const token = isAuth ? process.env.TOKEN : ""
     return axios.create({
         timeout: timeout ?? intervalTimeout,
-        headers: {
+        headers: header ?? {
             "accept": "*/*",
-            'Content-type': 'multipart/form-data',
+            'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + token
         }
     });
