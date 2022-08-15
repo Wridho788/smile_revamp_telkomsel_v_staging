@@ -12,7 +12,6 @@ import BasicFormCard from "../../../../../atoms/BasicFormCard";
 import BasicFormCardWithRightSwitch from "../../../../../atoms/BasicFormCardWithRightSwitch";
 import { IMainInfoProps } from "./type";
 import AddIcon from "@mui/icons-material/Add";
-import { Image } from "@mui/icons-material";
 
 const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
   const [outbit, setOutbit] = React.useState("");

@@ -1,14 +1,11 @@
 import { Box, Divider, Grid, Stack, Switch } from "@mui/material";
 import * as React from "react";
-import { optionsObj } from "../../../../../../mocks/options";
 import {
   BodyCopy,
   H2,
   OutlinedTextField,
   ResponsiveDateTimePicker,
-  Select,
 } from "../../../../../atoms";
-import BasicFormCard from "../../../../../atoms/BasicFormCard";
 import { IMainInfoProps } from "./type";
 
 const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {

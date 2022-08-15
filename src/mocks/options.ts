@@ -36,6 +36,10 @@ export const keywordTypeOptions = [
     _id: "5",
     set_value: "Direct Redeem",
   },
+  {
+    _id: "6",
+    set_value: "Donation",
+  },
 ];
 
 export const programSegmentationOptions = [

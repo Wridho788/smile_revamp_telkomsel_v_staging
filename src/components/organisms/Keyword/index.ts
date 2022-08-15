@@ -6,3 +6,4 @@ export { default as MainInfoAuction } from "./Auction/Registration/MainInfo";
 export { default as MainInfoCoreProduct } from "./CoreProduct/Registration/MainInfo";
 export { default as MainInfoLuckyDraw } from "./LuckyDraw/Registration/MainInfo";
 export { default as MainInfoDirectRedeem } from "./DirectRedeem/Registration/MainInfo";
+export { default as MainInfoDonation } from "./Donation/Registration/MainInfo";
