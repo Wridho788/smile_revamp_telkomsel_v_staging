@@ -5,7 +5,6 @@ export interface IMainInfo {
     owner: any[]
 }
 
-
 export interface INotification {
     notification: any[]
     via: any[]
@@ -72,14 +71,13 @@ export interface IProgramSegmentation {
 }
 
 export interface ICreateProgram {
+    _id?: string
     name: string,
-    program: string,
+    desc: string,
     start_period: string,
     end_period: string,
-    program_type: string,
     point_type: string,
     program_notification: Array<IProgramNotification>,
-    program_segmentation: Array<IProgramSegmentation>,
     program_mechanism: string,
     program_owner: string,
     program_owner_detail: string,
@@ -91,28 +89,60 @@ export interface ICreateProgram {
 
 }
 
+export interface IProgramImportFile {
+    file: any
+    type: string
+}
+
 export interface IDefaultListResult {
     total: number,
     data: any[],
 }
 
 
-export interface IProgramState {
-    result: IProgramPageData
-    loading: boolean
-    error: null | string
+export interface IProgramItem {
+    _id: string
+    name: string
+    start_period: Date
+    end_period: Date
+    point_type: string
+    program_mechanism: string
+    program_owner: string
+    logic: string
+    program_parent: string
+    createdAt: Date
+    updatedAt: Date
+    deletedAt: Date
+    __v: 0,
+    program_bonus: any[]
 }
 
-export interface IDefaultListState {
-    result: IDefaultListResult
-    loading: boolean
-    error: null | string
+export interface IProgramList {
+    data: Array<IProgramItem>
+    total: number
 }
 
-export interface ICreateProgramState {
+export interface IFindProgram {
+    data: ICreateProgram
+}
+
+
+// Interface Reducer
+export interface ICreateProgramReducer {
     result: ICreateProgram
     loading: boolean
     error: null | string
 }
 
+export interface IProgramReducer {
+    result: IProgramPageData
+    loading: boolean
+    error: null | string
+}
+
+export interface IProgramListReducer {
+    result: IProgramList
+    loading: boolean
+    error: null | string
+}
 

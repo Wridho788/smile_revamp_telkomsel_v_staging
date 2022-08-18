@@ -11,7 +11,7 @@ import {
 } from "../../../../app/redux/Utils/InitialState/ProgramInitial";
 
 interface INotificationProps {
-    notification: INotification
+    notification: INotification,
 }
 
 const Notification: React.FunctionComponent<INotificationProps> = ({notification}: INotificationProps) => {

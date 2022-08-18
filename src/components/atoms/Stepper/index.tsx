@@ -14,9 +14,9 @@ import {StepIconProps} from "@mui/material/StepIcon";
 import {useTypedSelector} from "../../../app/hooks/useTypedSelector";
 import {useActions} from "../../../app/hooks/useActions";
 import {useEffect} from "react";
-import {CreateProgramInitial} from "../../../app/redux/Utils/InitialState/ProgramInitial";
-import {useNavigate} from "react-router-dom";
+import {CreateProgramInitial, ProgramDetailInitial} from "../../../app/redux/Utils/InitialState/ProgramInitial";
 import {CircularProgress} from "@mui/material";
+import {updateProgram} from "../../../app/redux/Actions/Program";
 
 const ColorlibConnector = styled(StepConnector)(({theme}) => ({
     [`&.${stepConnectorClasses.alternativeLabel}`]: {
@@ -101,12 +101,14 @@ export default function HorizontalLinearStepper({
                                                     steps,
                                                     activeStep,
                                                     setActiveStep,
+                                                    slug
                                                 }: {
     children?: any;
     optionalStep?: number;
     steps?: any;
     activeStep?: any;
     setActiveStep?: any;
+    slug?: string
 }) {
     const [skipped, setSkipped] = React.useState<Set<number>>(new Set<number>());
 
@@ -123,9 +125,15 @@ export default function HorizontalLinearStepper({
     }, [result])
 
 
-    const handleNext = () => {
+
+    const handleNext = async () => {
         if (activeStep === 2) {
-            createProgram(CreateProgramInitial);
+            try {
+                slug === "insert" ? await createProgram(CreateProgramInitial) : await updateProgram(ProgramDetailInitial.data)
+                window.location.href = '/program-management'
+            } catch (e) {
+                console.log(e)
+            }
             if (error) {
                 return alert(error)
             }
@@ -167,10 +175,8 @@ export default function HorizontalLinearStepper({
         });
     };
 
-    let navigate = useNavigate();
     const handleShowList = () => {
-        // setActiveStep(0);
-        navigate("/program-management")
+        window.location.href = '/program-management'
     };
 
     return (
@@ -249,7 +255,7 @@ export default function HorizontalLinearStepper({
                                 paddingBlock: "1vw",
                             }}
                         >
-                            {activeStep === steps.length - 1 ? "Create" : "Next"}
+                            {activeStep === steps.length - 1 ? (slug === "insert" ?"Create" : "Update") : "Next"}
                         </Button>
                     </Box>
                 </React.Fragment>

@@ -1,6 +1,6 @@
 import {IDefaultListResult} from "../Interface/IKeyword";
 
-export const IDefaultListInitial: IDefaultListResult = {
+export const DefaultListInitial: IDefaultListResult = {
     total: 0,
-    data : []
+    data  : []
 }
