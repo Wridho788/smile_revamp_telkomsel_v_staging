@@ -4,15 +4,14 @@ import {useAppDispatch, useAppSelector} from "../../redux/app/hooks";
 import {Circle} from "@mui/icons-material";
 import {IParams} from "../../redux/utils/IGeneral";
 import {useCustomerTierListQuery} from "../../redux/features/customer/customer-api-slice";
+import {useProgramListQuery} from "../../redux/features/program/notification-api-slice";
 
 function App() {
 const filter: IParams = {
     limit : 6,
     skip: 0,
-    filter:null,
-    sort:null
 }
-    const { data = {data : [], total: 0}, isFetching } = useCustomerTierListQuery(filter);
+    const { data = {data : [], total: 0}, isFetching } = useProgramListQuery(filter);
 if(isFetching){
     return <Circle/>
 }
