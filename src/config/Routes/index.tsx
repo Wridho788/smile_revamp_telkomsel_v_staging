@@ -7,13 +7,14 @@ import {
     ProgramPage,
     CreateProgram,
     Keyword,
-    EditProgram
+    EditProgram,
+    Tes
 } from "../../pages";
 import SpecificProgramTemplate from "../../atomic/containers/pages/GeneralProgramRegistration";
 
 const Index = () => (
     <Routes>
-        <Route path="/" element={<Dashboard/>}/>
+        <Route path="/" element={<Tes/>}/>
         <Route path="/myTelkomsel" element={<MyTelkomsel/>}/>
         <Route path="/dashboard" element={<Dashboard/>}/>
         <Route path="/program-management" element={<ProgramPage/>}/>

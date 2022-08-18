@@ -6,6 +6,7 @@ import LoginPage from "./Login";
 import ProgramPage from "./ProgramPage/index"
 import CreateProgram from "./CreateProgram";
 import EditProgram from "./CreateProgram/edit";
+import  Tes from "./tes"
 
 import Keyword from "./Keyword";
 
@@ -19,4 +20,5 @@ export {
     CreateProgram,
     EditProgram,
     Keyword,
+    Tes
 };
