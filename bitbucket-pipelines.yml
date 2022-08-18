@@ -9,7 +9,7 @@ pipelines:
             caches:
               - node
             script:
-              - npm install
+              - yarn
               - npm run build
               - apt update && apt install zip
               # Exclude files to be ignored
