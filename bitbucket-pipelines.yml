@@ -3,30 +3,19 @@ image: node:16
 pipelines:
   branches:
     develop:
-      - parallel:
-        - step:
+      - step:
             name: Build and Test
             caches:
               - node
             script:
               - yarn
-              - npm run build
-              - apt update && apt install zip
-              # Exclude files to be ignored
-              - zip -r app-$BITBUCKET_BUILD_NUMBER.zip . -x *.git* bitbucket-pipelines.yml
-            artifacts:
-              - "*.zip"
+              - CI= npm run build
       - step:
           name: Deploy to staging
-          trigger: manual
           deployment: staging
           script:
-            - pipe: atlassian/rsync-deploy:0.7.1
+            - pipe: atlassian/ssh-run:0.4.1
               variables:
-                USER: 'ec2-user'
-                SERVER: '13.229.104.241'
-                REMOTE_PATH: 'pipeline-test'
-                LOCAL_PATH: ${BITBUCKET_CLONE_DIR}/*
-                SSH_KEY: $MY_SSH_KEY
-                DEBUG: 'true'
-                ZIP_FILE: app-$BITBUCKET_BUILD_NUMBER.zip
+               SSH_USER: 'ec2-user'
+               SERVER: '13.229.104.241'
+               COMMAND: '/bin/bash pipeline-deploy/run.sh'
