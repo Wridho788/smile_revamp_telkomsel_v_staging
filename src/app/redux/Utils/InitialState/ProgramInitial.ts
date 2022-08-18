@@ -1,7 +1,7 @@
 import {
-    ICreateProgram,
+    ICreateProgram, IFindProgram,
     IMainInfo,
-    INotification,
+    INotification, IProgramItem, IProgramList,
     IProgramNotification,
     IProgramSegmentation, ISegmentation
 } from "../Interface/IProgram";
@@ -59,24 +59,45 @@ export const ProgramSegmentationInitial: IProgramSegmentation =
     }
 export const ProgramPageDataInitial: IProgramPageData = {
     main_info: MainInfoInitial,
-    segmentation : SegmentationInitial,
+    segmentation: SegmentationInitial,
     notification: NotificationInitial,
 }
 export const CreateProgramInitial: ICreateProgram = {
     name: "",
-    program: "",
+    desc: "",
     start_period: "2022-01-01",
     end_period: "2022-01-01",
-    program_type: "",
     point_type: "",
     program_notification: [ProgramNotificationInitial],
-    program_segmentation: [ProgramSegmentationInitial],
     program_mechanism: "",
     program_owner: "",
     program_owner_detail: "",
     logic: "",
-    c_los_enable : false,
+    c_los_enable: false,
     c_los_value: 0,
-    c_point_balance :0,
+    c_point_balance: 0,
     program_parent: "62f1436fbbdf15809f92c01c",
+}
+export const ProgramItemInitial: IProgramItem = {
+    _id: "",
+    name: "",
+    start_period: new Date(),
+    end_period: new Date(),
+    point_type: "",
+    program_mechanism: "",
+    program_owner: "",
+    logic: "",
+    program_parent: "",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    deletedAt: new Date(),
+    __v: 0,
+    program_bonus: []
+}
+export const ProgramListInitial : IProgramList= {
+    data:[ProgramItemInitial],
+    total:0
+}
+export const ProgramDetailInitial : IFindProgram= {
+    data:CreateProgramInitial,
 }

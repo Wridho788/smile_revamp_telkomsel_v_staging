@@ -8,16 +8,18 @@ import {
 import { IMainInfo } from "../../../../app/redux/Utils/Interface/IProgram";
 import { useState } from "react";
 import {
-  CreateProgramInitial,
+  CreateProgramInitial, ProgramDetailInitial,
   ProgramSegmentationInitial,
 } from "../../../../app/redux/Utils/InitialState/ProgramInitial";
 
 interface IMainInfoProps {
   mainInfo: IMainInfo;
+  slug:string
 }
 
 const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
   mainInfo,
+    slug
 }: IMainInfoProps) => {
   const optionStatic = [
     { _id: "1", set_value: "True" },
@@ -27,12 +29,10 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
     { _id: "intercept", set_value: "Intercept" },
     { _id: "union", set_value: "Union" },
   ];
-  const programData = CreateProgramInitial;
+  const programData = slug === "insert" ? CreateProgramInitial : ProgramDetailInitial.data
+  // console.log(programData)
   const programSegmentation = ProgramSegmentationInitial;
 
-  const [programTypeLabel, handleChangeProgramType] = useState(
-    programData.program_type
-  );
   const [pointTypeLabel, handleChangePointType] = useState(
     programData.point_type
   );
@@ -46,7 +46,7 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
     programData.program_owner_detail
   );
   const [programDescriptionLabel, handleChangeProgramDescription] = useState(
-    programData.program
+    programData.desc
   );
   const [programNameLabel, handleChangeProgramName] = useState(
     programData.name
@@ -65,12 +65,11 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
 
   React.useEffect(() => {
     programData.name = programNameLabel;
-    programData.program_type = programTypeLabel;
     programData.point_type = pointTypeLabel;
     programData.program_mechanism = programMechanismLabel;
     programData.program_owner = programOwnerLabel;
     programData.program_owner_detail = programOwnerDetail;
-    programData.program = programDescriptionLabel;
+    programData.desc = programDescriptionLabel;
     programData.start_period = startPeriod;
     programData.end_period = endPeriod;
     programData.logic = logicValue;
@@ -89,7 +88,6 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
   }, [
     programData,
     programNameLabel,
-    programTypeLabel,
     pointTypeLabel,
     programMechanismLabel,
     programOwnerLabel,
@@ -106,14 +104,6 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
   return (
     <Box display="flex" justifyContent="center" px="20%" py="1vw">
       <Stack spacing={"1vw"} width={"100%"}>
-        <Select
-          label="Type"
-          placeholder="Option"
-          options={mainInfo.program_type}
-          optionLabel="set_value"
-          value={programTypeLabel}
-          handleChange={handleChangeProgramType}
-        />
         <OutlinedTextField
           label="Name"
           placeholder="Name"

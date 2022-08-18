@@ -1,11 +1,12 @@
 import Instance from "./Instance";
 import {ICreateKeywordState} from "../../redux/Utils/Interface/IKeyword";
+import {AxiosRequestHeaders} from "axios";
 
 const baseUrl = process.env.REACT_APP_BASE_URL
 
 const AxiosGet = async (
     endpoint: string,
-    params?: string,
+    params?: any,
     isAuth?: boolean
 ) => {
     let response: any = []
@@ -21,10 +22,11 @@ const AxiosGet = async (
 const AxiosPost = async (
     endpoint: string,
     data: any,
-    isAuth?: boolean
+    header?: AxiosRequestHeaders,
+    isAuth?: boolean,
 ) => {
     let response: any = []
-    await Instance(isAuth).post(baseUrl + endpoint, data)
+    await Instance(isAuth, header).post(baseUrl + endpoint, data)
         .then((res) => {
             response = res.data
         })
@@ -35,10 +37,11 @@ const AxiosPost = async (
 }
 const AxiosPut = async (
     endpoint: string,
-    data: any
+    data: any,
+    header?: AxiosRequestHeaders,
 ) => {
     let response: any = []
-    await Instance().put(baseUrl + endpoint + '/edit', data)
+    await Instance(true, header).put(baseUrl + endpoint, data)
         .then((res) => {
             response = res.data
         })
@@ -52,7 +55,7 @@ const AxiosDelete = async (
     endpoint: string,
 ) => {
     let response: any = []
-    await Instance().delete(baseUrl + endpoint + '/delete')
+    await Instance().delete(baseUrl + endpoint)
         .then((res) => {
             response = res.data
         })
