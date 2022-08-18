@@ -1,11 +1,13 @@
 import { Box, Stack } from "@mui/material";
 import * as React from "react";
-import { MainInfoAuction } from "..";
 import {
-  keywordTypeOptions,
-  options,
-  optionsObj,
-} from "../../../../mocks/options";
+  MainInfoAuction,
+  MainInfoCoreProduct,
+  MainInfoDirectRedeem,
+  MainInfoLuckyDraw,
+  MainInfoDonation,
+} from "..";
+import { keywordTypeOptions, optionsObj } from "../../../../mocks/options";
 import {
   Select,
   OutlinedTextField,
@@ -131,6 +133,10 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
           />
         </Stack>
         {type === "Auction" && <MainInfoAuction />}
+        {type === "Core Product" && <MainInfoCoreProduct />}
+        {type === "Lucky Draw" && <MainInfoLuckyDraw />}
+        {type === "Direct Redeem" && <MainInfoDirectRedeem />}
+        {type === "Donation" && <MainInfoDonation />}
       </Stack>
     </Box>
   );
