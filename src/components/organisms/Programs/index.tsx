@@ -20,17 +20,32 @@ import {ProgramItemInitial} from "../../../app/redux/Utils/InitialState/ProgramI
 import {programDetail} from "../../../app/redux/Actions/Program";
 
 const Programs: React.FunctionComponent = () => {
+
+    const [searchInput, setSearchInput] = useState<string>('');
+
+    const {result, error, loading} = useTypedSelector(state => state.programList);
+    useEffect(() => {
+        getProgramList({});
+        if (searchInput !== '') {
+            const filteredData = data.filter((i) => {
+                return Object.values(i).join('').toLowerCase().includes(searchInput.toLowerCase())
+            })
+            setFilteredResults(filteredData)
+        } else {
+            setFilteredResults(data)
+        }
+    }, [result]);
+    const data = result.data;
+    const [filteredResults, setFilteredResults] = useState(data);
+
+
     const navigate = useNavigate()
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
     const [listForm, setListForm] = React.useState<string>("list");
-    const {result, error, loading} = useTypedSelector(state => state.programList);
     const {getProgramList, deleteProgram} = useActions();
     const [item, setItem] = useState(ProgramItemInitial);
-    useEffect(() => {
-        getProgramList({});
-    }, [result])
 
     const handleButtonDelete = async (_id: string) => {
         const tes = await deleteProgram(_id)
@@ -41,23 +56,11 @@ const Programs: React.FunctionComponent = () => {
         setItem(item)
         handleOpen()
     }
-    const data = result.data;
+
     if (error) {
         return <h1 style={{color: 'red', fontWeight: '700'}}>{error}</h1>
     }
-    const [searchInput, setSearchInput] = useState('');
-    const [filteredResults, setFilteredResults] = useState(data);
-    const searchItems = (searchValue: string) => {
-        setSearchInput(searchValue)
-        if (searchInput !== '') {
-            const filteredData = data.filter((i) => {
-                return Object.values(i).join('').toLowerCase().includes(searchInput.toLowerCase())
-            })
-            setFilteredResults(filteredData)
-        } else {
-            setFilteredResults(data)
-        }
-    }
+
 
     const description = <>
         <li>{item.name}</li>
@@ -110,7 +113,7 @@ const Programs: React.FunctionComponent = () => {
                     />
                     <Input
                         placeholder='Search...'
-                        onChange={(e) => searchItems(e.target.value)}
+                        onChange={(e) => setSearchInput(e.target.value)}
                     />
                     {/*<KeywordSearch*/}
                     {/*    onChange={(e) => searchItems(e.target.value)}*/}
