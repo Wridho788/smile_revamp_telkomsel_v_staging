@@ -9,7 +9,7 @@ pipelines:
               - node
             script:
               - yarn
-              - CI= npm run build
+              - CI= DISABLE_ESLINT_PLUGIN=true npm run build
       - step:
           name: Deploy to staging
           deployment: staging
