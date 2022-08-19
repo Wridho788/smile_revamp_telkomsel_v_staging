@@ -119,31 +119,10 @@ export default function HorizontalLinearStepper({
     const isStepSkipped = (step: number) => {
         return skipped.has(step);
     };
-    const {result, error, loading} = useTypedSelector(state => state.createProgram);
-    const {createProgram} = useActions();
-    useEffect(() => {
-    }, [result])
-
-
 
     const handleNext = async () => {
         if (activeStep === 2) {
-            try {
-                slug === "insert" ? await createProgram(CreateProgramInitial) : await updateProgram(ProgramDetailInitial.data)
-                window.location.href = '/program-management'
-            } catch (e) {
-                console.log(e)
-            }
-            if (error) {
-                return alert(error)
-            }
-            if (loading) {
-                return (
-                    <Box sx={{display: 'flex'}}>
-                        <CircularProgress/>
-                    </Box>
-                );
-            }
+
         }
 
         let newSkipped = skipped;

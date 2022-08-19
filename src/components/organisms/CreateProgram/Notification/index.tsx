@@ -11,10 +11,9 @@ import {
 } from "../../../../app/redux/Utils/InitialState/ProgramInitial";
 
 interface INotificationProps {
-    notification: INotification,
 }
 
-const Notification: React.FunctionComponent<INotificationProps> = ({notification}: INotificationProps) => {
+const Notification: React.FunctionComponent<INotificationProps> = ({}: INotificationProps) => {
     const programNotification = ProgramNotificationInitial
     const [via, setVia] = React.useState<string>(programNotification.via);
     const [receiver, setReceiver] = React.useState<string>(programNotification.receiver);
@@ -50,47 +49,47 @@ const Notification: React.FunctionComponent<INotificationProps> = ({notification
                         borderRadius="0.3vw"
                         p="3vw"
                     >
-                        <Grid item xs={5} pr={"1.5vw"}>
-                            <Select
-                                direction="column"
-                                label="Via"
-                                placeholder="Option"
-                                options={notification.via}
-                                value={via}
-                                handleChange={setVia}
-                            />
-                        </Grid>
-                        <Grid item xs={5} pr={"1.5vw"}>
-                            <Select
-                                direction="column"
-                                label="Receiver"
-                                placeholder="Option"
-                                options={notification.receiver}
-                                value={receiver}
-                                handleChange={setReceiver}
-                            />
-                        </Grid>
-                        <Grid item xs={5} pr={"1.5vw"}>
-                            <Select
-                                direction="column"
-                                label="Template"
-                                placeholder="Option"
-                                optionLabel={"notif_type"}
-                                options={notification.notification}
-                                value={template}
-                                handleChange={setTemplate}
-                            />
-                        </Grid>
-                        <Grid item xs={5} pr={"1.5vw"}>
-                            <Select
-                                direction="column"
-                                label="Transaction Type"
-                                placeholder="Option"
-                                options={notification.transactionType}
-                                value={transactionType}
-                                handleChange={setTransactionType}
-                            />
-                        </Grid>
+                        {/*<Grid item xs={5} pr={"1.5vw"}>*/}
+                        {/*    <Select*/}
+                        {/*        direction="column"*/}
+                        {/*        label="Via"*/}
+                        {/*        placeholder="Option"*/}
+                        {/*        options={notification.via}*/}
+                        {/*        value={via}*/}
+                        {/*        handleChange={setVia}*/}
+                        {/*    />*/}
+                        {/*</Grid>*/}
+                        {/*<Grid item xs={5} pr={"1.5vw"}>*/}
+                        {/*    <Select*/}
+                        {/*        direction="column"*/}
+                        {/*        label="Receiver"*/}
+                        {/*        placeholder="Option"*/}
+                        {/*        options={notification.receiver}*/}
+                        {/*        value={receiver}*/}
+                        {/*        handleChange={setReceiver}*/}
+                        {/*    />*/}
+                        {/*</Grid>*/}
+                        {/*<Grid item xs={5} pr={"1.5vw"}>*/}
+                        {/*    <Select*/}
+                        {/*        direction="column"*/}
+                        {/*        label="Template"*/}
+                        {/*        placeholder="Option"*/}
+                        {/*        optionLabel={"notif_type"}*/}
+                        {/*        options={notification.notification}*/}
+                        {/*        value={template}*/}
+                        {/*        handleChange={setTemplate}*/}
+                        {/*    />*/}
+                        {/*</Grid>*/}
+                        {/*<Grid item xs={5} pr={"1.5vw"}>*/}
+                        {/*    <Select*/}
+                        {/*        direction="column"*/}
+                        {/*        label="Transaction Type"*/}
+                        {/*        placeholder="Option"*/}
+                        {/*        options={notification.transactionType}*/}
+                        {/*        value={transactionType}*/}
+                        {/*        handleChange={setTransactionType}*/}
+                        {/*    />*/}
+                        {/*</Grid>*/}
                         <Grid
                             item
                             xs={1}

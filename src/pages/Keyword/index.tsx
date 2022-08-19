@@ -11,8 +11,8 @@ import { KeywordAuctionProvider } from "../../app/context/KeywordAuction/Provide
 
 const Keyword = () => {
   const [activeStep, setActiveStep] = React.useState<number>(0);
-  const steps = ["Main Info", "Bonus", "Notification", "Summary"];
-  const stepsItem = [<MainInfo />, <Bonus />, <Notification />, <Summary />];
+  const steps = ["Main Info", "Bonus", "Notification"];
+  const stepsItem = [<MainInfo />, <Bonus />, <Notification />];
 
   return (
     <KeywordAuctionProvider>

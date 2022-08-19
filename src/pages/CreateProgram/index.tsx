@@ -8,22 +8,16 @@ import {
     Summary,
 } from "../../components/organisms/CreateProgram";
 import {CreateProgramProvider} from "../../app/context/CreateProgram/Provider";
-import {useTypedSelector} from "../../app/hooks/useTypedSelector";
-import {useActions} from "../../app/hooks/useActions";
+
 
 const CreateProgram = () => {
-    const {result, error, loading} = useTypedSelector(state => state.program);
-    const {getProgramPage} = useActions();
-    useEffect(() => {
-        getProgramPage();
-    }, [result])
 
     const [activeStep, setActiveStep] = React.useState<number>(0);
     const steps = ["Main Info", "Segmentation", "Notification"];
     const stepsItem = [
-        <MainInfo mainInfo={result.main_info} slug={"insert"}/>,
+        <MainInfo slug={"insert"}/>,
         <Segmentation/>,
-        <Notification notification={result.notification}/>,
+        <Notification />,
         // <Summary />,
     ];
 

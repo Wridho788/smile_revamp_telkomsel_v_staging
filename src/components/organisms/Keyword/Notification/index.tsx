@@ -4,10 +4,21 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { Select } from "../../../atoms";
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import { options } from "../../../../mocks/options";
+import {
+  useGetNotifReceiverQuery,
+  useGetNotifTypeQuery,
+  useGetNotifViaQuery,
+  useGetProgramTypeQuery, useGetTransactionTypeQuery
+} from "../../../../redux/features/lov/lov-api-slice";
 
 interface INotificationProps {}
 
 const Notification: React.FunctionComponent<INotificationProps> = (props) => {
+
+  const {data: viaOption = {data: []}} = useGetNotifViaQuery()
+  const {data: typeOption = {data: []}} = useGetNotifTypeQuery()
+  const {data: receiverOption = {data: []}} = useGetNotifReceiverQuery()
+  const {data: transactionTypeOption = {data: []}} = useGetTransactionTypeQuery()
   const [via, setVia] = React.useState<string>("");
   const [type, setType] = React.useState<string>("");
   const [template, setTemplate] = React.useState<string>("");
@@ -31,7 +42,7 @@ const Notification: React.FunctionComponent<INotificationProps> = (props) => {
                 direction="column"
                 label="Via"
                 placeholder="Option"
-                options={options}
+                options={viaOption.data}
                 value={via}
                 // setValue={setVia}
               />
@@ -41,7 +52,7 @@ const Notification: React.FunctionComponent<INotificationProps> = (props) => {
                 direction="column"
                 label="Type"
                 placeholder="Option"
-                options={options}
+                options={typeOption.data}
                 value={type}
                 // setValue={setType}
               />
@@ -49,9 +60,9 @@ const Notification: React.FunctionComponent<INotificationProps> = (props) => {
             <Grid item xs={5} pr={"1.5vw"}>
               <Select
                 direction="column"
-                label="Template"
+                label="Receiver"
                 placeholder="Option"
-                options={options}
+                options={receiverOption.data}
                 value={template}
                 // setValue={setTemplate}
               />
@@ -61,7 +72,7 @@ const Notification: React.FunctionComponent<INotificationProps> = (props) => {
                 direction="column"
                 label="Transaction Type"
                 placeholder="Option"
-                options={options}
+                options={transactionTypeOption.data}
                 value={transactionType}
                 // setValue={setTransactionType}
               />

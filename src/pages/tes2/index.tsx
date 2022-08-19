@@ -5,16 +5,13 @@ import {Circle} from "@mui/icons-material";
 import {IParams} from "../../redux/utils/IGeneral";
 import {useCustomerTierListQuery} from "../../redux/features/customer/customer-api-slice";
 import {useProgramListQuery} from "../../redux/features/program/notification-api-slice";
-import {useGetTransactionTypeQuery} from "../../redux/features/lov/lov-api-slice";
 
 function App() {
 const filter: IParams = {
     limit : 6,
     skip: 0,
 }
-    const { data = {data : [], total: 0}, isFetching } = useProgramListQuery(filter);
-    const { data :tes= {data : [], total: 0} } = useGetTransactionTypeQuery();
-
+    const { data = {data : [], total: 0}, isFetching } = useCustomerTierListQuery(filter);
 if(isFetching){
     return <Circle/>
 }

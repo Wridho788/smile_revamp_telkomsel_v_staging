@@ -23,9 +23,9 @@ const EditProgram = () => {
     const [activeStep, setActiveStep] = React.useState<number>(0);
     const steps = ["Main Info", "Segmentation", "Notification"];
     const stepsItem = [
-        <MainInfo mainInfo={result.main_info} slug={"edit"}/>,
+        <MainInfo slug={"edit"}/>,
         <Segmentation/>,
-        <Notification notification={result.notification}/>,
+        <Notification />,
         // <Summary />,
     ];
 

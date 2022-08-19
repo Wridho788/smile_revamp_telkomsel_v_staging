@@ -13,12 +13,10 @@ import {
 } from "../../../../app/redux/Utils/InitialState/ProgramInitial";
 
 interface IMainInfoProps {
-  mainInfo: IMainInfo;
   slug:string
 }
 
 const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
-  mainInfo,
     slug
 }: IMainInfoProps) => {
   const optionStatic = [
@@ -111,30 +109,30 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
           value={programNameLabel}
           handleChange={handleChangeProgramName}
         />
-        <Select
-          label="Point Type"
-          placeholder="Option"
-          options={mainInfo.point_type}
-          optionLabel="set_value"
-          value={pointTypeLabel}
-          handleChange={handleChangePointType}
-        />
-        <Select
-          label="Mechanism"
-          placeholder="Option"
-          options={mainInfo.mechanism}
-          optionLabel="set_value"
-          value={programMechanismLabel}
-          handleChange={handleChangeProgramMechanism}
-        />
-        <Select
-          label="Owner"
-          placeholder="Option"
-          options={mainInfo.owner}
-          optionLabel="set_value"
-          value={programOwnerLabel}
-          handleChange={handleChangeProgramOwner}
-        />
+        {/*<Select*/}
+        {/*  label="Point Type"*/}
+        {/*  placeholder="Option"*/}
+        {/*  options={mainInfo.point_type}*/}
+        {/*  optionLabel="set_value"*/}
+        {/*  value={pointTypeLabel}*/}
+        {/*  handleChange={handleChangePointType}*/}
+        {/*/>*/}
+        {/*<Select*/}
+        {/*  label="Mechanism"*/}
+        {/*  placeholder="Option"*/}
+        {/*  options={mainInfo.mechanism}*/}
+        {/*  optionLabel="set_value"*/}
+        {/*  value={programMechanismLabel}*/}
+        {/*  handleChange={handleChangeProgramMechanism}*/}
+        {/*/>*/}
+        {/*<Select*/}
+        {/*  label="Owner"*/}
+        {/*  placeholder="Option"*/}
+        {/*  options={mainInfo.owner}*/}
+        {/*  optionLabel="set_value"*/}
+        {/*  value={programOwnerLabel}*/}
+        {/*  handleChange={handleChangeProgramOwner}*/}
+        {/*/>*/}
         <OutlinedTextField
           label="Owner Detail"
           placeholder="Owner Dxetail"
