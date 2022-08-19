@@ -28,7 +28,7 @@ const filter: IParams = {
 }
 const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
 
-    const {data: programTypeOption = {data: []}} = useGetProgramTypeQuery()
+    const {data: keywordTypeOption = {data: []}} = useGetKeywordTypeQuery()
     const {data: customerTierOption = {data: []}} = useCustomerTierListQuery(filter);
     const {data: pointTypeOption = {data: []}} = useGetPointTypeQuery();
     const {data: parentOption = {data: []}} = useGetKeywordTypeQuery();
@@ -88,7 +88,7 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
                     <Select
                         label="Type"
                         placeholder="Option"
-                        options={programTypeOption.data}
+                        options={keywordTypeOption.data}
                         value={type}
                         handleChange={setType}
                     />
