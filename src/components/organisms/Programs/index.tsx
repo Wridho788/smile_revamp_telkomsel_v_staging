@@ -26,6 +26,8 @@ const Programs: React.FunctionComponent = () => {
     const {result, error, loading} = useTypedSelector(state => state.programList);
     useEffect(() => {
         getProgramList({});
+    }, [result]);
+    useEffect(() => {
         if (searchInput !== '') {
             const filteredData = data.filter((i) => {
                 return Object.values(i).join('').toLowerCase().includes(searchInput.toLowerCase())
@@ -34,7 +36,7 @@ const Programs: React.FunctionComponent = () => {
         } else {
             setFilteredResults(data)
         }
-    }, [result, searchInput]);
+    }, [searchInput]);
     const data = result.data;
     const [filteredResults, setFilteredResults] = useState(data);
 
