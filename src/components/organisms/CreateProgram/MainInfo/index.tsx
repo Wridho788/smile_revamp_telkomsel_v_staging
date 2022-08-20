@@ -5,12 +5,16 @@ import {
   OutlinedTextField,
   ResponsiveDateTimePicker,
 } from "../../../atoms";
-import { IMainInfo } from "../../../../app/redux/Utils/Interface/IProgram";
 import { useState } from "react";
 import {
   CreateProgramInitial, ProgramDetailInitial,
   ProgramSegmentationInitial,
 } from "../../../../app/redux/Utils/InitialState/ProgramInitial";
+import {
+  useGetKeywordTypeQuery,
+  useGetMechanismQuery, useGetOwnerQuery,
+  useGetPointTypeQuery
+} from "../../../../redux/features/lov/lov-api-slice";
 
 interface IMainInfoProps {
   slug:string
@@ -19,6 +23,12 @@ interface IMainInfoProps {
 const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
     slug
 }: IMainInfoProps) => {
+
+  const {data: pointTypeOption = {data: []}} = useGetPointTypeQuery()
+  const {data: mechanismOption = {data: []}} = useGetMechanismQuery()
+  const {data: ownerOption = {data: []}} = useGetOwnerQuery()
+
+
   const optionStatic = [
     { _id: "1", set_value: "True" },
     { _id: "2", set_value: "False" },
@@ -27,9 +37,7 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
     { _id: "intercept", set_value: "Intercept" },
     { _id: "union", set_value: "Union" },
   ];
-  const programData = slug === "insert" ? CreateProgramInitial : ProgramDetailInitial.data
-  // console.log(programData)
-  const programSegmentation = ProgramSegmentationInitial;
+  const programData = slug === "insert" ? ProgramDetailInitial.data : ProgramDetailInitial.data
 
   const [pointTypeLabel, handleChangePointType] = useState(
     programData.point_type
@@ -72,15 +80,6 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
     programData.end_period = endPeriod;
     programData.logic = logicValue;
 
-    programData.c_los_enable = cLOSEnabled === "True" ? true : false;
-    programSegmentation.customer_los_enable =
-      cLOSEnabled === "True" ? true : false;
-
-    programData.c_los_value = Number(cLOSValue);
-    programSegmentation.customer_los_value = String(cLOSValue);
-
-    programData.c_point_balance = Number(cPointBalance);
-    programSegmentation.customer_point_balance = Number(cPointBalance);
 
     return;
   }, [
@@ -109,30 +108,30 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
           value={programNameLabel}
           handleChange={handleChangeProgramName}
         />
-        {/*<Select*/}
-        {/*  label="Point Type"*/}
-        {/*  placeholder="Option"*/}
-        {/*  options={mainInfo.point_type}*/}
-        {/*  optionLabel="set_value"*/}
-        {/*  value={pointTypeLabel}*/}
-        {/*  handleChange={handleChangePointType}*/}
-        {/*/>*/}
-        {/*<Select*/}
-        {/*  label="Mechanism"*/}
-        {/*  placeholder="Option"*/}
-        {/*  options={mainInfo.mechanism}*/}
-        {/*  optionLabel="set_value"*/}
-        {/*  value={programMechanismLabel}*/}
-        {/*  handleChange={handleChangeProgramMechanism}*/}
-        {/*/>*/}
-        {/*<Select*/}
-        {/*  label="Owner"*/}
-        {/*  placeholder="Option"*/}
-        {/*  options={mainInfo.owner}*/}
-        {/*  optionLabel="set_value"*/}
-        {/*  value={programOwnerLabel}*/}
-        {/*  handleChange={handleChangeProgramOwner}*/}
-        {/*/>*/}
+        <Select
+          label="Point Type"
+          placeholder="Option"
+          options={pointTypeOption.data}
+          optionLabel="set_value"
+          value={pointTypeLabel}
+          handleChange={handleChangePointType}
+        />
+        <Select
+          label="Mechanism"
+          placeholder="Option"
+          options={mechanismOption.data}
+          optionLabel="set_value"
+          value={programMechanismLabel}
+          handleChange={handleChangeProgramMechanism}
+        />
+        <Select
+          label="Owner"
+          placeholder="Option"
+          options={ownerOption.data}
+          optionLabel="set_value"
+          value={programOwnerLabel}
+          handleChange={handleChangeProgramOwner}
+        />
         <OutlinedTextField
           label="Owner Detail"
           placeholder="Owner Dxetail"

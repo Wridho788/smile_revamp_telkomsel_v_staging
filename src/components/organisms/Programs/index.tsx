@@ -1,54 +1,36 @@
 import * as React from "react";
 import {Box, Card, CardContent, CircularProgress, Grid, IconButton, Input, Stack} from "@mui/material";
 import {BodyCopy, H2, SmallCopy, PreTitle} from "../..";
-import KeywordSearch from "../../atoms/KeywordSearch";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import DarkButton from "../../atoms/DarkButton";
 import ListButton from "../../atoms/ListButton";
 import CardButton from "../../atoms/CardButton";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import {useTypedSelector} from "../../../app/hooks/useTypedSelector";
 import {useActions} from "../../../app/hooks/useActions";
 import {useEffect, useState} from "react";
-import mock from "../../../mock-data/programs-data.json";
 import {useNavigate} from "react-router-dom";
 import Moment from 'moment';
 import {Add, Delete, Edit, Visibility} from "@mui/icons-material";
 import Modal from "../../../atomic/components/atoms/Modal";
-import {IProgramItem} from "../../../app/redux/Utils/Interface/IProgram";
-import {ProgramItemInitial} from "../../../app/redux/Utils/InitialState/ProgramInitial";
-import {programDetail} from "../../../app/redux/Actions/Program";
+import {useDeleteProgramMutation, useProgramListQuery} from "../../../redux/features/program/notification-api-slice";
+import {FilterInitial} from "../../../redux/utils/initial-general";
+import {IData} from "../../../redux/features/program/interface";
+import {ProgramItemInitial} from "./initial";
 
 const Programs: React.FunctionComponent = () => {
+    const  {data: programList = {data: [ProgramItemInitial]}, isError, isLoading} = useProgramListQuery(FilterInitial)
+    const  [deleteProgram, isSuccess] = useDeleteProgramMutation()
     const navigate = useNavigate()
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
     const [listForm, setListForm] = React.useState<string>("list");
-    const {result, error, loading} = useTypedSelector(state => state.programList);
-    const {getProgramList, deleteProgram} = useActions();
-    const [item, setItem] = useState(ProgramItemInitial);
-    useEffect(() => {
-        getProgramList({});
-    }, [result])
+    const [item, setItem] = useState(programList.data[0]);
 
-    const handleButtonDelete = async (_id: string) => {
-        const tes = await deleteProgram(_id)
-        console.log(tes)
-        getProgramList({});
-    }
-    const handleButtonDetail = async (item: IProgramItem) => {
-        setItem(item)
-        handleOpen()
-    }
-    const data = result.data;
-    if (error) {
-        return <h1 style={{color: 'red', fontWeight: '700'}}>{error}</h1>
-    }
+    const data = programList.data;
     const [searchInput, setSearchInput] = useState('');
     const [filteredResults, setFilteredResults] = useState(data);
-    const searchItems = (searchValue: string) => {
-        setSearchInput(searchValue)
+    useEffect(() => {
         if (searchInput !== '') {
             const filteredData = data.filter((i) => {
                 return Object.values(i).join('').toLowerCase().includes(searchInput.toLowerCase())
@@ -57,18 +39,30 @@ const Programs: React.FunctionComponent = () => {
         } else {
             setFilteredResults(data)
         }
-    }
 
+    }, [searchInput]);
+
+
+    const handleButtonDelete = async (_id: string) => {
+        deleteProgram({_id})
+    }
+    const handleButtonDetail = async (item: IData) => {
+        setItem(item)
+        handleOpen()
+    }
+    if (isError) {
+        return <h1 style={{color: 'red', fontWeight: '700'}}>{isError}</h1>
+    }
     const description = <>
-        <li>{item.name}</li>
-        <li>{item.program_mechanism}</li>
-        <li>{Moment(item.start_period).format('Y-m-d')}</li>
-        <li>{Moment(item.end_period).format('Y-m-d')}</li>
+        <li>{item.name ?? ''}</li>
+        <li>{item.program_mechanism ?? ''}</li>
+        <li>{Moment(item.start_period ?? '2000-10-10').format('Y-m-d')}</li>
+        <li>{Moment(item.end_period ?? '2000-10-10').format('Y-m-d')}</li>
     </>
 
     return (
         <>
-            <Modal open={open} handleClose={handleClose} title={item.name} description={description}/>
+            <Modal open={open} handleClose={handleClose} title={item.name} description={<li>es</li>}/>
             <Stack direction={"row"} justifyContent={"space-between"}>
                 <H2 color={"secondary.dark"}>Program</H2>
                 <Stack direction="row" alignItems="center" spacing={"1vw"}>
@@ -110,7 +104,7 @@ const Programs: React.FunctionComponent = () => {
                     />
                     <Input
                         placeholder='Search...'
-                        onChange={(e) => searchItems(e.target.value)}
+                        onChange={(e) => setSearchInput(e.target.value)}
                     />
                     {/*<KeywordSearch*/}
                     {/*    onChange={(e) => searchItems(e.target.value)}*/}
@@ -127,7 +121,7 @@ const Programs: React.FunctionComponent = () => {
 
             <Box mt={5}>
                 {
-                    loading && <Box sx={{
+                    isLoading && <Box sx={{
                         display: 'flex',
                         justifyContent: "center",
                         alignItems: "center",

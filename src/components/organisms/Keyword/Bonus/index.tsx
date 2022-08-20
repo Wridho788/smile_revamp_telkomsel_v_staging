@@ -4,18 +4,40 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { Select } from "../../../atoms";
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import { options } from "../../../../mocks/options";
+import {useGetBonusTypeQuery, useGetKeywordTypeQuery} from "../../../../redux/features/lov/lov-api-slice";
+import {useLocationBucketQuery} from "../../../../redux/features/location/notification-api-slice";
+import {FilterInitial} from "../../../../redux/utils/initial-general";
+import {useEffect} from "react";
+import {CreateKeywordInitial, KeywordBonusInitial} from "../../../../pages/Keyword/initial";
 
 interface IBonusProps {}
 
 const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
+  const keywordCreate = CreateKeywordInitial
+  const keywordBonus = KeywordBonusInitial
+  const {data: bucketOption = {data: []}} = useLocationBucketQuery(FilterInitial)
+  const {data: bonusTypeOption = {data: []}} = useGetBonusTypeQuery()
+  const [index, setIndex] = React.useState<number>(0);
   const [type, setType] = React.useState<string>("");
-  const [bucket, setBucket] = React.useState<string>("");
+  const [bucket, setBucket] = React.useState<string>(keywordCreate.keyword_bonus[index].bucket);
   const [quantity, setQuantity] = React.useState<string>("");
   const [granular, setGranular] = React.useState<string>("");
   const [bid, setBid] = React.useState<string>("");
   const [bonus, setBonus] = React.useState<string>("");
   const [totalRow, setTotalRow] = React.useState<number[]>([1]);
+  const handleAddBonus = () =>{
+    setIndex(index + 1)
+    setTotalRow((prevState) => [...prevState, prevState.length])
+    keywordBonus.bonus_type =type
+    keywordBonus.bucket =bucket
+    keywordCreate.keyword_bonus.push(keywordBonus)
 
+  }
+useEffect(()=>{
+},[
+    type,
+    bucket
+])
   return (
     <Box pt="1vw">
       <Stack maxWidth={"100%"} spacing="3vw">
@@ -33,9 +55,9 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
                 direction="column"
                 label="Type"
                 placeholder="Option"
-                options={options}
+                options={bonusTypeOption.data}
                 value={type}
-                // setValue={setType}
+                handleChange={setType}
               />
             </Grid>
             <Grid item xs={5} pr={"1.5vw"}>
@@ -43,9 +65,9 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
                 direction="column"
                 label="Bucket"
                 placeholder="Option"
-                options={options}
+                options={bucketOption.data}
                 value={bucket}
-                // setValue={setBucket}
+                handleChange={setBucket}
               />
             </Grid>
             <Grid item xs={5} pr={"1.5vw"}>
@@ -55,7 +77,7 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
                 placeholder="Option"
                 options={options}
                 value={quantity}
-                // setValue={setQuantity}
+                // handleChange={setQuantity}
               />
             </Grid>
             <Grid item xs={5} pr={"1.5vw"}>
@@ -65,7 +87,7 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
                 placeholder="Option"
                 options={options}
                 value={granular}
-                // setValue={setGranular}
+                // handleChange={setGranular}
               />
             </Grid>
             <Grid item xs={5} pr={"1.5vw"}>
@@ -75,7 +97,7 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
                 placeholder="Option"
                 options={options}
                 value={bid}
-                // setValue={setBid}
+                // handleChange={setBid}
               />
             </Grid>
             <Grid item xs={5} pr={"1.5vw"}>
@@ -85,7 +107,7 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
                 placeholder="Option"
                 options={options}
                 value={bonus}
-                // setValue={setBonus}
+                // handleChange={setBonus}
               />
             </Grid>
             <Grid
@@ -107,9 +129,7 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
         ))}
         <Box display="flex" justifyContent="center">
           <Button
-            onClick={() =>
-              setTotalRow((prevState) => [...prevState, prevState.length])
-            }
+            onClick={() => handleAddBonus()}
             color="primary"
             variant="contained"
             startIcon={<AddBoxIcon fontSize="large" />}

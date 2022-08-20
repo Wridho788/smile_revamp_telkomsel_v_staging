@@ -1,41 +1,16 @@
 import * as React from "react";
-import Tabs from "@mui/material/Tabs";
-import Tab from "@mui/material/Tab";
 import {
     Box,
     Button,
-    Checkbox, CircularProgress,
-    FormControlLabel,
-    FormGroup,
-    Grid,
+    CircularProgress,
     IconButton,
     Pagination,
     Stack,
 } from "@mui/material";
 import {BodyCopy, Select} from "../../../atoms";
-import KeywordSearch from "../../../atoms/KeywordSearch";
-import FilterAltIcon from "@mui/icons-material/FilterAlt";
-import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrowLeft";
-import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
-import DeleteIcon from "@mui/icons-material/Delete";
-import {tabTitles} from "../../../../mocks/tabTitles";
-import {useTypedSelector} from "../../../../app/hooks/useTypedSelector";
 import {useActions} from "../../../../app/hooks/useActions";
 import {useEffect, useState} from "react";
-import {IProgramImportFile, ISegmentation} from "../../../../app/redux/Utils/Interface/IProgram";
-import {
-    CreateProgramInitial,
-    ProgramSegmentationInitial
-} from "../../../../app/redux/Utils/InitialState/ProgramInitial";
 import {programSegmentationOptions} from "../../../../mocks/options";
-import MaterialTable from "material-table";
-import {read, utils} from "xlsx";
-import {
-    deleteProgramTempList,
-    programImportFile
-} from "../../../../app/redux/Actions/Program";
-import {DefaultListInitial} from "../../../../app/redux/Utils/InitialState/DefaultListInitial";
-import {ActionTypes} from "../../../../app/redux/Types/Types";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -43,9 +18,13 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import TablePagination from "@mui/material/TablePagination";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
 import {Delete} from "@mui/icons-material";
+import {
+    useImportListMutation, useLazyProgramTempListQuery, useProgramTempListQuery,
+
+} from "../../../../redux/features/program/notification-api-slice";
+import {FilterInitial} from "../../../../redux/utils/initial-general";
+import {IProgramImportFile} from "../../../../redux/features/program/interface";
 
 interface ISegmentationProps {
 }
@@ -55,16 +34,20 @@ const EXTENSIONS = ["txt"];
 // const EXTENSIONS = ["xlsx", "xls", "csv"];
 
 const Segmentation: React.FunctionComponent<ISegmentationProps> = () => {
+    const [importFile, {isLoading: isUpdate, isSuccess}] = useImportListMutation()
+
+    const  {data: tempList = {data: []}} = useProgramTempListQuery(FilterInitial)
+    const [getTempList] = useLazyProgramTempListQuery()
+
     const {programImportFile, deleteProgramTempList} = useActions();
     const [typeMSSIDN, setTypeMSSIDN] = React.useState("");
     const [colDefs, setColDefs] = useState<any>();
     const [data, setData] = useState<any>();
     const [fileName, setFileName] = useState<any>();
-    const [segmentationData, setSegmentationData] = useState(DefaultListInitial.data);
+    const [segmentationData, setSegmentationData] = useState(tempList);
     const [isLoading, setIsLoading] = useState(false);
     useEffect(() => {
     }, [segmentationData]);
-
 
     const getExention = (file: { name: string }) => {
         const parts = file.name.split(".");
@@ -93,26 +76,21 @@ const Segmentation: React.FunctionComponent<ISegmentationProps> = () => {
         }
         setFileName(file);
     }
+
     const handleProcess = async () => {
         const Data: IProgramImportFile = {
             file: fileName,
             type: typeMSSIDN
         }
-        try {
-            setIsLoading(true)
-            await programImportFile(Data)
-            setSegmentationData(DefaultListInitial.data)
-            setIsLoading(false)
-            return
-        } catch (e) {
-            console.log(e)
-        }
+        importFile({Data}).then(()=> getTempList({}))
+
+
     }
     const handleDeleteProgramTempList = async (_id: string) => {
         try {
             setIsLoading(true)
             await deleteProgramTempList(_id)
-            setSegmentationData(DefaultListInitial.data)
+            setSegmentationData(tempList)
             setIsLoading(false)
             return
         } catch (e) {
@@ -167,7 +145,7 @@ const Segmentation: React.FunctionComponent<ISegmentationProps> = () => {
 
     const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.checked) {
-            const newSelected = segmentationData.map((n) => n.name);
+            const newSelected = tempList.data.map((n) => n.name);
             setSelected(newSelected);
             return;
         }
@@ -206,7 +184,7 @@ const Segmentation: React.FunctionComponent<ISegmentationProps> = () => {
     const isSelected = (name: string) => selected.indexOf(name) !== -1;
     // Avoid a layout jump when reaching the last page with empty rows.
     const emptyRows =
-        page > 0 ? Math.max(0, (1 + page) * rowsPerPage - segmentationData.length) : 0;
+        page > 0 ? Math.max(0, (1 + page) * rowsPerPage - tempList.data.length) : 0;
     // TODO END LOGIC DATATABLE
 
 
@@ -253,13 +231,13 @@ const Segmentation: React.FunctionComponent<ISegmentationProps> = () => {
                         </TableHead>
 
                         <TableBody>
-                            {segmentationData.map((row) => (
+                            {tempList.data.map((row) => (
                                 <TableRow
-                                    key={row['msisdn']}
+                                    key={row.msisdn}
                                     sx={{'&:last-child td, &:last-child th': {border: 0}}}
                                 >
                                     <TableCell component="th" scope="row">
-                                        {row['msisdn']}
+                                        {row.msisdn}
                                     </TableCell>
                                     <TableCell component="th" scope="row">
                                         <IconButton

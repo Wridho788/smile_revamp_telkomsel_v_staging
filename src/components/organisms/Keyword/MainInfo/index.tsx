@@ -2,8 +2,6 @@ import {Box, Stack} from "@mui/material";
 import * as React from "react";
 import {MainInfoAuction} from "..";
 import {
-    keywordTypeOptions,
-    options,
     optionsObj,
 } from "../../../../mocks/options";
 import {
@@ -15,23 +13,20 @@ import {useCustomerTierListQuery} from "../../../../redux/features/customer/cust
 import {
     useGetKeywordTypeQuery,
     useGetPointTypeQuery,
-    useGetProgramTypeQuery
 } from "../../../../redux/features/lov/lov-api-slice";
-import {IParams} from "../../../../redux/utils/IGeneral";
 import {CreateKeywordInitial} from "../../../../pages/Keyword/initial";
+import {FilterInitial} from "../../../../redux/utils/initial-general";
+import {useKeywordListQuery} from "../../../../redux/features/keyword/notification-api-slice";
 
 interface IMainInfoProps {
 }
-const filter: IParams = {
-    limit: 10,
-    skip: 0,
-}
+
 const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
 
     const {data: keywordTypeOption = {data: []}} = useGetKeywordTypeQuery()
-    const {data: customerTierOption = {data: []}} = useCustomerTierListQuery(filter);
+    const {data: customerTierOption = {data: []}} = useCustomerTierListQuery(FilterInitial);
     const {data: pointTypeOption = {data: []}} = useGetPointTypeQuery();
-    const {data: parentOption = {data: []}} = useGetKeywordTypeQuery();
+    const {data: parentOption = {data: []}} = useKeywordListQuery(FilterInitial);
 
     const keywordCreate = CreateKeywordInitial
     const [type, setType] = React.useState<string>(keywordCreate.keyword_type);

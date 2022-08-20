@@ -5,7 +5,6 @@ import {
     MainInfo,
     Notification,
     Segmentation,
-    Summary,
 } from "../../components/organisms/CreateProgram";
 import {CreateProgramProvider} from "../../app/context/CreateProgram/Provider";
 import {useTypedSelector} from "../../app/hooks/useTypedSelector";
