@@ -9,11 +9,22 @@ import {
     CreateProgramInitial,
     ProgramNotificationInitial
 } from "../../../../app/redux/Utils/InitialState/ProgramInitial";
+import {
+    useGetNotifReceiverQuery,
+    useGetNotifTypeQuery,
+    useGetNotifViaQuery,
+    useGetPointTypeQuery, useGetTransactionTypeQuery
+} from "../../../../redux/features/lov/lov-api-slice";
 
 interface INotificationProps {
 }
 
 const Notification: React.FunctionComponent<INotificationProps> = ({}: INotificationProps) => {
+
+    const {data: viaOption = {data: []}} = useGetNotifViaQuery()
+    const {data: receiverOption = {data: []}} = useGetNotifReceiverQuery()
+    const {data: typeOption = {data: []}} = useGetNotifTypeQuery()
+    const {data: transactionTypeOption = {data: []}} = useGetTransactionTypeQuery()
     const programNotification = ProgramNotificationInitial
     const [via, setVia] = React.useState<string>(programNotification.via);
     const [receiver, setReceiver] = React.useState<string>(programNotification.receiver);
@@ -49,47 +60,47 @@ const Notification: React.FunctionComponent<INotificationProps> = ({}: INotifica
                         borderRadius="0.3vw"
                         p="3vw"
                     >
-                        {/*<Grid item xs={5} pr={"1.5vw"}>*/}
-                        {/*    <Select*/}
-                        {/*        direction="column"*/}
-                        {/*        label="Via"*/}
-                        {/*        placeholder="Option"*/}
-                        {/*        options={notification.via}*/}
-                        {/*        value={via}*/}
-                        {/*        handleChange={setVia}*/}
-                        {/*    />*/}
-                        {/*</Grid>*/}
-                        {/*<Grid item xs={5} pr={"1.5vw"}>*/}
-                        {/*    <Select*/}
-                        {/*        direction="column"*/}
-                        {/*        label="Receiver"*/}
-                        {/*        placeholder="Option"*/}
-                        {/*        options={notification.receiver}*/}
-                        {/*        value={receiver}*/}
-                        {/*        handleChange={setReceiver}*/}
-                        {/*    />*/}
-                        {/*</Grid>*/}
-                        {/*<Grid item xs={5} pr={"1.5vw"}>*/}
-                        {/*    <Select*/}
-                        {/*        direction="column"*/}
-                        {/*        label="Template"*/}
-                        {/*        placeholder="Option"*/}
-                        {/*        optionLabel={"notif_type"}*/}
-                        {/*        options={notification.notification}*/}
-                        {/*        value={template}*/}
-                        {/*        handleChange={setTemplate}*/}
-                        {/*    />*/}
-                        {/*</Grid>*/}
-                        {/*<Grid item xs={5} pr={"1.5vw"}>*/}
-                        {/*    <Select*/}
-                        {/*        direction="column"*/}
-                        {/*        label="Transaction Type"*/}
-                        {/*        placeholder="Option"*/}
-                        {/*        options={notification.transactionType}*/}
-                        {/*        value={transactionType}*/}
-                        {/*        handleChange={setTransactionType}*/}
-                        {/*    />*/}
-                        {/*</Grid>*/}
+                        <Grid item xs={5} pr={"1.5vw"}>
+                            <Select
+                                direction="column"
+                                label="Via"
+                                placeholder="Option"
+                                options={viaOption.data}
+                                value={via}
+                                handleChange={setVia}
+                            />
+                        </Grid>
+                        <Grid item xs={5} pr={"1.5vw"}>
+                            <Select
+                                direction="column"
+                                label="Receiver"
+                                placeholder="Option"
+                                options={receiverOption.data}
+                                value={receiver}
+                                handleChange={setReceiver}
+                            />
+                        </Grid>
+                        <Grid item xs={5} pr={"1.5vw"}>
+                            <Select
+                                direction="column"
+                                label="Template"
+                                placeholder="Option"
+                                optionLabel={"notif_type"}
+                                options={typeOption.data}
+                                value={template}
+                                handleChange={setTemplate}
+                            />
+                        </Grid>
+                        <Grid item xs={5} pr={"1.5vw"}>
+                            <Select
+                                direction="column"
+                                label="Transaction Type"
+                                placeholder="Option"
+                                options={transactionTypeOption.data}
+                                value={transactionType}
+                                handleChange={setTransactionType}
+                            />
+                        </Grid>
                         <Grid
                             item
                             xs={1}

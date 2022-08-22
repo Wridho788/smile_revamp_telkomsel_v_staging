@@ -16,9 +16,14 @@ export interface IData {
     deletedAt: string
     __v:number
     program_notification : any[]
+    msisdn?:string
 }
 export interface IResponse {
     data: Array<IData>
     total: number
 }
 
+export interface IProgramImportFile {
+    file: any
+    type: string
+}

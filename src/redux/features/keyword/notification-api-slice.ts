@@ -16,12 +16,87 @@ export const keywordSlice = createApi({
                     params: params
                 }),
             });
+        const postHandler = (endpoint: string) =>
+            builder.mutation<{ success: boolean; body: any }, any>({
+                query: (body) => ({
+                    url: endpoint,
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: body
+                }),
+            });
+        const putHandler = (endpoint: string) =>
+            builder.mutation<{ success: boolean; body: any }, any>({
+                query: (body) => ({
+                    url: endpoint,
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: body
+                }),
+            });
+        const deleteHandler = (endpoint: string) =>
+            builder.mutation<{ success: boolean; id: number }, number>({
+                query: (id) => ({
+                    url: endpoint + id + '/delete',
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                }),
+            });
         return {
-            keywordList: responseHandler( baseUrl +'/keyword'),
+            // all function
+            keywordList: responseHandler(baseUrl + '/keyword'),
+            keywordDelete: deleteHandler(baseUrl + '/keyword'),
+            keywordNotificationDelete: deleteHandler('/notification'),
+
+            // action
+            keywordActionList: responseHandler('/action'),
+            keywordActionCreate: postHandler('/action'),
+            keywordActionUpdate: putHandler('/action'),
+            keywordActionDelete: deleteHandler('/action'),
+
+            // core product
+            keywordCoreProductList: responseHandler('/core_product'),
+            keywordCoreProductCreate: postHandler('/core_product'),
+            keywordCoreProductUpdate: putHandler('/core_product'),
+            keywordCoreProductDelete: deleteHandler('/core_product'),
+
+            //direct redeem
+            keywordCoreDirectRedeemList: responseHandler('/direct_redeem'),
+            keywordRedeemCreate: postHandler('/redeem'),
+            keywordRedeemUpdate: putHandler('/redeem'),
+            keywordRedeemDelete: deleteHandler('/redeem'),
+
+            //donation
+            keywordCoreDonationList: responseHandler('/donation'),
+
+            keywordDonationCreate: postHandler('/donation'),
+            keywordDonationUpdate: putHandler('/donation'),
+            keywordDonationDelete: deleteHandler('/donation'),
+            // general
+            keywordCoreGeneralList: responseHandler('/general'),
+
+            keywordGeneralCreate: postHandler('/general'),
+            keywordGeneralUpdate: putHandler('/general'),
+            keywordGeneralDelete: deleteHandler('/general'),
+
+            //lucky draw
+            keywordCoreLuckyDrawList: responseHandler('/lucky_draw'),
+            keywordLuckyDrawCreate: postHandler('/lucky_draw'),
+            keywordLuckyDrawUpdate: putHandler('/lucky_draw'),
+            keywordLuckyDrawDelete: deleteHandler('/lucky_draw'),
         };
     },
 });
 
 export const {
-    useKeywordListQuery
+    useKeywordListQuery,
+    useKeywordActionListQuery,
+    useKeywordCoreProductListQuery,
+
 } = keywordSlice;

@@ -7,7 +7,7 @@ const baseUrl = process.env.REACT_APP_BASE_URL
 
 export const lovSlice = createApi({
     reducerPath: 'lovApi',
-    baseQuery: API_HEADER(baseUrl + '/lov'),
+    baseQuery: API_HEADER(baseUrl + '/v1/lov'),
     endpoints(builder) {
 
         const responseHandler = (endpoint: string, params?: string) =>

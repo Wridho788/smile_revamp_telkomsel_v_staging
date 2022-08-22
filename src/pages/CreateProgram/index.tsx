@@ -5,7 +5,6 @@ import {
     MainInfo,
     Notification,
     Segmentation,
-    Summary,
 } from "../../components/organisms/CreateProgram";
 import {CreateProgramProvider} from "../../app/context/CreateProgram/Provider";
 
@@ -18,7 +17,6 @@ const CreateProgram = () => {
         <MainInfo slug={"insert"}/>,
         <Segmentation/>,
         <Notification />,
-        // <Summary />,
     ];
 
     return (

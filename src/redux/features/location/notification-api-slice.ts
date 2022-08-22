@@ -18,10 +18,12 @@ export const locationSlice = createApi({
             });
         return {
             locationTemplate: responseHandler( baseUrl + '/location'),
+            locationBucket: responseHandler(  '/bucket'),
         };
     },
 });
 
 export const {
-    useLocationTemplateQuery
+    useLocationTemplateQuery,
+    useLocationBucketQuery
 } = locationSlice;
