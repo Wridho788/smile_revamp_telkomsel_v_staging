@@ -53,16 +53,16 @@ const TableComponent: React.FC<Props> = ({ data }: Props) => {
       <Table sx={{ minWidth: 700 }} aria-label="customized table">
         <TableHead>
           <TableRow>
-            {Object.keys(data[1]).map((data) => (
-              <StyledTableCell key={data} align="center">
+            {Object.keys(data[1]).map((data, index: number) => (
+              <StyledTableCell key={index} align="center">
                 {data}
               </StyledTableCell>
             ))}
           </TableRow>
         </TableHead>
         <TableBody>
-          {data.map((item) => (
-            <StyledTableRow key={item.via}>
+          {data.map((item, index: number) => (
+            <StyledTableRow key={index}>
               <StyledTableCell component="th" scope="row">
                 {item.via}
               </StyledTableCell>
