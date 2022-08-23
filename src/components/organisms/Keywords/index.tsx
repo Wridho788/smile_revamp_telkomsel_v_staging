@@ -17,7 +17,8 @@ import {
     useKeywordGeneralDeleteMutation,
     useLazyKeywordGeneralListQuery,
 
-} from "../../../redux/features/keyword/notification-api-slice";
+} from "../../../redux/features/keyword/keyword-api-slice";
+import Swal from "sweetalert2";
 
 const Keywords: React.FunctionComponent = () => {
     const [getKeywordList, {
@@ -51,8 +52,21 @@ const Keywords: React.FunctionComponent = () => {
 
 
     const handleButtonDelete = async (_id: string) => {
-        await deleteKeyword(_id)
-        getKeywordList(FilterInitial)
+        Swal.fire({
+            title: 'Do you want to delete data?',
+            showDenyButton: true,
+            confirmButtonText: `Delete`,
+            denyButtonText: `Don't Delete`,
+        }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+                deleteKeyword(_id)
+                Swal.fire('Deleted!', '', 'success')
+            } else if (result.isDenied) {
+                Swal.fire('Data are not deleted', '', 'info')
+            }
+            getKeywordList(FilterInitial)
+        });
     }
     const handleButtonDetail = async (item: IData) => {
         setItem(item)

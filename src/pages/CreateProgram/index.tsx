@@ -42,6 +42,7 @@ const CreateProgram = () => {
                         activeStep={activeStep}
                         setActiveStep={setActiveStep}
                         slug={"insert"}
+                        type={"program"}
                     >
                         {stepsItem[activeStep]}
                     </Stepper>

@@ -4,7 +4,9 @@ import {notificationSlice} from "../features/notification/notification-api-slice
 import {customerSlice} from "../features/customer/customer-api-slice";
 import {programSlice} from "../features/program/program-api-slice";
 import {locationSlice} from "../features/location/notification-api-slice";
-import {keywordSlice} from "../features/keyword/notification-api-slice";
+import {keywordSlice} from "../features/keyword/keyword-api-slice";
+import {merchantSlice} from "../features/merchant/merchant-api-slice";
+import {channelSlice} from "../features/channel/merchant-api-slice";
 
 export const rootReducer = combineReducers({
     [lovSlice.reducerPath]: lovSlice.reducer,
@@ -13,5 +15,7 @@ export const rootReducer = combineReducers({
     [locationSlice.reducerPath]: locationSlice.reducer,
     [programSlice.reducerPath]: programSlice.reducer,
     [keywordSlice.reducerPath]: keywordSlice.reducer,
+    [merchantSlice.reducerPath]: merchantSlice.reducer,
+    [channelSlice.reducerPath]: channelSlice.reducer,
 })
 

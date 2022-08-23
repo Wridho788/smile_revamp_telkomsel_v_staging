@@ -1,4 +1,4 @@
-export interface KeywordBonus {
+export interface IKeywordBonus {
     bonus_type: string
     location: string
     limit: number
@@ -12,18 +12,18 @@ export interface KeywordBonus {
     bonus_name: string
 }
 
-export interface KeywordNotification {
+export interface IKeywordNotification {
     notification: string,
     via: string
     receiver: string
 }
 
-export interface KeywordShift {
+export interface IKeywordShift {
     from: string
     to: string
 }
 
-export interface CreateKeyword {
+export interface ICreateKeyword {
     name: string,
     start_period: Date
     end_period: Date
@@ -47,7 +47,7 @@ export interface CreateKeyword {
     customer_tier: string
     comment_approval: string
     keyword_parent: string
-    keyword_bonus: Array<KeywordBonus>
-    keyword_notification: Array<KeywordNotification>,
-    keyword_shift: Array<KeywordShift>
+    keyword_bonus: Array<IKeywordBonus>
+    keyword_notification: Array<IKeywordNotification>,
+    keyword_shift: Array<IKeywordShift>
 }

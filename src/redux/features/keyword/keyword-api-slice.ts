@@ -102,6 +102,7 @@ export const {
     useKeywordDeleteMutation,
     useKeywordGeneralListQuery,
     useLazyKeywordGeneralListQuery,
-    useKeywordGeneralDeleteMutation
+    useKeywordGeneralDeleteMutation,
+    useKeywordGeneralCreateMutation
 
 } = keywordSlice;

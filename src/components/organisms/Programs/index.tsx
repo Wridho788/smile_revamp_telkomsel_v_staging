@@ -65,8 +65,8 @@ const Programs: React.FunctionComponent = () => {
             } else if (result.isDenied) {
                 Swal.fire('Data are not deleted', '', 'info')
             }
+            getProgramList({})
         });
-        getProgramList({})
     }
     const handleButtonDetail = async (item: IData) => {
         setItem(item)

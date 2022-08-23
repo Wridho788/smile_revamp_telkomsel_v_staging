@@ -14,6 +14,10 @@ import {StepIconProps} from "@mui/material/StepIcon";
 import {CreateProgramInitial, ProgramDetailInitial} from "../../../app/redux/Utils/InitialState/ProgramInitial";
 import {useCreateProgramMutation, useUpdateProgramMutation} from "../../../redux/features/program/program-api-slice";
 import {CircularProgress} from "@mui/material";
+import {CreateKeywordInitial} from "../../../pages/CreateKeyword/initial";
+import {CreateKeywordGeneral} from "../../organisms/CreateKeyword/initial";
+import {useKeywordGeneralCreateMutation} from "../../../redux/features/keyword/keyword-api-slice";
+import {useEffect, useState} from "react";
 
 const ColorlibConnector = styled(StepConnector)(({theme}) => ({
     [`&.${stepConnectorClasses.alternativeLabel}`]: {
@@ -98,18 +102,23 @@ export default function HorizontalLinearStepper({
                                                     steps,
                                                     activeStep,
                                                     setActiveStep,
-                                                    slug
+                                                    slug, type
                                                 }: {
     children?: any;
     optionalStep?: number;
     steps?: any;
     activeStep?: any;
     setActiveStep?: any;
-    slug?: string
+    slug?: string,
+    type?: string
 }) {
-    const [createProgram, {isLoading : createLoading}] = useCreateProgramMutation()
-    const [updateProgram, {isLoading : updateLoading}] = useUpdateProgramMutation()
+    const [isLoading, setIsLoading] = useState(false);
+    const [createProgram] = useCreateProgramMutation()
+    const [updateProgram] = useUpdateProgramMutation()
+    const [createKeywordGeneral] = useKeywordGeneralCreateMutation()
     const [skipped, setSkipped] = React.useState<Set<number>>(new Set<number>());
+    useEffect(() => {
+    }, [isLoading]);
 
     const isStepOptional = (step: number) => {
         return optionalStep ? step === optionalStep : false;
@@ -121,8 +130,15 @@ export default function HorizontalLinearStepper({
 
     const handleNext = async () => {
         if (activeStep === 2) {
-          slug === "insert" ? await createProgram(CreateProgramInitial) :  await updateProgram(CreateProgramInitial)
-            window.location.href = '/program-management'
+            setIsLoading(true)
+            if (type === "program") {
+                slug === "insert" ? await createProgram(CreateProgramInitial) : await updateProgram(CreateProgramInitial)
+                window.location.href = '/program-management'
+            } else {
+                slug === "insert" ? await createKeywordGeneral(CreateKeywordGeneral) : await updateProgram(CreateKeywordGeneral)
+                // window.location.href = '/keyword'
+            }
+            setIsLoading(false)
         }
 
         let newSkipped = skipped;
@@ -161,7 +177,7 @@ export default function HorizontalLinearStepper({
     return (
         <Box sx={{width: "100%"}}>
             {
-                createLoading || updateLoading && <Box sx={{
+                isLoading && <Box sx={{
                     display: 'flex',
                     justifyContent: "center",
                     alignItems: "center",
@@ -244,7 +260,7 @@ export default function HorizontalLinearStepper({
                                 paddingBlock: "1vw",
                             }}
                         >
-                            {activeStep === steps.length - 1 ? (slug === "insert" ?"Create" : "Update") : "Next"}
+                            {activeStep === steps.length - 1 ? (slug === "insert" ? "Create" : "Update") : "Next"}
                         </Button>
                     </Box>
                 </React.Fragment>

@@ -6,73 +6,122 @@ import {
     OutlinedTextField,
     ResponsiveDateTimePicker,
 } from "../../../atoms";
-import {useCustomerTierListQuery} from "../../../../redux/features/customer/customer-api-slice";
+import {useCustomerListQuery, useCustomerTierListQuery} from "../../../../redux/features/customer/customer-api-slice";
 import {
     useGetKeywordTypeQuery,
     useGetPointTypeQuery,
 } from "../../../../redux/features/lov/lov-api-slice";
 import {CreateKeywordInitial} from "../../../../pages/CreateKeyword/initial";
 import {FilterInitial} from "../../../../redux/utils/initial-general";
-import {useKeywordListQuery} from "../../../../redux/features/keyword/notification-api-slice";
+import {useKeywordListQuery} from "../../../../redux/features/keyword/keyword-api-slice";
 
-import { keywordTypeOptions, optionsObj } from "../../../../mocks/options";
+import {keywordTypeOptions, optionsObj} from "../../../../mocks/options";
+import {
+    BooleanOption,
+    CreateKeywordGeneral,
+    MaxModeOption,
+    PointValueOption,
+    TelkomselLOSOperatorOption, TelkomselLOSTypeOption
+} from "../initial";
+import {useState} from "react";
+import {useMerchantManagementListQuery} from "../../../../redux/features/merchant/merchant-api-slice";
+import {useChannelListQuery} from "../../../../redux/features/channel/merchant-api-slice";
+
 interface IMainInfoProps {
 }
 
 const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
 
-    // const {data: keywordTypeOption = {data: []}} = useGetKeywordTypeQuery()
+    const {data: keywordTypeOption = {data: []}} = useGetKeywordTypeQuery()
     const {data: customerTierOption = {data: []}} = useCustomerTierListQuery(FilterInitial);
     const {data: pointTypeOption = {data: []}} = useGetPointTypeQuery();
-    const {data: parentOption = {data: []}} = useKeywordListQuery(FilterInitial);
+    const {data: keywordParentOption = {data: []}} = useKeywordListQuery(FilterInitial);
+    const {data: merchantManagementOption = {data: []}} = useMerchantManagementListQuery(FilterInitial);
+    const {data: channelOption = {data: []}} = useChannelListQuery(FilterInitial);
+    const {data: customerOption = {data: []}} = useCustomerListQuery(FilterInitial);
 
-    const keywordCreate = CreateKeywordInitial
-    const [type, setType] = React.useState<string>(keywordCreate.keyword_type);
+    const keywordCreate = CreateKeywordGeneral
+    const [keywordType, setKeywordType] = useState(keywordCreate.keyword_type);
     const [name, setName] = React.useState<string>(keywordCreate.name);
-    const [startPeriod, setStartPeriod] = React.useState<string>(keywordCreate.start_period);
-    const [endPeriod, setEndPeriod] = React.useState<string>(keywordCreate.end_period);
-    const [maxRedeemPermisson, setMaxRedeemPermisson] =
-        React.useState<number>(keywordCreate.max_redeem_per_msisdn);
-    const [maxRedeemPermissonType, setMaxRedeemPermissonType] =
-        React.useState<number>(keywordCreate.max_redeem_per_msisdn_type);
-    const [maxRedeemPermissonFrom, setMaxRedeemPermissonFrom] =
-        React.useState<string>(keywordCreate.max_redeem_per_msisdn_from);
-    const [maxRedeemPermissonTo, setMaxRedeemPermissonTo] =
-        React.useState<string>(keywordCreate.max_redeem_per_msisdn_to);
-    const [enableCorporate, setEnableCorporate] = React.useState<boolean>(keywordCreate.enable_coorporate);
-    const [customerTier, setCustomerTier] = React.useState<string>(keywordCreate.customer_tier);
+    const [startPeriod, setStartPeriod] = React.useState(keywordCreate.start_period);
+    const [endPeriod, setEndPeriod] = React.useState(keywordCreate.end_period);
+    const [forNewRedeemer, setForNewRedeemer] = React.useState(keywordCreate.for_new_redeemer === true ? "1" : "2");
     const [pointType, setPointType] = React.useState<string>(keywordCreate.point_type);
+    const [pointValue, setPointValue] = React.useState<string>(keywordCreate.point_value);
+    const [maxRedeemPermissonMsisdn, setMaxRedeemPermissonMsisdn] =
+        React.useState<number>(keywordCreate.max_redeem_per_msisdn);
+    const [maxMode, setMaxMode] =
+        React.useState<string>(keywordCreate.max_mode);
+    const [maxRedeemCounter, setMaxRedeemCounter] =
+        React.useState<number>(keywordCreate.max_redeem_counter);
+    const [channelValidation, setChannelValidation] = useState<string>(keywordCreate.channel_validation);
+    const [merchandiseKeyword, setMerchandiseKeyword] = useState(keywordCreate.merchandise_keyword === true ? "1" : "2");
+    const [merchant, setMerchant] = useState<string>(keywordCreate.merchant);
+    const [merchantName, setMerchantName] = useState<string>(keywordCreate.merchant_name);
+
+    const [telkomselLos, setTelkomselLos] = useState(keywordCreate.telkomsel_los === true ? "1" : "2");
+    const [telkomselLosType, setTelkomselLosType] = useState<string>(keywordCreate.telkomsel_los_type);
+    const [telkomselLosOperator, setTelkomselLosOperator] = useState<string>(keywordCreate.telkomsel_los_operator);
+    const [telkomselLosValue, setTelkomselLosValue] = useState<number>(keywordCreate.telkomsel_los_value);
+    const [telkomselLosRangeMin, setTelkomselLosRangeMin] = useState<number>(keywordCreate.telkomsel_los_range_min);
+    const [telkomselLosRangeMax, setTelkomselLosRangeMax] = useState<number>(keywordCreate.telkomsel_los_range_max);
+
+    const [enableCorporate, setEnableCorporate] = React.useState(keywordCreate.enable_coorporate === true ? "1" : "2");
+    const [customerTier, setCustomerTier] = React.useState<string>(keywordCreate.customer_tier);
     const [commentApproval, setCommentApproval] = React.useState<string>(keywordCreate.comment_approval);
-    const [parent, setParent] = React.useState<string>(keywordCreate.keyword_parent);
+    const [keywordParent, setKeywordParent] = React.useState<string>(keywordCreate.keyword_parent);
     React.useEffect(() => {
         keywordCreate.name = name
-        keywordCreate.keyword_type = type
+        keywordCreate.keyword_type = keywordType
         keywordCreate.start_period = startPeriod
         keywordCreate.end_period = endPeriod
-        keywordCreate.max_redeem_per_msisdn = maxRedeemPermisson
-        keywordCreate.max_redeem_per_msisdn_type = maxRedeemPermissonType
-        keywordCreate.max_redeem_per_msisdn_from = maxRedeemPermissonFrom
-        keywordCreate.max_redeem_per_msisdn_to = maxRedeemPermissonTo
-        keywordCreate.enable_coorporate = enableCorporate
-        keywordCreate.customer_tier = maxRedeemPermissonTo
-        keywordCreate.point_type = maxRedeemPermissonTo
+        keywordCreate.max_redeem_per_msisdn = maxRedeemPermissonMsisdn
+        keywordCreate.max_mode = maxMode
+        keywordCreate.max_redeem_counter = maxRedeemCounter
+        keywordCreate.enable_coorporate = enableCorporate === "1" ? true : false
+        keywordCreate.channel_validation = channelValidation
+        keywordCreate.merchandise_keyword = merchandiseKeyword === "1" ? true : false
+        keywordCreate.for_new_redeemer = forNewRedeemer === "1" ? true : false
+        keywordCreate.merchant = merchant
+        keywordCreate.merchant_name = merchantName
+
+        keywordCreate.telkomsel_los = telkomselLos === "1" ? true : false
+        keywordCreate.telkomsel_los_type = telkomselLosType
+        keywordCreate.telkomsel_los_operator = telkomselLosOperator
+        keywordCreate.telkomsel_los_value = telkomselLosValue
+        keywordCreate.telkomsel_los_range_min = telkomselLosRangeMin
+        keywordCreate.telkomsel_los_range_max = telkomselLosRangeMax
+
         keywordCreate.comment_approval = commentApproval
-        keywordCreate.keyword_parent = parent
+        keywordCreate.keyword_parent = keywordParent
+
         return;
     }, [
         name,
-        type,
+        keywordType,
         startPeriod,
         endPeriod,
-        maxRedeemPermisson,
-        maxRedeemPermissonType,
-        maxRedeemPermissonFrom,
-        maxRedeemPermissonTo,
-        enableCorporate,
-        customerTierOption,
         pointType,
+        pointValue,
+        maxRedeemPermissonMsisdn,
+        maxMode,
+        maxRedeemCounter,
+        enableCorporate,
+        channelValidation,
+        merchandiseKeyword,
+        merchant,
+        merchantName,
+        telkomselLos,
+        telkomselLosType,
+        telkomselLosValue,
+        telkomselLosOperator,
+        telkomselLosRangeMin,
+        telkomselLosRangeMax,
+        customerTierOption,
+        customerTier,
         commentApproval,
-        parent
+        keywordParent,
+        forNewRedeemer
     ]);
     return (
         <Box display="flex" justifyContent="center" px="5%" py="1vw">
@@ -81,9 +130,9 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
                     <Select
                         label="Type"
                         placeholder="Option"
-                        options={keywordTypeOptions}
-                        value={type}
-                        handleChange={setType}
+                        options={keywordTypeOption.data}
+                        value={keywordType}
+                        handleChange={setKeywordType}
                     />
                 </Box>
                 <Stack spacing={"1vw"} px="7vw" pb="3vw">
@@ -106,53 +155,141 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
                         value={endPeriod}
                         handleChange={setEndPeriod}
                     />
-                    <OutlinedTextField
-                        label="Max Redeem Permisson"
-                        placeholder="Max Redeem Permisson"
-                        value={maxRedeemPermisson}
-                        handleChange={setMaxRedeemPermisson}
-                        variant={"outlined"}
-                    />
-                    <OutlinedTextField
-                        label="Max Redeem Permisson Type"
-                        placeholder="Max Redeem Permisson Type"
-                        value={maxRedeemPermissonType}
-                        handleChange={setMaxRedeemPermissonType}
-                        variant={"outlined"}
-                    />
-                    <ResponsiveDateTimePicker
-                        label="Max Redeem Permisson From"
-                        placeholder="Max Redeem Permisson From"
-                        value={maxRedeemPermissonFrom}
-                        handleChange={setMaxRedeemPermissonFrom}
-                    />
-                    <ResponsiveDateTimePicker
-                        label="Max Redeem Permisson To"
-                        placeholder="Max Redeem Permisson To"
-                        value={maxRedeemPermissonTo}
-                        handleChange={setMaxRedeemPermissonTo}
-                    />
                     <Select
-                        label="Enable Corporate"
-                        placeholder="Option"
-                        options={optionsObj}
-                        value={enableCorporate}
-                        handleChange={setEnableCorporate}
-                    />
-                    <Select
-                        optionLabel={"name"}
-                        label="Customer Tier"
-                        placeholder="Option"
-                        options={customerTierOption.data}
-                        value={customerTier}
-                        handleChange={setCustomerTier}
-                    />
-                    <Select
-                        label="Point Type"
+                        label="Option Type"
                         placeholder="Option"
                         options={pointTypeOption.data}
                         value={pointType}
                         handleChange={setPointType}
+                    />
+                    <Select
+                        label="Point Value"
+                        placeholder="Option"
+                        options={PointValueOption}
+                        value={pointValue}
+                        handleChange={setPointValue}
+                    />
+                    <Select
+                        label="For New Redeem"
+                        placeholder="Option"
+                        options={BooleanOption}
+                        value={forNewRedeemer}
+                        handleChange={setForNewRedeemer}
+                    />
+                    <Select
+                        label="Max Mode"
+                        placeholder="Max Mode"
+                        value={maxMode}
+                        options={MaxModeOption}
+                        handleChange={setMaxMode}
+                    />
+                    <OutlinedTextField
+                        type={"number"}
+                        label="Max Redeem Counter"
+                        placeholder="Max Redeem Counter"
+                        value={maxRedeemCounter}
+                        handleChange={setMaxRedeemCounter}
+                        variant={"outlined"}
+                    />
+                    <OutlinedTextField
+                        type={"number"}
+                        label="Max Redeem Permisson Msisdn"
+                        placeholder="Max Redeem Permisson Msisdn"
+                        value={maxRedeemPermissonMsisdn}
+                        handleChange={setMaxRedeemPermissonMsisdn}
+                        variant={"outlined"}
+                    />
+                    <Select
+                        label="Channel Validation"
+                        placeholder="Option"
+                        value={channelValidation}
+                        options={channelOption.data}
+                        optionLabel={"name"}
+                        handleChange={setChannelValidation}
+                    />
+                    <Select
+                        label="Merchandise Keyword"
+                        placeholder="Option"
+                        options={BooleanOption}
+                        value={merchandiseKeyword}
+                        handleChange={setMerchandiseKeyword}
+                    />
+                    <Select
+                        label="Merchant"
+                        placeholder="Option"
+                        value={merchant}
+                        options={merchantManagementOption.data}
+                        optionLabel={"company_name"}
+                        handleChange={setMerchant}
+                    />
+                    <OutlinedTextField
+                        label="Merchant Name"
+                        placeholder="Merchant Name"
+                        value={merchantName}
+                        handleChange={setMerchantName}
+                        variant={"outlined"}
+                    />
+
+                    <Select
+                        label="Telkomesel Los"
+                        placeholder="Option"
+                        options={BooleanOption}
+                        value={telkomselLos}
+                        handleChange={setTelkomselLos}
+                    />
+                    <Select
+                        label="Telkomesel Los Type"
+                        placeholder="Option"
+                        options={TelkomselLOSTypeOption}
+                        value={telkomselLosType}
+                        handleChange={setTelkomselLosType}
+                    />
+                    <Select
+                        label="Telkomesel Los Type"
+                        placeholder="Option"
+                        options={TelkomselLOSOperatorOption}
+                        value={telkomselLosOperator}
+                        handleChange={setTelkomselLosOperator}
+                    />
+                    <OutlinedTextField
+                        type={"number"}
+                        label="Telkomsel Los Value"
+                        placeholder="Telkomsel Los Value"
+                        value={telkomselLosValue}
+                        handleChange={setTelkomselLosValue}
+                        variant={"outlined"}
+                    />
+                    <OutlinedTextField
+                        type={"number"}
+                        label="Telkomsel Los Range Min"
+                        placeholder="Telkomsel Los Range Min"
+                        value={telkomselLosRangeMin}
+                        handleChange={setTelkomselLosRangeMin}
+                        variant={"outlined"}
+                    />
+                    <OutlinedTextField
+                        type={"number"}
+                        label="Telkomsel Los Range Max"
+                        placeholder="Telkomsel Los Range Max"
+                        value={telkomselLosRangeMax}
+                        handleChange={setTelkomselLosRangeMax}
+                        variant={"outlined"}
+                    />
+                    <Select
+                        label="Enable Corporate"
+                        placeholder="Option"
+                        options={BooleanOption}
+                        value={enableCorporate}
+                        handleChange={setEnableCorporate}
+                    />
+
+                    <Select
+                        label="Customer Tier"
+                        placeholder="Option"
+                        options={customerTierOption.data}
+                        value={customerTier}
+                        optionLabel={"name"}
+                        handleChange={setCustomerTier}
                     />
                     <OutlinedTextField
                         label="Comment Approval"
@@ -160,19 +297,17 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
                         value={commentApproval}
                         handleChange={setCommentApproval}
                         variant={"outlined"}
-                        multiline
-                        rows={4}
                     />
                     <Select
-                        label="Parent"
+                        label="Keyword Parent"
                         placeholder="Option"
-                        options={parentOption.data}
-                        value={parent}
+                        options={keywordParentOption.data}
+                        value={keywordParent}
                         optionLabel={"name"}
-                        handleChange={setParent}
+                        handleChange={setKeywordParent}
                     />
                 </Stack>
-                {type === "Auction" && <MainInfoAuction/>}
+                {/*{type === "Auction" && <MainInfoAuction/>}*/}
             </Stack>
         </Box>
     );
