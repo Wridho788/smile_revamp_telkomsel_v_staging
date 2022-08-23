@@ -19,6 +19,7 @@ import {
 import {FilterInitial} from "../../../redux/utils/initial-general";
 import {IData} from "../../../redux/features/program/interface";
 import {ProgramItemInitial} from "./initial";
+import Swal from "sweetalert2";
 
 const Programs: React.FunctionComponent = () => {
     const [getProgramList, {
@@ -50,9 +51,21 @@ const Programs: React.FunctionComponent = () => {
 
     }, [searchInput]);
 
-
     const handleButtonDelete = async (_id: string) => {
-        await deleteProgram(_id)
+        Swal.fire({
+            title: 'Do you want to delete data?',
+            showDenyButton: true,
+            confirmButtonText: `Delete`,
+            denyButtonText: `Don't Delete`,
+        }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+                 deleteProgram(_id)
+                Swal.fire('Deleted!', '', 'success')
+            } else if (result.isDenied) {
+                Swal.fire('Data are not deleted', '', 'info')
+            }
+        });
         getProgramList({})
     }
     const handleButtonDetail = async (item: IData) => {

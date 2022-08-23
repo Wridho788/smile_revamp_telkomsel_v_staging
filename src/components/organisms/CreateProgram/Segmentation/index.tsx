@@ -25,6 +25,7 @@ import {
 } from "../../../../redux/features/program/program-api-slice";
 import {FilterInitial} from "../../../../redux/utils/initial-general";
 import {IProgramImportFile, IResponse} from "../../../../redux/features/program/interface";
+import Swal from "sweetalert2";
 
 interface ISegmentationProps {
 }
@@ -86,10 +87,23 @@ const Segmentation: React.FunctionComponent<ISegmentationProps> = () => {
         setIsLoading(false)
     }
     const handleDeleteProgramTempList = async (_id: string) => {
-        setIsLoading(true)
-        await tempListDelete(_id)
-        await getTempList({})
-        setIsLoading(false)
+        Swal.fire({
+            title: 'Do you want to delete data?',
+            showDenyButton: true,
+            confirmButtonText: `Delete`,
+            denyButtonText: `Don't Delete`,
+        }).then( async (result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+                 tempListDelete(_id)
+                Swal.fire('Deleted!', '', 'success')
+            } else if (result.isDenied) {
+                Swal.fire('Data are not deleted', '', 'info')
+            }
+            setIsLoading(true)
+            await getTempList({})
+            setIsLoading(false)
+        });
     }
     // const importExcel = (e: any) => {
     //     const file = e.target.files[0];
