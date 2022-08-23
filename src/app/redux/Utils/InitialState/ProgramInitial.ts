@@ -1,5 +1,6 @@
+import { ICreateProgram } from "../../../../pages/CreateProgram/interface";
 import {
-    ICreateProgram, IFindProgram,
+     IFindProgram,
     IMainInfo,
     INotification, IProgramItem, IProgramList,
     IProgramNotification,
@@ -34,13 +35,20 @@ export const NotificationInitial: INotification = {
     receiver: [],
     transactionType: []
 }
-export const ProgramNotificationInitial: IProgramNotification =
+export const ProgramNotificationInitial = [
     {
         notification: "",
         via: "",
         receiver: "",
         transaction_type: ""
-    }
+    },
+    {
+        notification: "",
+        via: "",
+        receiver: "",
+        transaction_type: ""
+    },
+]
 
 export const ProgramSegmentationInitial: IProgramSegmentation =
     {
@@ -63,12 +71,13 @@ export const ProgramPageDataInitial: IProgramPageData = {
     notification: NotificationInitial,
 }
 export const CreateProgramInitial: ICreateProgram = {
+    _id: "",
     name: "",
     desc: "",
     start_period: "2022-01-01",
     end_period: "2022-01-01",
     point_type: "",
-    program_notification: [ProgramNotificationInitial],
+    program_notification: ProgramNotificationInitial,
     program_mechanism: "",
     program_owner: "",
     program_owner_detail: "",

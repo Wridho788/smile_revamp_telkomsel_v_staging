@@ -2124,6 +2124,11 @@
     "@svgr/plugin-svgo" "^5.5.0"
     loader-utils "^2.0.0"
 
+"@sweetalert2/theme-material-ui@^5.0.12":
+  version "5.0.12"
+  resolved "https://registry.yarnpkg.com/@sweetalert2/theme-material-ui/-/theme-material-ui-5.0.12.tgz#c2793354b41c0e1e94db976b918b17aa0492d045"
+  integrity sha512-z29LyWv5upkWAZmKKRD4jb1x8cQNZUnM9S4NXnRQ8nX/n77TfZ/pHNAZCYtSivTti60nVsQnmi3U3/mV3diO5Q==
+
 "@testing-library/dom@^8.5.0":
   version "8.16.0"
   resolved "https://registry.npmjs.org/@testing-library/dom/-/dom-8.16.0.tgz#d6fc50250aed17b1035ca1bd64655e342db3936a"

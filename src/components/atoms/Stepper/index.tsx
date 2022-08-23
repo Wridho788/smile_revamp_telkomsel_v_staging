@@ -11,12 +11,9 @@ import StepConnector, {
     stepConnectorClasses,
 } from "@mui/material/StepConnector";
 import {StepIconProps} from "@mui/material/StepIcon";
-import {useTypedSelector} from "../../../app/hooks/useTypedSelector";
-import {useActions} from "../../../app/hooks/useActions";
-import {useEffect} from "react";
 import {CreateProgramInitial, ProgramDetailInitial} from "../../../app/redux/Utils/InitialState/ProgramInitial";
+import {useCreateProgramMutation, useUpdateProgramMutation} from "../../../redux/features/program/program-api-slice";
 import {CircularProgress} from "@mui/material";
-import {updateProgram} from "../../../app/redux/Actions/Program";
 
 const ColorlibConnector = styled(StepConnector)(({theme}) => ({
     [`&.${stepConnectorClasses.alternativeLabel}`]: {
@@ -110,6 +107,8 @@ export default function HorizontalLinearStepper({
     setActiveStep?: any;
     slug?: string
 }) {
+    const [createProgram, {isLoading : createLoading}] = useCreateProgramMutation()
+    const [updateProgram, {isLoading : updateLoading}] = useUpdateProgramMutation()
     const [skipped, setSkipped] = React.useState<Set<number>>(new Set<number>());
 
     const isStepOptional = (step: number) => {
@@ -122,7 +121,8 @@ export default function HorizontalLinearStepper({
 
     const handleNext = async () => {
         if (activeStep === 2) {
-
+          slug === "insert" ? await createProgram(CreateProgramInitial) :  await updateProgram(CreateProgramInitial)
+            window.location.href = '/program-management'
         }
 
         let newSkipped = skipped;
@@ -160,6 +160,16 @@ export default function HorizontalLinearStepper({
 
     return (
         <Box sx={{width: "100%"}}>
+            {
+                createLoading || updateLoading && <Box sx={{
+                    display: 'flex',
+                    justifyContent: "center",
+                    alignItems: "center",
+                    minHeight: "100vh"
+                }}>
+                    <CircularProgress/>
+                </Box>
+            }
             <Box>
                 <Stepper
                     alternativeLabel

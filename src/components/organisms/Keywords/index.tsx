@@ -7,38 +7,37 @@ import ListButton from "../../atoms/ListButton";
 import CardButton from "../../atoms/CardButton";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import {useEffect, useState} from "react";
-import {useNavigate} from "react-router-dom";
 import Moment from 'moment';
 import {Add, Delete, Edit, Visibility} from "@mui/icons-material";
 import Modal from "../../../atomic/components/atoms/Modal";
-import {
-    useDeleteProgramMutation, useLazyProgramListQuery,
-    useLazyProgramTempListQuery,
-    useProgramListQuery
-} from "../../../redux/features/program/program-api-slice";
 import {FilterInitial} from "../../../redux/utils/initial-general";
-import {IData} from "../../../redux/features/program/interface";
-import {ProgramItemInitial} from "./initial";
+import {IData} from "../../../redux/features/keyword/interface";
+import {KeywordItemInitial} from "./initial";
+import {
+    useKeywordGeneralDeleteMutation,
+    useLazyKeywordGeneralListQuery,
 
-const Programs: React.FunctionComponent = () => {
-    const [getProgramList, {
-        data: programList = {data: [ProgramItemInitial]},
+} from "../../../redux/features/keyword/notification-api-slice";
+
+const Keywords: React.FunctionComponent = () => {
+    const [getKeywordList, {
+        data: keywordList = {data: [KeywordItemInitial]},
         isError,
         isLoading
-    }] = useLazyProgramListQuery()
-    const [deleteProgram, {isLoading: deleteLoading}] = useDeleteProgramMutation()
-    const navigate = useNavigate()
+    }] = useLazyKeywordGeneralListQuery()
+
+    const [deleteKeyword, isSuccess] = useKeywordGeneralDeleteMutation()
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
     const [listForm, setListForm] = React.useState<string>("list");
-    const [item, setItem] = useState(programList.data[0]);
+    const [item, setItem] = useState(keywordList.data[0]);
 
-    const data = programList.data;
+    const data = keywordList.data;
     const [searchInput, setSearchInput] = useState('');
     const [filteredResults, setFilteredResults] = useState(data);
     useEffect(() => {
-        getProgramList({})
+        getKeywordList(FilterInitial)
         if (searchInput !== '') {
             const filteredData = data.filter((i) => {
                 return Object.values(i).join('').toLowerCase().includes(searchInput.toLowerCase())
@@ -52,8 +51,8 @@ const Programs: React.FunctionComponent = () => {
 
 
     const handleButtonDelete = async (_id: string) => {
-        await deleteProgram(_id)
-        getProgramList({})
+        await deleteKeyword(_id)
+        getKeywordList(FilterInitial)
     }
     const handleButtonDetail = async (item: IData) => {
         setItem(item)
@@ -63,20 +62,18 @@ const Programs: React.FunctionComponent = () => {
         return <h1 style={{color: 'red', fontWeight: '700'}}>{isError}</h1>
     }
     const description = <>
-        <li>{item.name ?? ''}</li>
-        <li>{item.program_mechanism ?? ''}</li>
-        <li>{Moment(item.start_period ?? '2000-10-10').format('Y-m-d')}</li>
-        <li>{Moment(item.end_period ?? '2000-10-10').format('Y-m-d')}</li>
+        <li>{item.merchant ?? ''}</li>
+        <li>{item.merchant_name ?? ''}</li>
     </>
 
     return (
         <>
-            <Modal open={open} handleClose={handleClose} title={item.name} description={<li>es</li>}/>
+            <Modal open={open} handleClose={handleClose} title={item.name} description={description}/>
             <Stack direction={"row"} justifyContent={"space-between"}>
                 <H2 color={"secondary.dark"}>Program</H2>
                 <Stack direction="row" alignItems="center" spacing={"1vw"}>
                     <IconButton
-                        href="/create-program/"
+                        href="/create-keyword/"
                         size="small"
                         sx={{
                             bgcolor: "primary",
@@ -130,7 +127,7 @@ const Programs: React.FunctionComponent = () => {
 
             <Box mt={5}>
                 {
-                    (isLoading || deleteLoading)&& <Box sx={{
+                    isLoading && <Box sx={{
                         display: 'flex',
                         justifyContent: "center",
                         alignItems: "center",
@@ -187,7 +184,7 @@ const Programs: React.FunctionComponent = () => {
                                                     >
                                                         {/* 3 */}
                                                         {/* <SmallCopy>{_["name"]}</SmallCopy> */}
-                                                        <SmallCopy>{Moment(_.start_period).format('Y-m-d')}</SmallCopy>
+                                                        <SmallCopy>{_.name}</SmallCopy>
                                                     </Box>
                                                     <Box
                                                         bgcolor={"secondary.main"}
@@ -199,7 +196,7 @@ const Programs: React.FunctionComponent = () => {
                                                     >
                                                         {/* 4 */}
                                                         {/* <SmallCopy>{_["name"]}</SmallCopy> */}
-                                                        <SmallCopy>{Moment(_.end_period).format('Y-m-d')}</SmallCopy>
+                                                        <SmallCopy>{Moment(_.created_at).format('Y-m-d')}</SmallCopy>
                                                     </Box>
                                                 </Stack>
                                             </Box>
@@ -256,7 +253,7 @@ const Programs: React.FunctionComponent = () => {
                                             >
                                                 {/* 3 */}
                                                 {/* <SmallCopy>{_["name"]}</SmallCopy> */}
-                                                <SmallCopy>{Moment(_.start_period).format('Y-m-d')}</SmallCopy>
+                                                <SmallCopy>{Moment(_.created_at).format('Y-m-d')}</SmallCopy>
                                             </Box>
                                         </Grid>
                                         <Grid item xs={4}>
@@ -271,7 +268,7 @@ const Programs: React.FunctionComponent = () => {
                                             >
                                                 {/* 4 */}
                                                 {/* <SmallCopy>{_["name"]}</SmallCopy> */}
-                                                <SmallCopy>{Moment(_.end_period).format('Y-m-d')}</SmallCopy>
+                                                <SmallCopy>{Moment(_.created_at).format('Y-m-d')}</SmallCopy>
                                             </Box>
                                         </Grid>
                                         <Grid item xs={4}>
@@ -293,7 +290,7 @@ const Programs: React.FunctionComponent = () => {
                                                 </Grid>
                                                 <Grid item xs={4}>
                                                     <IconButton
-                                                        href={"/edit-program/" + _._id}
+                                                        href={"/edit-keyword/" + _._id}
                                                         size="small"
                                                         sx={{
                                                             bgcolor: "secondary.main",
@@ -334,4 +331,4 @@ const Programs: React.FunctionComponent = () => {
         </>
     );
 };
-export default Programs;
+export default Keywords;

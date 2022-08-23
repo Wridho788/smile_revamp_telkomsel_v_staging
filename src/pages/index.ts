@@ -6,10 +6,9 @@ import LoginPage from "./Login";
 import ProgramPage from "./ProgramPage/index"
 import CreateProgram from "./CreateProgram";
 import EditProgram from "./CreateProgram/edit";
-import  Tes from "./tes"
-import  Tes2 from "./tes2"
 
-import Keyword from "./Keyword";
+import CreateKeyword from "./CreateKeyword";
+import Keyword from "./Keyword"
 
 export {
     Option,
@@ -20,7 +19,6 @@ export {
     ProgramPage,
     CreateProgram,
     EditProgram,
-    Keyword,
-    Tes,
-    Tes2
+    CreateKeyword,
+    Keyword
 };

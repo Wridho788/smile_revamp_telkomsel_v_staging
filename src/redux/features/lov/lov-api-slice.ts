@@ -36,6 +36,7 @@ export const lovSlice = createApi({
             getPointBalance: responseHandler('/c_point_balance'),
             getProgramType: responseHandler('/program_type'),
             getTransactionType: responseHandler('/transaction_type'),
+            getProgramNotification: responseHandler('/program/notification'),
         };
     },
 });
@@ -55,5 +56,6 @@ export const {
     useGetPointBalanceQuery,
     useGetProgramTypeQuery,
     useGetTransactionTypeQuery,
+    useGetProgramNotificationQuery
 
 } = lovSlice;

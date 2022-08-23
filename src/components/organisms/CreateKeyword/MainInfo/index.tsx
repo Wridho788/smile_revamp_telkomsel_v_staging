@@ -2,9 +2,6 @@ import {Box, Stack} from "@mui/material";
 import * as React from "react";
 import {MainInfoAuction} from "..";
 import {
-    optionsObj,
-} from "../../../../mocks/options";
-import {
     Select,
     OutlinedTextField,
     ResponsiveDateTimePicker,
@@ -14,16 +11,17 @@ import {
     useGetKeywordTypeQuery,
     useGetPointTypeQuery,
 } from "../../../../redux/features/lov/lov-api-slice";
-import {CreateKeywordInitial} from "../../../../pages/Keyword/initial";
+import {CreateKeywordInitial} from "../../../../pages/CreateKeyword/initial";
 import {FilterInitial} from "../../../../redux/utils/initial-general";
 import {useKeywordListQuery} from "../../../../redux/features/keyword/notification-api-slice";
 
+import { keywordTypeOptions, optionsObj } from "../../../../mocks/options";
 interface IMainInfoProps {
 }
 
 const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
 
-    const {data: keywordTypeOption = {data: []}} = useGetKeywordTypeQuery()
+    // const {data: keywordTypeOption = {data: []}} = useGetKeywordTypeQuery()
     const {data: customerTierOption = {data: []}} = useCustomerTierListQuery(FilterInitial);
     const {data: pointTypeOption = {data: []}} = useGetPointTypeQuery();
     const {data: parentOption = {data: []}} = useKeywordListQuery(FilterInitial);
@@ -83,7 +81,7 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
                     <Select
                         label="Type"
                         placeholder="Option"
-                        options={keywordTypeOption.data}
+                        options={keywordTypeOptions}
                         value={type}
                         handleChange={setType}
                     />
@@ -170,6 +168,7 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
                         placeholder="Option"
                         options={parentOption.data}
                         value={parent}
+                        optionLabel={"name"}
                         handleChange={setParent}
                     />
                 </Stack>

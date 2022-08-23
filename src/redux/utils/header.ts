@@ -4,7 +4,8 @@ export const API_HEADER = (baseUrl: string) =>
     fetchBaseQuery({
         baseUrl: baseUrl,
         prepareHeaders(headers) {
-            headers.set('authorization', `Bearer ${process.env.TOKEN}`);
+            headers.set("accept", "*/*")
+            headers.set('authorization', `Bearer ${process.env.REACT_APP_TOKEN}`)
             return headers;
         },
     })

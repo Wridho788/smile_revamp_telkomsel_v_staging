@@ -7,7 +7,7 @@ const baseUrl = process.env.REACT_APP_BASE_URL
 
 export const keywordSlice = createApi({
     reducerPath: 'keywordApi',
-    baseQuery: API_HEADER(baseUrl + '/keyword'),
+    baseQuery: API_HEADER(baseUrl + '/v1/keyword'),
     endpoints(builder) {
         const responseHandler = (endpoint: string) =>
             builder.query<IResponse, IParams>({
@@ -39,7 +39,7 @@ export const keywordSlice = createApi({
                 }),
             });
         const deleteHandler = (endpoint: string) =>
-            builder.mutation<{ success: boolean; id: number }, number>({
+            builder.mutation<{ success: boolean; id: string }, string>({
                 query: (id) => ({
                     url: endpoint + id + '/delete',
                     method: 'DELETE',
@@ -50,8 +50,8 @@ export const keywordSlice = createApi({
             });
         return {
             // all function
-            keywordList: responseHandler(baseUrl + '/keyword'),
-            keywordDelete: deleteHandler(baseUrl + '/keyword'),
+            keywordList: responseHandler(baseUrl + '/v1/keyword'),
+            keywordDelete: deleteHandler(baseUrl + '/v1/keyword'),
             keywordNotificationDelete: deleteHandler('/notification'),
 
             // action
@@ -78,12 +78,12 @@ export const keywordSlice = createApi({
             keywordDonationCreate: postHandler('/donation'),
             keywordDonationUpdate: putHandler('/donation'),
             keywordDonationDelete: deleteHandler('/donation'),
-            // general
-            keywordCoreGeneralList: responseHandler('/general'),
 
+            // general
+            keywordGeneralList: responseHandler('/general'),
             keywordGeneralCreate: postHandler('/general'),
             keywordGeneralUpdate: putHandler('/general'),
-            keywordGeneralDelete: deleteHandler('/general'),
+            keywordGeneralDelete: deleteHandler('/general/'),
 
             //lucky draw
             keywordCoreLuckyDrawList: responseHandler('/lucky_draw'),
@@ -96,7 +96,12 @@ export const keywordSlice = createApi({
 
 export const {
     useKeywordListQuery,
+    useLazyKeywordListQuery,
     useKeywordActionListQuery,
     useKeywordCoreProductListQuery,
+    useKeywordDeleteMutation,
+    useKeywordGeneralListQuery,
+    useLazyKeywordGeneralListQuery,
+    useKeywordGeneralDeleteMutation
 
 } = keywordSlice;

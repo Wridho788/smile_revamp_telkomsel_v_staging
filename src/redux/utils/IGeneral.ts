@@ -14,3 +14,6 @@ export interface IParams {
     filter?: any
     sort?: any
 }
+export interface IParamDetail {
+    _id : string
+}

@@ -7,25 +7,24 @@ import {
     Segmentation,
 } from "../../components/organisms/CreateProgram";
 import {CreateProgramProvider} from "../../app/context/CreateProgram/Provider";
-import {useTypedSelector} from "../../app/hooks/useTypedSelector";
-import {useActions} from "../../app/hooks/useActions";
 import {useParams} from "react-router-dom";
+import {useDetailProgramQuery} from "../../redux/features/program/program-api-slice";
+import {ProgramDetailInitial} from "../../app/redux/Utils/InitialState/ProgramInitial";
 
 const EditProgram = () => {
-    const {result, error, loading} = useTypedSelector(state => state.program);
-    const {programDetail} = useActions();
     let {_id} = useParams()
+    let ProgramDetail = ProgramDetailInitial.data
+    const {data = ProgramDetailInitial.data, isLoading} = useDetailProgramQuery(_id ?? '')
     useEffect(() => {
-        programDetail(_id ?? '')
-    }, [result, _id])
+        ProgramDetail = data
+    }, [data]);
 
     const [activeStep, setActiveStep] = React.useState<number>(0);
     const steps = ["Main Info", "Segmentation", "Notification"];
     const stepsItem = [
         <MainInfo slug={"edit"}/>,
         <Segmentation/>,
-        <Notification />,
-        // <Summary />,
+        <Notification/>,
     ];
 
     return (
@@ -38,7 +37,7 @@ const EditProgram = () => {
             >
                 <StepperPaper sx={{paddingTop: "4vw"}}>
                     <H2 textAlign="center" mb="2vw">
-                        Create Program
+                        Edit Program
                     </H2>
 
                     <Stepper
@@ -46,7 +45,7 @@ const EditProgram = () => {
                         activeStep={activeStep}
                         setActiveStep={setActiveStep}
                     >
-                        { loading ? <Box sx={{
+                        {isLoading ? <Box sx={{
                                 display: 'flex',
                                 justifyContent: "center",
                                 alignItems: "center",

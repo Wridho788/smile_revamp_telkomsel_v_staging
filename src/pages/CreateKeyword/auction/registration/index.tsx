@@ -1,5 +1,5 @@
 import React from "react";
-import { MainInfo } from "../../../../components/organisms/Keyword/Auction/Registration";
+import { MainInfo } from "../../../../components/organisms/CreateKeyword/Auction/Registration";
 import { KeywordAuctionProvider } from "../../../../app/context/KeywordAuction/Provider";
 
 const KeywordAuction = () => {

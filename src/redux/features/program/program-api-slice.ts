@@ -1,7 +1,8 @@
 import {createApi} from '@reduxjs/toolkit/query/react';
 import {API_HEADER} from "../../utils/header";
-import {IProgramImportFile, IResponse} from "./interface";
-import {IParams} from "../../utils/IGeneral";
+import {IData, IProgramImportFile, IResponse} from "./interface";
+import {IParamDetail, IParams} from "../../utils/IGeneral";
+import {ICreateProgram} from "../../../pages/CreateProgram/interface";
 
 const baseUrl = process.env.REACT_APP_BASE_URL
 
@@ -17,13 +18,19 @@ export const programSlice = createApi({
                     params: params
                 }),
             });
+        const detailHandler = (endpoint: string) =>
+            builder.query<ICreateProgram, string>({
+                query: (_id:string) => ({
+                    url: endpoint + _id + '/detail',
+                }),
+            });
         const importFileHandler = (endpoint: string) =>
             builder.mutation<{ success: boolean; body: any }, any>({
                 query: (body) => ({
                     url: endpoint,
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'multipart/form-data',
+                        'Content-Type': 'multipart/form-data'
                     },
                     body: body
                 }),
@@ -39,10 +46,21 @@ export const programSlice = createApi({
                     body: body
                 }),
             });
+        const putHandler = (endpoint: string) =>
+            builder.mutation<{ success: boolean; body: any }, any>({
+                query: (body) => ({
+                    url: endpoint + body['_id'] + '/edit',
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: body
+                }),
+            });
         const deleteHandler = (endpoint: string) =>
-            builder.mutation<{ success: boolean; id: number }, number>({
-                query: (id) => ({
-                    url: endpoint  + id + '/delete',
+            builder.mutation<{ success: boolean; _id: string }, string>({
+                query: (_id) => ({
+                    url: endpoint + _id + '/delete',
                     method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json',
@@ -54,7 +72,7 @@ export const programSlice = createApi({
             programList: responseHandler(baseUrl + '/program'),
             programTempList: responseHandler('/temp_list'),
             programSegmentationList: responseHandler('/segmentation'),
-            detailProgram: responseHandler('/detail'),
+            detailProgram: detailHandler(baseUrl + '/program/'),
 
             // import file
             importList: importFileHandler('/import_list'),
@@ -62,8 +80,12 @@ export const programSlice = createApi({
             // post
             createProgram: postHandler(baseUrl + '/program'),
 
+            // put
+            updateProgram: putHandler(baseUrl + '/program/'),
+
             // delete
-            deleteProgram: postHandler(baseUrl + '/program/'),
+            deleteProgram: deleteHandler(baseUrl + '/program/'),
+            deleteProgramTempList: deleteHandler(baseUrl + '/program/temp_list/'),
 
         };
     },
@@ -71,9 +93,13 @@ export const programSlice = createApi({
 
 export const {
     useProgramListQuery,
+    useLazyProgramListQuery,
     useProgramTempListQuery,
     useLazyProgramTempListQuery,
     useCreateProgramMutation,
     useImportListMutation,
-    useDeleteProgramMutation
+    useDeleteProgramMutation,
+    useDeleteProgramTempListMutation,
+    useDetailProgramQuery,
+    useUpdateProgramMutation
 } = programSlice;

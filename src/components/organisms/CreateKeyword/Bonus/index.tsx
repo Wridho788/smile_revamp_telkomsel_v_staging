@@ -8,7 +8,7 @@ import {useGetBonusTypeQuery, useGetKeywordTypeQuery} from "../../../../redux/fe
 import {useLocationBucketQuery} from "../../../../redux/features/location/notification-api-slice";
 import {FilterInitial} from "../../../../redux/utils/initial-general";
 import {useEffect} from "react";
-import {CreateKeywordInitial, KeywordBonusInitial} from "../../../../pages/Keyword/initial";
+import {CreateKeywordInitial, KeywordBonusInitial} from "../../../../pages/CreateKeyword/initial";
 
 interface IBonusProps {}
 

@@ -8,7 +8,6 @@ import {
     Stack,
 } from "@mui/material";
 import {BodyCopy, Select} from "../../../atoms";
-import {useActions} from "../../../../app/hooks/useActions";
 import {useEffect, useState} from "react";
 import {programSegmentationOptions} from "../../../../mocks/options";
 import Table from '@mui/material/Table';
@@ -20,11 +19,12 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import {Delete} from "@mui/icons-material";
 import {
+    useDeleteProgramTempListMutation,
     useImportListMutation, useLazyProgramTempListQuery, useProgramTempListQuery,
 
-} from "../../../../redux/features/program/notification-api-slice";
+} from "../../../../redux/features/program/program-api-slice";
 import {FilterInitial} from "../../../../redux/utils/initial-general";
-import {IProgramImportFile} from "../../../../redux/features/program/interface";
+import {IProgramImportFile, IResponse} from "../../../../redux/features/program/interface";
 
 interface ISegmentationProps {
 }
@@ -35,11 +35,9 @@ const EXTENSIONS = ["txt"];
 
 const Segmentation: React.FunctionComponent<ISegmentationProps> = () => {
     const [importFile, {isLoading: isUpdate, isSuccess}] = useImportListMutation()
+    const [tempListDelete] = useDeleteProgramTempListMutation()
+    const [getTempList, {data: tempList = {data: []}}] = useLazyProgramTempListQuery()
 
-    const  {data: tempList = {data: []}} = useProgramTempListQuery(FilterInitial)
-    const [getTempList] = useLazyProgramTempListQuery()
-
-    const {programImportFile, deleteProgramTempList} = useActions();
     const [typeMSSIDN, setTypeMSSIDN] = React.useState("");
     const [colDefs, setColDefs] = useState<any>();
     const [data, setData] = useState<any>();
@@ -82,20 +80,16 @@ const Segmentation: React.FunctionComponent<ISegmentationProps> = () => {
             file: fileName,
             type: typeMSSIDN
         }
-        importFile({Data}).then(()=> getTempList({}))
-
-
+        setIsLoading(true)
+        await importFile({Data})
+        await getTempList({})
+        setIsLoading(false)
     }
     const handleDeleteProgramTempList = async (_id: string) => {
-        try {
-            setIsLoading(true)
-            await deleteProgramTempList(_id)
-            setSegmentationData(tempList)
-            setIsLoading(false)
-            return
-        } catch (e) {
-            console.log(e)
-        }
+        setIsLoading(true)
+        await tempListDelete(_id)
+        await getTempList({})
+        setIsLoading(false)
     }
     // const importExcel = (e: any) => {
     //     const file = e.target.files[0];
@@ -142,15 +136,15 @@ const Segmentation: React.FunctionComponent<ISegmentationProps> = () => {
     const [dense, setDense] = React.useState(false);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
-
-    const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
-        if (event.target.checked) {
-            const newSelected = tempList.data.map((n) => n.name);
-            setSelected(newSelected);
-            return;
-        }
-        setSelected([]);
-    };
+    //
+    // const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
+    //     if (event.target.checked) {
+    //         const newSelected = tempList.data.map((n) => n.name);
+    //         setSelected(newSelected);
+    //         return;
+    //     }
+    //     setSelected([]);
+    // };
 
     const handleClick = (event: React.MouseEvent<unknown>, name: string) => {
         const selectedIndex = selected.indexOf(name);

@@ -5,16 +5,18 @@ import {
   OutlinedTextField,
   ResponsiveDateTimePicker,
 } from "../../../atoms";
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import {
   CreateProgramInitial, ProgramDetailInitial,
   ProgramSegmentationInitial,
 } from "../../../../app/redux/Utils/InitialState/ProgramInitial";
 import {
-  useGetKeywordTypeQuery,
+  useGetKeywordTypeQuery, useGetLocationTypeQuery,
   useGetMechanismQuery, useGetOwnerQuery,
   useGetPointTypeQuery
 } from "../../../../redux/features/lov/lov-api-slice";
+import {useDetailProgramQuery} from "../../../../redux/features/program/program-api-slice";
+import {useParams} from "react-router-dom";
 
 interface IMainInfoProps {
   slug:string
@@ -24,11 +26,17 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
     slug
 }: IMainInfoProps) => {
 
+  let programData = ProgramDetailInitial.data
+  let {_id} = useParams()
+  const {data: fetchDetail = programData, isLoading} = useDetailProgramQuery(_id ?? '')
   const {data: pointTypeOption = {data: []}} = useGetPointTypeQuery()
   const {data: mechanismOption = {data: []}} = useGetMechanismQuery()
-  const {data: ownerOption = {data: []}} = useGetOwnerQuery()
+  const {data: ownerOption = {data: []}} = useGetLocationTypeQuery()
+  useEffect(() => {
+    programData._id = fetchDetail._id
+  }, [fetchDetail]);
 
-
+    console.log(programData.point_type)
   const optionStatic = [
     { _id: "1", set_value: "True" },
     { _id: "2", set_value: "False" },
@@ -37,36 +45,35 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
     { _id: "intercept", set_value: "Intercept" },
     { _id: "union", set_value: "Union" },
   ];
-  const programData = slug === "insert" ? ProgramDetailInitial.data : ProgramDetailInitial.data
 
   const [pointTypeLabel, handleChangePointType] = useState(
-    programData.point_type
+    fetchDetail.point_type
   );
   const [programMechanismLabel, handleChangeProgramMechanism] = useState(
-    programData.program_mechanism
+    fetchDetail.program_mechanism
   );
   const [programOwnerLabel, handleChangeProgramOwner] = useState(
-    programData.program_owner
+    fetchDetail.program_owner
   );
   const [programOwnerDetail, setProgramOwnerDetail] = React.useState<string>(
-    programData.program_owner_detail
+    fetchDetail.program_owner_detail
   );
   const [programDescriptionLabel, handleChangeProgramDescription] = useState(
-    programData.desc
+    fetchDetail.desc
   );
   const [programNameLabel, handleChangeProgramName] = useState(
-    programData.name
+    fetchDetail.name
   );
-  const [startPeriod, setStartPeriod] = useState(programData.start_period);
-  const [endPeriod, setEndPeriod] = useState(programData.end_period);
+  const [startPeriod, setStartPeriod] = useState(fetchDetail.start_period);
+  const [endPeriod, setEndPeriod] = useState(fetchDetail.end_period);
 
-  let cLOSEnableInitial = programData.c_los_enable === true ? "True" : "False";
+  let cLOSEnableInitial = fetchDetail.c_los_enable === true ? "True" : "False";
   const [cLOSEnabled, setCLOSEnabled] = useState(cLOSEnableInitial);
 
-  const [cLOSValue, setCLOSValue] = useState<number>(programData.c_los_value);
-  const [logicValue, setLogicValue] = useState(programData.logic);
+  const [cLOSValue, setCLOSValue] = useState<number>(fetchDetail.c_los_value);
+  const [logicValue, setLogicValue] = useState(fetchDetail.logic);
   const [cPointBalance, setCPointBalance] = React.useState<number>(
-    programData.c_point_balance
+    fetchDetail.c_point_balance
   );
 
   React.useEffect(() => {

@@ -57,3 +57,7 @@ export interface IProgramItem {
     program_bonus: any[]
 }
 
+
+export interface IFindProgram {
+    data: ICreateProgram
+}
