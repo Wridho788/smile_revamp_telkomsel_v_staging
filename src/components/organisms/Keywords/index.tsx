@@ -244,6 +244,7 @@ const Keywords: React.FunctionComponent = () => {
           <Stack spacing="1vw">
             {(searchInput.length > 1 ? filteredResults : data).map((_, id) => (
               <Grid
+                key={id}
                 container
                 display="flex"
                 justifyContent="space-between"

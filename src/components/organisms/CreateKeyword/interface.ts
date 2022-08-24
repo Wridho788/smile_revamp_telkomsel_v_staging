@@ -4,7 +4,7 @@ export interface IKeywordBonus {
   limit: number;
   stock: number;
   bucket: string;
-  qty_denom: string;
+  qty_denom: number;
   payment: string;
   granular: string;
   bid: string;
@@ -24,16 +24,17 @@ export interface IKeywordShift {
 }
 
 export interface ICreateKeyword {
+  keyword_type: string;
   name: string;
   start_period: Date;
   end_period: Date;
-  point_type: string;
+  point_type: [];
   point_value: string;
   for_new_redeemer: boolean;
   max_mode: string;
   max_redeem_counter: number;
   max_redeem_per_msisdn: number;
-  channel_validation: string;
+  channel_validation: [];
   merchandise_keyword: boolean;
   merchant: string;
   merchant_name: string;
@@ -44,7 +45,7 @@ export interface ICreateKeyword {
   telkomsel_los_range_min: number;
   telkomsel_los_range_max: number;
   enable_coorporate: boolean;
-  customer_tier: string;
+  customer_tier: [];
   comment_approval: string;
   keyword_parent: string;
   keyword_bonus: Array<IKeywordBonus>;

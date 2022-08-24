@@ -57,7 +57,7 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
   const [forNewRedeemer, setForNewRedeemer] = React.useState(
     keywordCreate.for_new_redeemer === true ? "1" : "2"
   );
-  const [pointType, setPointType] = React.useState<string>(
+  const [pointType, setPointType] = React.useState<[]>(
     keywordCreate.point_type
   );
   const [pointValue, setPointValue] = React.useState<string>(
@@ -69,7 +69,7 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
   const [maxRedeemCounter, setMaxRedeemCounter] = React.useState<number>(
     keywordCreate.max_redeem_counter
   );
-  const [channelValidation, setChannelValidation] = useState<string>(
+  const [channelValidation, setChannelValidation] = useState<[]>(
     keywordCreate.channel_validation
   );
   const [merchandiseKeyword, setMerchandiseKeyword] = useState(
@@ -102,7 +102,7 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
   const [enableCorporate, setEnableCorporate] = React.useState(
     keywordCreate.enable_coorporate === true ? "1" : "2"
   );
-  const [customerTier, setCustomerTier] = React.useState<string>(
+  const [customerTier, setCustomerTier] = React.useState<[]>(
     keywordCreate.customer_tier
   );
   const [commentApproval, setCommentApproval] = React.useState<string>(
@@ -199,6 +199,7 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
             handleChange={setEndPeriod}
           />
           <Select
+            multiple
             label="Point Type"
             placeholder="Option"
             options={pointTypeOption.data}
@@ -243,6 +244,7 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
             variant={"outlined"}
           />
           <Select
+            multiple
             label="Channel Validation"
             placeholder="Option"
             value={channelValidation}
@@ -327,6 +329,7 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
           />
 
           <Select
+            multiple
             label="Customer Tier"
             placeholder="Option"
             options={customerTierOption.data}

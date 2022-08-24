@@ -3,10 +3,8 @@ import { Grid, Stack, IconButton, Box, Button } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { OutlinedTextField, Select } from "../../../atoms";
 import AddBoxIcon from "@mui/icons-material/AddBox";
-import { options } from "../../../../mocks/options";
 import { useGetBonusTypeQuery } from "../../../../redux/features/lov/lov-api-slice";
 import { FilterInitial } from "../../../../redux/utils/initial-general";
-import { useEffect } from "react";
 import { CreateKeywordGeneral } from "../initial";
 import { ICreateKeyword } from "../interface";
 import { useProductSelectBoxQuery } from "../../../../redux/features/product/product-api-slice";
@@ -26,7 +24,7 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
   const { data: bonusLocationOption = { data: [] } } =
     useLocationQuery(FilterInitial);
 
-  useEffect(() => {
+  React.useEffect(() => {
     setKeywordCreateState(keywordCreate);
   }, [keywordCreate, stateTrigger]);
   console.log(keywordCreate);
@@ -42,8 +40,8 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
               borderRadius="0.3vw"
               p="2vw"
             >
-              <Grid container columns={4} spacing={"1vw"}>
-                <Grid item xs={1}>
+              <Grid container columns={12} spacing={"1vw"}>
+                <Grid item xs={3}>
                   <Select
                     direction="column"
                     label="Type"
@@ -56,24 +54,7 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
                     }}
                   />
                 </Grid>
-                <Grid item xs={1}>
-                  <Select
-                    direction="column"
-                    label="Bonus"
-                    placeholder="Option"
-                    options={bonusProductOption}
-                    optionLabel={"name"}
-                    optionValue={"id"}
-                    value={keywordCreateState.keyword_bonus[idx].bonus_id || ""}
-                    handleChange={(value: any) => {
-                      keywordCreate.keyword_bonus[idx].bonus_id = value;
-                      keywordCreate.keyword_bonus[idx].bonus_name =
-                        bonusProductOption.find((e) => e.id === value)?.name;
-                      setStateTrigger(!stateTrigger);
-                    }}
-                  />
-                </Grid>
-                <Grid item xs={1}>
+                <Grid item xs={3}>
                   <Select
                     direction="column"
                     label="Location"
@@ -87,7 +68,7 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
                     }}
                   />
                 </Grid>
-                <Grid item xs={1}>
+                <Grid item xs={3}>
                   <Select
                     direction="column"
                     label="Bucket"
@@ -107,20 +88,24 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
                     }}
                   />
                 </Grid>
-                <Grid item xs={1}>
-                  <OutlinedTextField
-                    label="Quantity"
-                    placeholder="Quantity"
-                    value={keywordCreateState.keyword_bonus[idx].qty_denom}
+                <Grid item xs={3}>
+                  <Select
+                    direction="column"
+                    label="Bonus"
+                    placeholder="Option"
+                    options={bonusProductOption}
+                    optionLabel={"name"}
+                    optionValue={"id"}
+                    value={keywordCreateState.keyword_bonus[idx].bonus_id || ""}
                     handleChange={(value: any) => {
-                      keywordCreate.keyword_bonus[idx].qty_denom = value;
+                      keywordCreate.keyword_bonus[idx].bonus_id = value;
+                      keywordCreate.keyword_bonus[idx].bonus_name =
+                        bonusProductOption.find((e) => e.id === value)?.name;
                       setStateTrigger(!stateTrigger);
                     }}
-                    variant={"outlined"}
-                    direction={"column"}
                   />
                 </Grid>
-                <Grid item xs={1}>
+                <Grid item xs={4}>
                   <OutlinedTextField
                     label="Granular"
                     placeholder="Granular"
@@ -133,7 +118,7 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
                     direction={"column"}
                   />
                 </Grid>
-                <Grid item xs={1}>
+                <Grid item xs={4}>
                   <OutlinedTextField
                     label="Bid"
                     placeholder="Bid"
@@ -146,7 +131,7 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
                     direction={"column"}
                   />
                 </Grid>
-                <Grid item xs={1}>
+                <Grid item xs={4}>
                   <OutlinedTextField
                     label="Payment"
                     placeholder="Payment"
@@ -159,7 +144,22 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
                     direction={"column"}
                   />
                 </Grid>
-                <Grid item xs={1}>
+                <Grid item xs={4}>
+                  <OutlinedTextField
+                    type={"number"}
+                    label="Quantity"
+                    placeholder="Quantity"
+                    value={keywordCreateState.keyword_bonus[idx].qty_denom}
+                    handleChange={(value: any) => {
+                      keywordCreate.keyword_bonus[idx].qty_denom =
+                        Number(value);
+                      setStateTrigger(!stateTrigger);
+                    }}
+                    variant={"outlined"}
+                    direction={"column"}
+                  />
+                </Grid>
+                <Grid item xs={4}>
                   <OutlinedTextField
                     type={"number"}
                     label="Limit"
@@ -173,7 +173,7 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
                     direction={"column"}
                   />
                 </Grid>
-                <Grid item xs={1}>
+                <Grid item xs={4}>
                   <OutlinedTextField
                     type={"number"}
                     label="Stock"
@@ -221,7 +221,7 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
                 bucket: "",
                 limit: 0,
                 stock: 0,
-                qty_denom: "",
+                qty_denom: 0,
                 payment: "",
                 granular: "",
                 bid: "",

@@ -28,17 +28,17 @@ import {
 //   receiver: "",
 // };
 export const CreateKeywordGeneral: ICreateKeyword = {
-  //   keyword_type: "",
+  keyword_type: "",
   name: "",
   start_period: new Date(),
   end_period: new Date(),
-  point_type: "",
+  point_type: [],
   point_value: "",
   for_new_redeemer: false,
   max_mode: "",
   max_redeem_counter: 0,
   max_redeem_per_msisdn: 0,
-  channel_validation: "",
+  channel_validation: [],
   merchandise_keyword: false,
   merchant: "",
   merchant_name: "",
@@ -49,7 +49,7 @@ export const CreateKeywordGeneral: ICreateKeyword = {
   telkomsel_los_range_min: 0,
   telkomsel_los_range_max: 0,
   enable_coorporate: false,
-  customer_tier: "",
+  customer_tier: [],
   comment_approval: "",
   keyword_parent: "",
   keyword_bonus: [
@@ -61,14 +61,25 @@ export const CreateKeywordGeneral: ICreateKeyword = {
       bucket: "",
       limit: 0,
       stock: 0,
-      qty_denom: "",
+      qty_denom: 0,
       payment: "",
       granular: "",
       bid: "",
     },
   ],
-  keyword_notification: [],
-  keyword_shift: [],
+  keyword_notification: [
+    {
+      notification: "",
+      via: "",
+      receiver: "",
+    },
+  ],
+  keyword_shift: [
+    {
+      from: "00:00",
+      to: "00:00",
+    },
+  ],
 };
 
 export const BooleanOption = [
