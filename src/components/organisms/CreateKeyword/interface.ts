@@ -9,7 +9,7 @@ export interface IKeywordBonus {
   granular: string;
   bid: string;
   bonus_id: string;
-  bonus_name: string;
+  bonus_name: string | undefined;
 }
 
 export interface IKeywordNotification {

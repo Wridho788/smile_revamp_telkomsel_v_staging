@@ -1,18 +1,20 @@
-interface  IBucket {
-    __id:string
-    location:string
-    name: string
-    balance:number
-}
-interface IData {
-    _id: string
-    name: string
-    type: string
-    bucket: Array<IBucket>
-    __v:number
-}
-export interface IResponse {
-    data: Array<IData>
-    total: number
+interface IBucket {
+  _id: string;
+  location: string;
+  name: string;
+  balance: number;
+  __v: number;
 }
 
+interface IData {
+  _id: string;
+  code: string;
+  name: string;
+  type: string;
+  __v: number;
+  bucket: IBucket[];
+}
+
+export interface ILocation {
+  data: IData[];
+}
