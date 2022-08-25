@@ -25,6 +25,7 @@ import { CreateKeywordGeneral } from "../../organisms/CreateKeyword/initial";
 import { useKeywordGeneralCreateMutation } from "../../../redux/features/keyword/keyword-api-slice";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const ColorlibConnector = styled(StepConnector)(({ theme }) => ({
   [`&.${stepConnectorClasses.alternativeLabel}`]: {
@@ -147,9 +148,11 @@ export default function HorizontalLinearStepper({
       } else if (type === "keyword") {
         slug === "insert"
           ? await createKeywordGeneral(CreateKeywordGeneral)
-              .then((res) => {
+              .then((res: any) => {
+                res.data.status === 200 &&
+                  Swal.fire("Success!", "Keyword has been created!", "success");
                 console.log("res : ", res);
-                console.log("response : ", response);
+                // console.log("response : ", response);
                 nav("/keyword");
               })
               .catch((err) => {
