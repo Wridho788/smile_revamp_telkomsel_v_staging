@@ -9,7 +9,7 @@ import {
   Input,
   Stack,
 } from "@mui/material";
-import { BodyCopy, H2, SmallCopy, PreTitle } from "../..";
+import { BodyCopy, H2, SmallCopy, PreTitle, OutlinedTextField } from "../..";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import DarkButton from "../../atoms/DarkButton";
 import ListButton from "../../atoms/ListButton";
@@ -59,6 +59,8 @@ const Keywords: React.FunctionComponent = () => {
     }
   }, [searchInput]);
 
+  // console.log(data);
+
   const handleButtonDelete = async (_id: string) => {
     Swal.fire({
       title: "Do you want to delete data?",
@@ -84,10 +86,126 @@ const Keywords: React.FunctionComponent = () => {
     return <h1 style={{ color: "red", fontWeight: "700" }}>{isError}</h1>;
   }
   const description = (
-    <>
-      <li>{item.merchant ?? ""}</li>
-      <li>{item.merchant_name ?? ""}</li>
-    </>
+    <Grid container columns={12} spacing={"2vw"}>
+      <Grid item xs={6}>
+        <OutlinedTextField
+          label="Merchant"
+          value={item.merchant_name ?? ""}
+          variant={"outlined"}
+          direction={"column"}
+          disabled={true}
+        />
+      </Grid>
+      <Grid item xs={6}>
+        <OutlinedTextField
+          label="Point Value"
+          value={item.point_value ?? ""}
+          variant={"outlined"}
+          direction={"column"}
+          disabled={true}
+        />
+      </Grid>
+      <Grid item xs={4}>
+        <OutlinedTextField
+          label="Enable Coorporate"
+          value={item.enable_coorporate ?? ""}
+          variant={"outlined"}
+          direction={"column"}
+          disabled={true}
+        />
+      </Grid>
+      <Grid item xs={4}>
+        <OutlinedTextField
+          label="For New Redeemer"
+          value={item.for_new_redeemer ?? ""}
+          variant={"outlined"}
+          direction={"column"}
+          disabled={true}
+        />
+      </Grid>
+      <Grid item xs={4}>
+        <OutlinedTextField
+          label="Merchandise Keyword"
+          value={item.merchandise_keyword ?? ""}
+          variant={"outlined"}
+          direction={"column"}
+          disabled={true}
+        />
+      </Grid>
+      <Grid item xs={4}>
+        <OutlinedTextField
+          label="Max Mode"
+          value={item.max_mode ?? ""}
+          variant={"outlined"}
+          direction={"column"}
+          disabled={true}
+        />
+      </Grid>
+      <Grid item xs={4}>
+        <OutlinedTextField
+          label="Max Redeem Counter"
+          value={item.max_redeem_counter ?? ""}
+          variant={"outlined"}
+          direction={"column"}
+          disabled={true}
+        />
+      </Grid>
+      <Grid item xs={4}>
+        <OutlinedTextField
+          label="Max Redeem Per MSISDN"
+          value={item.max_redeem_per_msisdn ?? ""}
+          variant={"outlined"}
+          direction={"column"}
+          disabled={true}
+        />
+      </Grid>
+      <Grid item xs={6}>
+        <OutlinedTextField
+          label="LOS Type"
+          value={item.telkomsel_los_type ?? ""}
+          variant={"outlined"}
+          direction={"column"}
+          disabled={true}
+        />
+      </Grid>
+      <Grid item xs={6}>
+        <OutlinedTextField
+          label="LOS Operator"
+          value={item.telkomsel_los_operator ?? ""}
+          variant={"outlined"}
+          direction={"column"}
+          disabled={true}
+        />
+      </Grid>
+
+      <Grid item xs={4}>
+        <OutlinedTextField
+          label="LOS Value"
+          value={item.telkomsel_los_value ?? ""}
+          variant={"outlined"}
+          direction={"column"}
+          disabled={true}
+        />
+      </Grid>
+      <Grid item xs={4}>
+        <OutlinedTextField
+          label="LOS Range Max"
+          value={item.telkomsel_los_range_max ?? ""}
+          variant={"outlined"}
+          direction={"column"}
+          disabled={true}
+        />
+      </Grid>
+      <Grid item xs={4}>
+        <OutlinedTextField
+          label="LOS Range Min"
+          value={item.telkomsel_los_range_min ?? ""}
+          variant={"outlined"}
+          direction={"column"}
+          disabled={true}
+        />
+      </Grid>
+    </Grid>
   );
 
   return (
