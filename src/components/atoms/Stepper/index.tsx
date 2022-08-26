@@ -133,10 +133,10 @@ export default function HorizontalLinearStepper({
             setIsLoading(true)
             if (type === "program") {
                 slug === "insert" ? await createProgram(CreateProgramInitial) : await updateProgram(CreateProgramInitial)
-                // window.location.href = '/program-management'
+                window.location.href = '/program-management'
             } else {
                 slug === "insert" ? await createKeywordGeneral(CreateKeywordGeneral) : await updateProgram(CreateKeywordGeneral)
-                // window.location.href = '/keyword'
+                window.location.href = '/keyword'
             }
             setIsLoading(false)
         }

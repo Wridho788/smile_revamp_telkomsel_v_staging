@@ -57,15 +57,15 @@ const Programs: React.FunctionComponent = () => {
             showDenyButton: true,
             confirmButtonText: `Delete`,
             denyButtonText: `Don't Delete`,
-        }).then((result) => {
+        }).then(async (result) => {
             /* Read more about isConfirmed, isDenied below */
             if (result.isConfirmed) {
-                 deleteProgram(_id)
-                Swal.fire('Deleted!', '', 'success')
+                deleteProgram(_id)
+               await Swal.fire('Deleted!', '', 'success')
+                getProgramList({})
             } else if (result.isDenied) {
                 Swal.fire('Data are not deleted', '', 'info')
             }
-            getProgramList({})
         });
     }
     const handleButtonDetail = async (item: IData) => {
@@ -143,7 +143,7 @@ const Programs: React.FunctionComponent = () => {
 
             <Box mt={5}>
                 {
-                    (isLoading || deleteLoading)&& <Box sx={{
+                    (isLoading || deleteLoading) && <Box sx={{
                         display: 'flex',
                         justifyContent: "center",
                         alignItems: "center",
