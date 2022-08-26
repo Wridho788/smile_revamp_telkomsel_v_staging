@@ -1,41 +1,15 @@
 import * as React from "react";
-import Tabs from "@mui/material/Tabs";
-import Tab from "@mui/material/Tab";
 import {
     Box,
     Button,
-    Checkbox, CircularProgress,
-    FormControlLabel,
-    FormGroup,
-    Grid,
+    CircularProgress,
     IconButton,
     Pagination,
     Stack,
 } from "@mui/material";
 import {BodyCopy, Select} from "../../../atoms";
-import KeywordSearch from "../../../atoms/KeywordSearch";
-import FilterAltIcon from "@mui/icons-material/FilterAlt";
-import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrowLeft";
-import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
-import DeleteIcon from "@mui/icons-material/Delete";
-import {tabTitles} from "../../../../mocks/tabTitles";
-import {useTypedSelector} from "../../../../app/hooks/useTypedSelector";
-import {useActions} from "../../../../app/hooks/useActions";
 import {useEffect, useState} from "react";
-import {IProgramImportFile, ISegmentation} from "../../../../app/redux/Utils/Interface/IProgram";
-import {
-    CreateProgramInitial,
-    ProgramSegmentationInitial
-} from "../../../../app/redux/Utils/InitialState/ProgramInitial";
 import {programSegmentationOptions} from "../../../../mocks/options";
-import MaterialTable from "material-table";
-import {read, utils} from "xlsx";
-import {
-    deleteProgramTempList,
-    programImportFile
-} from "../../../../app/redux/Actions/Program";
-import {DefaultListInitial} from "../../../../app/redux/Utils/InitialState/DefaultListInitial";
-import {ActionTypes} from "../../../../app/redux/Types/Types";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -43,9 +17,15 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import TablePagination from "@mui/material/TablePagination";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
 import {Delete} from "@mui/icons-material";
+import {
+    useDeleteProgramTempListMutation,
+    useImportListMutation, useLazyProgramTempListQuery, useProgramTempListQuery,
+
+} from "../../../../redux/features/program/program-api-slice";
+import {FilterInitial} from "../../../../redux/utils/initial-general";
+import {IProgramImportFile, IResponse} from "../../../../redux/features/program/interface";
+import Swal from "sweetalert2";
 
 interface ISegmentationProps {
 }
@@ -55,16 +35,18 @@ const EXTENSIONS = ["txt"];
 // const EXTENSIONS = ["xlsx", "xls", "csv"];
 
 const Segmentation: React.FunctionComponent<ISegmentationProps> = () => {
-    const {programImportFile, deleteProgramTempList} = useActions();
+    const [importFile, {isLoading: isUpdate, isSuccess}] = useImportListMutation()
+    const [tempListDelete] = useDeleteProgramTempListMutation()
+    const [getTempList, {data: tempList = {data: []}}] = useLazyProgramTempListQuery()
+
     const [typeMSSIDN, setTypeMSSIDN] = React.useState("");
     const [colDefs, setColDefs] = useState<any>();
     const [data, setData] = useState<any>();
     const [fileName, setFileName] = useState<any>();
-    const [segmentationData, setSegmentationData] = useState(DefaultListInitial.data);
+    const [segmentationData, setSegmentationData] = useState(tempList);
     const [isLoading, setIsLoading] = useState(false);
     useEffect(() => {
     }, [segmentationData]);
-
 
     const getExention = (file: { name: string }) => {
         const parts = file.name.split(".");
@@ -93,31 +75,35 @@ const Segmentation: React.FunctionComponent<ISegmentationProps> = () => {
         }
         setFileName(file);
     }
+
     const handleProcess = async () => {
-        const Data: IProgramImportFile = {
-            file: fileName,
-            type: typeMSSIDN
+        const Data = {
+            "file": fileName,
+            "type": typeMSSIDN
         }
-        try {
-            setIsLoading(true)
-            await programImportFile(Data)
-            setSegmentationData(DefaultListInitial.data)
-            setIsLoading(false)
-            return
-        } catch (e) {
-            console.log(e)
-        }
+        setIsLoading(true)
+        await importFile({Data})
+        await getTempList({})
+        setIsLoading(false)
     }
     const handleDeleteProgramTempList = async (_id: string) => {
-        try {
+        Swal.fire({
+            title: 'Do you want to delete data?',
+            showDenyButton: true,
+            confirmButtonText: `Delete`,
+            denyButtonText: `Don't Delete`,
+        }).then(async (result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+                tempListDelete(_id)
+                Swal.fire('Deleted!', '', 'success')
+            } else if (result.isDenied) {
+                Swal.fire('Data are not deleted', '', 'info')
+            }
             setIsLoading(true)
-            await deleteProgramTempList(_id)
-            setSegmentationData(DefaultListInitial.data)
+            await getTempList({})
             setIsLoading(false)
-            return
-        } catch (e) {
-            console.log(e)
-        }
+        });
     }
     // const importExcel = (e: any) => {
     //     const file = e.target.files[0];
@@ -164,15 +150,15 @@ const Segmentation: React.FunctionComponent<ISegmentationProps> = () => {
     const [dense, setDense] = React.useState(false);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
-
-    const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
-        if (event.target.checked) {
-            const newSelected = segmentationData.map((n) => n.name);
-            setSelected(newSelected);
-            return;
-        }
-        setSelected([]);
-    };
+    //
+    // const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
+    //     if (event.target.checked) {
+    //         const newSelected = tempList.data.map((n) => n.name);
+    //         setSelected(newSelected);
+    //         return;
+    //     }
+    //     setSelected([]);
+    // };
 
     const handleClick = (event: React.MouseEvent<unknown>, name: string) => {
         const selectedIndex = selected.indexOf(name);
@@ -206,7 +192,7 @@ const Segmentation: React.FunctionComponent<ISegmentationProps> = () => {
     const isSelected = (name: string) => selected.indexOf(name) !== -1;
     // Avoid a layout jump when reaching the last page with empty rows.
     const emptyRows =
-        page > 0 ? Math.max(0, (1 + page) * rowsPerPage - segmentationData.length) : 0;
+        page > 0 ? Math.max(0, (1 + page) * rowsPerPage - tempList.data.length) : 0;
     // TODO END LOGIC DATATABLE
 
 
@@ -253,13 +239,13 @@ const Segmentation: React.FunctionComponent<ISegmentationProps> = () => {
                         </TableHead>
 
                         <TableBody>
-                            {segmentationData.map((row) => (
+                            {tempList.data.map((row) => (
                                 <TableRow
-                                    key={row['msisdn']}
+                                    key={row.msisdn}
                                     sx={{'&:last-child td, &:last-child th': {border: 0}}}
                                 >
                                     <TableCell component="th" scope="row">
-                                        {row['msisdn']}
+                                        {row.msisdn}
                                     </TableCell>
                                     <TableCell component="th" scope="row">
                                         <IconButton

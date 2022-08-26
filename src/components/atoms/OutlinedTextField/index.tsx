@@ -26,7 +26,7 @@ const Index: React.FunctionComponent<IOutlinedTextFieldProps> = ({
       >
         <BodyCopy>{label}</BodyCopy>
       </Grid>
-      <Grid item xs={rightColumn}>
+      <Grid item xs={rightColumn} mt={direction === "column" ? "0.3vw" : 0}>
         <TextField
           value={value}
           onChange={(event: React.ChangeEvent<HTMLInputElement>) => {

@@ -1,7 +1,7 @@
 interface ModalProps{
     open: any,
     handleClose?:any,
-    title: string,
+    title?: string,
     description: any
 
 }

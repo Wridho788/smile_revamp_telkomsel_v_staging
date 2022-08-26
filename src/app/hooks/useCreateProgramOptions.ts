@@ -1,14 +1,11 @@
 import React from "react";
 import useCreateProgram from "../context/CreateProgram/useCreateProgram";
-import { useActions } from "./useActions";
 import { useTypedSelector } from "./useTypedSelector";
 
 const useCreateProgramOptions = () => {
-  const { getProgramPage } = useActions();
   const { result, error, loading } = useTypedSelector((state) => state.program);
 
   React.useEffect(() => {
-    getProgramPage();
   }, [result]);
 
   const main_info = {

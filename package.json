@@ -12,6 +12,8 @@
     "@mui/styles": "^5.9.3",
     "@mui/x-date-pickers": "^5.0.0-beta.0",
     "@reduxjs/toolkit": "^1.8.3",
+    "@sweetalert2/theme-dark": "5.0.1",
+    "@sweetalert2/theme-material-ui": "4.0.1",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^13.0.0",
     "@testing-library/user-event": "^13.2.1",
@@ -36,11 +38,13 @@
     "styled-components": "^5.3.5",
     "typescript": "^4.7.4",
     "web-vitals": "^2.1.0",
-    "xlsx": "^0.18.5"
+    "xlsx": "^0.18.5",
+    "sweetalert2": "11.0.18",
+    "sweetalert2-react-content": "4.1.0"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "PORT=3100 react-scripts start",
+    "build": "PORT=3100 react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

@@ -1,12 +1,10 @@
 import {useEffect, useState} from "react";
 import {useTypedSelector} from "../../../../app/hooks/useTypedSelector";
-import {useActions} from "../../../../app/hooks/useActions";
 
 // SEMUA DATA YANG AKAN DIKIRIMKAN UNTUK CREATE PROGRAM DIKUMPULKAN DIDALAM HOOKS INI
 
 const useGeneralProgramRegistration = () => {
     const {result, error, loading} = useTypedSelector(state=>state.program);
-    const {getProgramPage} = useActions();
 
     const [step, setStep] = useState<number>(0)
     const [notification, setNotification] = useState<any>([])
@@ -28,7 +26,6 @@ const useGeneralProgramRegistration = () => {
 
 
     useEffect(()=>{
-        getProgramPage();
     }, [result])
 
     return{

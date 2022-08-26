@@ -7,7 +7,8 @@ import ProgramPage from "./ProgramPage/index"
 import CreateProgram from "./CreateProgram";
 import EditProgram from "./CreateProgram/edit";
 
-import Keyword from "./Keyword";
+import CreateKeyword from "./CreateKeyword";
+import Keyword from "./Keyword"
 
 export {
     Option,
@@ -18,5 +19,6 @@ export {
     ProgramPage,
     CreateProgram,
     EditProgram,
-    Keyword,
+    CreateKeyword,
+    Keyword
 };

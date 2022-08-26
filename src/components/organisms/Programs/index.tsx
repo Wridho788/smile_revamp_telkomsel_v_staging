@@ -1,54 +1,45 @@
 import * as React from "react";
 import {Box, Card, CardContent, CircularProgress, Grid, IconButton, Input, Stack} from "@mui/material";
 import {BodyCopy, H2, SmallCopy, PreTitle} from "../..";
-import KeywordSearch from "../../atoms/KeywordSearch";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import DarkButton from "../../atoms/DarkButton";
 import ListButton from "../../atoms/ListButton";
 import CardButton from "../../atoms/CardButton";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import {useTypedSelector} from "../../../app/hooks/useTypedSelector";
-import {useActions} from "../../../app/hooks/useActions";
 import {useEffect, useState} from "react";
-import mock from "../../../mock-data/programs-data.json";
 import {useNavigate} from "react-router-dom";
 import Moment from 'moment';
 import {Add, Delete, Edit, Visibility} from "@mui/icons-material";
 import Modal from "../../../atomic/components/atoms/Modal";
-import {IProgramItem} from "../../../app/redux/Utils/Interface/IProgram";
-import {ProgramItemInitial} from "../../../app/redux/Utils/InitialState/ProgramInitial";
-import {programDetail} from "../../../app/redux/Actions/Program";
+import {
+    useDeleteProgramMutation, useLazyProgramListQuery,
+    useLazyProgramTempListQuery,
+    useProgramListQuery
+} from "../../../redux/features/program/program-api-slice";
+import {FilterInitial} from "../../../redux/utils/initial-general";
+import {IData} from "../../../redux/features/program/interface";
+import {ProgramItemInitial} from "./initial";
+import Swal from "sweetalert2";
 
 const Programs: React.FunctionComponent = () => {
+    const [getProgramList, {
+        data: programList = {data: [ProgramItemInitial]},
+        isError,
+        isLoading
+    }] = useLazyProgramListQuery()
+    const [deleteProgram, {isLoading: deleteLoading}] = useDeleteProgramMutation()
     const navigate = useNavigate()
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
     const [listForm, setListForm] = React.useState<string>("list");
-    const {result, error, loading} = useTypedSelector(state => state.programList);
-    const {getProgramList, deleteProgram} = useActions();
-    const [item, setItem] = useState(ProgramItemInitial);
-    useEffect(() => {
-        getProgramList({});
-    }, [result])
+    const [item, setItem] = useState(programList.data[0]);
 
-    const handleButtonDelete = async (_id: string) => {
-        const tes = await deleteProgram(_id)
-        console.log(tes)
-        getProgramList({});
-    }
-    const handleButtonDetail = async (item: IProgramItem) => {
-        setItem(item)
-        handleOpen()
-    }
-    const data = result.data;
-    if (error) {
-        return <h1 style={{color: 'red', fontWeight: '700'}}>{error}</h1>
-    }
+    const data = programList.data;
     const [searchInput, setSearchInput] = useState('');
     const [filteredResults, setFilteredResults] = useState(data);
-    const searchItems = (searchValue: string) => {
-        setSearchInput(searchValue)
+    useEffect(() => {
+        getProgramList({})
         if (searchInput !== '') {
             const filteredData = data.filter((i) => {
                 return Object.values(i).join('').toLowerCase().includes(searchInput.toLowerCase())
@@ -57,18 +48,43 @@ const Programs: React.FunctionComponent = () => {
         } else {
             setFilteredResults(data)
         }
-    }
 
+    }, [searchInput]);
+
+    const handleButtonDelete = async (_id: string) => {
+        Swal.fire({
+            title: 'Do you want to delete data?',
+            showDenyButton: true,
+            confirmButtonText: `Delete`,
+            denyButtonText: `Don't Delete`,
+        }).then(async (result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+                deleteProgram(_id)
+               await Swal.fire('Deleted!', '', 'success')
+                getProgramList({})
+            } else if (result.isDenied) {
+                Swal.fire('Data are not deleted', '', 'info')
+            }
+        });
+    }
+    const handleButtonDetail = async (item: IData) => {
+        setItem(item)
+        handleOpen()
+    }
+    if (isError) {
+        return <h1 style={{color: 'red', fontWeight: '700'}}>{isError}</h1>
+    }
     const description = <>
-        <li>{item.name}</li>
-        <li>{item.program_mechanism}</li>
-        <li>{Moment(item.start_period).format('Y-m-d')}</li>
-        <li>{Moment(item.end_period).format('Y-m-d')}</li>
+        <li>{item.name ?? ''}</li>
+        <li>{item.program_mechanism ?? ''}</li>
+        <li>{Moment(item.start_period ?? '2000-10-10').format('Y-m-d')}</li>
+        <li>{Moment(item.end_period ?? '2000-10-10').format('Y-m-d')}</li>
     </>
 
     return (
         <>
-            <Modal open={open} handleClose={handleClose} title={item.name} description={description}/>
+            <Modal open={open} handleClose={handleClose} title={item.name} description={<li>es</li>}/>
             <Stack direction={"row"} justifyContent={"space-between"}>
                 <H2 color={"secondary.dark"}>Program</H2>
                 <Stack direction="row" alignItems="center" spacing={"1vw"}>
@@ -110,7 +126,7 @@ const Programs: React.FunctionComponent = () => {
                     />
                     <Input
                         placeholder='Search...'
-                        onChange={(e) => searchItems(e.target.value)}
+                        onChange={(e) => setSearchInput(e.target.value)}
                     />
                     {/*<KeywordSearch*/}
                     {/*    onChange={(e) => searchItems(e.target.value)}*/}
@@ -127,7 +143,7 @@ const Programs: React.FunctionComponent = () => {
 
             <Box mt={5}>
                 {
-                    loading && <Box sx={{
+                    (isLoading || deleteLoading) && <Box sx={{
                         display: 'flex',
                         justifyContent: "center",
                         alignItems: "center",
@@ -136,194 +152,377 @@ const Programs: React.FunctionComponent = () => {
                         <CircularProgress/>
                     </Box>
                 }
-                {listForm === "card" && (
+                {
+                    listForm === "card" && (
                     <Grid container columns={5} spacing={"1vw"}>
-                        {(searchInput.length > 1 ? filteredResults : data).map((_, id) =>
-                            (<Grid key={id} item xs={1} onClick={() => handleButtonDetail(_)}>
-                                    <Card sx={{position: "relative", minHeight: "12.5vw"}}>
-                                        <CardContent>
-                                            <Grid container columns={11}>
-                                                <Grid item xs={9}>
-                                                    <PreTitle
-                                                        color={"secondary.light"}
-                                                        sx={{opacity: 0.5}}
-                                                    >
-                                                        {/* 1 */}
-                                                        {/* {_["name"]} */}
-                                                        {_.name}
-                                                    </PreTitle>
+                        {filteredResults.length > 0 ?
+                            filteredResults.map((_, id) =>
+                                (<Grid key={id} item xs={1} onClick={() => handleButtonDetail(_)}>
+                                        <Card sx={{position: "relative", minHeight: "12.5vw"}}>
+                                            <CardContent>
+                                                <Grid container columns={11}>
+                                                    <Grid item xs={9}>
+                                                        <PreTitle
+                                                            color={"secondary.light"}
+                                                            sx={{opacity: 0.5}}
+                                                        >
+                                                            {/* 1 */}
+                                                            {/* {_["name"]} */}
+                                                            {_.name}
+                                                        </PreTitle>
+                                                    </Grid>
+                                                    <Grid item xs={1}>
+                                                        <IconButton
+                                                            sx={{
+                                                                width: "2.1vw",
+                                                                height: "2.1vw",
+                                                                bgcolor: "secondary.main",
+                                                                borderRadius: "0.4vw",
+                                                                opacity: 0.8,
+                                                            }}
+                                                        >
+                                                            <MoreVertIcon fontSize="inherit"/>
+                                                        </IconButton>
+                                                    </Grid>
                                                 </Grid>
-                                                <Grid item xs={1}>
-                                                    <IconButton
-                                                        sx={{
-                                                            width: "2.1vw",
-                                                            height: "2.1vw",
-                                                            bgcolor: "secondary.main",
-                                                            borderRadius: "0.4vw",
-                                                            opacity: 0.8,
-                                                        }}
-                                                    >
-                                                        <MoreVertIcon fontSize="inherit"/>
-                                                    </IconButton>
+                                                {/* 2 */}
+                                                {/* <H2 mt={"2.5vw"}>{_["name"]}</H2> */}
+                                                <H2 mt={"1.5vw"} pb="2vw">
+                                                    {_.name}
+                                                </H2>
+                                                <Box position="absolute" bottom={"1vw"}>
+                                                    <Stack direction={"row"} spacing={"0.5vw"} mt={"0.5vw"}>
+                                                        <Box
+                                                            bgcolor={"secondary.main"}
+                                                            color={"secondary.light"}
+                                                            borderRadius={"1vw"}
+                                                            px={"0.9vw"}
+                                                            py={"0.2vw"}
+                                                            sx={{opacity: 0.8}}
+                                                        >
+                                                            {/* 3 */}
+                                                            {/* <SmallCopy>{_["name"]}</SmallCopy> */}
+                                                            <SmallCopy>{Moment(_.start_period).format('Y-m-d')}</SmallCopy>
+                                                        </Box>
+                                                        <Box
+                                                            bgcolor={"secondary.main"}
+                                                            color={"secondary.light"}
+                                                            borderRadius={"1vw"}
+                                                            px={"0.9vw"}
+                                                            py={"0.2vw"}
+                                                            sx={{opacity: 0.8}}
+                                                        >
+                                                            {/* 4 */}
+                                                            {/* <SmallCopy>{_["name"]}</SmallCopy> */}
+                                                            <SmallCopy>{Moment(_.end_period).format('Y-m-d')}</SmallCopy>
+                                                        </Box>
+                                                    </Stack>
+                                                </Box>
+                                            </CardContent>
+                                        </Card>
+                                    </Grid>
+                                )) :
+                            data.map((_, id) =>
+                                (<Grid key={id} item xs={1} onClick={() => handleButtonDetail(_)}>
+                                        <Card sx={{position: "relative", minHeight: "12.5vw"}}>
+                                            <CardContent>
+                                                <Grid container columns={11}>
+                                                    <Grid item xs={9}>
+                                                        <PreTitle
+                                                            color={"secondary.light"}
+                                                            sx={{opacity: 0.5}}
+                                                        >
+                                                            {/* 1 */}
+                                                            {/* {_["name"]} */}
+                                                            {_.name}
+                                                        </PreTitle>
+                                                    </Grid>
+                                                    <Grid item xs={1}>
+                                                        <IconButton
+                                                            sx={{
+                                                                width: "2.1vw",
+                                                                height: "2.1vw",
+                                                                bgcolor: "secondary.main",
+                                                                borderRadius: "0.4vw",
+                                                                opacity: 0.8,
+                                                            }}
+                                                        >
+                                                            <MoreVertIcon fontSize="inherit"/>
+                                                        </IconButton>
+                                                    </Grid>
                                                 </Grid>
-                                            </Grid>
-                                            {/* 2 */}
-                                            {/* <H2 mt={"2.5vw"}>{_["name"]}</H2> */}
-                                            <H2 mt={"1.5vw"} pb="2vw">
-                                                {_.name}
-                                            </H2>
-                                            <Box position="absolute" bottom={"1vw"}>
-                                                <Stack direction={"row"} spacing={"0.5vw"} mt={"0.5vw"}>
-                                                    <Box
-                                                        bgcolor={"secondary.main"}
-                                                        color={"secondary.light"}
-                                                        borderRadius={"1vw"}
-                                                        px={"0.9vw"}
-                                                        py={"0.2vw"}
-                                                        sx={{opacity: 0.8}}
-                                                    >
-                                                        {/* 3 */}
-                                                        {/* <SmallCopy>{_["name"]}</SmallCopy> */}
-                                                        <SmallCopy>{Moment(_.start_period).format('Y-m-d')}</SmallCopy>
-                                                    </Box>
-                                                    <Box
-                                                        bgcolor={"secondary.main"}
-                                                        color={"secondary.light"}
-                                                        borderRadius={"1vw"}
-                                                        px={"0.9vw"}
-                                                        py={"0.2vw"}
-                                                        sx={{opacity: 0.8}}
-                                                    >
-                                                        {/* 4 */}
-                                                        {/* <SmallCopy>{_["name"]}</SmallCopy> */}
-                                                        <SmallCopy>{Moment(_.end_period).format('Y-m-d')}</SmallCopy>
-                                                    </Box>
-                                                </Stack>
-                                            </Box>
-                                        </CardContent>
-                                    </Card>
-                                </Grid>
-                            ))
+                                                {/* 2 */}
+                                                {/* <H2 mt={"2.5vw"}>{_["name"]}</H2> */}
+                                                <H2 mt={"1.5vw"} pb="2vw">
+                                                    {_.name}
+                                                </H2>
+                                                <Box position="absolute" bottom={"1vw"}>
+                                                    <Stack direction={"row"} spacing={"0.5vw"} mt={"0.5vw"}>
+                                                        <Box
+                                                            bgcolor={"secondary.main"}
+                                                            color={"secondary.light"}
+                                                            borderRadius={"1vw"}
+                                                            px={"0.9vw"}
+                                                            py={"0.2vw"}
+                                                            sx={{opacity: 0.8}}
+                                                        >
+                                                            {/* 3 */}
+                                                            {/* <SmallCopy>{_["name"]}</SmallCopy> */}
+                                                            <SmallCopy>{Moment(_.start_period).format('Y-m-d')}</SmallCopy>
+                                                        </Box>
+                                                        <Box
+                                                            bgcolor={"secondary.main"}
+                                                            color={"secondary.light"}
+                                                            borderRadius={"1vw"}
+                                                            px={"0.9vw"}
+                                                            py={"0.2vw"}
+                                                            sx={{opacity: 0.8}}
+                                                        >
+                                                            {/* 4 */}
+                                                            {/* <SmallCopy>{_["name"]}</SmallCopy> */}
+                                                            <SmallCopy>{Moment(_.end_period).format('Y-m-d')}</SmallCopy>
+                                                        </Box>
+                                                    </Stack>
+                                                </Box>
+                                            </CardContent>
+                                        </Card>
+                                    </Grid>
+                                ))
                         }
                     </Grid>
                 )}
 
                 {listForm === "list" && (
                     <Stack spacing="1vw">
-                        {(searchInput.length > 1 ? filteredResults : data).map((_, id) => (
-                            <Grid
-                                container
-                                display="flex"
-                                justifyContent="space-between"
-                                alignItems="center"
-                                bgcolor="background.paper"
-                                py="1.5vw"
-                                px="3vw"
-                            >
-                                <Grid item xs={9}>
-                                    <Grid container display="flex" alignItems="center">
-                                        <Grid item xs={6}>
-                                            <BodyCopy
-                                                color={"secondary.light"}
-                                                sx={{opacity: 0.5}}
-                                            >
-                                                {/* 1 */}
-                                                {/* {_["name"]} */}
-                                                {_.name}
-                                            </BodyCopy>
-                                        </Grid>
-                                        <Grid item xs={6}>
-                                            {/* 2 */}
-                                            {/* <H2 mt={"2.5vw"}>{_["name"]}</H2> */}
-                                            <H2>{_.name}</H2>
+                        {filteredResults.length > 0 ?
+                            filteredResults.map((_, id) => (
+                                <Grid
+                                    container
+                                    display="flex"
+                                    justifyContent="space-between"
+                                    alignItems="center"
+                                    bgcolor="background.paper"
+                                    py="1.5vw"
+                                    px="3vw"
+                                >
+                                    <Grid item xs={9}>
+                                        <Grid container display="flex" alignItems="center">
+                                            <Grid item xs={6}>
+                                                <BodyCopy
+                                                    color={"secondary.light"}
+                                                    sx={{opacity: 0.5}}
+                                                >
+                                                    {/* 1 */}
+                                                    {/* {_["name"]} */}
+                                                    {_.name}
+                                                </BodyCopy>
+                                            </Grid>
+                                            <Grid item xs={6}>
+                                                {/* 2 */}
+                                                {/* <H2 mt={"2.5vw"}>{_["name"]}</H2> */}
+                                                <H2>{_.name}</H2>
+                                            </Grid>
                                         </Grid>
                                     </Grid>
-                                </Grid>
-                                <Grid item xs={3}>
-                                    <Grid container display="flex" alignItems="center">
-                                        <Grid item xs={4}>
-                                            <Box
-                                                bgcolor={"secondary.main"}
-                                                color={"secondary.light"}
-                                                borderRadius={"1vw"}
-                                                maxWidth="6vw"
-                                                px={"0.9vw"}
-                                                py={"0.4vw"}
-                                                sx={{opacity: 0.8}}
-                                            >
-                                                {/* 3 */}
-                                                {/* <SmallCopy>{_["name"]}</SmallCopy> */}
-                                                <SmallCopy>{Moment(_.start_period).format('Y-m-d')}</SmallCopy>
-                                            </Box>
-                                        </Grid>
-                                        <Grid item xs={4}>
-                                            <Box
-                                                bgcolor={"secondary.main"}
-                                                color={"secondary.light"}
-                                                borderRadius={"1vw"}
-                                                maxWidth="6vw"
-                                                px={"0.9vw"}
-                                                py={"0.4vw"}
-                                                sx={{opacity: 0.8}}
-                                            >
-                                                {/* 4 */}
-                                                {/* <SmallCopy>{_["name"]}</SmallCopy> */}
-                                                <SmallCopy>{Moment(_.end_period).format('Y-m-d')}</SmallCopy>
-                                            </Box>
-                                        </Grid>
-                                        <Grid item xs={4}>
-                                            <Grid container display="flex" alignItems="center">
-                                                <Grid item xs={4}>
-                                                    <IconButton
-                                                        onClick={() => handleButtonDetail(_)}
-                                                        size="small"
-                                                        sx={{
-                                                            bgcolor: "secondary.main",
-                                                            borderRadius: "0.4vw",
-                                                            opacity: 0.8,
-                                                            width: "2.1vw",
-                                                            height: "2.1vw",
-                                                        }}
-                                                    >
-                                                        <Visibility fontSize="inherit"/>
-                                                    </IconButton>
-                                                </Grid>
-                                                <Grid item xs={4}>
-                                                    <IconButton
-                                                        href={"/edit-program/" + _._id}
-                                                        size="small"
-                                                        sx={{
-                                                            bgcolor: "secondary.main",
-                                                            borderRadius: "0.4vw",
-                                                            opacity: 0.8,
-                                                            width: "2.1vw",
-                                                            height: "2.1vw",
-                                                        }}
-                                                    >
-                                                        <Edit fontSize="inherit"/>
-                                                    </IconButton>
-                                                </Grid>
-                                                <Grid item xs={4}>
-                                                    <IconButton
-                                                        onClick={() => handleButtonDelete(_._id)}
-                                                        size="small"
-                                                        sx={{
-                                                            bgcolor: "secondary.main",
-                                                            borderRadius: "0.4vw",
-                                                            opacity: 0.8,
-                                                            width: "2.1vw",
-                                                            height: "2.1vw",
-                                                        }}
-                                                    >
-                                                        <Delete fontSize="inherit"/>
-                                                    </IconButton>
+                                    <Grid item xs={3}>
+                                        <Grid container display="flex" alignItems="center">
+                                            <Grid item xs={4}>
+                                                <Box
+                                                    bgcolor={"secondary.main"}
+                                                    color={"secondary.light"}
+                                                    borderRadius={"1vw"}
+                                                    maxWidth="6vw"
+                                                    px={"0.9vw"}
+                                                    py={"0.4vw"}
+                                                    sx={{opacity: 0.8}}
+                                                >
+                                                    {/* 3 */}
+                                                    {/* <SmallCopy>{_["name"]}</SmallCopy> */}
+                                                    <SmallCopy>{Moment(_.start_period).format('Y-m-d')}</SmallCopy>
+                                                </Box>
+                                            </Grid>
+                                            <Grid item xs={4}>
+                                                <Box
+                                                    bgcolor={"secondary.main"}
+                                                    color={"secondary.light"}
+                                                    borderRadius={"1vw"}
+                                                    maxWidth="6vw"
+                                                    px={"0.9vw"}
+                                                    py={"0.4vw"}
+                                                    sx={{opacity: 0.8}}
+                                                >
+                                                    {/* 4 */}
+                                                    {/* <SmallCopy>{_["name"]}</SmallCopy> */}
+                                                    <SmallCopy>{Moment(_.end_period).format('Y-m-d')}</SmallCopy>
+                                                </Box>
+                                            </Grid>
+                                            <Grid item xs={4}>
+                                                <Grid container display="flex" alignItems="center">
+                                                    <Grid item xs={4}>
+                                                        <IconButton
+                                                            onClick={() => handleButtonDetail(_)}
+                                                            size="small"
+                                                            sx={{
+                                                                bgcolor: "secondary.main",
+                                                                borderRadius: "0.4vw",
+                                                                opacity: 0.8,
+                                                                width: "2.1vw",
+                                                                height: "2.1vw",
+                                                            }}
+                                                        >
+                                                            <Visibility fontSize="inherit"/>
+                                                        </IconButton>
+                                                    </Grid>
+                                                    <Grid item xs={4}>
+                                                        <IconButton
+                                                            href={"/edit-program/" + _._id}
+                                                            size="small"
+                                                            sx={{
+                                                                bgcolor: "secondary.main",
+                                                                borderRadius: "0.4vw",
+                                                                opacity: 0.8,
+                                                                width: "2.1vw",
+                                                                height: "2.1vw",
+                                                            }}
+                                                        >
+                                                            <Edit fontSize="inherit"/>
+                                                        </IconButton>
+                                                    </Grid>
+                                                    <Grid item xs={4}>
+                                                        <IconButton
+                                                            onClick={() => handleButtonDelete(_._id)}
+                                                            size="small"
+                                                            sx={{
+                                                                bgcolor: "secondary.main",
+                                                                borderRadius: "0.4vw",
+                                                                opacity: 0.8,
+                                                                width: "2.1vw",
+                                                                height: "2.1vw",
+                                                            }}
+                                                        >
+                                                            <Delete fontSize="inherit"/>
+                                                        </IconButton>
+                                                    </Grid>
                                                 </Grid>
                                             </Grid>
                                         </Grid>
                                     </Grid>
                                 </Grid>
-                            </Grid>
-                        ))
+                            )) :
+                            data.map((_, id) => (
+                                <Grid
+                                    container
+                                    display="flex"
+                                    justifyContent="space-between"
+                                    alignItems="center"
+                                    bgcolor="background.paper"
+                                    py="1.5vw"
+                                    px="3vw"
+                                >
+                                    <Grid item xs={9}>
+                                        <Grid container display="flex" alignItems="center">
+                                            <Grid item xs={6}>
+                                                <BodyCopy
+                                                    color={"secondary.light"}
+                                                    sx={{opacity: 0.5}}
+                                                >
+                                                    {/* 1 */}
+                                                    {/* {_["name"]} */}
+                                                    {_.name}
+                                                </BodyCopy>
+                                            </Grid>
+                                            <Grid item xs={6}>
+                                                {/* 2 */}
+                                                {/* <H2 mt={"2.5vw"}>{_["name"]}</H2> */}
+                                                <H2>{_.name}</H2>
+                                            </Grid>
+                                        </Grid>
+                                    </Grid>
+                                    <Grid item xs={3}>
+                                        <Grid container display="flex" alignItems="center">
+                                            <Grid item xs={4}>
+                                                <Box
+                                                    bgcolor={"secondary.main"}
+                                                    color={"secondary.light"}
+                                                    borderRadius={"1vw"}
+                                                    maxWidth="6vw"
+                                                    px={"0.9vw"}
+                                                    py={"0.4vw"}
+                                                    sx={{opacity: 0.8}}
+                                                >
+                                                    {/* 3 */}
+                                                    {/* <SmallCopy>{_["name"]}</SmallCopy> */}
+                                                    <SmallCopy>{Moment(_.start_period).format('Y-m-d')}</SmallCopy>
+                                                </Box>
+                                            </Grid>
+                                            <Grid item xs={4}>
+                                                <Box
+                                                    bgcolor={"secondary.main"}
+                                                    color={"secondary.light"}
+                                                    borderRadius={"1vw"}
+                                                    maxWidth="6vw"
+                                                    px={"0.9vw"}
+                                                    py={"0.4vw"}
+                                                    sx={{opacity: 0.8}}
+                                                >
+                                                    {/* 4 */}
+                                                    {/* <SmallCopy>{_["name"]}</SmallCopy> */}
+                                                    <SmallCopy>{Moment(_.end_period).format('Y-m-d')}</SmallCopy>
+                                                </Box>
+                                            </Grid>
+                                            <Grid item xs={4}>
+                                                <Grid container display="flex" alignItems="center">
+                                                    <Grid item xs={4}>
+                                                        <IconButton
+                                                            onClick={() => handleButtonDetail(_)}
+                                                            size="small"
+                                                            sx={{
+                                                                bgcolor: "secondary.main",
+                                                                borderRadius: "0.4vw",
+                                                                opacity: 0.8,
+                                                                width: "2.1vw",
+                                                                height: "2.1vw",
+                                                            }}
+                                                        >
+                                                            <Visibility fontSize="inherit"/>
+                                                        </IconButton>
+                                                    </Grid>
+                                                    <Grid item xs={4}>
+                                                        <IconButton
+                                                            href={"/edit-program/" + _._id}
+                                                            size="small"
+                                                            sx={{
+                                                                bgcolor: "secondary.main",
+                                                                borderRadius: "0.4vw",
+                                                                opacity: 0.8,
+                                                                width: "2.1vw",
+                                                                height: "2.1vw",
+                                                            }}
+                                                        >
+                                                            <Edit fontSize="inherit"/>
+                                                        </IconButton>
+                                                    </Grid>
+                                                    <Grid item xs={4}>
+                                                        <IconButton
+                                                            onClick={() => handleButtonDelete(_._id)}
+                                                            size="small"
+                                                            sx={{
+                                                                bgcolor: "secondary.main",
+                                                                borderRadius: "0.4vw",
+                                                                opacity: 0.8,
+                                                                width: "2.1vw",
+                                                                height: "2.1vw",
+                                                            }}
+                                                        >
+                                                            <Delete fontSize="inherit"/>
+                                                        </IconButton>
+                                                    </Grid>
+                                                </Grid>
+                                            </Grid>
+                                        </Grid>
+                                    </Grid>
+                                </Grid>
+                            ))
                         }
                     </Stack>
                 )}
