@@ -52,34 +52,3 @@ export const CreateKeywordGeneral = {
     keyword_notification: [KeywordNotification],
     keyword_shift: [KeywordShift]
 }
-
-export const BooleanOption = [
-    {_id: "1", set_value: "True"},
-    {_id: "2", set_value: "False"},
-];
-
-export const PointValueOption = [
-    {_id: "Fixed", set_value: "Fixed"},
-    {_id: "Flexible", set_value: "Flexible"},
-    {_id: "Fixed-Multiple", set_value: "Fixed-Multiple"},
-];
-export const MaxModeOption = [
-    {_id: "Day", set_value: "Day"},
-    {_id: "Month", set_value: "Month"},
-    {_id: "Year", set_value: "Year"},
-    {_id: "Shift", set_value: "Shift"},
-    {_id: "Program", set_value: "Program"},
-];
-export const TelkomselLOSTypeOption = [
-    {_id: "Day", set_value: "Day"},
-    {_id: "Month", set_value: "Month"},
-    {_id: "Year", set_value: "Year"},
-];
-export const TelkomselLOSOperatorOption = [
-    {_id: "LessThan", set_value: "LessThan"},
-    {_id: "LessOrEqualTo", set_value: "LessOrEqualTo"},
-    {_id: "EqualTo", set_value: "EqualTo"},
-    {_id: "MoreThan", set_value: "MoreThan"},
-    {_id: "MoreOrEqualTo", set_value: "MoreOrEqualTo"},
-    {_id: "Ranged", set_value: "Ranged"},
-];

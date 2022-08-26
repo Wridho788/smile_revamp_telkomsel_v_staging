@@ -1,6 +1,5 @@
 ﻿import {
-    CreateProgramInitial, ProgramItemInitial,
-    ProgramListInitial,
+
     ProgramPageDataInitial
 } from "../Utils/InitialState/ProgramInitial";
 import {
@@ -9,6 +8,7 @@ import {
     IProgramReducer
 } from "../Utils/Interface/IProgram";
 import {ActionTypes, Types} from "../Types/Types";
+import {CreateProgramInitial, ProgramListInitial} from "../../../pages/CreateProgram/programInitial";
 
 const initialState: IProgramReducer = {
     result: ProgramPageDataInitial,
@@ -24,41 +24,6 @@ export const ProgramReducer = (state: IProgramReducer = initialState, action: Ty
             return {loading: false, error: null, result: action.payload}
         case ActionTypes.FETCH_DATA_ERROR:
             return {loading: true, error: action.payload, result: ProgramPageDataInitial}
-        default:
-            return state;
-    }
-}
-
-const initialCreateProgramState: ICreateProgramReducer = {
-    result: CreateProgramInitial,
-    loading: false,
-    error: null
-}
-export const CreateProgramdReducer = (state: ICreateProgramReducer = initialCreateProgramState, action: Types): ICreateProgramReducer => {
-    switch (action.type) {
-        case ActionTypes.FETCH_DATA:
-            return {loading: true, error: null, result: CreateProgramInitial}
-        case ActionTypes.FETCH_DATA_SUCCESS:
-            return {loading: false, error: null, result: action.payload}
-        case ActionTypes.FETCH_DATA_ERROR:
-            return {loading: true, error: action.payload, result: CreateProgramInitial}
-        default:
-            return state;
-    }
-}
-const initialProgramList: IProgramListReducer = {
-    result: ProgramListInitial,
-    loading: false,
-    error: null
-}
-export const ProgramListReducer = (state: IProgramListReducer = initialProgramList, action: Types): IProgramListReducer => {
-    switch (action.type) {
-        case ActionTypes.FETCH_DATA:
-            return {loading: true, error: null, result: ProgramListInitial}
-        case ActionTypes.FETCH_DATA_SUCCESS:
-            return {loading: false, error: null, result: action.payload}
-        case ActionTypes.FETCH_DATA_ERROR:
-            return {loading: true, error: action.payload, result: ProgramListInitial}
         default:
             return state;
     }

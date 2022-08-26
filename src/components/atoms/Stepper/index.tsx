@@ -11,13 +11,13 @@ import StepConnector, {
     stepConnectorClasses,
 } from "@mui/material/StepConnector";
 import {StepIconProps} from "@mui/material/StepIcon";
-import {CreateProgramInitial, ProgramDetailInitial} from "../../../app/redux/Utils/InitialState/ProgramInitial";
 import {useCreateProgramMutation, useUpdateProgramMutation} from "../../../redux/features/program/program-api-slice";
 import {CircularProgress} from "@mui/material";
 import {CreateKeywordInitial} from "../../../pages/CreateKeyword/initial";
 import {CreateKeywordGeneral} from "../../organisms/CreateKeyword/initial";
 import {useKeywordGeneralCreateMutation} from "../../../redux/features/keyword/keyword-api-slice";
 import {useEffect, useState} from "react";
+import {CreateProgramInitial, ProgramItemInitial} from "../../../pages/CreateProgram/programInitial";
 
 const ColorlibConnector = styled(StepConnector)(({theme}) => ({
     [`&.${stepConnectorClasses.alternativeLabel}`]: {
@@ -133,7 +133,7 @@ export default function HorizontalLinearStepper({
             setIsLoading(true)
             if (type === "program") {
                 slug === "insert" ? await createProgram(CreateProgramInitial) : await updateProgram(CreateProgramInitial)
-                window.location.href = '/program-management'
+                // window.location.href = '/program-management'
             } else {
                 slug === "insert" ? await createKeywordGeneral(CreateKeywordGeneral) : await updateProgram(CreateKeywordGeneral)
                 // window.location.href = '/keyword'

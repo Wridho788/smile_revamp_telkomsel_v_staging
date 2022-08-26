@@ -6,9 +6,9 @@ import {ICreateProgram} from "../../../pages/CreateProgram/interface";
 
 const baseUrl = process.env.REACT_APP_BASE_URL
 
-export const programSlice = createApi({
-    reducerPath: 'programApi',
-    baseQuery: API_HEADER(baseUrl + '/v2/program'),
+export const accountSlice = createApi({
+    reducerPath: 'accountApi',
+    baseQuery: API_HEADER(baseUrl + '/v1/account'),
     endpoints(builder) {
 
         const responseHandler = (endpoint: string) =>
@@ -22,17 +22,6 @@ export const programSlice = createApi({
             builder.query<ICreateProgram, string>({
                 query: (_id:string) => ({
                     url: endpoint + _id + '/detail',
-                }),
-            });
-        const importFileHandler = (endpoint: string) =>
-            builder.mutation<{ success: boolean; body: any }, any>({
-                query: (body) => ({
-                    url: endpoint,
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'multipart/form-data;application/json'
-                    },
-                    body: body
                 }),
             });
         const postHandler = (endpoint: string) =>
@@ -69,37 +58,19 @@ export const programSlice = createApi({
             });
         return {
             // get
-            programList: responseHandler(baseUrl + '/v2/program'),
-            programTempList: responseHandler('/temp_list'),
-            programSegmentationList: responseHandler('/segmentation'),
-            detailProgram: detailHandler(baseUrl + '/v2/program/'),
-
-            // import file
-            importList: importFileHandler('/import_list'),
-
+            accountList: responseHandler(baseUrl + '/v1/account'),
+            accountRole: responseHandler('/role'),
             // post
-            createProgram: postHandler(baseUrl + '/v2/program'),
 
             // put
-            updateProgram: putHandler(baseUrl + '/v2/program/'),
 
             // delete
-            deleteProgram: deleteHandler(baseUrl + '/v2/program/'),
-            deleteProgramTempList: deleteHandler(baseUrl + '/v2/program/temp_list/'),
 
         };
     },
 });
 
 export const {
-    useProgramListQuery,
-    useLazyProgramListQuery,
-    useProgramTempListQuery,
-    useLazyProgramTempListQuery,
-    useCreateProgramMutation,
-    useImportListMutation,
-    useDeleteProgramMutation,
-    useDeleteProgramTempListMutation,
-    useDetailProgramQuery,
-    useUpdateProgramMutation
-} = programSlice;
+    useLazyAccountListQuery,
+    useLazyAccountRoleQuery
+} = accountSlice;

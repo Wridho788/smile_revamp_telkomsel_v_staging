@@ -20,7 +20,6 @@ const CreateProgram = () => {
     ];
 
     return (
-        <CreateProgramProvider>
             <Box
                 sx={{
                     paddingBlock: "3vw",
@@ -48,7 +47,6 @@ const CreateProgram = () => {
                     </Stepper>
                 </StepperPaper>
             </Box>
-        </CreateProgramProvider>
     );
 };
 

@@ -5,7 +5,7 @@ import { Select } from "../../../atoms";
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import { options } from "../../../../mocks/options";
 import {useGetBonusTypeQuery, useGetKeywordTypeQuery} from "../../../../redux/features/lov/lov-api-slice";
-import {useLocationBucketQuery} from "../../../../redux/features/location/notification-api-slice";
+import {useLocationBucketQuery} from "../../../../redux/features/location/location-api-slice";
 import {FilterInitial} from "../../../../redux/utils/initial-general";
 import {useEffect} from "react";
 import {CreateKeywordInitial, KeywordBonusInitial} from "../../../../pages/CreateKeyword/initial";

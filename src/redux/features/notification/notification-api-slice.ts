@@ -1,6 +1,6 @@
 import {createApi} from '@reduxjs/toolkit/query/react';
 import {API_HEADER} from "../../utils/header";
-import {IResponse} from "./interface";
+import {IResponse, IData, DetailResponse} from "./interface";
 import {IParams} from "../../utils/IGeneral";
 import {ICreateProgram} from "../../../pages/CreateProgram/interface";
 
@@ -14,13 +14,19 @@ export const notificationSlice = createApi({
             builder.query<IResponse, IParams>({
                 query: (params: IParams) => ({
                     url: endpoint,
-                    params: params
+                    params: params,
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
                 }),
             });
         const detailHandler = (endpoint: string) =>
-            builder.query<IResponse, string>({
+            builder.query<IData, string>({
                 query: (_id:string) => ({
                     url: endpoint + _id + '/detail',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
                 }),
             });
         return {

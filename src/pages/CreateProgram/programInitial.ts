@@ -1,54 +1,80 @@
-import {ICreateProgram, IFindProgram, IProgramItem, IProgramNotification} from "./interface";
+import {ICreateProgram, IFindProgram, IProgramItem, IProgramNotification, IProgramList} from "./interface";
+import {DetailResponse, IData} from "../../redux/features/notification/interface";
 
 export const ProgramNotificationInitial = [
     {
-        notification: "",
+        template: "",
         via: "",
-        receiver: "",
-        transaction_type: ""
+        notif_type: "",
+        template_content: ""
     },
     {
-        notification: "",
+        template: "",
         via: "",
-        receiver: "",
-        transaction_type: ""
+        notif_type: "",
+        template_content: ""
     },
 ]
 
 export const CreateProgramInitial: ICreateProgram = {
+    _id: "",
     name: "",
     desc: "",
-    start_period: "2022-01-01",
-    end_period: "2022-01-01",
+    start_period: new Date,
+    end_period: new Date,
     point_type: "",
-    program_notification: ProgramNotificationInitial,
     program_mechanism: "",
     program_owner: "",
     program_owner_detail: "",
+    keyword_registration: "",
+    whitelist_counter: true,
     logic: "",
-    c_los_enable: false,
-    c_los_value: 0,
-    c_point_balance: 0,
-    program_parent: "62f1436fbbdf15809f92c01c",
+    program_time_zone: "",
+    program_parent: "",
+    alarm_pic_type: "",
+    alarm_pic: [],
+    threshold_alarm_expired: 0,
+    threshold_alarm_voucher: 0,
+    program_notification: ProgramNotificationInitial
 }
 
 export const ProgramItemInitial: IProgramItem = {
     _id: "",
     name: "",
-    start_period: new Date(),
-    end_period: new Date(),
+    desc: "",
+    start_period: new Date,
+    end_period: new Date,
     point_type: "",
     program_mechanism: "",
     program_owner: "",
+    program_owner_detail: "",
+    keyword_registration: "",
+    whitelist_counter: true,
     logic: "",
+    program_time_zone: "",
     program_parent: "",
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    deletedAt: new Date(),
-    __v: 0,
-    program_bonus: []
-}
-export const ProgramDetailInitial : IFindProgram= {
-    data:CreateProgramInitial,
+    alarm_pic_type: "",
+    alarm_pic: [],
+    threshold_alarm_expired: 0,
+    threshold_alarm_voucher: 0,
+    program_notification: ProgramNotificationInitial
 }
 
+
+export const ProgramListInitial: IProgramList = {
+    data: [ProgramItemInitial],
+    total: 0
+}
+export const ProgramDetailInitial: IFindProgram = {
+    data: CreateProgramInitial,
+}
+export const NotificationTemplateInitial: IData = {
+        _id: "",
+        notif_type: "",
+        notif_via: "",
+        notif_content: "",
+    }
+
+export const notificationTemplateDetailInitial: DetailResponse = {
+    data: NotificationTemplateInitial
+}

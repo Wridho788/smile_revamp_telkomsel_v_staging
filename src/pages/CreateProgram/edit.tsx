@@ -9,7 +9,7 @@ import {
 import {CreateProgramProvider} from "../../app/context/CreateProgram/Provider";
 import {useParams} from "react-router-dom";
 import {useDetailProgramQuery} from "../../redux/features/program/program-api-slice";
-import {ProgramDetailInitial} from "../../app/redux/Utils/InitialState/ProgramInitial";
+import { ProgramDetailInitial } from "./programInitial";
 
 const EditProgram = () => {
     let {_id} = useParams()
@@ -44,6 +44,7 @@ const EditProgram = () => {
                         steps={steps}
                         activeStep={activeStep}
                         setActiveStep={setActiveStep}
+                        type={"program"}
                     >
                         {isLoading ? <Box sx={{
                                 display: 'flex',

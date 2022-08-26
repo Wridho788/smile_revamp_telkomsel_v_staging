@@ -77,9 +77,9 @@ const Segmentation: React.FunctionComponent<ISegmentationProps> = () => {
     }
 
     const handleProcess = async () => {
-        const Data: IProgramImportFile = {
-            file: fileName,
-            type: typeMSSIDN
+        const Data = {
+            "file": fileName,
+            "type": typeMSSIDN
         }
         setIsLoading(true)
         await importFile({Data})

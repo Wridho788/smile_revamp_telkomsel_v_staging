@@ -18,14 +18,14 @@ import {useKeywordListQuery} from "../../../../redux/features/keyword/keyword-ap
 import {keywordTypeOptions, optionsObj} from "../../../../mocks/options";
 import {
     BooleanOption,
-    CreateKeywordGeneral,
     MaxModeOption,
     PointValueOption,
     TelkomselLOSOperatorOption, TelkomselLOSTypeOption
-} from "../initial";
+} from "../../../../redux/utils/initial-general";
 import {useState} from "react";
 import {useMerchantManagementListQuery} from "../../../../redux/features/merchant/merchant-api-slice";
 import {useChannelListQuery} from "../../../../redux/features/channel/merchant-api-slice";
+import { CreateKeywordGeneral } from "../initial";
 
 interface IMainInfoProps {
 }
