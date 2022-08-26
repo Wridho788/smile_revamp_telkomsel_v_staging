@@ -74,19 +74,22 @@ export interface ICreateProgram {
     _id?: string
     name: string,
     desc: string,
-    start_period: string,
-    end_period: string,
+    start_period: Date,
+    end_period: Date,
     point_type: string,
-    program_notification: Array<IProgramNotification>,
+    program_experience: string,
     program_mechanism: string,
     program_owner: string,
     program_owner_detail: string,
+    whitelist_counter: boolean,
     logic: string,
+    program_time_zone: string,
     program_parent: string,
-    c_los_enable: boolean,
-    c_los_value: number,
-    c_point_balance: number,
-
+    alarm_pic_type: string,
+    alarm_pic: string[],
+    threshold_alarm_expired: number,
+    threshold_alarm_voucher: number,
+    program_notification: Array<IProgramNotification>,
 }
 
 export interface IProgramImportFile {
@@ -101,21 +104,27 @@ export interface IDefaultListResult {
 
 
 export interface IProgramItem {
-    _id: string
-    name: string
-    start_period: Date
-    end_period: Date
-    point_type: string
-    program_mechanism: string
-    program_owner: string
-    logic: string
-    program_parent: string
-    createdAt: Date
-    updatedAt: Date
-    deletedAt: Date
-    __v: 0,
-    program_bonus: any[]
+    _id?: string
+    name: string,
+    desc: string,
+    start_period: Date,
+    end_period: Date,
+    point_type: string,
+    program_experience: string,
+    program_mechanism: string,
+    program_owner: string,
+    program_owner_detail: string,
+    whitelist_counter: boolean,
+    logic: string,
+    program_time_zone: string,
+    program_parent: string,
+    alarm_pic_type: string,
+    alarm_pic: string[],
+    threshold_alarm_expired: number,
+    threshold_alarm_voucher: number,
+    program_notification: Array<IProgramNotification>,
 }
+
 
 export interface IProgramList {
     data: Array<IProgramItem>

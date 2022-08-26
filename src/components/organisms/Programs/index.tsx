@@ -1,33 +1,45 @@
 import * as React from "react";
 import {Box, Card, CardContent, CircularProgress, Grid, IconButton, Input, Stack} from "@mui/material";
 import {BodyCopy, H2, SmallCopy, PreTitle} from "../..";
-import KeywordSearch from "../../atoms/KeywordSearch";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import DarkButton from "../../atoms/DarkButton";
 import ListButton from "../../atoms/ListButton";
 import CardButton from "../../atoms/CardButton";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import {useTypedSelector} from "../../../app/hooks/useTypedSelector";
-import {useActions} from "../../../app/hooks/useActions";
 import {useEffect, useState} from "react";
-import mock from "../../../mock-data/programs-data.json";
 import {useNavigate} from "react-router-dom";
 import Moment from 'moment';
 import {Add, Delete, Edit, Visibility} from "@mui/icons-material";
 import Modal from "../../../atomic/components/atoms/Modal";
-import {IProgramItem} from "../../../app/redux/Utils/Interface/IProgram";
-import {ProgramItemInitial} from "../../../app/redux/Utils/InitialState/ProgramInitial";
-import {programDetail} from "../../../app/redux/Actions/Program";
+import {
+    useDeleteProgramMutation, useLazyProgramListQuery,
+    useLazyProgramTempListQuery,
+    useProgramListQuery
+} from "../../../redux/features/program/program-api-slice";
+import {FilterInitial} from "../../../redux/utils/initial-general";
+import {IData} from "../../../redux/features/program/interface";
+import {ProgramItemInitial} from "./initial";
+import Swal from "sweetalert2";
 
 const Programs: React.FunctionComponent = () => {
+    const [getProgramList, {
+        data: programList = {data: [ProgramItemInitial]},
+        isError,
+        isLoading
+    }] = useLazyProgramListQuery()
+    const [deleteProgram, {isLoading: deleteLoading}] = useDeleteProgramMutation()
+    const navigate = useNavigate()
+    const [open, setOpen] = React.useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
+    const [listForm, setListForm] = React.useState<string>("list");
+    const [item, setItem] = useState(programList.data[0]);
 
-    const [searchInput, setSearchInput] = useState<string>('');
-
-    const {result, error, loading} = useTypedSelector(state => state.programList);
+    const data = programList.data;
+    const [searchInput, setSearchInput] = useState('');
+    const [filteredResults, setFilteredResults] = useState(data);
     useEffect(() => {
-        getProgramList({});
-    }, [result]);
-    useEffect(() => {
+        getProgramList({})
         if (searchInput !== '') {
             const filteredData = data.filter((i) => {
                 return Object.values(i).join('').toLowerCase().includes(searchInput.toLowerCase())
@@ -36,45 +48,43 @@ const Programs: React.FunctionComponent = () => {
         } else {
             setFilteredResults(data)
         }
+
     }, [searchInput]);
-    const data = result.data;
-    const [filteredResults, setFilteredResults] = useState(data);
-
-
-    const navigate = useNavigate()
-    const [open, setOpen] = React.useState(false);
-    const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
-    const [listForm, setListForm] = React.useState<string>("list");
-    const {getProgramList, deleteProgram} = useActions();
-    const [item, setItem] = useState(ProgramItemInitial);
 
     const handleButtonDelete = async (_id: string) => {
-        const tes = await deleteProgram(_id)
-        console.log(tes)
-        getProgramList({});
+        Swal.fire({
+            title: 'Do you want to delete data?',
+            showDenyButton: true,
+            confirmButtonText: `Delete`,
+            denyButtonText: `Don't Delete`,
+        }).then(async (result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+                deleteProgram(_id)
+               await Swal.fire('Deleted!', '', 'success')
+                getProgramList({})
+            } else if (result.isDenied) {
+                Swal.fire('Data are not deleted', '', 'info')
+            }
+        });
     }
-    const handleButtonDetail = async (item: IProgramItem) => {
+    const handleButtonDetail = async (item: IData) => {
         setItem(item)
         handleOpen()
     }
-
-    if (error) {
-        return <h1 style={{color: 'red', fontWeight: '700'}}>{error}</h1>
+    if (isError) {
+        return <h1 style={{color: 'red', fontWeight: '700'}}>{isError}</h1>
     }
-
-
-    console.log(filteredResults.length);
     const description = <>
-        <li>{item.name}</li>
-        <li>{item.program_mechanism}</li>
-        <li>{Moment(item.start_period).format('Y-m-d')}</li>
-        <li>{Moment(item.end_period).format('Y-m-d')}</li>
+        <li>{item.name ?? ''}</li>
+        <li>{item.program_mechanism ?? ''}</li>
+        <li>{Moment(item.start_period ?? '2000-10-10').format('Y-m-d')}</li>
+        <li>{Moment(item.end_period ?? '2000-10-10').format('Y-m-d')}</li>
     </>
 
     return (
         <>
-            <Modal open={open} handleClose={handleClose} title={item.name} description={description}/>
+            <Modal open={open} handleClose={handleClose} title={item.name} description={<li>es</li>}/>
             <Stack direction={"row"} justifyContent={"space-between"}>
                 <H2 color={"secondary.dark"}>Program</H2>
                 <Stack direction="row" alignItems="center" spacing={"1vw"}>
@@ -133,7 +143,7 @@ const Programs: React.FunctionComponent = () => {
 
             <Box mt={5}>
                 {
-                    loading && <Box sx={{
+                    (isLoading || deleteLoading) && <Box sx={{
                         display: 'flex',
                         justifyContent: "center",
                         alignItems: "center",

@@ -1,47 +1,21 @@
 import React from "react";
-import { Box } from "@mui/material";
-import { H2, Stepper, StepperPaper } from "../../components";
-import {
-  MainInfo,
-  Notification,
-  Bonus,
-  Summary,
-} from "../../components/organisms/Keyword";
-import { KeywordAuctionProvider } from "../../app/context/KeywordAuction/Provider";
+import { Box, Grid } from "@mui/material";
+import Keywords from "../../components/organisms/Keywords";
+
 
 const Keyword = () => {
-  const [activeStep, setActiveStep] = React.useState<number>(0);
-  const steps = ["Main Info", "Bonus", "Notification", "Summary"];
-  const stepsItem = [<MainInfo />, <Bonus />, <Notification />, <Summary />];
-
   return (
-    <KeywordAuctionProvider>
-      <Box
-        sx={{
-          paddingBlock: "3vw",
-          paddingInline: "20vw",
-        }}
-      >
-        {/* <SingleBreadcrumbs
-        firstTitle="Dashboard"
-        secondTitle="Program"
-        title="Create Program"
-        sx={{ mb: "3vw" }}
-      /> */}
-        <StepperPaper sx={{ paddingTop: "4vw" }}>
-          <H2 textAlign="center" mb="2vw">
-            Keyword
-          </H2>
-          <Stepper
-            steps={steps}
-            activeStep={activeStep}
-            setActiveStep={setActiveStep}
-          >
-            {stepsItem[activeStep]}
-          </Stepper>
-        </StepperPaper>
-      </Box>
-    </KeywordAuctionProvider>
+    <Box
+      sx={{
+        paddingTop: "3vw",
+        paddingLeft: "50px",
+        paddingRight: "50px",
+      }}
+    >
+        <Grid item xs={7}>
+          <Keywords />
+        </Grid>
+    </Box>
   );
 };
 
