@@ -1,9 +1,9 @@
-import {createApi} from '@reduxjs/toolkit/query/react';
-import {API_HEADER} from "../../utils/header";
-import {IResponse} from "./interface";
-import {IParams} from "../../utils/IGeneral";
+import { createApi } from "@reduxjs/toolkit/query/react";
+import { API_HEADER } from "../../utils/header";
+import { IResponse } from "./interface";
+import { IParams } from "../../utils/IGeneral";
 
-const baseUrl = process.env.REACT_APP_BASE_URL
+const baseUrl = process.env.REACT_APP_BASE_URL;
 
 export const channelSlice = createApi({
     reducerPath: 'channelApi',
@@ -54,6 +54,4 @@ export const channelSlice = createApi({
     },
 });
 
-export const {
-    useChannelListQuery
-} = channelSlice;
+export const { useChannelListQuery } = channelSlice;

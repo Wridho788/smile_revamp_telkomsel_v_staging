@@ -37,6 +37,7 @@ const CreateKeyword = () => {
             activeStep={activeStep}
             setActiveStep={setActiveStep}
             slug={"insert"}
+            type={"keyword"}
           >
             {stepsItem[activeStep]}
           </Stepper>

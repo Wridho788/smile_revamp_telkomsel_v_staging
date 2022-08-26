@@ -8,6 +8,7 @@ import {keywordSlice} from "../features/keyword/keyword-api-slice";
 import {merchantSlice} from "../features/merchant/merchant-api-slice";
 import {channelSlice} from "../features/channel/merchant-api-slice";
 import { accountSlice } from '../features/account/account-api-slice';
+import {productSlice} from "../features/product/product-api-slice";
 
 export const rootReducer = combineReducers({
     [lovSlice.reducerPath]: lovSlice.reducer,
@@ -19,5 +20,6 @@ export const rootReducer = combineReducers({
     [merchantSlice.reducerPath]: merchantSlice.reducer,
     [channelSlice.reducerPath]: channelSlice.reducer,
     [accountSlice.reducerPath]: accountSlice.reducer,
+    [productSlice.reducerPath]: productSlice.reducer,
 })
 
