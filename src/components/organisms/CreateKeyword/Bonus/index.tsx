@@ -9,7 +9,6 @@ import {useLocationBucketQuery} from "../../../../redux/features/location/locati
 import {FilterInitial} from "../../../../redux/utils/initial-general";
 import {useEffect} from "react";
 import {CreateKeywordInitial, KeywordBonusInitial} from "../../../../pages/CreateKeyword/initial";
-
 interface IBonusProps {}
 
 const Bonus: React.FunctionComponent<IBonusProps> = (props) => {

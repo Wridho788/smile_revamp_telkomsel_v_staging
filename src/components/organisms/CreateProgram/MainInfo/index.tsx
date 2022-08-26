@@ -32,7 +32,6 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
                                                                slug
                                                            }: IMainInfoProps) => {
 
-
     let programData = ProgramDetailInitial.data
     let {_id} = useParams()
     const {data: fetchDetail = programData, isLoading} = useDetailProgramQuery(_id ?? '')
@@ -106,7 +105,6 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
             programData.alarm_pic.splice(index, 1)
         }
     };
-
     React.useEffect(() => {
         programData.name = programNameLabel;
         programData.desc = programDescriptionLabel;
