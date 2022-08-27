@@ -6,6 +6,7 @@ import {
   Card,
   CardActions,
   CardContent,
+  Chip,
   Container,
   Dialog,
   DialogActions,
@@ -56,14 +57,14 @@ const Index = () => {
     detail: false,
   });
   const [filter, setFilter] = React.useState({
-    brand: "",
     msisdn: "",
-    search: "",
+    cluster_sales: "",
+    region: "",
   });
   const [queryFilter, setQueryFilter] = React.useState({
-    brand: "",
     msisdn: "",
-    search: "",
+    cluster_sales: "",
+    region: "",
   });
   const [paginationCustomer, setPaginationCustomer] = React.useState({
     page: 0,
@@ -95,7 +96,7 @@ const Index = () => {
   } = useCustomerListQuery({
     skip: page,
     limit,
-    filter: `{"msisdn":"${queryFilter.msisdn}", "region_lacci": "${queryFilter.brand}", "arpu": "${queryFilter.search}"}`,
+    filter: `{"msisdn":"${queryFilter.msisdn}", "region_lacci": "${queryFilter.region}", "cluster_sales": "${queryFilter.cluster_sales}"}`,
     sort: "{}",
   });
   const {
@@ -136,9 +137,9 @@ const Index = () => {
 
   // ==================== Handler =======================
   const handleSearch = (e: any) => {
-    setFilter({ ...filter, search: e.target.value });
+    setFilter({ ...filter, msisdn: e.target.value });
     setTimeout(
-      () => setQueryFilter({ ...queryFilter, search: e.target.value }),
+      () => setQueryFilter({ ...queryFilter, msisdn: e.target.value }),
       1000
     );
   };
@@ -148,22 +149,17 @@ const Index = () => {
   const handleFilter = async () => {
     setQueryFilter({
       ...filter,
-      brand: filter.brand,
-      msisdn: filter.msisdn,
-    });
-    setFilter({
-      brand: "",
-      msisdn: "",
-      search: "",
+      cluster_sales: filter.cluster_sales,
+      region: filter.region,
     });
     setOpen({ ...open, filter: false });
   };
 
   const handleCloseFilter = async () => {
     setFilter({
-      brand: "",
       msisdn: "",
-      search: "",
+      region: "",
+      cluster_sales: "",
     });
     setOpen({ ...open, filter: false });
   };
@@ -179,42 +175,74 @@ const Index = () => {
   //====================== Memo for Searching component ==========================
   const subHeaderComponentMemo = React.useMemo(() => {
     return (
-      <Box sx={{ display: "flex" }}>
-        <FormControl
-          sx={{
-            width: "25ch",
-            "& .MuiInputBase-root": {
-              borderRadius: "4px",
-            },
-          }}
-        >
-          <OutlinedInput
-            name="search"
-            value={filter.search}
-            onChange={handleSearch}
+      <Box
+        sx={{ display: "flex", width: "100%", justifyContent: "space-between" }}
+      >
+        <div>
+          {queryFilter.region && (
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              <SmallCopy>Region: </SmallCopy>
+              <Chip
+                label={queryFilter.region}
+                variant="outlined"
+                onDelete={() => {
+                  setQueryFilter({ ...queryFilter, region: "" });
+                  setFilter({ ...filter, region: "" });
+                }}
+              />
+            </Box>
+          )}
+          {queryFilter.cluster_sales && (
+            <Box sx={{ isplay: "flex", alignItems: "center" }}>
+              <SmallCopy>Cluster Sales: </SmallCopy>
+              <Chip
+                label={queryFilter.cluster_sales}
+                variant="outlined"
+                onDelete={() => {
+                  setQueryFilter({ ...queryFilter, cluster_sales: "" });
+                  setFilter({ ...filter, cluster_sales: "" });
+                }}
+              />
+            </Box>
+          )}
+        </div>
+        <div>
+          <FormControl
             sx={{
-              "& .MuiInputBase-input": {
-                padding: "5px 10px",
+              width: "25ch",
+              "& .MuiInputBase-root": {
+                borderRadius: "4px",
               },
             }}
-            placeholder="Search"
-          />
-        </FormControl>
-        <Button
-          sx={{
-            marginLeft: 3,
-            minWidth: "100px",
-            backgroundColor: "#001A41",
-          }}
-          variant="contained"
-          endIcon={<FilterAlt />}
-          onClick={() => setOpen({ ...open, filter: true })}
-        >
-          <PreTitle>Filter</PreTitle>
-        </Button>
+          >
+            <OutlinedInput
+              name="msisdn"
+              value={filter.msisdn}
+              onChange={handleSearch}
+              sx={{
+                "& .MuiInputBase-input": {
+                  padding: "5px 10px",
+                },
+              }}
+              placeholder="Search"
+            />
+          </FormControl>
+          <Button
+            sx={{
+              marginLeft: 3,
+              minWidth: "100px",
+              backgroundColor: "#001A41",
+            }}
+            variant="contained"
+            endIcon={<FilterAlt />}
+            onClick={() => setOpen({ ...open, filter: true })}
+          >
+            <PreTitle>Filter</PreTitle>
+          </Button>
+        </div>
       </Box>
     );
-  }, [filter.search]);
+  }, [filter.msisdn, queryFilter.region, queryFilter.cluster_sales]);
 
   //
   const TableColumnCustomers: TableColumn<TableDataRows<any>>[] = [
@@ -394,19 +422,19 @@ const Index = () => {
             fullWidth
             freeSolo
             disableClearable
-            value={filter.msisdn}
-            onChange={(e: any) => {
-              setFilter({ ...filter, msisdn: e.target.value });
-            }}
             id="combo-box-demo"
             options={[""]}
             sx={{ margin: "10px 0" }}
+            value={filter.region}
+            onChange={(e: any, newValue: string) =>
+              setFilter({ ...filter, region: newValue })
+            }
             renderInput={(params) => (
               <TextField
                 {...params}
-                name="msisdn"
                 onChange={handleChange}
-                label="MSISDN"
+                name="region"
+                label="Region"
               />
             )}
           />
@@ -418,16 +446,16 @@ const Index = () => {
             id="combo-box-demo"
             options={[""]}
             sx={{ margin: "10px 0" }}
-            value={filter.brand}
-            onChange={(e: any) =>
-              setFilter({ ...filter, brand: e.target.value })
+            value={filter.cluster_sales}
+            onChange={(e: any, newValue: string) =>
+              setFilter({ ...filter, cluster_sales: newValue })
             }
             renderInput={(params) => (
               <TextField
                 {...params}
                 onChange={handleChange}
-                name="brand"
-                label="Brand"
+                name="cluster_sales"
+                label="Cluster Sales"
               />
             )}
           />
@@ -445,9 +473,68 @@ const Index = () => {
         open={open.detail}
         onClose={() => setOpen({ ...open, detail: false })}
       >
-        <DialogTitle variant="h5">Filter</DialogTitle>
+        <DialogTitle variant="h5">
+          Customer: {customerDetail && customerDetail.msisdn}
+        </DialogTitle>
         <DialogContent>
-          <SmallCopy></SmallCopy>
+          <SmallCopy>
+            Customer Profile From BI:{" "}
+            {customerDetail && customerDetail.nik_rgn_name}
+          </SmallCopy>
+          <SmallCopy>
+            Customer Level / Tier:{" "}
+            {customerDetail && customerDetail.loyalty_tier.join()}
+          </SmallCopy>
+          <SmallCopy>
+            Customer LOS: {customerDetail && customerDetail.loyalty_tier.join()}
+          </SmallCopy>
+          <SmallCopy>
+            Customer Type:{" "}
+            {customerDetail && customerDetail.loyalty_tier.join()}
+          </SmallCopy>
+          <SmallCopy>
+            Customer Location-City:{" "}
+            {customerDetail && customerDetail.loyalty_tier.join()}
+          </SmallCopy>
+          <SmallCopy>
+            Customer Brand:{" "}
+            {customerDetail && customerDetail.loyalty_tier.join()}
+          </SmallCopy>
+          <SmallCopy>
+            Customer ARPU:{" "}
+            {customerDetail && customerDetail.loyalty_tier.join()}
+          </SmallCopy>
+          <SmallCopy>
+            Customer BCP Profile:{" "}
+            {customerDetail && customerDetail.loyalty_tier.join()}
+          </SmallCopy>
+          <SmallCopy>
+            Customer Prepaid Registration:{" "}
+            {customerDetail && customerDetail.loyalty_tier.join()}
+          </SmallCopy>
+          <SmallCopy>
+            Customer Telkomsel Employee Numbers:{" "}
+            {customerDetail && customerDetail.loyalty_tier.join()}
+          </SmallCopy>
+          <SmallCopy>
+            IMEI: {customerDetail && customerDetail.loyalty_tier.join()}
+          </SmallCopy>
+          <SmallCopy>
+            Complete Name:{" "}
+            {customerDetail && customerDetail.loyalty_tier.join()}
+          </SmallCopy>
+          <SmallCopy>
+            Email: {customerDetail && customerDetail.loyalty_tier.join()}
+          </SmallCopy>
+          <SmallCopy>
+            Province: {customerDetail && customerDetail.loyalty_tier.join()}
+          </SmallCopy>
+          <SmallCopy>
+            Postal Code: {customerDetail && customerDetail.loyalty_tier.join()}
+          </SmallCopy>
+          <SmallCopy>
+            Address: {customerDetail && customerDetail.loyalty_tier.join()}
+          </SmallCopy>
         </DialogContent>
       </Dialog>
     </DrawerNav>
