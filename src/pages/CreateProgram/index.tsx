@@ -20,7 +20,6 @@ const CreateProgram = () => {
     ];
 
     return (
-        <CreateProgramProvider>
             <Box
                 sx={{
                     paddingBlock: "3vw",
@@ -42,12 +41,12 @@ const CreateProgram = () => {
                         activeStep={activeStep}
                         setActiveStep={setActiveStep}
                         slug={"insert"}
+                        type={"program"}
                     >
                         {stepsItem[activeStep]}
                     </Stepper>
                 </StepperPaper>
             </Box>
-        </CreateProgramProvider>
     );
 };
 

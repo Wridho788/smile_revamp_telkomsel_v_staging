@@ -1,123 +1,206 @@
 import * as React from "react";
 import { Grid, Stack, IconButton, Box, Button } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { Select } from "../../../atoms";
+import { OutlinedTextField, Select } from "../../../atoms";
 import AddBoxIcon from "@mui/icons-material/AddBox";
-import { options } from "../../../../mocks/options";
-import {useGetBonusTypeQuery, useGetKeywordTypeQuery} from "../../../../redux/features/lov/lov-api-slice";
-import {useLocationBucketQuery} from "../../../../redux/features/location/notification-api-slice";
-import {FilterInitial} from "../../../../redux/utils/initial-general";
-import {useEffect} from "react";
-import {CreateKeywordInitial, KeywordBonusInitial} from "../../../../pages/CreateKeyword/initial";
+import { useGetBonusTypeQuery } from "../../../../redux/features/lov/lov-api-slice";
+import { FilterInitial } from "../../../../redux/utils/initial-general";
+import { CreateKeywordGeneral } from "../initial";
+import { ICreateKeyword } from "../interface";
+import { useProductSelectBoxQuery } from "../../../../redux/features/product/product-api-slice";
+import { useLocationTemplateQuery } from "../../../../redux/features/location/location-api-slice";
 
 interface IBonusProps {}
 
 const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
-  const keywordCreate = CreateKeywordInitial
-  const keywordBonus = KeywordBonusInitial
-  const {data: bucketOption = {data: []}} = useLocationBucketQuery(FilterInitial)
-  const {data: bonusTypeOption = {data: []}} = useGetBonusTypeQuery()
-  const [index, setIndex] = React.useState<number>(0);
-  const [type, setType] = React.useState<string>("");
-  const [bucket, setBucket] = React.useState<string>(keywordCreate.keyword_bonus[index].bucket);
-  const [quantity, setQuantity] = React.useState<string>("");
-  const [granular, setGranular] = React.useState<string>("");
-  const [bid, setBid] = React.useState<string>("");
-  const [bonus, setBonus] = React.useState<string>("");
-  const [totalRow, setTotalRow] = React.useState<number[]>([1]);
-  const handleAddBonus = () =>{
-    setIndex(index + 1)
-    setTotalRow((prevState) => [...prevState, prevState.length])
-    keywordBonus.bonus_type =type
-    keywordBonus.bucket =bucket
-    keywordCreate.keyword_bonus.push(keywordBonus)
+  const keywordCreate = CreateKeywordGeneral;
+  const [keywordCreateState, setKeywordCreateState] =
+    React.useState<ICreateKeyword>(keywordCreate);
+  const [stateTrigger, setStateTrigger] = React.useState<boolean>(false);
 
-  }
-useEffect(()=>{
-},[
-    type,
-    bucket
-])
+  const { data: bonusTypeOption = { data: [] } } = useGetBonusTypeQuery();
+  const { data: bonusProductOption = [] } =
+    useProductSelectBoxQuery(FilterInitial);
+  const { data: bonusLocationOption = { data: [] } } =
+    useLocationTemplateQuery(FilterInitial);
+
+  React.useEffect(() => {
+    setKeywordCreateState(keywordCreate);
+  }, [keywordCreate, stateTrigger]);
+  console.log(keywordCreate);
   return (
     <Box pt="1vw">
-      <Stack maxWidth={"100%"} spacing="3vw">
-        {totalRow.map((_, idx) => (
-          <Grid
-            key={`rowItem__${idx}`}
-            container
-            columns={31}
-            border="0.1vw solid rgba(0, 0, 0, 0.1)"
-            borderRadius="0.3vw"
-            p="3vw"
-          >
-            <Grid item xs={5} pr={"1.5vw"}>
-              <Select
-                direction="column"
-                label="Type"
-                placeholder="Option"
-                options={bonusTypeOption.data}
-                value={type}
-                handleChange={setType}
-              />
-            </Grid>
-            <Grid item xs={5} pr={"1.5vw"}>
-              <Select
-                direction="column"
-                label="Bucket"
-                placeholder="Option"
-                options={bucketOption.data}
-                value={bucket}
-                handleChange={setBucket}
-              />
-            </Grid>
-            <Grid item xs={5} pr={"1.5vw"}>
-              <Select
-                direction="column"
-                label="Quantity"
-                placeholder="Option"
-                options={options}
-                value={quantity}
-                // handleChange={setQuantity}
-              />
-            </Grid>
-            <Grid item xs={5} pr={"1.5vw"}>
-              <Select
-                direction="column"
-                label="Granular"
-                placeholder="Option"
-                options={options}
-                value={granular}
-                // handleChange={setGranular}
-              />
-            </Grid>
-            <Grid item xs={5} pr={"1.5vw"}>
-              <Select
-                direction="column"
-                label="Bid"
-                placeholder="Option"
-                options={options}
-                value={bid}
-                // handleChange={setBid}
-              />
-            </Grid>
-            <Grid item xs={5} pr={"1.5vw"}>
-              <Select
-                direction="column"
-                label="Bonus"
-                placeholder="Option"
-                options={options}
-                value={bonus}
-                // handleChange={setBonus}
-              />
+      <Stack maxWidth={"100%"} spacing="2vw">
+        {keywordCreate.keyword_bonus.map((_, idx) => (
+          <Grid key={`rowItem__${idx}`} container columns={12} px="3vw">
+            <Grid
+              item
+              xs={11}
+              border="0.1vw solid rgba(0, 0, 0, 0.1)"
+              borderRadius="0.3vw"
+              p="2vw"
+            >
+              <Grid container columns={12} spacing={"1vw"}>
+                <Grid item xs={3}>
+                  <Select
+                    direction="column"
+                    label="Type"
+                    placeholder="Option"
+                    options={bonusTypeOption.data}
+                    value={keywordCreateState.keyword_bonus[idx].bonus_type}
+                    handleChange={(value: any) => {
+                      keywordCreate.keyword_bonus[idx].bonus_type = value;
+                      setStateTrigger(!stateTrigger);
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={3}>
+                  <Select
+                    direction="column"
+                    label="Location"
+                    placeholder="Option"
+                    options={bonusLocationOption.data}
+                    optionLabel={"name"}
+                    value={keywordCreateState.keyword_bonus[idx].location}
+                    handleChange={(value: any) => {
+                      keywordCreate.keyword_bonus[idx].location = value;
+                      setStateTrigger(!stateTrigger);
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={3}>
+                  <Select
+                    direction="column"
+                    label="Bucket"
+                    placeholder="Option"
+                    options={
+                      bonusLocationOption.data.find(
+                        (e) =>
+                          e["_id"] ===
+                          keywordCreateState.keyword_bonus[idx].location
+                      )?.bucket
+                    }
+                    optionLabel={"name"}
+                    value={keywordCreateState.keyword_bonus[idx].bucket}
+                    handleChange={(value: any) => {
+                      keywordCreate.keyword_bonus[idx].bucket = value;
+                      setStateTrigger(!stateTrigger);
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={3}>
+                  <Select
+                    direction="column"
+                    label="Bonus"
+                    placeholder="Option"
+                    options={bonusProductOption}
+                    optionLabel={"name"}
+                    optionValue={"id"}
+                    value={keywordCreateState.keyword_bonus[idx].bonus_id || ""}
+                    handleChange={(value: any) => {
+                      keywordCreate.keyword_bonus[idx].bonus_id = value;
+                      keywordCreate.keyword_bonus[idx].bonus_name =
+                        bonusProductOption.find((e) => e.id === value)?.name;
+                      setStateTrigger(!stateTrigger);
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={4}>
+                  <OutlinedTextField
+                    label="Granular"
+                    placeholder="Granular"
+                    value={keywordCreateState.keyword_bonus[idx].granular}
+                    handleChange={(value: any) => {
+                      keywordCreate.keyword_bonus[idx].granular = value;
+                      setStateTrigger(!stateTrigger);
+                    }}
+                    variant={"outlined"}
+                    direction={"column"}
+                  />
+                </Grid>
+                <Grid item xs={4}>
+                  <OutlinedTextField
+                    label="Bid"
+                    placeholder="Bid"
+                    value={keywordCreateState.keyword_bonus[idx].bid}
+                    handleChange={(value: any) => {
+                      keywordCreate.keyword_bonus[idx].bid = value;
+                      setStateTrigger(!stateTrigger);
+                    }}
+                    variant={"outlined"}
+                    direction={"column"}
+                  />
+                </Grid>
+                <Grid item xs={4}>
+                  <OutlinedTextField
+                    label="Payment"
+                    placeholder="Payment"
+                    value={keywordCreateState.keyword_bonus[idx].payment}
+                    handleChange={(value: any) => {
+                      keywordCreate.keyword_bonus[idx].payment = value;
+                      setStateTrigger(!stateTrigger);
+                    }}
+                    variant={"outlined"}
+                    direction={"column"}
+                  />
+                </Grid>
+                <Grid item xs={4}>
+                  <OutlinedTextField
+                    type={"number"}
+                    label="Quantity"
+                    placeholder="Quantity"
+                    value={keywordCreateState.keyword_bonus[idx].qty_denom}
+                    handleChange={(value: any) => {
+                      keywordCreate.keyword_bonus[idx].qty_denom =
+                        Number(value);
+                      setStateTrigger(!stateTrigger);
+                    }}
+                    variant={"outlined"}
+                    direction={"column"}
+                  />
+                </Grid>
+                <Grid item xs={4}>
+                  <OutlinedTextField
+                    type={"number"}
+                    label="Limit"
+                    placeholder="Limit"
+                    value={keywordCreateState.keyword_bonus[idx].limit}
+                    handleChange={(value: any) => {
+                      keywordCreate.keyword_bonus[idx].limit = Number(value);
+                      setStateTrigger(!stateTrigger);
+                    }}
+                    variant={"outlined"}
+                    direction={"column"}
+                  />
+                </Grid>
+                <Grid item xs={4}>
+                  <OutlinedTextField
+                    type={"number"}
+                    label="Stock"
+                    placeholder="Stock"
+                    value={keywordCreateState.keyword_bonus[idx].stock}
+                    handleChange={(value: any) => {
+                      keywordCreate.keyword_bonus[idx].stock = Number(value);
+                      setStateTrigger(!stateTrigger);
+                    }}
+                    variant={"outlined"}
+                    direction={"column"}
+                  />
+                </Grid>
+              </Grid>
             </Grid>
             <Grid
               item
               xs={1}
               display="flex"
-              justifyContent="center"
+              justifyContent="end"
               alignItems="center"
             >
               <IconButton
+                onClick={() => {
+                  keywordCreate.keyword_bonus.splice(idx, 1);
+                  setStateTrigger(!stateTrigger);
+                }}
                 aria-label="delete"
                 size="large"
                 sx={{ color: "primary.main" }}
@@ -129,7 +212,22 @@ useEffect(()=>{
         ))}
         <Box display="flex" justifyContent="center">
           <Button
-            onClick={() => handleAddBonus()}
+            onClick={() => {
+              keywordCreate.keyword_bonus.push({
+                bonus_type: "",
+                bonus_id: "",
+                bonus_name: "",
+                location: "",
+                bucket: "",
+                limit: 0,
+                stock: 0,
+                qty_denom: 0,
+                payment: "",
+                granular: "",
+                bid: "",
+              });
+              setStateTrigger(!stateTrigger);
+            }}
             color="primary"
             variant="contained"
             startIcon={<AddBoxIcon fontSize="large" />}

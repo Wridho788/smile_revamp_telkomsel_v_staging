@@ -8,7 +8,7 @@ const baseUrl = process.env.REACT_APP_BASE_URL
 
 export const programSlice = createApi({
     reducerPath: 'programApi',
-    baseQuery: API_HEADER(baseUrl + '/program'),
+    baseQuery: API_HEADER(baseUrl + '/v2/program'),
     endpoints(builder) {
 
         const responseHandler = (endpoint: string) =>
@@ -30,7 +30,7 @@ export const programSlice = createApi({
                     url: endpoint,
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'multipart/form-data'
+                        'Content-Type': 'multipart/form-data;application/json'
                     },
                     body: body
                 }),
@@ -69,23 +69,23 @@ export const programSlice = createApi({
             });
         return {
             // get
-            programList: responseHandler(baseUrl + '/program'),
+            programList: responseHandler(baseUrl + '/v2/program'),
             programTempList: responseHandler('/temp_list'),
             programSegmentationList: responseHandler('/segmentation'),
-            detailProgram: detailHandler(baseUrl + '/program/'),
+            detailProgram: detailHandler(baseUrl + '/v2/program/'),
 
             // import file
             importList: importFileHandler('/import_list'),
 
             // post
-            createProgram: postHandler(baseUrl + '/program'),
+            createProgram: postHandler(baseUrl + '/v2/program'),
 
             // put
-            updateProgram: putHandler(baseUrl + '/program/'),
+            updateProgram: putHandler(baseUrl + '/v2/program/'),
 
             // delete
-            deleteProgram: deleteHandler(baseUrl + '/program/'),
-            deleteProgramTempList: deleteHandler(baseUrl + '/program/temp_list/'),
+            deleteProgram: deleteHandler(baseUrl + '/v2/program/'),
+            deleteProgramTempList: deleteHandler(baseUrl + '/v2/program/temp_list/'),
 
         };
     },

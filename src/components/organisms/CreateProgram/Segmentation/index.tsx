@@ -77,9 +77,9 @@ const Segmentation: React.FunctionComponent<ISegmentationProps> = () => {
     }
 
     const handleProcess = async () => {
-        const Data: IProgramImportFile = {
-            file: fileName,
-            type: typeMSSIDN
+        const Data = {
+            "file": fileName,
+            "type": typeMSSIDN
         }
         setIsLoading(true)
         await importFile({Data})
@@ -92,10 +92,10 @@ const Segmentation: React.FunctionComponent<ISegmentationProps> = () => {
             showDenyButton: true,
             confirmButtonText: `Delete`,
             denyButtonText: `Don't Delete`,
-        }).then( async (result) => {
+        }).then(async (result) => {
             /* Read more about isConfirmed, isDenied below */
             if (result.isConfirmed) {
-                 tempListDelete(_id)
+                tempListDelete(_id)
                 Swal.fire('Deleted!', '', 'success')
             } else if (result.isDenied) {
                 Swal.fire('Data are not deleted', '', 'info')

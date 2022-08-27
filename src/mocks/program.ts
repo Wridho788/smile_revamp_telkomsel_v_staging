@@ -1,0 +1,53 @@
+export const DetailProgram = {
+  title: "Adakah...",
+  description: "Sedekah dong bray",
+  start: " August 22, 2022",
+  end: "Novemeber 22, 2022",
+  totalRedeem: 100,
+  keywords: [
+    "Keyword 001 Auction",
+    "Keyword 001 Auction",
+    "Keyword 001 Auction",
+    "Keyword 001 Auction",
+    "Keyword 001 Auction",
+    "Keyword 001 Auction",
+    "Keyword 001 Auction",
+    "Keyword 001 Auction",
+    "Keyword 001 Auction",
+    "Keyword 001 Auction",
+    "Keyword 001 Auction",
+    "Keyword 001 Auction",
+  ],
+  whitelists: [
+    "+62041404140141",
+    "+62041404140141",
+    "+62041404140141",
+    "+62041404140141",
+  ],
+  blacklists: [
+    "+62041404140141",
+    "+62041404140141",
+    "+62041404140141",
+    "+62041404140141",
+  ],
+  notifications: [
+    {
+      via: "SMS",
+      receiver: "PIC Customer",
+      template: "Registration",
+      transactionType: "Redeem",
+    },
+    {
+      via: "SMS",
+      receiver: "PIC Customer",
+      template: "Registration",
+      transactionType: "Redeem",
+    },
+    {
+      via: "SMS",
+      receiver: "PIC Customer",
+      template: "Registration",
+      transactionType: "Redeem",
+    },
+  ],
+};

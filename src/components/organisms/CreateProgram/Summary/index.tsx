@@ -1,12 +1,10 @@
 import {Box, Stack} from "@mui/material";
 import * as React from "react";
 import {BodyCopy, Subtitle} from "../../../atoms";
-import {IProgramPageData} from "../../../../app/redux/Utils/Interface/IProgram";
-import {
-    CreateProgramInitial,
-    ProgramSegmentationInitial
-} from "../../../../app/redux/Utils/InitialState/ProgramInitial";
+
 import H3 from "../../../atoms/Typography/H3";
+import {CreateProgramInitial} from "../../../../pages/CreateProgram/programInitial";
+import {ProgramSegmentationInitial} from "../../../../app/redux/Utils/InitialState/ProgramInitial";
 
 interface ISummaryProps {
 }
