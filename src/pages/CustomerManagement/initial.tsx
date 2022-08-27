@@ -1,12 +1,15 @@
 import { TableColumn } from "react-data-table-component";
+import { VisibilityOutlined } from "@mui/icons-material";
 import {
   ICustomerBrand,
   ICustomers,
   ICustomerTier,
 } from "../../redux/features/customer/interface";
+import { Modal } from "@mui/material";
 
 // type of row
 export interface TableDataRows<T> {
+  _id: T;
   msisdn: T;
   activation_date: T;
   expire_date: T;
@@ -50,6 +53,13 @@ export const TableColumnCustomer: TableColumn<TableDataRows<any>>[] = [
   {
     name: "Brand",
     selector: (row) => row.brand,
+  },
+  {
+    name: "Action",
+    ignoreRowClick: true,
+    allowOverflow: true,
+    button: true,
+    cell: (row) => <VisibilityOutlined onClick={() => alert(row._id)} />,
   },
 ];
 

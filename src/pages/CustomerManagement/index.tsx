@@ -38,18 +38,22 @@ import {
   CustomerInitial,
   CustomerTierInitial,
   CustomerBrandInitial,
+  TableDataRows,
 } from "./initial";
-import DataTable from "react-data-table-component";
+import DataTable, { TableColumn } from "react-data-table-component";
 import {
   Delete,
   FilterAlt,
   ModeEditOutlineOutlined,
+  VisibilityOutlined,
 } from "@mui/icons-material";
+import { ICustomers } from "../../redux/features/customer/interface";
 
 const Index = () => {
   // ============== Local State =================
   const [open, setOpen] = React.useState({
     filter: false,
+    detail: false,
   });
   const [filter, setFilter] = React.useState({
     brand: "",
@@ -61,11 +65,26 @@ const Index = () => {
     msisdn: "",
     search: "",
   });
-  const [pagination, setPagination] = React.useState({
+  const [paginationCustomer, setPaginationCustomer] = React.useState({
     page: 0,
     limit: 3,
   });
-  const { page, limit } = pagination;
+  const [paginationBrand, setPaginationBrand] = React.useState({
+    page: 0,
+    limit: 5,
+  });
+  const [paginationBadge, setPaginationBadge] = React.useState({
+    page: 0,
+    limit: 5,
+  });
+  const [paginationTier, setPaginationTier] = React.useState({
+    page: 0,
+    limit: 5,
+  });
+
+  const [customerDetail, setCustomerDetail] =
+    React.useState<ICustomers | null>();
+  const { page, limit } = paginationCustomer;
 
   // ================= Fetching with RTK ===================
 
@@ -84,7 +103,7 @@ const Index = () => {
     isError: badgeError,
     isLoading: loadingBadge,
   } = useCustomerBadgeListQuery({
-    skip: page,
+    skip: paginationBadge.page,
     limit,
     filter: `{}`,
     sort: "{}",
@@ -94,8 +113,8 @@ const Index = () => {
     isError: brandError,
     isLoading: loadingBrand,
   } = useCustomerBrandListQuery({
-    skip: page,
-    limit,
+    skip: paginationBrand.page,
+    limit: paginationBrand.limit,
     filter: `{}`,
     sort: "{}",
   });
@@ -104,8 +123,8 @@ const Index = () => {
     isError: tierError,
     isLoading: loadingTier,
   } = useCustomerTierListQuery({
-    skip: page,
-    limit,
+    skip: paginationTier.page,
+    limit: paginationTier.limit,
     filter: `{}`,
     sort: "{}",
   });
@@ -149,6 +168,14 @@ const Index = () => {
     setOpen({ ...open, filter: false });
   };
 
+  const handleShowCustomer = async (data: any) => {
+    const customerShow = await dataCustomer.filter(
+      (item) => item._id === data._id
+    );
+    setOpen({ ...open, detail: true });
+    setCustomerDetail(customerShow ? customerShow[0] : null);
+  };
+
   //====================== Memo for Searching component ==========================
   const subHeaderComponentMemo = React.useMemo(() => {
     return (
@@ -189,6 +216,51 @@ const Index = () => {
     );
   }, [filter.search]);
 
+  //
+  const TableColumnCustomers: TableColumn<TableDataRows<any>>[] = [
+    {
+      name: "MSISDN",
+      selector: (row) => row.msisdn,
+    },
+    {
+      name: "Activation Date",
+      selector: (row) => row.activation_date,
+    },
+    {
+      name: "Expiration Date",
+      selector: (row) => row.expire_date,
+    },
+    {
+      name: "Region Lacci",
+      selector: (row) => row.region_lacci,
+    },
+    {
+      name: "Cluster Sales",
+      selector: (row) => row.cluster_sales,
+    },
+    {
+      name: "Loyalty Tier",
+      selector: (row) => row.loyalty_tier,
+    },
+    {
+      name: "Arpu",
+      selector: (row) => row.arpu,
+    },
+    {
+      name: "Brand",
+      selector: (row) => row.brand,
+    },
+    {
+      name: "Action",
+      ignoreRowClick: true,
+      allowOverflow: true,
+      button: true,
+      cell: (row) => (
+        <VisibilityOutlined onClick={() => handleShowCustomer(row)} />
+      ),
+    },
+  ];
+
   return (
     <DrawerNav>
       <Box
@@ -204,18 +276,20 @@ const Index = () => {
           <Paper>
             <Container>
               <DataTable
-                columns={TableColumnCustomer}
+                columns={TableColumnCustomers}
                 data={dataCustomer}
                 highlightOnHover
                 pagination
                 paginationServer
                 paginationTotalRows={10}
-                paginationPerPage={pagination.limit}
+                paginationPerPage={paginationCustomer.limit}
                 subHeaderComponent={subHeaderComponentMemo}
                 paginationComponentOptions={{
                   noRowsPerPage: true,
                 }}
-                onChangePage={(page) => setPagination({ ...pagination, page })}
+                onChangePage={(page) =>
+                  setPaginationCustomer({ ...paginationCustomer, page })
+                }
                 subHeader
               />
             </Container>
@@ -364,6 +438,17 @@ const Index = () => {
           </Button>
           <Button onClick={handleFilter}>Apply</Button>
         </DialogActions>
+      </Dialog>
+      {/* Show Detail Customer */}
+      <Dialog
+        fullWidth
+        open={open.detail}
+        onClose={() => setOpen({ ...open, detail: false })}
+      >
+        <DialogTitle variant="h5">Filter</DialogTitle>
+        <DialogContent>
+          <SmallCopy></SmallCopy>
+        </DialogContent>
       </Dialog>
     </DrawerNav>
   );
