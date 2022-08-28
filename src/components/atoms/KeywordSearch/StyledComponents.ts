@@ -5,7 +5,7 @@ import InputBase from "@mui/material/InputBase";
 export const Search = styled("div")(({ theme }) => ({
   position: "relative",
   minWidth: "15vw",
-  borderRadius: 50,
+  borderRadius: 5,
   backgroundColor: theme.palette.secondary.main,
   "&:hover": {
     backgroundColor: theme.palette.secondary.main,
@@ -42,5 +42,21 @@ export const StyledInputBase = styled(InputBase)(({ theme }) => ({
         width: "20ch",
       },
     },
+  },
+}));
+
+export const SearchComponent = styled("input")(({ theme }) => ({
+  position: "relative",
+  minWidth: "15vw",
+  borderRadius: 50,
+  backgroundColor: theme.palette.secondary.main,
+  "&:hover": {
+    backgroundColor: theme.palette.secondary.main,
+  },
+  marginLeft: 0,
+  width: "100%",
+  [theme.breakpoints.up("sm")]: {
+    marginLeft: theme.spacing(1),
+    width: "auto",
   },
 }));

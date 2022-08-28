@@ -22,6 +22,9 @@ import Stepper from "./Stepper";
 import SingleBreadcrumbs from "./SingleBreadcrumbs";
 import Gap from "./Gap";
 
+
+import KeywordSearch from "./KeywordSearch";
+
 export {
   Button,
   Label,
@@ -43,5 +46,6 @@ export {
   ResponsiveDateTimePicker,
   Stepper,
   SingleBreadcrumbs,
+  KeywordSearch,
   Gap,
 };
