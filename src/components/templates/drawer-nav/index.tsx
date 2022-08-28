@@ -119,7 +119,11 @@ const Index: React.FC<LayoutProps> = ({ children }: LayoutProps) => {
         <Divider />
         <List>
           {menuItems.map((menu, index) => (
-            <SidebarItem menu={menu} openMenu={open} />
+            <SidebarItem
+              key={`menuItems__menu__${index}`}
+              menu={menu}
+              openMenu={open}
+            />
           ))}
         </List>
 
