@@ -18,6 +18,14 @@ export const keywordSlice = createApi({
         }),
         providesTags: ["Keyword"],
       });
+    const approvalHandler = (endpoint: string) =>
+      builder.mutation<any, string>({
+        query: (_id: string) => ({
+          url: `/${_id}/${endpoint}`,
+          method: "PATCH",
+        }),
+        invalidatesTags: ["Keyword"],
+      });
     const postHandler = (endpoint: string) =>
       builder.mutation<{ success: boolean; body: any }, any>({
         query: (body) => ({
@@ -56,6 +64,8 @@ export const keywordSlice = createApi({
       keywordList: responseHandler(baseUrl + "/v1/keyword"),
       keywordDelete: deleteHandler(baseUrl + "/v1/keyword"),
       keywordNotificationDelete: deleteHandler("/notification"),
+      keywordApprove: approvalHandler("approve"),
+      keywordReject: approvalHandler("reject"),
 
       // action
       keywordActionList: responseHandler("/action"),
@@ -100,6 +110,8 @@ export const keywordSlice = createApi({
 export const {
   useKeywordListQuery,
   useLazyKeywordListQuery,
+  useKeywordApproveMutation,
+  useKeywordRejectMutation,
   useKeywordActionListQuery,
   useKeywordCoreProductListQuery,
   useKeywordDeleteMutation,

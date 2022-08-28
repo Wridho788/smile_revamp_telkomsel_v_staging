@@ -31,27 +31,30 @@ import { IData } from "../../../redux/features/program/interface";
 import { ProgramItemInitial } from "./initial";
 import Swal from "sweetalert2";
 import { useAppConfigQuery } from "../../../redux/features/app-config/app-config-api-slice";
+import { useAccountAuthenticateQuery } from "../../../redux/features/account/account-api-slice";
+import ProgramDetailsModal from "../../../atomic/components/atoms/Modal/ProgramDetailsModal";
 
 const Programs: React.FunctionComponent = () => {
-  const { data: appConfig = [], isFetching } = useAppConfigQuery();
+  const { data: appConfig } = useAppConfigQuery();
+  const defaultRoleManager =
+    appConfig !== undefined
+      ? appConfig.find((item) => item["param_key"] === "DEFAULT_ROLE_MANAGER")[
+          "param_value"
+        ]
+      : undefined;
 
-  useEffect(() => {
-    const defaultRoleManager =
-      appConfig.length > 0
-        ? appConfig.find(
-            (item) => item["param_key"] === "DEFAULT_ROLE_MANAGER"
-          )["param_value"]
-        : "loading";
-    console.log(defaultRoleManager);
-  }, [isFetching]);
+  const { data: accountAuth } = useAccountAuthenticateQuery();
+
+  // console.log(defaultRoleManager);
+  // console.log(accountAuth?.role_id.replace("role-", ""));
 
   const [
     getProgramList,
     { data: programList = { data: [ProgramItemInitial] }, isError, isLoading },
   ] = useLazyProgramListQuery();
+
   const [deleteProgram, { isLoading: deleteLoading }] =
     useDeleteProgramMutation();
-  const navigate = useNavigate();
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -75,7 +78,7 @@ const Programs: React.FunctionComponent = () => {
     } else {
       setFilteredResults(data);
     }
-  }, [appConfig, data, getProgramList, searchInput]);
+  }, [data, getProgramList, searchInput]);
 
   const handleButtonDelete = async (_id: string) => {
     Swal.fire({
@@ -94,13 +97,16 @@ const Programs: React.FunctionComponent = () => {
       }
     });
   };
+
   const handleButtonDetail = async (item: IData) => {
     setItem(item);
     handleOpen();
   };
+
   if (isError) {
     return <h1 style={{ color: "red", fontWeight: "700" }}>{isError}</h1>;
   }
+
   const description = (
     <>
       <li>{item.name ?? ""}</li>
@@ -112,11 +118,17 @@ const Programs: React.FunctionComponent = () => {
 
   return (
     <>
-      <Modal
+      <ProgramDetailsModal
         open={open}
         handleClose={handleClose}
-        title={item.name}
-        description={<li>es</li>}
+        data={item}
+        roleAccess={
+          defaultRoleManager !== undefined && accountAuth !== undefined
+            ? defaultRoleManager === accountAuth.role_id
+              ? true
+              : false
+            : false
+        }
       />
       <Stack direction={"row"} justifyContent={"space-between"}>
         <H2 color={"secondary.dark"}>Program</H2>

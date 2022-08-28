@@ -11,6 +11,7 @@ import { channelSlice } from "../features/channel/merchant-api-slice";
 import { productSlice } from "../features/product/product-api-slice";
 import { locationSlice } from "../features/location/location-api-slice";
 import { appConfigSlice } from "../features/app-config/app-config-api-slice";
+import { accountSlice } from "../features/account/account-api-slice";
 
 export const listenerMiddleware = createListenerMiddleware();
 export const store = configureStore({
@@ -26,6 +27,7 @@ export const store = configureStore({
         keywordSlice.middleware,
         merchantSlice.middleware,
         channelSlice.middleware,
+        accountSlice.middleware,
         productSlice.middleware,
         locationSlice.middleware,
         appConfigSlice.middleware
