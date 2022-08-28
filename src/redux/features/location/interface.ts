@@ -6,7 +6,7 @@ interface IBucket {
   __v: number;
 }
 
-interface IData {
+export interface ILocation {
   _id: string;
   code: string;
   name: string;
@@ -16,6 +16,6 @@ interface IData {
 }
 
 export interface IResponse {
-  data: IData[];
-  total: number
+  data: ILocation[];
+  total: number;
 }
