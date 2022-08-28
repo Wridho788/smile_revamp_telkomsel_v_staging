@@ -6,6 +6,7 @@ import {
   ICustomerTier,
 } from "../../redux/features/customer/interface";
 import { Modal } from "@mui/material";
+import { ILocation } from "../../redux/features/location/interface";
 
 // type of row
 export interface TableDataRows<T> {
@@ -126,4 +127,21 @@ export const CustomerBrandInitial: ICustomerBrand = {
   updatedAt: "",
   deletedAt: null,
   __v: 0,
+};
+
+export const LocationInitial: ILocation = {
+  _id: "",
+  code: "",
+  name: "",
+  type: "",
+  __v: 0,
+  bucket: [
+    {
+      _id: "",
+      location: "",
+      name: "",
+      balance: 0,
+      __v: 0,
+    },
+  ],
 };

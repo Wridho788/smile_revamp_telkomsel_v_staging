@@ -40,6 +40,7 @@ import {
   CustomerTierInitial,
   CustomerBrandInitial,
   TableDataRows,
+  LocationInitial,
 } from "./initial";
 import DataTable, { TableColumn } from "react-data-table-component";
 import {
@@ -49,6 +50,8 @@ import {
   VisibilityOutlined,
 } from "@mui/icons-material";
 import { ICustomers } from "../../redux/features/customer/interface";
+import { useLocationTemplateQuery } from "../../redux/features/location/location-api-slice";
+import { format } from "date-fns";
 
 const Index = () => {
   // ============== Local State =================
@@ -130,10 +133,25 @@ const Index = () => {
     sort: "{}",
   });
 
+  // ==================== Fetching Region =======================
+
+  const {
+    data: locationData = { data: [LocationInitial] },
+    isError: locationError,
+    isLoading: loadingLocation,
+  } = useLocationTemplateQuery({
+    skip: 0,
+    limit: 100,
+    filter: `{}`,
+    sort: "{}",
+  });
+
+  // ===== Spread data from fetching data =========
   const dataCustomer = customerList.data;
   const dataCustomerBadge = customerBadgeList.data;
   const dataCustomerBrand = customerBrandList.data;
   const dataCustomerTier = customerTierList.data;
+  const dataLocation = locationData.data;
 
   // ==================== Handler =======================
   const handleSearch = (e: any) => {
@@ -252,11 +270,11 @@ const Index = () => {
     },
     {
       name: "Activation Date",
-      selector: (row) => row.activation_date,
+      selector: (row) => format(new Date(`${row.activation_date}`), "PPP"),
     },
     {
       name: "Expiration Date",
-      selector: (row) => row.expire_date,
+      selector: (row) => format(new Date(`${row.expire_date}`), "PPP"),
     },
     {
       name: "Region Lacci",
@@ -423,7 +441,7 @@ const Index = () => {
             freeSolo
             disableClearable
             id="combo-box-demo"
-            options={[""]}
+            options={dataLocation.map((option) => option.name)}
             sx={{ margin: "10px 0" }}
             value={filter.region}
             onChange={(e: any, newValue: string) =>
@@ -438,7 +456,7 @@ const Index = () => {
               />
             )}
           />
-          <Gap width={0} height={10} />
+          {/* <Gap width={0} height={10} />
           <Autocomplete
             fullWidth
             freeSolo
@@ -458,7 +476,7 @@ const Index = () => {
                 label="Cluster Sales"
               />
             )}
-          />
+          /> */}
         </DialogContent>
         <DialogActions sx={{ display: "flex", justifyContent: "space-around" }}>
           <Button sx={{ color: "#001A41" }} onClick={handleCloseFilter}>
