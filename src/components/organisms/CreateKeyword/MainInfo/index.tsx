@@ -29,7 +29,7 @@ import {
 } from "../initial";
 import { useState } from "react";
 import { useMerchantManagementListQuery } from "../../../../redux/features/merchant/merchant-api-slice";
-import { useChannelListQuery } from "../../../../redux/features/channel/merchant-api-slice";
+import { useChannelListQuery } from "../../../../redux/features/channel/channel-api-slice";
 
 interface IMainInfoProps {}
 

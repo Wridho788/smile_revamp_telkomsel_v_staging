@@ -35,7 +35,6 @@ import {
   useCustomerTierListQuery,
 } from "../../redux/features/customer/customer-api-slice";
 import {
-  TableColumnCustomer,
   CustomerInitial,
   CustomerTierInitial,
   CustomerBrandInitial,

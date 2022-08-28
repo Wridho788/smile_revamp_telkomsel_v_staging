@@ -7,7 +7,7 @@ import { customerSlice } from "../features/customer/customer-api-slice";
 import { programSlice } from "../features/program/program-api-slice";
 import { keywordSlice } from "../features/keyword/keyword-api-slice";
 import { merchantSlice } from "../features/merchant/merchant-api-slice";
-import { channelSlice } from "../features/channel/merchant-api-slice";
+import { channelSlice } from "../features/channel/channel-api-slice";
 import { productSlice } from "../features/product/product-api-slice";
 import { locationSlice } from "../features/location/location-api-slice";
 
