@@ -1,4 +1,5 @@
 import {
+  Autocomplete,
   Box,
   Button,
   Container,
@@ -9,15 +10,19 @@ import {
   OutlinedInput,
   Paper,
   Stack,
+  TextareaAutosize,
+  TextField,
 } from "@mui/material";
 import React from "react";
 import {
   DrawerNav,
   Gap,
   H2,
+  InputSearchable,
   OutlinedTextField,
   PreTitle,
   SmallCopy,
+  Title,
 } from "../../components";
 import DataTable, { TableColumn } from "react-data-table-component";
 import { MerchantInitial, TableMerchantDataRows } from "./initial";
@@ -110,6 +115,26 @@ const MerchantManagement = () => {
           onClick={() => handleShowMerchant(row)}
         />
       ),
+    },
+  ];
+
+  const top100Films = [
+    { name: "The Shawshank Redemption", year: 1994 },
+    { name: "The Godfather", year: 1972 },
+    { name: "The Godfather: Part II", year: 1974 },
+    { name: "The Dark Knight", year: 2008 },
+    { name: "12 Angry Men", year: 1957 },
+    { name: "Schindler's List", year: 1993 },
+    { name: "Pulp Fiction", year: 1994 },
+    {
+      name: "The Lord of the Rings: The Return of the King",
+      year: 2003,
+    },
+    { name: "The Good, the Bad and the Ugly", year: 1966 },
+    { name: "Fight Club", year: 1999 },
+    {
+      name: "The Lord of the Rings: The Fellowship of the Ring",
+      year: 2001,
     },
   ];
 
@@ -238,6 +263,35 @@ const MerchantManagement = () => {
         <DialogTitle variant="h5">ADD MERCHANT</DialogTitle>
         <Stack sx={{ display: "flex" }} px="3vw">
           <Box sx={{ display: "flex" }}>
+            {/* <Autocomplete
+              fullWidth
+              freeSolo
+              disableClearable
+              id="combo-box-demo"
+              options={top100Films.map((option) => option.name)}
+              // sx={{ padding: "2px" }}
+              value={""}
+              onChange={(e: any, newValue: string) => {}}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  onChange={() => {}}
+                  name="region"
+                  label="Region"
+                />
+              )}
+            /> */}
+            <InputSearchable label="Partner" options={top100Films} />
+            <Gap width={50} height={0} />
+            <OutlinedTextField
+              placeholder="Name"
+              value=""
+              handleChange={() => {}}
+              variant="outlined"
+            />
+          </Box>
+          <Gap width={0} height={20} />
+          <Box sx={{ display: "flex" }}>
             <OutlinedTextField
               placeholder="Name"
               value=""
@@ -252,7 +306,92 @@ const MerchantManagement = () => {
               variant="outlined"
             />
           </Box>
+          <Gap width={0} height={20} />
+          <Box sx={{ display: "flex" }}>
+            <InputSearchable label="Partner" options={top100Films} />
+            <Gap width={50} height={0} />
+            <InputSearchable label="Partner" options={top100Films} />
+            <Gap width={50} height={0} />
+            <OutlinedTextField
+              placeholder="Name"
+              value=""
+              handleChange={() => {}}
+              variant="outlined"
+            />
+          </Box>
+          <Gap width={0} height={20} />
+          <Box sx={{ display: "flex" }}>
+            <OutlinedTextField
+              multiline
+              minRows={4}
+              placeholder="Name"
+              value=""
+              handleChange={() => {}}
+              variant="outlined"
+            />
+          </Box>
+          <Gap width={0} height={20} />
+          <Title title="PIC" />
+          <Gap width={0} height={20} />
+          <Box sx={{ display: "flex" }}>
+            <OutlinedTextField
+              placeholder="Name"
+              value=""
+              handleChange={() => {}}
+              variant="outlined"
+            />
+            <Gap width={50} height={0} />
+            <OutlinedTextField
+              placeholder="Name"
+              value=""
+              handleChange={() => {}}
+              variant="outlined"
+            />
+          </Box>
+          <Gap width={0} height={20} />
+          <Box sx={{ display: "flex" }}>
+            <OutlinedTextField
+              placeholder="Name"
+              value=""
+              handleChange={() => {}}
+              variant="outlined"
+            />
+            <Gap width={50} height={0} />
+            <InputSearchable label="Partner" options={top100Films} />
+          </Box>
+          <Gap width={0} height={20} />
+          <Title title="OUTLET Management" />
+          <Gap width={0} height={20} />
+          <Box sx={{ display: "flex" }}>
+            <OutlinedTextField
+              placeholder="Name"
+              value=""
+              handleChange={() => {}}
+              variant="outlined"
+            />
+            <Gap width={50} height={0} />
+            <OutlinedTextField
+              placeholder="Name"
+              value=""
+              handleChange={() => {}}
+              variant="outlined"
+            />
+          </Box>
+          <Gap width={0} height={20} />
+          <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+            <OutlinedTextField
+              sx={{ width: "100%" }}
+              placeholder="Name"
+              value=""
+              handleChange={() => {}}
+              variant="outlined"
+            />
+            <Gap width={50} height={0} />
+            <Box sx={{ width: "100%" }}></Box>
+          </Box>
+          <Gap width={0} height={20} />
         </Stack>
+        <Gap width={0} height={20} />
       </Dialog>
     </DrawerNav>
   );

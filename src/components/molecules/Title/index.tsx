@@ -8,7 +8,7 @@ interface Props {
 const Title: FC<Props> = ({ title }: Props) => {
   return (
     <Box sx={{ display: "flex", alignItems: "center" }}>
-      <PreTitle>{title}</PreTitle>
+      <PreTitle sx={{ whiteSpace: "nowrap" }}>{title}</PreTitle>
       <Box
         sx={{
           display: "flex",
