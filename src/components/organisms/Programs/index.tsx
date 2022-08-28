@@ -49,7 +49,7 @@ const Programs: React.FunctionComponent = () => {
             setFilteredResults(data)
         }
 
-    }, [searchInput]);
+    }, [searchInput,programList]);
 
     const handleButtonDelete = async (_id: string) => {
         Swal.fire({

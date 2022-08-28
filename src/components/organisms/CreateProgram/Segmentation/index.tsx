@@ -26,6 +26,7 @@ import {
 import {FilterInitial} from "../../../../redux/utils/initial-general";
 import {IProgramImportFile, IResponse} from "../../../../redux/features/program/interface";
 import Swal from "sweetalert2";
+import TablePagination from "@mui/material/TablePagination";
 
 interface ISegmentationProps {
 }
@@ -267,15 +268,15 @@ const Segmentation: React.FunctionComponent<ISegmentationProps> = () => {
                     </Table>
                 </TableContainer>
             }
-            {/*<TablePagination*/}
-            {/*    rowsPerPageOptions={[5, 10, 25]}*/}
-            {/*    component="div"*/}
-            {/*    count={segmentationData.length}*/}
-            {/*    rowsPerPage={rowsPerPage}*/}
-            {/*    page={page}*/}
-            {/*    onPageChange={handleChangePage}*/}
-            {/*    onRowsPerPageChange={handleChangeRowsPerPage}*/}
-            {/*/>*/}
+            <TablePagination
+                rowsPerPageOptions={[5, 10, 25]}
+                component="div"
+                count={tempList.data.length}
+                rowsPerPage={2}
+                page={3}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+            />
         </Box>
     );
 };
