@@ -70,11 +70,12 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
     programData._id = fetchDetail._id;
   }, [fetchDetail]);
 
-  let programData = ProgramDetailInitial.data;
-  let { _id } = useParams();
-  const { data: fetchDetail = programData, isLoading } = useDetailProgramQuery(
-    _id ?? ""
+  const [programNameLabel, setProgramName] = useState(fetchDetail.name);
+  const [programDescriptionLabel, setProgramDescription] = useState(
+    fetchDetail.desc
   );
+  const [startPeriod, setStartPeriod] = useState(fetchDetail.start_period);
+  const [endPeriod, setEndPeriod] = useState(fetchDetail.end_period);
 
   useEffect(() => {
     programData._id = fetchDetail._id;
@@ -129,14 +130,6 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-
-  const { data: pointTypeOption = { data: [] } } = useGetPointTypeQuery();
-  const { data: mechanismOption = { data: [] } } = useGetMechanismQuery();
-  const { data: keywordRegisterOption = { data: [] } } =
-    useKeywordListQuery(FilterInitial);
-  const { data: programParentOption = { data: [] } } =
-    useProgramListQuery(FilterInitial);
-  const { data: ownerOption = { data: [] } } = useGetLocationTypeQuery();
 
   const ownerFilterInitial: IParams = {
     limit: 100,
