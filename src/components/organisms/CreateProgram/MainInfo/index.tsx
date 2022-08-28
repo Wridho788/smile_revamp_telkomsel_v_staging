@@ -1,6 +1,7 @@
 import {
   Box,
   Checkbox,
+  CircularProgress,
   FormControlLabel,
   FormGroup,
   Grid,
@@ -13,6 +14,7 @@ import {
   Select,
   OutlinedTextField,
   ResponsiveDateTimePicker,
+  H2,
 } from "../../../atoms";
 import { useEffect, useRef, useState } from "react";
 import {
@@ -42,6 +44,15 @@ import {
   useLazyAccountListQuery,
   useLazyAccountRoleQuery,
 } from "../../../../redux/features/account/account-api-slice";
+import TableContainer from "@mui/material/TableContainer";
+import Paper from "@mui/material/Paper";
+import Table from "@mui/material/Table";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import TableCell from "@mui/material/TableCell";
+import TableBody from "@mui/material/TableBody";
+import { Delete } from "@mui/icons-material";
+import TablePagination from "@mui/material/TablePagination";
 
 interface IMainInfoProps {
   slug: string;
@@ -59,12 +70,15 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
     programData._id = fetchDetail._id;
   }, [fetchDetail]);
 
-  const [programNameLabel, setProgramName] = useState(fetchDetail.name);
-  const [programDescriptionLabel, setProgramDescription] = useState(
-    fetchDetail.desc
+  let programData = ProgramDetailInitial.data;
+  let { _id } = useParams();
+  const { data: fetchDetail = programData, isLoading } = useDetailProgramQuery(
+    _id ?? ""
   );
-  const [startPeriod, setStartPeriod] = useState(fetchDetail.start_period);
-  const [endPeriod, setEndPeriod] = useState(fetchDetail.end_period);
+
+  useEffect(() => {
+    programData._id = fetchDetail._id;
+  }, [fetchDetail]);
 
   const [pointTypeLabel, setPointType] = useState(fetchDetail.point_type);
   const [programMechanismLabel, setProgramMechanism] = useState(
@@ -108,23 +122,64 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
     useProgramListQuery(FilterInitial);
   const { data: ownerOption = { data: [] } } = useGetLocationTypeQuery();
 
+  const [searchInput, setSearchInput] = useState<string>("");
+
+  // TODO LOGIC DATATABLE
+  const [selected, setSelected] = React.useState<readonly string[]>([]);
+  const [page, setPage] = React.useState(0);
+  const [dense, setDense] = React.useState(false);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+
+  const { data: pointTypeOption = { data: [] } } = useGetPointTypeQuery();
+  const { data: mechanismOption = { data: [] } } = useGetMechanismQuery();
+  const { data: keywordRegisterOption = { data: [] } } =
+    useKeywordListQuery(FilterInitial);
+  const { data: programParentOption = { data: [] } } =
+    useProgramListQuery(FilterInitial);
+  const { data: ownerOption = { data: [] } } = useGetLocationTypeQuery();
+
   const ownerFilterInitial: IParams = {
     limit: 100,
     skip: 0,
     filter: `{"type":"${programOwnerLabel}"}`,
     sort: "{}",
   };
+
+  const PicParamInitial: IParams = {
+    limit: 100,
+    skip: 0,
+    filter: `{"phone": "${searchInput}"}`,
+    sort: "{}",
+  };
+  const RoleParamInitial: IParams = {
+    limit: 100,
+    skip: 0,
+    filter: `{"name": "${searchInput}"}`,
+    sort: "{}",
+  };
+
   const { data: ownerDetailOption = { data: [] } } =
     useLocationTemplateQuery(ownerFilterInitial);
   const [getAlarmPicList, { data: alarmPicList = { data: [] } }] =
     useLazyAccountListQuery();
   const [getAlarmRoleList, { data: alarmRoleList = { data: [] } }] =
     useLazyAccountRoleQuery();
+
+  useEffect(() => {
+    setTimeout(() => {
+      if (alarmPicType === "PIC") {
+        getAlarmPicList(PicParamInitial);
+      } else if (alarmPicType === "Role") {
+        getAlarmRoleList(RoleParamInitial);
+      }
+    }, 100);
+  }, [alarmPicType, searchInput]);
+
   useEffect(() => {
     if (alarmPicType === "PIC") {
-      getAlarmPicList(FilterInitial);
+      getAlarmPicList(PicParamInitial);
     } else if (alarmPicType === "Role") {
-      getAlarmRoleList(FilterInitial);
+      getAlarmRoleList(RoleParamInitial);
     }
   }, [alarmPicType]);
 
@@ -137,6 +192,32 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
       const index = programData.alarm_pic.indexOf(_id);
       programData.alarm_pic.splice(index, 1);
     }
+  };
+  const resultSearchData =
+    alarmPicType === "PIC" ? alarmPicList.data : alarmRoleList.data;
+  const [filteredResults, setFilteredResults] = useState(resultSearchData);
+  useEffect(() => {
+    if (searchInput !== "") {
+      const filteredData = resultSearchData.filter((i) => {
+        return Object.values(i)
+          .join("")
+          .toLowerCase()
+          .includes(searchInput.toLowerCase());
+      });
+      setFilteredResults(filteredData);
+    } else {
+      setFilteredResults(resultSearchData);
+    }
+  }, [searchInput]);
+
+  const handleChangePage = (event: unknown, newPage: number) => {
+    setPage(newPage);
+  };
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
   };
   React.useEffect(() => {
     programData.name = programNameLabel;
@@ -275,36 +356,6 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
           optionLabel="name"
           handleChange={setProgramParent}
         />
-        <Select
-          label="Alarm Pic Type"
-          placeholder="Option"
-          options={PicTypeOption}
-          value={alarmPicType}
-          handleChange={setAlarmPicType}
-        />
-        <FormGroup>
-          {(alarmPicType === "PIC"
-            ? alarmPicList.data
-            : alarmRoleList.data
-          ).map((_, idx) => (
-            <Grid
-              key={`alarmRoleList__data__${idx}`}
-              item
-              xs={8}
-              display="flex"
-              alignItems="center"
-              pl="0.5vw"
-            >
-              <FormControlLabel
-                key={`checkBox__${_._id}`}
-                control={
-                  <Checkbox onChange={handleChangeCheckbox} value={_._id} />
-                }
-                label={alarmPicType === "PIC" ? _.phone : _.name}
-              />
-            </Grid>
-          ))}
-        </FormGroup>
         <OutlinedTextField
           InputProps={{ inputProps: { min: 0, max: 7 } }}
           type={"number"}
@@ -322,6 +373,82 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
           value={thresholdAlarmVoucher}
           handleChange={setThresholdAlarmVoucher}
           variant={"outlined"}
+        />
+        <Select
+          label="Alarm Pic Type"
+          placeholder="Option"
+          options={PicTypeOption}
+          value={alarmPicType}
+          handleChange={setAlarmPicType}
+        />
+        {isLoading ? (
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <CircularProgress />
+          </Box>
+        ) : (
+          <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+              <TableHead>
+                <TableRow>
+                  <TableCell>
+                    <Grid container>
+                      <Grid xs={7}>{"Alarm " + alarmPicType}</Grid>
+                      <Grid xs={5}>
+                        <Input
+                          fullWidth
+                          placeholder="Search..."
+                          onChange={(e) => setSearchInput(e.target.value)}
+                        />
+                      </Grid>
+                    </Grid>
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+
+              <TableBody>
+                {(alarmPicType === "PIC"
+                  ? alarmPicList.data
+                  : alarmRoleList.data
+                ).map((row, idx) => (
+                  <TableRow
+                    key={row._id}
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  >
+                    <TableCell component="th" scope="row">
+                      <FormControlLabel
+                        key={`checkBox__${row._id}`}
+                        control={
+                          <Checkbox
+                            onChange={handleChangeCheckbox}
+                            value={row._id}
+                          />
+                        }
+                        label={alarmPicType === "PIC" ? row.phone : row.name}
+                      />
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        )}
+        <TablePagination
+          rowsPerPageOptions={[5, 10, 25]}
+          component="div"
+          count={
+            (alarmPicType === "PIC" ? alarmPicList.data : alarmRoleList.data)
+              .length
+          }
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Stack>
     </Box>

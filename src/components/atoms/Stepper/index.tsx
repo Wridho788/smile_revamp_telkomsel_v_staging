@@ -143,7 +143,12 @@ export default function HorizontalLinearStepper({
         slug === "insert"
           ? await createProgram(CreateProgramInitial)
           : await updateProgram(CreateProgramInitial);
-        window.location.href = "/program-management";
+
+          Swal.fire("Success!", "Keyword has been created!", "success");
+          console.log("res : ");
+          // console.log("response : ", response);
+          nav("/program-management")
+        // window.location.href = "/program-management";
       } else if (type === "keyword") {
         slug === "insert"
           ? await createKeywordGeneral(CreateKeywordGeneral)

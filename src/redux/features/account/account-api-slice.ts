@@ -71,6 +71,8 @@ export const accountSlice = createApi({
 });
 
 export const {
+    useAccountListQuery,
+    useAccountRoleQuery,
     useLazyAccountListQuery,
     useLazyAccountRoleQuery
 } = accountSlice;
