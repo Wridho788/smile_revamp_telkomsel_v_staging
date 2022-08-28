@@ -8,6 +8,8 @@ import EditProgram from "./CreateProgram/edit";
 import CreateKeyword from "./CreateKeyword";
 import Keyword from "./Keyword"
 import Auth from "./Auth";
+import MerchantManagement from "./MerchantManagement";
+import CustomerManagement from "./CustomerManagement";
 
 export {
     Option,
@@ -19,5 +21,7 @@ export {
     EditProgram,
     CreateKeyword,
     Keyword,
-    Auth
+    Auth,
+    MerchantManagement,
+    CustomerManagement,
 };

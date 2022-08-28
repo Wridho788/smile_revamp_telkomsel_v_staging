@@ -1,12 +1,11 @@
-import { FC } from "react";
+import React from "react";
 
-interface Props {
+interface IProps {
   width: number;
   height: number;
 }
-
-const Gap: FC<Props> = ({ width, height }: Props) => {
-  return <div style={{ width: `${width}px`, height: `${height}px` }}></div>;
+const Index = (props: IProps) => {
+  return <div style={{ width: props.width, height: props.height }}></div>;
 };
 
-export default Gap;
+export default Index;

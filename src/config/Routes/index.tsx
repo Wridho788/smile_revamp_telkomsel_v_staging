@@ -1,13 +1,17 @@
 import {Routes, Route} from "react-router-dom";
 
 import {
+
     MyTelkomsel,
     Dashboard,
     ProgramPage,
     CreateProgram,
     CreateKeyword,
     EditProgram,
-    Keyword, Auth,
+    Keyword,
+    MerchantManagement,
+    CustomerManagement,
+    Auth
 } from "../../pages";
 import SpecificProgramTemplate from "../../atomic/containers/pages/GeneralProgramRegistration";
 
@@ -21,7 +25,12 @@ const Index = () => (
         <Route path="/create-program" element={<CreateProgram/>}/>
         <Route path="/edit-program/:_id" element={<EditProgram/>}/>
         <Route path="/create-keyword" element={<CreateKeyword/>}/>
-        <Route path={"/auth"} element={<Auth/>}/>
+        <Route path="/merchant-management" element={<MerchantManagement/>}/>
+        <Route path="/login" element={<Auth/>}/>
+        <Route
+            path="/customer-segmentation-management"
+            element={<CustomerManagement/>}
+        />
         <Route
             path={"general-program-registration"}
             element={<SpecificProgramTemplate/>}
