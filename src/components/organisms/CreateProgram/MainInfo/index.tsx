@@ -24,7 +24,12 @@ import {
 import {useDetailProgramQuery, useProgramListQuery} from "../../../../redux/features/program/program-api-slice";
 import {useParams} from "react-router-dom";
 import {
-    BooleanOption, FilterInitial, logicOption, PicTypeOption, programTimeZoneOption
+    BooleanOption,
+    FilterInitial,
+    logicOption,
+    PicTypeOption,
+    programTimeZoneOption,
+    ThresholdAlarmExpiredOption,
 } from "../../../../redux/utils/initial-general";
 import {ProgramDetailInitial} from "../../../../pages/CreateProgram/programInitial";
 import {useKeywordListQuery} from "../../../../redux/features/keyword/keyword-api-slice";
@@ -59,6 +64,9 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
         programData._id = fetchDetail._id
     }, [fetchDetail]);
 
+    const [programGroup, setProgramGroup] = useState(
+        fetchDetail.program_group
+    );
     const [programNameLabel, setProgramName] = useState(
         fetchDetail.name
     );
@@ -181,6 +189,7 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
         setPage(0);
     };
     React.useEffect(() => {
+        programData.program_group = programGroup;
         programData.name = programNameLabel;
         programData.desc = programDescriptionLabel;
         programData.start_period = startPeriod;
@@ -200,6 +209,7 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
         return;
     }, [
         programData,
+        programGroup,
         programNameLabel,
         programDescriptionLabel,
         startPeriod,
@@ -220,8 +230,15 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
         <Box display="flex" justifyContent="center" px="20%" py="1vw">
             <Stack spacing={"1vw"} width={"100%"}>
                 <OutlinedTextField
-                    label="Name"
-                    placeholder="Name"
+                    label="Program Group"
+                    placeholder="Program Group"
+                    variant={"outlined"}
+                    value={programGroup}
+                    handleChange={setProgramGroup}
+                />
+                <OutlinedTextField
+                    label="Program Name"
+                    placeholder="Program Name"
                     variant={"outlined"}
                     value={programNameLabel}
                     handleChange={setProgramName}
@@ -234,6 +251,7 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
                     handleChange={setProgramDescription}
                     multiline
                     rows={4}
+                    isRequired={false}
                 />
 
                 <ResponsiveDateTimePicker
@@ -257,7 +275,7 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
                     handleChange={setPointType}
                 />
                 <Select
-                    label="Mechanism"
+                    label="Program Mechanism"
                     placeholder="Option"
                     options={mechanismOption.data}
                     optionLabel="set_value"
@@ -272,22 +290,24 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
                     value={programOwnerLabel}
                     handleChange={setProgramOwner}
                 />
-                <Select
-                    label="Owner Detail"
-                    placeholder="Option"
-                    options={ownerDetailOption.data}
-                    optionLabel="name"
-                    value={programOwnerDetail}
-                    handleChange={setProgramOwnerDetail}
-                />
-                <Select
-                    label="Keyword Registration"
-                    placeholder="Option"
-                    options={keywordRegisterOption.data}
-                    value={keywordRegistration}
-                    optionLabel="name"
-                    handleChange={setKeywordRegistration}
-                />
+                {(programOwnerLabel) &&
+                    <Select
+                        label="Owner Detail"
+                        placeholder="Option"
+                        options={ownerDetailOption.data}
+                        optionLabel="name"
+                        value={programOwnerDetail}
+                        handleChange={setProgramOwnerDetail}
+                    />
+                }
+                {/*<Select*/}
+                {/*    label="Keyword Registration"*/}
+                {/*    placeholder="Option"*/}
+                {/*    options={keywordRegisterOption.data}*/}
+                {/*    value={keywordRegistration}*/}
+                {/*    optionLabel="name"*/}
+                {/*    handleChange={setKeywordRegistration}*/}
+                {/*/>*/}
                 <Select
                     label="Whitelist Counter"
                     placeholder="Option"
@@ -296,7 +316,7 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
                     handleChange={setWhiteListCounter}
                 />
                 <Select
-                    label="Logic"
+                    label="Segmentation Logic"
                     placeholder="Option"
                     options={logicOption}
                     value={logicValue}
@@ -317,24 +337,6 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
                     optionLabel="name"
                     handleChange={setProgramParent}
                 />
-                <OutlinedTextField
-                    InputProps={{inputProps: {min: 0, max: 7}}}
-                    type={"number"}
-                    label="Threshold Alarm Experied"
-                    placeholder="Threshold Alrm Experied"
-                    value={thresholdAlarmExpired}
-                    handleChange={setThresholdAlarmExpired}
-                    variant={"outlined"}
-                />
-                <OutlinedTextField
-                    InputProps={{inputProps: {min: 70, max: 100}}}
-                    type={"number"}
-                    label="Threshold Alarm Voucher"
-                    placeholder="Threshold Alrm Voucher"
-                    value={thresholdAlarmVoucher}
-                    handleChange={setThresholdAlarmVoucher}
-                    variant={"outlined"}
-                />
                 <Select
                     label="Alarm Pic Type"
                     placeholder="Option"
@@ -342,15 +344,9 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
                     value={alarmPicType}
                     handleChange={setAlarmPicType}
                 />
-                {isLoading ? <Box sx={{
-                        display: 'flex',
-                        justifyContent: "center",
-                        alignItems: "center",
-                    }}>
-                        <CircularProgress/>
-                    </Box>
-                    :
-                    <TableContainer component={Paper}>
+                {
+                    (alarmPicType) &&
+                    <> <TableContainer component={Paper}>
                         <Table sx={{minWidth: 650}} aria-label="simple table">
                             <TableHead>
                                 <TableRow>
@@ -391,15 +387,33 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
                             </TableBody>
                         </Table>
                     </TableContainer>
+                        <TablePagination
+                            rowsPerPageOptions={[5, 10, 25]}
+                            component="div"
+                            count={(alarmPicType === 'PIC' ? alarmPicList.data : alarmRoleList.data).length}
+                            rowsPerPage={rowsPerPage}
+                            page={page}
+                            onPageChange={handleChangePage}
+                            onRowsPerPageChange={handleChangeRowsPerPage}
+                        />
+                    </>
                 }
-                <TablePagination
-                    rowsPerPageOptions={[5, 10, 25]}
-                    component="div"
-                    count={(alarmPicType === 'PIC' ? alarmPicList.data : alarmRoleList.data).length}
-                    rowsPerPage={rowsPerPage}
-                    page={page}
-                    onPageChange={handleChangePage}
-                    onRowsPerPageChange={handleChangeRowsPerPage}
+
+                <Select
+                    label="Threshold Alarm Experied"
+                    placeholder="Option"
+                    value={thresholdAlarmExpired}
+                    options={ThresholdAlarmExpiredOption}
+                    handleChange={setThresholdAlarmExpired}
+                />
+                <OutlinedTextField
+                    InputProps={{inputProps: {min: 70, max: 100}}}
+                    type={"number"}
+                    label="Threshold Alarm Voucher"
+                    placeholder="Threshold Alrm Voucher"
+                    value={thresholdAlarmVoucher}
+                    handleChange={setThresholdAlarmVoucher}
+                    variant={"outlined"}
                 />
             </Stack>
         </Box>
