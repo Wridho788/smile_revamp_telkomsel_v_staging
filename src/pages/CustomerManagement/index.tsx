@@ -15,8 +15,11 @@ import {
   FormControl,
   Grid,
   Icon,
+  InputLabel,
+  MenuItem,
   OutlinedInput,
   Paper,
+  Select,
   TextField,
 } from "@mui/material";
 import {
@@ -60,15 +63,16 @@ const Index = () => {
     detail: false,
   });
   const [filter, setFilter] = React.useState({
-    msisdn: "",
+    search: "",
     cluster_sales: "",
     region: "",
   });
   const [queryFilter, setQueryFilter] = React.useState({
-    msisdn: "",
+    search: "",
     cluster_sales: "",
     region: "",
   });
+  const [searchKey, setSearchKey] = React.useState<string>("msisdn");
   const [paginationCustomer, setPaginationCustomer] = React.useState({
     page: 0,
     limit: 3,
@@ -99,7 +103,7 @@ const Index = () => {
   } = useCustomerListQuery({
     skip: page,
     limit,
-    filter: `{"msisdn":"${queryFilter.msisdn}", "region_lacci": "${queryFilter.region}", "cluster_sales": "${queryFilter.cluster_sales}"}`,
+    filter: `{"${searchKey}":"${queryFilter.search}", "region_lacci": "${queryFilter.region}", "cluster_sales": "${queryFilter.cluster_sales}"}`,
     sort: "{}",
   });
   const {
@@ -155,14 +159,19 @@ const Index = () => {
 
   // ==================== Handler =======================
   const handleSearch = (e: any) => {
-    setFilter({ ...filter, msisdn: e.target.value });
+    setFilter({ ...filter, search: e.target.value });
+    console.log(e.target.value);
     setTimeout(
-      () => setQueryFilter({ ...queryFilter, msisdn: e.target.value }),
+      () => setQueryFilter({ ...queryFilter, search: e.target.value }),
       1000
     );
   };
   const handleChange = (e: any) => {
     setFilter({ ...filter, [e.target.name]: e.target.value });
+  };
+  const handleChangeSearchKey = (e: any) => {
+    console.log(e.target.value);
+    setSearchKey(e.target.value);
   };
   const handleFilter = async () => {
     setQueryFilter({
@@ -175,7 +184,7 @@ const Index = () => {
 
   const handleCloseFilter = async () => {
     setFilter({
-      msisdn: "",
+      search: "",
       region: "",
       cluster_sales: "",
     });
@@ -224,7 +233,71 @@ const Index = () => {
             </Box>
           )}
         </div>
-        <div>
+        <div style={{ display: "flex" }}>
+          <FormControl
+            fullWidth
+            sx={{
+              "&.MuiOutlinedInput-root": {
+                padding: "5px 10px",
+                border: "none",
+                outline: "none",
+              },
+              "& .MuiFormLabel-root": {
+                transform: "translate(10px, 6px) scale(1)",
+                transition:
+                  "color 200ms cubic-bezier(0.0, 0, 0.2, 1) 0ms,transform 200ms cubic-bezier(0.0, 0, 0.2, 1) 0ms,max-width 200ms cubic-bezier(0.0, 0, 0.2, 1) 0ms",
+                "&.Mui-focused": {
+                  transform: "translate(14px, -9px) scale(0.75)",
+                },
+              },
+            }}
+          >
+            {/* <InputLabel id="demo-simple-select-label">Search By</InputLabel> */}
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={searchKey}
+              label="Search By"
+              onChange={handleChangeSearchKey}
+              sx={{
+                "&.MuiSelect-select": {
+                  paddingRight: 0,
+                },
+                "& .MuiInputBase-input": {
+                  padding: "5px 10px",
+                  border: "none",
+                },
+                "& .MuiOutlinedInput-root": {
+                  padding: "5px 10px",
+                  border: "none",
+                  outline: "none",
+                },
+              }}
+            >
+              {Object.keys(CustomerInitial).map((item) => (
+                <MenuItem value={item}>{item.replaceAll("_", " ")}</MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          {/* <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              "&:focus": { border: "none", outline: "none" },
+              "&:focus-visible": { border: "none", outline: "none" },
+            }}
+          >
+            <SmallCopy>Search By: </SmallCopy>
+            <select
+              onChange={handleChangeSearchKey}
+              value={searchKey}
+              style={{ border: "none", background: "none" }}
+            >
+              {Object.keys(CustomerInitial).map((item) => (
+                <option value={item}>{item.replaceAll("_", " ")}</option>
+              ))}
+            </select>
+          </Box> */}
           <FormControl
             sx={{
               width: "25ch",
@@ -234,8 +307,8 @@ const Index = () => {
             }}
           >
             <OutlinedInput
-              name="msisdn"
-              value={filter.msisdn}
+              name="search"
+              value={filter.search}
               onChange={handleSearch}
               sx={{
                 "& .MuiInputBase-input": {
@@ -260,7 +333,7 @@ const Index = () => {
         </div>
       </Box>
     );
-  }, [filter.msisdn, queryFilter.region, queryFilter.cluster_sales]);
+  }, [filter.search, queryFilter.region, queryFilter.cluster_sales, searchKey]);
 
   //
   const TableColumnCustomers: TableColumn<TableDataRows<any>>[] = [
@@ -270,11 +343,15 @@ const Index = () => {
     },
     {
       name: "Activation Date",
-      selector: (row) => format(new Date(`${row.activation_date}`), "PPP"),
+      selector: (row) =>
+        row.activation_date
+          ? format(new Date(`${row.activation_date}`), "PPP")
+          : "",
     },
     {
       name: "Expiration Date",
-      selector: (row) => format(new Date(`${row.expire_date}`), "PPP"),
+      selector: (row) =>
+        row.expire_date ? format(new Date(`${row.expire_date}`), "PPP") : "",
     },
     {
       name: "Region Lacci",
@@ -351,7 +428,7 @@ const Index = () => {
             <Grid item>No Data</Grid>
           ) : (
             dataCustomerBadge.map((data: any) => (
-              <Grid item sm={6} md={3} lg={3}>
+              <Grid key={data._id} item sm={6} md={3} lg={3}>
                 <Card sx={{ minWidth: 275 }}>
                   <CardContent>
                     <Subtitle>{data.name}</Subtitle>
@@ -504,55 +581,44 @@ const Index = () => {
             {customerDetail && customerDetail.loyalty_tier.join()}
           </SmallCopy>
           <SmallCopy>
-            Customer LOS: {customerDetail && customerDetail.loyalty_tier.join()}
+            Customer LOS: {customerDetail && customerDetail.los}
           </SmallCopy>
-          <SmallCopy>
+          {/* <SmallCopy>
             Customer Type:{" "}
-            {customerDetail && customerDetail.loyalty_tier.join()}
+            {customerDetail && customerDetail.}
+          </SmallCopy> */}
+          <SmallCopy>
+            Customer Location-City: {customerDetail && customerDetail.kabupaten}
           </SmallCopy>
           <SmallCopy>
-            Customer Location-City:{" "}
-            {customerDetail && customerDetail.loyalty_tier.join()}
+            Customer Brand: {customerDetail && customerDetail.brand.join()}
           </SmallCopy>
           <SmallCopy>
-            Customer Brand:{" "}
-            {customerDetail && customerDetail.loyalty_tier.join()}
+            Customer ARPU: {customerDetail && customerDetail.arpu}
           </SmallCopy>
-          <SmallCopy>
-            Customer ARPU:{" "}
-            {customerDetail && customerDetail.loyalty_tier.join()}
-          </SmallCopy>
-          <SmallCopy>
-            Customer BCP Profile:{" "}
-            {customerDetail && customerDetail.loyalty_tier.join()}
-          </SmallCopy>
+          {/* <SmallCopy>
+            Customer BCP Profile: {customerDetail && customerDetail.}
+          </SmallCopy> */}
           <SmallCopy>
             Customer Prepaid Registration:{" "}
-            {customerDetail && customerDetail.loyalty_tier.join()}
+            {customerDetail &&
+              customerDetail.activation_date &&
+              format(new Date(customerDetail.activation_date), "PPP")}
           </SmallCopy>
-          <SmallCopy>
+          {/* <SmallCopy>
             Customer Telkomsel Employee Numbers:{" "}
-            {customerDetail && customerDetail.loyalty_tier.join()}
-          </SmallCopy>
+            {customerDetail && customerDetail.}
+          </SmallCopy> */}
+          {/* <SmallCopy>IMEI: {customerDetail && customerDetail.}</SmallCopy> */}
           <SmallCopy>
-            IMEI: {customerDetail && customerDetail.loyalty_tier.join()}
+            Complete Name: {customerDetail && customerDetail.nik_rgn_name}
           </SmallCopy>
+          {/* <SmallCopy>Email: {customerDetail && customerDetail}</SmallCopy> */}
           <SmallCopy>
-            Complete Name:{" "}
-            {customerDetail && customerDetail.loyalty_tier.join()}
+            Province: {customerDetail && customerDetail.region_lacci}
           </SmallCopy>
-          <SmallCopy>
-            Email: {customerDetail && customerDetail.loyalty_tier.join()}
-          </SmallCopy>
-          <SmallCopy>
-            Province: {customerDetail && customerDetail.loyalty_tier.join()}
-          </SmallCopy>
-          <SmallCopy>
-            Postal Code: {customerDetail && customerDetail.loyalty_tier.join()}
-          </SmallCopy>
-          <SmallCopy>
-            Address: {customerDetail && customerDetail.loyalty_tier.join()}
-          </SmallCopy>
+          {/* <SmallCopy>Postal Code: {customerDetail && customerDetail.}</SmallCopy> */}
+          {/* <SmallCopy>Address: {customerDetail && customerDetail}</SmallCopy> */}
         </DialogContent>
       </Dialog>
     </DrawerNav>
