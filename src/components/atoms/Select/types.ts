@@ -12,4 +12,5 @@ export interface ISelectProps extends SelectProps {
   leftColumn?: number;
   rightColumn?: number;
   direction?: "row" | "column";
+  isRequired? : boolean
 }
