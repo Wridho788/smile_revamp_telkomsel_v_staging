@@ -106,9 +106,7 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
   const [programTimeZone, setProgramTypeZone] = useState(
     fetchDetail.program_time_zone
   );
-  const [programParent, setProgramParent] = useState(
-    fetchDetail.program_parent
-  );
+
   const [alarmPicType, setAlarmPicType] = useState(fetchDetail.alarm_pic_type);
   const [thresholdAlarmExpired, setThresholdAlarmExpired] = useState<number>(
     fetchDetail.threshold_alarm_expired
@@ -121,8 +119,6 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
   const { data: mechanismOption = { data: [] } } = useGetMechanismQuery();
   const { data: keywordRegisterOption = { data: [] } } =
     useKeywordListQuery(FilterInitial);
-  const { data: programParentOption = { data: [] } } =
-    useProgramListQuery(FilterInitial);
   const { data: ownerOption = { data: [] } } = useGetLocationTypeQuery();
 
   const [searchInput, setSearchInput] = useState<string>("");
@@ -226,7 +222,6 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
         programData.whitelist_counter = whiteListCounter === "1" ? true : false
         programData.logic = logicValue;
         programData.program_time_zone = programTimeZone;
-        programData.program_parent = programParent;
         programData.alarm_pic_type = alarmPicType;
         programData.threshold_alarm_expired = Number(thresholdAlarmExpired);
         programData.threshold_alarm_voucher = Number(thresholdAlarmVoucher);
@@ -246,7 +241,6 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
         whiteListCounter,
         logicValue,
         programTimeZone,
-        programParent,
         thresholdAlarmExpired,
         thresholdAlarmVoucher,
     ]);
@@ -352,14 +346,6 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
                     options={programTimeZoneOption}
                     value={programTimeZone}
                     handleChange={setProgramTypeZone}
-                />
-                <Select
-                    label="Program Parent"
-                    placeholder="Option"
-                    options={programParentOption.data}
-                    value={programParent}
-                    optionLabel="name"
-                    handleChange={setProgramParent}
                 />
                 <Select
                     label="Alarm Pic Type"
