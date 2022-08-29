@@ -81,7 +81,7 @@ const InputSearchable = <T extends Pick<InitialOptions, "name">>({
   } = useAutocomplete({
     id: "use-autocomplete-demo",
     options: options,
-    // getOptionLabel: (option) => option.name,
+    getOptionLabel: (option) => option.name,
   });
 
   return (
