@@ -1,28 +1,29 @@
 import {
-    Box,
-    Checkbox,
-    CircularProgress,
-    FormControlLabel,
-    FormGroup,
-    Grid,
-    IconButton,
-    Input,
-    Stack
+  Box,
+  Checkbox,
+  CircularProgress,
+  FormControlLabel,
+  FormGroup,
+  Grid,
+  IconButton,
+  Input,
+  Stack,
 } from "@mui/material";
 import * as React from "react";
 import {
-    Select,
-    OutlinedTextField,
-    ResponsiveDateTimePicker, H2,
+  Select,
+  OutlinedTextField,
+  ResponsiveDateTimePicker,
+  H2,
 } from "../../../atoms";
-import {useEffect, useRef, useState} from "react";
+import { useEffect, useRef, useState } from "react";
 import {
-    useGetKeywordTypeQuery, useGetLocationTypeQuery,
-    useGetMechanismQuery, useGetOwnerQuery,
-    useGetPointTypeQuery
+  useGetKeywordTypeQuery,
+  useGetLocationTypeQuery,
+  useGetMechanismQuery,
+  useGetOwnerQuery,
+  useGetPointTypeQuery,
 } from "../../../../redux/features/lov/lov-api-slice";
-import {useDetailProgramQuery, useProgramListQuery} from "../../../../redux/features/program/program-api-slice";
-import {useParams} from "react-router-dom";
 import {
     BooleanOption,
     FilterInitial,
@@ -31,12 +32,13 @@ import {
     programTimeZoneOption,
     ThresholdAlarmExpiredOption,
 } from "../../../../redux/utils/initial-general";
-import {ProgramDetailInitial} from "../../../../pages/CreateProgram/programInitial";
-import {useKeywordListQuery} from "../../../../redux/features/keyword/keyword-api-slice";
-import {useLocationTemplateQuery} from "../../../../redux/features/location/location-api-slice";
-import {IParams} from "../../../../redux/utils/IGeneral";
+import { ProgramDetailInitial } from "../../../../pages/CreateProgram/programInitial";
+import { useKeywordListQuery } from "../../../../redux/features/keyword/keyword-api-slice";
+import { useLocationTemplateQuery } from "../../../../redux/features/location/location-api-slice";
+import { IParams } from "../../../../redux/utils/IGeneral";
 import {
-    useLazyAccountListQuery, useLazyAccountRoleQuery,
+  useLazyAccountListQuery,
+  useLazyAccountRoleQuery,
 } from "../../../../redux/features/account/account-api-slice";
 import TableContainer from "@mui/material/TableContainer";
 import Paper from "@mui/material/Paper";
@@ -45,24 +47,26 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import TableBody from "@mui/material/TableBody";
-import {Delete} from "@mui/icons-material";
+import { Delete } from "@mui/icons-material";
 import TablePagination from "@mui/material/TablePagination";
+import {useParams} from "react-router-dom";
+import {useDetailProgramQuery, useProgramListQuery} from "../../../../redux/features/program/program-api-slice";
 
 interface IMainInfoProps {
-    slug: string
+  slug: string;
 }
 
 const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
-                                                               slug
-                                                           }: IMainInfoProps) => {
-
-    let programData = ProgramDetailInitial.data
-    let {_id} = useParams()
-    const {data: fetchDetail = programData, isLoading} = useDetailProgramQuery(_id ?? '')
-
-    useEffect(() => {
-        programData._id = fetchDetail._id
-    }, [fetchDetail]);
+  slug,
+}: IMainInfoProps) => {
+  let programData = ProgramDetailInitial.data;
+  let { _id } = useParams();
+  const { data: fetchDetail = programData, isLoading } = useDetailProgramQuery(
+    _id ?? ""
+  );
+  useEffect(() => {
+    programData._id = fetchDetail._id;
+  }, [fetchDetail]);
 
     const [programGroup, setProgramGroup] = useState(
         fetchDetail.program_group
@@ -75,111 +79,131 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
     );
     const [startPeriod, setStartPeriod] = useState(fetchDetail.start_period);
     const [endPeriod, setEndPeriod] = useState(fetchDetail.end_period);
+  useEffect(() => {
+    programData._id = fetchDetail._id;
+  }, [fetchDetail]);
 
-    const [pointTypeLabel, setPointType] = useState(
-        fetchDetail.point_type
-    );
-    const [programMechanismLabel, setProgramMechanism] = useState(
-        fetchDetail.program_mechanism
-    );
+  const [pointTypeLabel, setPointType] = useState(fetchDetail.point_type);
+  const [programMechanismLabel, setProgramMechanism] = useState(
+    fetchDetail.program_mechanism
+  );
 
-    const [programOwnerLabel, setProgramOwner] = useState(
-        fetchDetail.program_owner
-    );
-    const [programOwnerDetail, setProgramOwnerDetail] = React.useState<string>(
-        fetchDetail.program_owner_detail
-    );
+  const [programOwnerLabel, setProgramOwner] = useState(
+    fetchDetail.program_owner
+  );
+  const [programOwnerDetail, setProgramOwnerDetail] = React.useState<string>(
+    fetchDetail.program_owner_detail
+  );
 
-    const [keywordRegistration, setKeywordRegistration] = useState(fetchDetail.keyword_registration);
-    const [whiteListCounter, setWhiteListCounter] = React.useState(fetchDetail.whitelist_counter === true ? "1" : "2");
+  const [keywordRegistration, setKeywordRegistration] = useState(
+    fetchDetail.keyword_registration
+  );
+  const [whiteListCounter, setWhiteListCounter] = React.useState(
+    fetchDetail.whitelist_counter === true ? "1" : "2"
+  );
 
-    const [logicValue, setLogicValue] = useState(fetchDetail.logic);
-    const [programTimeZone, setProgramTypeZone] = useState(fetchDetail.program_time_zone);
-    const [programParent, setProgramParent] = useState(fetchDetail.program_parent);
-    const [alarmPicType, setAlarmPicType] = useState(fetchDetail.alarm_pic_type);
-    const [thresholdAlarmExpired, setThresholdAlarmExpired] = useState<number>(fetchDetail.threshold_alarm_expired);
-    const [thresholdAlarmVoucher, setThresholdAlarmVoucher] = useState<number>(fetchDetail.threshold_alarm_voucher);
+  const [logicValue, setLogicValue] = useState(fetchDetail.logic);
+  const [programTimeZone, setProgramTypeZone] = useState(
+    fetchDetail.program_time_zone
+  );
+  const [programParent, setProgramParent] = useState(
+    fetchDetail.program_parent
+  );
+  const [alarmPicType, setAlarmPicType] = useState(fetchDetail.alarm_pic_type);
+  const [thresholdAlarmExpired, setThresholdAlarmExpired] = useState<number>(
+    fetchDetail.threshold_alarm_expired
+  );
+  const [thresholdAlarmVoucher, setThresholdAlarmVoucher] = useState<number>(
+    fetchDetail.threshold_alarm_voucher
+  );
 
-    const [searchInput, setSearchInput] = useState<string>('');
+  const { data: pointTypeOption = { data: [] } } = useGetPointTypeQuery();
+  const { data: mechanismOption = { data: [] } } = useGetMechanismQuery();
+  const { data: keywordRegisterOption = { data: [] } } =
+    useKeywordListQuery(FilterInitial);
+  const { data: programParentOption = { data: [] } } =
+    useProgramListQuery(FilterInitial);
+  const { data: ownerOption = { data: [] } } = useGetLocationTypeQuery();
 
-    // TODO LOGIC DATATABLE
-    const [selected, setSelected] = React.useState<readonly string[]>([]);
-    const [page, setPage] = React.useState(0);
-    const [dense, setDense] = React.useState(false);
-    const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [searchInput, setSearchInput] = useState<string>("");
 
-    const {data: pointTypeOption = {data: []}} = useGetPointTypeQuery()
-    const {data: mechanismOption = {data: []}} = useGetMechanismQuery()
-    const {data: keywordRegisterOption = {data: []}} = useKeywordListQuery(FilterInitial)
-    const {data: programParentOption = {data: []}} = useProgramListQuery(FilterInitial)
-    const {data: ownerOption = {data: []}} = useGetLocationTypeQuery()
+  // TODO LOGIC DATATABLE
+  const [selected, setSelected] = React.useState<readonly string[]>([]);
+  const [page, setPage] = React.useState(0);
+  const [dense, setDense] = React.useState(false);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
-    const ownerFilterInitial: IParams = {
-        limit: 100,
-        skip: 0,
-        filter: `{"type":"${programOwnerLabel}"}`,
-        sort: '{}'
+  const ownerFilterInitial: IParams = {
+    limit: 100,
+    skip: 0,
+    filter: `{"type":"${programOwnerLabel}"}`,
+    sort: "{}",
+  };
+
+  const PicParamInitial: IParams = {
+      limit: rowsPerPage,
+      skip: page,
+    filter: `{"phone": "${searchInput}"}`,
+    sort: "{}",
+  };
+  const RoleParamInitial: IParams = {
+    limit: 100,
+    skip: 0,
+    filter: `{"name": "${searchInput}"}`,
+    sort: "{}",
+  };
+
+  const { data: ownerDetailOption = { data: [] } } =
+    useLocationTemplateQuery(ownerFilterInitial);
+  const [getAlarmPicList, { data: alarmPicList = { data: [] } }] =
+    useLazyAccountListQuery();
+  const [getAlarmRoleList, { data: alarmRoleList = { data: [] } }] =
+    useLazyAccountRoleQuery();
+
+  useEffect(() => {
+    setTimeout(() => {
+      if (alarmPicType === "PIC") {
+        getAlarmPicList(PicParamInitial);
+      } else if (alarmPicType === "Role") {
+        getAlarmRoleList(RoleParamInitial);
+      }
+    }, 100);
+  }, [alarmPicType, searchInput]);
+
+  useEffect(() => {
+    if (alarmPicType === "PIC") {
+      getAlarmPicList(PicParamInitial);
+    } else if (alarmPicType === "Role") {
+      getAlarmRoleList(RoleParamInitial);
     }
+  }, [alarmPicType, page, rowsPerPage]);
 
-    const PicParamInitial: IParams = {
-        limit: 100,
-        skip: 0,
-        filter: `{"phone": "${searchInput}"}`,
-        sort: '{}'
+  const handleChangeCheckbox = (event: any) => {
+    let isChecked = event.target.checked;
+    let _id = event.target.value;
+    if (isChecked) {
+      programData.alarm_pic.push(_id);
+    } else {
+      const index = programData.alarm_pic.indexOf(_id);
+      programData.alarm_pic.splice(index, 1);
     }
-    const RoleParamInitial: IParams = {
-        limit: 100,
-        skip: 0,
-        filter: `{"name": "${searchInput}"}`,
-        sort: '{}'
+  };
+  const resultSearchData =
+    alarmPicType === "PIC" ? alarmPicList.data : alarmRoleList.data;
+  const [filteredResults, setFilteredResults] = useState(resultSearchData);
+  useEffect(() => {
+    if (searchInput !== "") {
+      const filteredData = resultSearchData.filter((i) => {
+        return Object.values(i)
+          .join("")
+          .toLowerCase()
+          .includes(searchInput.toLowerCase());
+      });
+      setFilteredResults(filteredData);
+    } else {
+      setFilteredResults(resultSearchData);
     }
-
-    const {data: ownerDetailOption = {data: []}} = useLocationTemplateQuery(ownerFilterInitial)
-    const [getAlarmPicList, {data: alarmPicList = {data: []}}] = useLazyAccountListQuery()
-    const [getAlarmRoleList, {data: alarmRoleList = {data: []}}] = useLazyAccountRoleQuery()
-
-
-    useEffect(() => {
-        setTimeout(() => {
-            if (alarmPicType === 'PIC') {
-                getAlarmPicList(PicParamInitial)
-            } else if (alarmPicType === 'Role') {
-                getAlarmRoleList(RoleParamInitial)
-            }
-        }, 100)
-    }, [alarmPicType, searchInput]);
-
-    useEffect(() => {
-        if (alarmPicType === 'PIC') {
-            getAlarmPicList(PicParamInitial)
-        } else if (alarmPicType === 'Role') {
-            getAlarmRoleList(RoleParamInitial)
-        }
-    }, [alarmPicType]);
-
-    const handleChangeCheckbox = (event: any) => {
-        let isChecked = event.target.checked;
-        let _id = event.target.value
-        if (isChecked) {
-            programData.alarm_pic.push(_id)
-        } else {
-            const index = programData.alarm_pic.indexOf(_id)
-            programData.alarm_pic.splice(index, 1)
-        }
-    };
-    const resultSearchData = alarmPicType === 'PIC' ? alarmPicList.data : alarmRoleList.data;
-    const [filteredResults, setFilteredResults] = useState(resultSearchData);
-    useEffect(() => {
-        if (searchInput !== '') {
-            const filteredData = resultSearchData.filter((i) => {
-                return Object.values(i).join('').toLowerCase().includes(searchInput.toLowerCase())
-            })
-            setFilteredResults(filteredData)
-        } else {
-            setFilteredResults(resultSearchData)
-        }
-
-    }, [searchInput]);
+  }, [searchInput]);
 
     const handleChangePage = (event: unknown, newPage: number) => {
         setPage(newPage);
