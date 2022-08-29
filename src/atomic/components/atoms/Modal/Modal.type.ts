@@ -1,11 +1,22 @@
-interface ModalProps{
-    open: any,
-    handleClose?:any,
-    title?: string,
-    description: any
+interface ModalProps {
+  open: any;
+  handleClose?: any;
+  title?: string;
+  description?: any;
+}
 
+interface IProgramDetailsModalProps extends ModalProps {
+  roleAccess: boolean;
+  data: any;
+}
+
+interface IKeywordDetailsModalProps extends ModalProps {
+  roleAccess: boolean;
+  data: any;
 }
 
 export type {
-    ModalProps
-}
+  ModalProps,
+  IProgramDetailsModalProps,
+  IKeywordDetailsModalProps,
+};
