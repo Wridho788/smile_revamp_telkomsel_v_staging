@@ -133,7 +133,7 @@ const Index: React.FC<LayoutProps> = ({ children }: LayoutProps) => {
             bottom: 35,
             left: -10,
           }}
-          // onClick={handleClick}
+          onClick={() => setOpenList((prev) => !prev)}
         >
           <img
             src={open ? BtnArrowRight : BtnArrowLeft}
