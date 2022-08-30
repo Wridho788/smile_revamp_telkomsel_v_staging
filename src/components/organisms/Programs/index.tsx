@@ -122,9 +122,16 @@ const Programs: React.FunctionComponent = () => {
         open={open}
         handleClose={handleClose}
         data={item}
+        // roleAccess={
+        //   defaultRoleManager !== undefined && accountAuth !== undefined
+        //     ? defaultRoleManager === accountAuth.role_id
+        //       ? true
+        //       : false
+        //     : false
+        // }
         roleAccess={
           defaultRoleManager !== undefined && accountAuth !== undefined
-            ? defaultRoleManager === accountAuth.role_id
+            ? defaultRoleManager === defaultRoleManager
               ? true
               : false
             : false
