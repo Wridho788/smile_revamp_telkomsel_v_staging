@@ -2,7 +2,7 @@ import React, { FC, useState } from "react";
 import Box from "@mui/material/Box";
 import ModalCustom from "@mui/material/Modal";
 import { IKeywordDetailsModalProps } from "./Modal.type";
-import { Button, Grid, Stack } from "@mui/material";
+import { Button, Chip, Grid, Stack } from "@mui/material";
 import { BodyCopy, H2, OutlinedTextField } from "../../../../components";
 import {
   useKeywordApproveMutation,
@@ -29,8 +29,10 @@ const KeywordDetailsModal: FC<IKeywordDetailsModalProps> = ({
   roleAccess,
 }) => {
   const [rejectionIssue, setRejectionIssue] = useState("");
-  const [keywordApprove] = useKeywordApproveMutation();
-  const [keywordReject] = useKeywordRejectMutation();
+  const [keywordApprove, { isLoading: isLoadingApprove }] =
+    useKeywordApproveMutation();
+  const [keywordReject, { isLoading: isLoadingReject }] =
+    useKeywordRejectMutation();
 
   const approveHandler = async () => {
     await keywordApprove(data["_id"] ?? "");
@@ -172,7 +174,26 @@ const KeywordDetailsModal: FC<IKeywordDetailsModalProps> = ({
             />
           </Grid>
         </Grid>
-        {roleAccess && (
+        {data?.keyword_approval?.length > 0 ? (
+          <Stack
+            direction="row"
+            alignItems="center"
+            justifyContent="end"
+            mt="2vw"
+          >
+            <Chip
+              color="success"
+              label="APPROVED"
+              sx={{
+                color: "white",
+                fontSize: "1vw",
+                fontWeight: "bold",
+                paddingBlock: "1.2vw",
+                paddingInline: "0.4vw",
+              }}
+            />
+          </Stack>
+        ) : roleAccess ? (
           <>
             <Stack
               direction="row"
@@ -182,6 +203,7 @@ const KeywordDetailsModal: FC<IKeywordDetailsModalProps> = ({
               mt="2vw"
             >
               <Button
+                disabled={isLoadingApprove}
                 onClick={approveHandler}
                 variant={"contained"}
                 color="success"
@@ -190,6 +212,7 @@ const KeywordDetailsModal: FC<IKeywordDetailsModalProps> = ({
                 Approve
               </Button>
               <Button
+                disabled={isLoadingReject}
                 onClick={rejectHandler}
                 variant={"contained"}
                 color="error"
@@ -208,6 +231,8 @@ const KeywordDetailsModal: FC<IKeywordDetailsModalProps> = ({
               rows={3}
             />
           </>
+        ) : (
+          <></>
         )}
       </Box>
     </ModalCustom>
