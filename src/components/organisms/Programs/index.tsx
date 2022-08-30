@@ -1,8 +1,10 @@
 import * as React from "react";
 import {
   Box,
+  Button,
   Card,
   CardContent,
+  Chip,
   CircularProgress,
   Grid,
   IconButton,
@@ -245,9 +247,23 @@ const Programs: React.FunctionComponent = () => {
                         </Grid>
                         {/* 2 */}
                         {/* <H2 mt={"2.5vw"}>{_["name"]}</H2> */}
-                        <H2 mt={"1.5vw"} pb="2vw">
-                          {_.name}
-                        </H2>
+                        <H2 mt={"1.5vw"}>{_.name}</H2>
+                        <Stack
+                          direction="row"
+                          justifyContent="end"
+                          alignItems="center"
+                        >
+                          <Chip
+                            color="info"
+                            label={_.status.set_value}
+                            sx={{
+                              fontSize: "1vw",
+                              fontWeight: "bold",
+                              paddingBlock: "1.2vw",
+                              paddingInline: "0.5vw",
+                            }}
+                          />
+                        </Stack>
                         <Box position="absolute" bottom={"1vw"}>
                           <Stack
                             direction={"row"}
@@ -324,9 +340,23 @@ const Programs: React.FunctionComponent = () => {
                         </Grid>
                         {/* 2 */}
                         {/* <H2 mt={"2.5vw"}>{_["name"]}</H2> */}
-                        <H2 mt={"1.5vw"} pb="2vw">
-                          {_.name}
-                        </H2>
+                        <H2 mt={"1.5vw"}>{_.name}</H2>
+                        <Stack
+                          direction="row"
+                          justifyContent="end"
+                          alignItems="center"
+                        >
+                          <Chip
+                            color="info"
+                            label={_.status.set_value}
+                            sx={{
+                              fontSize: "1vw",
+                              fontWeight: "bold",
+                              paddingBlock: "1.2vw",
+                              paddingInline: "0.5vw",
+                            }}
+                          />
+                        </Stack>
                         <Box position="absolute" bottom={"1vw"}>
                           <Stack
                             direction={"row"}
@@ -386,7 +416,7 @@ const Programs: React.FunctionComponent = () => {
                   >
                     <Grid item xs={9}>
                       <Grid container display="flex" alignItems="center">
-                        <Grid item xs={6}>
+                        <Grid item xs={5}>
                           <BodyCopy
                             color={"secondary.light"}
                             sx={{ opacity: 0.5 }}
@@ -396,10 +426,28 @@ const Programs: React.FunctionComponent = () => {
                             {_.name}
                           </BodyCopy>
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={5}>
                           {/* 2 */}
                           {/* <H2 mt={"2.5vw"}>{_["name"]}</H2> */}
                           <H2>{_.name}</H2>
+                        </Grid>
+                        <Grid item xs={2}>
+                          <Stack
+                            direction="row"
+                            justifyContent="center"
+                            alignItems="center"
+                          >
+                            <Chip
+                              color="info"
+                              label={_.status.set_value}
+                              sx={{
+                                fontSize: "1vw",
+                                fontWeight: "bold",
+                                paddingBlock: "1.2vw",
+                                paddingInline: "0.5vw",
+                              }}
+                            />
+                          </Stack>
                         </Grid>
                       </Grid>
                     </Grid>
@@ -505,7 +553,7 @@ const Programs: React.FunctionComponent = () => {
                   >
                     <Grid item xs={9}>
                       <Grid container display="flex" alignItems="center">
-                        <Grid item xs={6}>
+                        <Grid item xs={5}>
                           <BodyCopy
                             color={"secondary.light"}
                             sx={{ opacity: 0.5 }}
@@ -515,10 +563,28 @@ const Programs: React.FunctionComponent = () => {
                             {_.name}
                           </BodyCopy>
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={5}>
                           {/* 2 */}
                           {/* <H2 mt={"2.5vw"}>{_["name"]}</H2> */}
                           <H2>{_.name}</H2>
+                        </Grid>
+                        <Grid item xs={2}>
+                          <Stack
+                            direction="row"
+                            justifyContent="center"
+                            alignItems="center"
+                          >
+                            <Chip
+                              color="info"
+                              label={_.status.set_value}
+                              sx={{
+                                fontSize: "1vw",
+                                fontWeight: "bold",
+                                paddingBlock: "1.2vw",
+                                paddingInline: "0.5vw",
+                              }}
+                            />
+                          </Stack>
                         </Grid>
                       </Grid>
                     </Grid>

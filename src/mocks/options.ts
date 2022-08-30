@@ -44,11 +44,11 @@ export const keywordTypeOptions = [
 
 export const programSegmentationOptions = [
   {
-    _id: "1",
-    set_value: "Whitelist",
+    _id: "whitelist",
+    set_value: "whitelist",
   },
   {
-    _id: "2",
-    set_value: "Blacklist",
+    _id: "blacklist",
+    set_value: "blacklist",
   },
 ];
