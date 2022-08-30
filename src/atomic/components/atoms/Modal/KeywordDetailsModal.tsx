@@ -40,7 +40,6 @@ const KeywordDetailsModal: FC<IKeywordDetailsModalProps> = ({
     await keywordReject(data["_id"] ?? "");
   };
 
-  console.log(data);
   return (
     <ModalCustom
       keepMounted

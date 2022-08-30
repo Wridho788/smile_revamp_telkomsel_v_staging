@@ -18,6 +18,7 @@ export const ProgramNotificationInitial = [
 
 export const CreateProgramInitial: ICreateProgram = {
     _id: "",
+    program_group: "",
     name: "",
     desc: "",
     start_period: new Date,
@@ -40,6 +41,7 @@ export const CreateProgramInitial: ICreateProgram = {
 
 export const ProgramItemInitial: IProgramItem = {
     _id: "",
+    program_group: "",
     name: "",
     desc: "",
     start_period: new Date,
