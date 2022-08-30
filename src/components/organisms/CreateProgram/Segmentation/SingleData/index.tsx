@@ -7,9 +7,9 @@ import {
     IconButton,
     Stack,
 } from "@mui/material";
-import {OutlinedTextField, Select} from "../../../atoms";
+import {OutlinedTextField, Select} from "../../../../atoms";
 import {useEffect, useState} from "react";
-import {programSegmentationOptions} from "../../../../mocks/options";
+import {programSegmentationOptions} from "../../../../../mocks/options";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -22,11 +22,11 @@ import {
     useDeleteProgramTempListMutation,
     useImportListMutation, useLazyProgramTempListQuery,
 
-} from "../../../../redux/features/program/program-api-slice";
+} from "../../../../../redux/features/program/program-api-slice";
 import Swal from "sweetalert2";
 import TablePagination from "@mui/material/TablePagination";
 import ModalCustom from "@mui/material/Modal";
-import {ModalInputs} from "./Segmentation.type";
+import {ModalInputs} from "../Segmentation.type";
 
 interface ISegmentationProps {
 }

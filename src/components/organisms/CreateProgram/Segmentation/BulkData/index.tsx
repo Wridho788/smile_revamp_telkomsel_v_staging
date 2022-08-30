@@ -9,9 +9,9 @@ import {
     Pagination,
     Stack,
 } from "@mui/material";
-import {BodyCopy, Select} from "../../../atoms";
+import {BodyCopy, Select} from "../../../../atoms";
 import {useEffect, useState} from "react";
-import {programSegmentationOptions} from "../../../../mocks/options";
+import {programSegmentationOptions} from "../../../../../mocks/options";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -24,13 +24,13 @@ import {
     useDeleteProgramTempListMutation,
     useImportListMutation, useLazyProgramTempListQuery, useProgramTempListQuery,
 
-} from "../../../../redux/features/program/program-api-slice";
-import {FilterInitial} from "../../../../redux/utils/initial-general";
-import {IProgramImportFile, IResponse} from "../../../../redux/features/program/interface";
+} from "../../../../../redux/features/program/program-api-slice";
+import {FilterInitial} from "../../../../../redux/utils/initial-general";
+import {IProgramImportFile, IResponse} from "../../../../../redux/features/program/interface";
 import Swal from "sweetalert2";
 import TablePagination from "@mui/material/TablePagination";
-import SwitchCustom from "../../../../atomic/components/atoms/Switch";
-import {noticeUploadData} from "../MainInfo/inital";
+import SwitchCustom from "../../../../../atomic/components/atoms/Switch";
+import {noticeUploadData} from "../../MainInfo/inital";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 
