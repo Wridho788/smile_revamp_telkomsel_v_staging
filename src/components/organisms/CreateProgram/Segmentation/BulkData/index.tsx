@@ -86,6 +86,7 @@ const BulkData: React.FunctionComponent<ISegmentationProps> = () => {
             "type": typeMSSIDN
         }
         await importFile({Data})
+        setWarningShow(false)
         setSuccessShow(true)
     }
     return (

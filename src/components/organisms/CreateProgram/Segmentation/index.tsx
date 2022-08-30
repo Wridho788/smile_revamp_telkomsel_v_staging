@@ -14,7 +14,6 @@ const Segmentation: React.FunctionComponent<ISegmentationProps> = () => {
     const [bulkUpload, setBulkUpload] = useState(false);
     return (
         <Box px="3vw">
-
             <Stack spacing={"2vw"} >
             <SwitchCustom checked={bulkUpload} handleChange={setBulkUpload} label={"Bulk Upload"}/>
             {
