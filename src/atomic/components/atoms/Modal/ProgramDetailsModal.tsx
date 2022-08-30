@@ -2,7 +2,7 @@ import React, { FC, useState } from "react";
 import Box from "@mui/material/Box";
 import ModalCustom from "@mui/material/Modal";
 import { IProgramDetailsModalProps } from "./Modal.type";
-import { Button, Stack } from "@mui/material";
+import { Button, Chip, Stack } from "@mui/material";
 import {
   useApproveProgramMutation,
   useRejectProgramMutation,
@@ -29,8 +29,10 @@ const ProgramDetailsModal: FC<IProgramDetailsModalProps> = ({
   roleAccess,
 }) => {
   const [rejectionIssue, setRejectionIssue] = useState("");
-  const [approveProgram] = useApproveProgramMutation();
-  const [rejectProgram] = useRejectProgramMutation();
+  const [approveProgram, { isLoading: isLoadingApprove }] =
+    useApproveProgramMutation();
+  const [rejectProgram, { isLoading: isLoadingReject }] =
+    useRejectProgramMutation();
 
   const approveHandler = async () => {
     await approveProgram(data["_id"] ?? "");
@@ -52,7 +54,26 @@ const ProgramDetailsModal: FC<IProgramDetailsModalProps> = ({
       <Box sx={style} minWidth={"45vw"}>
         <H2>{data.name ?? "Title"}</H2>
         <BodyCopy>Program ID : {data["_id"] ?? "Description"}</BodyCopy>
-        {roleAccess && (
+        {data?.program_approval?.length > 0 ? (
+          <Stack
+            direction="row"
+            alignItems="center"
+            justifyContent="end"
+            mt="2vw"
+          >
+            <Chip
+              color="success"
+              label="APPROVED"
+              sx={{
+                color: "white",
+                fontSize: "1vw",
+                fontWeight: "bold",
+                paddingBlock: "1.2vw",
+                paddingInline: "0.4vw",
+              }}
+            />
+          </Stack>
+        ) : roleAccess ? (
           <>
             <Stack
               direction="row"
@@ -62,6 +83,7 @@ const ProgramDetailsModal: FC<IProgramDetailsModalProps> = ({
               mt="2vw"
             >
               <Button
+                disabled={isLoadingApprove}
                 onClick={approveHandler}
                 variant={"contained"}
                 color="success"
@@ -70,6 +92,7 @@ const ProgramDetailsModal: FC<IProgramDetailsModalProps> = ({
                 Approve
               </Button>
               <Button
+                disabled={isLoadingReject}
                 onClick={rejectHandler}
                 variant={"contained"}
                 color="error"
@@ -88,6 +111,8 @@ const ProgramDetailsModal: FC<IProgramDetailsModalProps> = ({
               rows={3}
             />
           </>
+        ) : (
+          <></>
         )}
       </Box>
     </ModalCustom>
