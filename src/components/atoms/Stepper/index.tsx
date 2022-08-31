@@ -144,7 +144,7 @@ export default function HorizontalLinearStepper({
             if (type === "program") {
                 slug === "insert"
                     ? await createProgram(CreateProgramInitial).then((res: any) => {
-                        console.log(res.error.data.message)
+                        console.log(res)
                         if (res.error) {
                             messageErrorHandler(res.error.data.message)
                         } else {
@@ -173,7 +173,6 @@ export default function HorizontalLinearStepper({
                 // window.location.href = "/keyword";
             }
             setIsLoading(false);
-            return
         }
 
         let newSkipped = skipped;
