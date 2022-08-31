@@ -133,10 +133,7 @@ const Programs: React.FunctionComponent = () => {
         // }
         roleAccess={
           defaultRoleManager !== undefined && accountAuth !== undefined
-            ? defaultRoleManager === defaultRoleManager
-              ? true
-              : false
-            : false
+            ? defaultRoleManager === defaultRoleManager : false
         }
       />
       <Stack direction={"row"} justifyContent={"space-between"}>
