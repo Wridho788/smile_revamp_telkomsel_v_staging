@@ -61,7 +61,7 @@ const closedMixin = (theme: Theme): CSSObject => ({
 const DrawerHeader = styled("div")(({ theme }) => ({
   display: "flex",
   alignItems: "center",
-  justifyContent: "flex-end",
+  justifyContent: "center",
   padding: theme.spacing(0, 1),
   // necessary for content to be below app bar
   ...theme.mixins.toolbar,
@@ -98,7 +98,15 @@ const Index: React.FC<LayoutProps> = ({ children }: LayoutProps) => {
       <CssBaseline />
       <Drawer variant="permanent" open={open} anchor="right">
         {open == false ? (
-          <Toolbar sx={{ "&.MuiToolbar-root": { padding: "16px" } }}>
+          <Toolbar
+            sx={{
+              "&.MuiToolbar-root": {
+                padding: "16px",
+                display: "flex",
+                justifyContent: "center",
+              },
+            }}
+          >
             <IconButton color="inherit" aria-label="open drawer" edge="start">
               <img
                 src={LogoTsel}
@@ -108,7 +116,7 @@ const Index: React.FC<LayoutProps> = ({ children }: LayoutProps) => {
             </IconButton>
           </Toolbar>
         ) : (
-          <DrawerHeader sx={{ justifyContent: "" }}>
+          <DrawerHeader>
             <img
               src={TelkomselLabel}
               srcSet={TelkomselLabel}
@@ -162,6 +170,7 @@ const Index: React.FC<LayoutProps> = ({ children }: LayoutProps) => {
                 position: "fixed",
                 bottom: 32,
                 zIndex: 9,
+                width: "100%",
                 backgroundColor: "#FFF",
                 minHeight: 48,
                 justifyContent: open ? "initial" : "center",
