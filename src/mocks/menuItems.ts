@@ -8,6 +8,7 @@ import {
   Redeem,
   BrightnessLow,
   StarsOutlined,
+  ErrorOutlineOutlined,
 } from "@mui/icons-material";
 
 export interface Menu {
@@ -26,129 +27,46 @@ export interface ChildMenu {
 
 export const menuItems: Menu[] = [
   {
-    label: "Management Program",
-    hasChild: true,
+    label: "Program Management",
+    hasChild: false,
     icon: PersonSearch,
-    child: [
-      {
-        label: "Program",
-        path: "/dashboard",
-        alias: ["/dashboard"],
-      },
-      {
-        label: "Program Mechanism",
-        path: "/progarmMechanism",
-        alias: ["/progarmMechanism"],
-      },
-    ],
+    path: "/program-management",
+  },
+  {
+    label: "Keyword Management",
+    hasChild: false,
+    icon: Redeem,
+    path: "/keyword-management",
+  },
+  {
+    label: "Customer Management",
+    hasChild: false,
+    icon: PeopleAlt,
+    path: "/customer-management",
   },
 
   {
-    label: "Merchant",
+    label: "Merchant Management",
     hasChild: true,
     icon: Storefront,
-    path: "/dashboard",
     child: [
       {
         label: "Merchant",
         path: "/merchant",
-        alias: ["/merchant"],
+        alias: ["/merchant-management"],
       },
       {
-        label: "Product Category",
+        label: "Outlet",
         path: "/merchant",
         alias: ["/merchant"],
-      },
-      {
-        label: "Products",
-        path: "/merchant",
-        alias: ["/merchant"],
-      },
-      {
-        label: "Contract",
-        path: "/merchant",
-        alias: ["/merchant"],
-      },
-      {
-        label: "P/O",
-        path: "/merchant",
-        alias: ["/merchant"],
-      },
-      {
-        label: "Merchant User",
-        path: "/merchant",
-        alias: ["/merchant"],
-      },
-      {
-        label: "Vouchers",
-        path: "/merchant",
-        alias: ["/merchant"],
-      },
-    ],
-  },
-  {
-    label: "Configuration",
-    hasChild: true,
-    icon: BrightnessLow,
-    path: "/configuration",
-    child: [
-      {
-        label: "Earning",
-        path: "/configuration",
-        alias: ["/configuration"],
-      },
-      {
-        label: "Redeemption",
-        path: "/configuration",
-        alias: ["/configuration"],
-      },
-      {
-        label: "Reward",
-        path: "/configuration",
-        alias: ["/configuration"],
-      },
-      {
-        label: "Condition",
-        path: "/configuration",
-        alias: ["/configuration"],
-      },
-    ],
-  },
-  {
-    label: "Report",
-    hasChild: false,
-    icon: Equalizer,
-    path: "/report",
-  },
-  {
-    label: "Admin",
-    hasChild: true,
-    icon: PeopleAlt,
-    path: "/admin",
-    child: [
-      {
-        label: "User",
-        path: "/admin",
-        alias: ["/admin"],
-      },
-      {
-        label: "Menu Authorize",
-        path: "/admin",
-        alias: ["/admin"],
       },
     ],
   },
 
   {
-    label: "Lucky Draw",
+    label: "Notification Management",
     hasChild: false,
-    icon: StarsOutlined,
-    path: "/luckyDraw",
-  },
-  {
-    label: "Keyword",
-    hasChild: false,
-    icon: Redeem,
-    path: "/keyword",
+    icon: ErrorOutlineOutlined,
+    path: "/notification-management",
   },
 ];
