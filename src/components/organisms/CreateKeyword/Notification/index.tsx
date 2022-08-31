@@ -8,7 +8,7 @@ import {
   useGetNotifViaQuery,
 } from "../../../../redux/features/lov/lov-api-slice";
 import { CreateKeywordGeneral } from "../initial";
-import { ICreateKeyword } from "../interface";
+import { ICreateKeyword } from "../interfaces";
 import { useNotificationTemplateQuery } from "../../../../redux/features/notification/notification-api-slice";
 import { FilterInitial } from "../../../../redux/utils/initial-general";
 
@@ -137,9 +137,12 @@ const Notification: React.FunctionComponent<INotificationProps> = (props) => {
           <Button
             onClick={() => {
               keywordCreate.keyword_notification.push({
-                notification: "",
                 via: "",
                 receiver: "",
+                notif_type: "",
+                notification: "",
+                transaction_type: "",
+                notification_content: "",
               });
               setStateTrigger(!stateTrigger);
             }}

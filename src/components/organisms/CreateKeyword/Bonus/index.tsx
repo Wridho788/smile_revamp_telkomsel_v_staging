@@ -6,7 +6,7 @@ import AddBoxIcon from "@mui/icons-material/AddBox";
 import { useGetBonusTypeQuery } from "../../../../redux/features/lov/lov-api-slice";
 import { FilterInitial } from "../../../../redux/utils/initial-general";
 import { CreateKeywordGeneral } from "../initial";
-import { ICreateKeyword } from "../interface";
+import { ICreateKeyword } from "../interfaces";
 import { useProductSelectBoxQuery } from "../../../../redux/features/product/product-api-slice";
 import { useLocationTemplateQuery } from "../../../../redux/features/location/location-api-slice";
 
