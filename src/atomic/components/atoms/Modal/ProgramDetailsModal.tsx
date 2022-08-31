@@ -2,11 +2,7 @@ import React, { FC, useState } from "react";
 import Box from "@mui/material/Box";
 import ModalCustom from "@mui/material/Modal";
 import { IProgramDetailsModalProps } from "./Modal.type";
-<<<<<<< HEAD
 import {Button, Grid, IconButton, Stack, Card, Typography, Chip} from "@mui/material";
-=======
-import { Button, Chip, Stack } from "@mui/material";
->>>>>>> e6e16c8386d2ddaeb3b1a23d22d756409045a363
 import {
   useApproveProgramMutation,
   useRejectProgramMutation,
