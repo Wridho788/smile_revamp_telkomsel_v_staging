@@ -19,23 +19,28 @@ export interface IKeywordNotification {
 }
 
 export interface IKeywordShift {
-  from: string;
-  to: string;
+  from: any;
+  to: any;
 }
 
 export interface ICreateKeyword {
-  keyword_type: string;
+  // keyword_type: string;
+  keyword_parent: string;
   name: string;
   start_period: Date;
   end_period: Date;
   point_type: [];
-  point_value: string;
+  poin_value: string;
+  poin_redeemed: number;
   for_new_redeemer: boolean;
   max_mode: string;
   max_redeem_counter: number;
   max_redeem_per_msisdn: number;
-  channel_validation: [];
+  channel_validation: boolean;
+  // channel_validation: [];
   merchandise_keyword: boolean;
+  sms_masking: string;
+  keyword_shift: Array<IKeywordShift>;
   merchant: string;
   merchant_name: string;
   telkomsel_los: boolean;
@@ -47,8 +52,6 @@ export interface ICreateKeyword {
   enable_coorporate: boolean;
   customer_tier: [];
   comment_approval: string;
-  keyword_parent: string;
   keyword_bonus: Array<IKeywordBonus>;
   keyword_notification: Array<IKeywordNotification>;
-  keyword_shift: Array<IKeywordShift>;
 }
