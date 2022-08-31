@@ -21,14 +21,14 @@ const Index = () => (
         <Route path="/myTelkomsel" element={<MyTelkomsel/>}/>
         <Route path="/dashboard" element={<Dashboard/>}/>
         <Route path="/program-management" element={<ProgramPage/>}/>
-        <Route path="/keyword" element={<Keyword/>}/>
+        <Route path="/keyword-management" element={<Keyword/>}/>
         <Route path="/create-program" element={<CreateProgram/>}/>
         <Route path="/edit-program/:_id" element={<EditProgram/>}/>
         <Route path="/create-keyword" element={<CreateKeyword/>}/>
         <Route path="/merchant-management" element={<MerchantManagement/>}/>
         <Route path="/login" element={<Auth/>}/>
         <Route
-            path="/customer-segmentation-management"
+            path="/customer-management"
             element={<CustomerManagement/>}
         />
         <Route

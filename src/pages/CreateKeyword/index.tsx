@@ -30,7 +30,7 @@ const CreateKeyword = () => {
       /> */}
         <StepperPaper sx={{ paddingTop: "4vw" }}>
           <H2 textAlign="center" mb="2vw">
-            Keyword
+            Create Keyword
           </H2>
           <Stepper
             steps={steps}

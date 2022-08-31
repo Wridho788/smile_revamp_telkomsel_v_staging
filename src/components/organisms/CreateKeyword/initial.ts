@@ -28,18 +28,28 @@ import {
 //   receiver: "",
 // };
 export const CreateKeywordGeneral: ICreateKeyword = {
-  keyword_type: "",
+  // keyword_type: "",
+  keyword_parent: "",
   name: "",
   start_period: new Date(),
   end_period: new Date(),
   point_type: [],
-  point_value: "",
+  poin_value: "",
+  poin_redeemed: 0,
   for_new_redeemer: false,
   max_mode: "",
   max_redeem_counter: 0,
   max_redeem_per_msisdn: 0,
-  channel_validation: [],
+  channel_validation: false,
+  // channel_validation: [],
   merchandise_keyword: false,
+  sms_masking: "",
+  keyword_shift: [
+    {
+      from: new Date().getTime(),
+      to: new Date().getTime(),
+    },
+  ],
   merchant: "",
   merchant_name: "",
   telkomsel_los: false,
@@ -51,7 +61,6 @@ export const CreateKeywordGeneral: ICreateKeyword = {
   enable_coorporate: false,
   customer_tier: [],
   comment_approval: "",
-  keyword_parent: "",
   keyword_bonus: [
     {
       bonus_type: "",
@@ -72,12 +81,6 @@ export const CreateKeywordGeneral: ICreateKeyword = {
       notification: "",
       via: "",
       receiver: "",
-    },
-  ],
-  keyword_shift: [
-    {
-      from: "00:00",
-      to: "00:00",
     },
   ],
 };

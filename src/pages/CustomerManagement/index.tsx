@@ -6,51 +6,37 @@ import {
   Card,
   CardActions,
   CardContent,
-  Chip,
   Container,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
-  FormControl,
   Grid,
   Icon,
-  InputLabel,
-  MenuItem,
-  OutlinedInput,
   Paper,
-  Select,
   TextField,
 } from "@mui/material";
-import {
-  DrawerNav,
-  Gap,
-  H1,
-  H2,
-  PreTitle,
-  SmallCopy,
-  Subtitle,
-} from "../../components";
+import { DrawerNav, Gap, H2, SmallCopy, Subtitle } from "../../components";
 import {
   useCustomerBadgeListQuery,
   useCustomerBrandListQuery,
-  useCustomerListQuery,
   useCustomerTierListQuery,
+  useLazyCustomerListForPrimeQuery,
 } from "../../redux/features/customer/customer-api-slice";
 import {
-  TableColumnCustomer,
   CustomerInitial,
   CustomerTierInitial,
   CustomerBrandInitial,
-  TableDataRows,
   LocationInitial,
 } from "./initial";
-import DataTable, { TableColumn } from "react-data-table-component";
+import { DataTable } from "primereact/datatable";
+import { Column } from "primereact/column";
+import { Skeleton } from "primereact/skeleton";
+
 import {
   Delete,
   FilterAlt,
   ModeEditOutlineOutlined,
-  VisibilityOutlined,
 } from "@mui/icons-material";
 import { ICustomers } from "../../redux/features/customer/interface";
 import { useLocationTemplateQuery } from "../../redux/features/location/location-api-slice";
@@ -75,7 +61,7 @@ const Index = () => {
   const [searchKey, setSearchKey] = React.useState<string>("msisdn");
   const [paginationCustomer, setPaginationCustomer] = React.useState({
     page: 0,
-    limit: 3,
+    limit: 10,
   });
   const [paginationBrand, setPaginationBrand] = React.useState({
     page: 0,
@@ -96,59 +82,42 @@ const Index = () => {
 
   // ================= Fetching with RTK ===================
 
-  const {
-    data: customerList = { data: [CustomerInitial] },
-    isError: customerError,
-    isLoading: loadingCustomer,
-  } = useCustomerListQuery({
-    skip: page,
-    limit,
-    filter: `{"${searchKey}":"${queryFilter.search}", "region_lacci": "${queryFilter.region}", "cluster_sales": "${queryFilter.cluster_sales}"}`,
-    sort: "{}",
-  });
-  const {
-    data: customerBadgeList = { data: [CustomerBrandInitial] },
-    isError: badgeError,
-    isLoading: loadingBadge,
-  } = useCustomerBadgeListQuery({
-    skip: paginationBadge.page,
-    limit,
-    filter: `{}`,
-    sort: "{}",
-  });
-  const {
-    data: customerBrandList = { data: [CustomerBrandInitial] },
-    isError: brandError,
-    isLoading: loadingBrand,
-  } = useCustomerBrandListQuery({
-    skip: paginationBrand.page,
-    limit: paginationBrand.limit,
-    filter: `{}`,
-    sort: "{}",
-  });
-  const {
-    data: customerTierList = { data: [CustomerTierInitial] },
-    isError: tierError,
-    isLoading: loadingTier,
-  } = useCustomerTierListQuery({
-    skip: paginationTier.page,
-    limit: paginationTier.limit,
-    filter: `{}`,
-    sort: "{}",
-  });
+  const [getProgramList, { data: customerList = { data: [CustomerInitial] } }] =
+    useLazyCustomerListForPrimeQuery();
+
+  const { data: customerBadgeList = { data: [CustomerBrandInitial] } } =
+    useCustomerBadgeListQuery({
+      skip: paginationBadge.page,
+      limit,
+      filter: `{}`,
+      sort: "{}",
+    });
+
+  const { data: customerBrandList = { data: [CustomerBrandInitial] } } =
+    useCustomerBrandListQuery({
+      skip: paginationBrand.page,
+      limit: paginationBrand.limit,
+      filter: `{}`,
+      sort: "{}",
+    });
+
+  const { data: customerTierList = { data: [CustomerTierInitial] } } =
+    useCustomerTierListQuery({
+      skip: paginationTier.page,
+      limit: paginationTier.limit,
+      filter: `{}`,
+      sort: "{}",
+    });
 
   // ==================== Fetching Region =======================
 
-  const {
-    data: locationData = { data: [LocationInitial] },
-    isError: locationError,
-    isLoading: loadingLocation,
-  } = useLocationTemplateQuery({
-    skip: 0,
-    limit: 100,
-    filter: `{}`,
-    sort: "{}",
-  });
+  const { data: locationData = { data: [LocationInitial] } } =
+    useLocationTemplateQuery({
+      skip: 0,
+      limit: 100,
+      filter: `{}`,
+      sort: "{}",
+    });
 
   // ===== Spread data from fetching data =========
   const dataCustomer = customerList.data;
@@ -191,198 +160,92 @@ const Index = () => {
     setOpen({ ...open, filter: false });
   };
 
-  const handleShowCustomer = async (data: any) => {
-    const customerShow = await dataCustomer.filter(
-      (item) => item._id === data._id
-    );
-    setOpen({ ...open, detail: true });
-    setCustomerDetail(customerShow ? customerShow[0] : null);
+  //====== PRIME REACT =======
+  const [loading, setLoading] = React.useState(false);
+  const [totalRecords, setTotalRecords] = React.useState(0);
+  const [customers, setCustomers] = React.useState<any[]>([CustomerInitial]);
+  const [lazyParams, setLazyParams] = React.useState<any>({
+    first: 0,
+    rows: 5,
+    page: 1,
+    sortField: null,
+    sortOrder: null,
+    filters: {
+      msisdn: { value: "", matchMode: "contains" },
+      activation_date: { value: "", matchMode: "contains" },
+      expire_date: { value: "", matchMode: "contains" },
+      region_lacci: { value: "", matchMode: "contains" },
+      cluster_sales: { value: "", matchMode: "contains" },
+      loyalty_tier: { value: "", matchMode: "contains" },
+      arpu: { value: "", matchMode: "contains" },
+      brand: { value: "", matchMode: "contains" },
+    },
+  });
+
+  let loadLazyTimeout: any = null;
+
+  React.useEffect(() => {
+    loadLazyData();
+  }, [lazyParams]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const loadLazyData = () => {
+    setLoading(true);
+
+    if (loadLazyTimeout) {
+      clearTimeout(loadLazyTimeout);
+    }
+
+    //imitate delay of a backend call
+    loadLazyTimeout = setTimeout(async () => {
+      const { data }: any = await getProgramList({
+        lazyEvent: JSON.stringify(lazyParams),
+      });
+      console.log(data.payload);
+      setCustomers(data.payload.data);
+      setTotalRecords(data.payload.totalRecords);
+      setLoading(false);
+    }, Math.random() * 1000 + 250);
   };
 
-  //====================== Memo for Searching component ==========================
-  const subHeaderComponentMemo = React.useMemo(() => {
-    return (
-      <Box
-        sx={{ display: "flex", width: "100%", justifyContent: "space-between" }}
-      >
-        <div>
-          {queryFilter.region && (
-            <Box sx={{ display: "flex", alignItems: "center" }}>
-              <SmallCopy>Region: </SmallCopy>
-              <Chip
-                label={queryFilter.region}
-                variant="outlined"
-                onDelete={() => {
-                  setQueryFilter({ ...queryFilter, region: "" });
-                  setFilter({ ...filter, region: "" });
-                }}
-              />
-            </Box>
-          )}
-          {queryFilter.cluster_sales && (
-            <Box sx={{ isplay: "flex", alignItems: "center" }}>
-              <SmallCopy>Cluster Sales: </SmallCopy>
-              <Chip
-                label={queryFilter.cluster_sales}
-                variant="outlined"
-                onDelete={() => {
-                  setQueryFilter({ ...queryFilter, cluster_sales: "" });
-                  setFilter({ ...filter, cluster_sales: "" });
-                }}
-              />
-            </Box>
-          )}
-        </div>
-        <div style={{ display: "flex" }}>
-          <FormControl
-            fullWidth
-            sx={{
-              "&.MuiOutlinedInput-root": {
-                padding: "5px 10px",
-                border: "none",
-                outline: "none",
-              },
-              "& .MuiFormLabel-root": {
-                transform: "translate(10px, 6px) scale(1)",
-                transition:
-                  "color 200ms cubic-bezier(0.0, 0, 0.2, 1) 0ms,transform 200ms cubic-bezier(0.0, 0, 0.2, 1) 0ms,max-width 200ms cubic-bezier(0.0, 0, 0.2, 1) 0ms",
-                "&.Mui-focused": {
-                  transform: "translate(14px, -9px) scale(0.75)",
-                },
-              },
-            }}
-          >
-            {/* <InputLabel id="demo-simple-select-label">Search By</InputLabel> */}
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              value={searchKey}
-              label="Search By"
-              onChange={handleChangeSearchKey}
-              sx={{
-                "&.MuiSelect-select": {
-                  paddingRight: 0,
-                },
-                "& .MuiInputBase-input": {
-                  padding: "5px 10px",
-                  border: "none",
-                },
-                "& .MuiOutlinedInput-root": {
-                  padding: "5px 10px",
-                  border: "none",
-                  outline: "none",
-                },
-              }}
-            >
-              {Object.keys(CustomerInitial).map((item) => (
-                <MenuItem value={item}>{item.replaceAll("_", " ")}</MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-          {/* <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              "&:focus": { border: "none", outline: "none" },
-              "&:focus-visible": { border: "none", outline: "none" },
-            }}
-          >
-            <SmallCopy>Search By: </SmallCopy>
-            <select
-              onChange={handleChangeSearchKey}
-              value={searchKey}
-              style={{ border: "none", background: "none" }}
-            >
-              {Object.keys(CustomerInitial).map((item) => (
-                <option value={item}>{item.replaceAll("_", " ")}</option>
-              ))}
-            </select>
-          </Box> */}
-          <FormControl
-            sx={{
-              width: "25ch",
-              "& .MuiInputBase-root": {
-                borderRadius: "4px",
-              },
-            }}
-          >
-            <OutlinedInput
-              name="search"
-              value={filter.search}
-              onChange={handleSearch}
-              sx={{
-                "& .MuiInputBase-input": {
-                  padding: "5px 10px",
-                },
-              }}
-              placeholder="Search"
-            />
-          </FormControl>
-          <Button
-            sx={{
-              marginLeft: 3,
-              minWidth: "100px",
-              backgroundColor: "#001A41",
-            }}
-            variant="contained"
-            endIcon={<FilterAlt />}
-            onClick={() => setOpen({ ...open, filter: true })}
-          >
-            <PreTitle>Filter</PreTitle>
-          </Button>
-        </div>
-      </Box>
-    );
-  }, [filter.search, queryFilter.region, queryFilter.cluster_sales, searchKey]);
+  const onPage = (event: any) => {
+    setLazyParams(event);
+  };
 
-  //
-  const TableColumnCustomers: TableColumn<TableDataRows<any>>[] = [
-    {
-      name: "MSISDN",
-      selector: (row) => row.msisdn,
-    },
-    {
-      name: "Activation Date",
-      selector: (row) =>
-        row.activation_date
-          ? format(new Date(`${row.activation_date}`), "PPP")
-          : "",
-    },
-    {
-      name: "Expiration Date",
-      selector: (row) =>
-        row.expire_date ? format(new Date(`${row.expire_date}`), "PPP") : "",
-    },
-    {
-      name: "Region Lacci",
-      selector: (row) => row.region_lacci,
-    },
-    {
-      name: "Cluster Sales",
-      selector: (row) => row.cluster_sales,
-    },
-    {
-      name: "Loyalty Tier",
-      selector: (row) => row.loyalty_tier,
-    },
-    {
-      name: "Arpu",
-      selector: (row) => row.arpu,
-    },
-    {
-      name: "Brand",
-      selector: (row) => row.brand,
-    },
-    {
-      name: "Action",
-      ignoreRowClick: true,
-      allowOverflow: true,
-      button: true,
-      cell: (row) => (
-        <VisibilityOutlined onClick={() => handleShowCustomer(row)} />
-      ),
-    },
-  ];
+  const onSort = (event: any) => {
+    setLazyParams(event);
+  };
+
+  const onFilter = (event: any) => {
+    event["first"] = 0;
+
+    setLazyParams(event);
+  };
+
+  const onRowSelect = (event: any) => {
+    setOpen({ ...open, detail: true });
+    setCustomerDetail(event.data);
+  };
+
+  const activationDateBodyTemplate = (rowData: ICustomers) => {
+    return (
+      <React.Fragment>
+        <span className="image-text">
+          {rowData.activation_date !== "" &&
+            format(new Date(rowData.activation_date), "PPP")}
+        </span>
+      </React.Fragment>
+    );
+  };
+  const expireDateBodyTemplate = (rowData: ICustomers) => {
+    return (
+      <React.Fragment>
+        <span className="image-text">
+          {rowData.expire_date !== "" &&
+            format(new Date(rowData.expire_date), "PPP")}
+        </span>
+      </React.Fragment>
+    );
+  };
 
   return (
     <DrawerNav>
@@ -397,25 +260,90 @@ const Index = () => {
         <Gap width={0} height={20} />
         <Box>
           <Paper>
-            <Container>
+            <div className="card">
               <DataTable
-                columns={TableColumnCustomers}
-                data={dataCustomer}
-                highlightOnHover
-                pagination
-                paginationServer
-                paginationTotalRows={10}
-                paginationPerPage={paginationCustomer.limit}
-                subHeaderComponent={subHeaderComponentMemo}
-                paginationComponentOptions={{
-                  noRowsPerPage: true,
-                }}
-                onChangePage={(page) =>
-                  setPaginationCustomer({ ...paginationCustomer, page })
-                }
-                subHeader
-              />
-            </Container>
+                value={customers}
+                lazy
+                filterDisplay="row"
+                responsiveLayout="scroll"
+                dataKey="id"
+                paginator
+                first={lazyParams.first}
+                rows={10}
+                totalRecords={totalRecords}
+                onPage={onPage}
+                onSort={onSort}
+                onFilter={onFilter}
+                filters={lazyParams.filters}
+                loading={loading}
+                scrollable
+                scrollDirection="both"
+                selectionMode="single"
+                onRowSelect={onRowSelect}
+              >
+                <Column
+                  footer="MSISDN"
+                  style={{ flexGrow: 1, flexBasis: "250px" }}
+                  field="msisdn"
+                  header="MSISDN"
+                  sortable
+                  filter
+                  filterPlaceholder="Search by msisdn"
+                />
+                <Column
+                  footer="Activation Date"
+                  style={{ flexGrow: 1, flexBasis: "250px" }}
+                  field="activation_date"
+                  sortable
+                  filter
+                  header="Avtivation Date"
+                  body={activationDateBodyTemplate}
+                  filterPlaceholder="Search by activation date"
+                />
+                <Column
+                  footer="Expire Date"
+                  style={{ flexGrow: 1, flexBasis: "250px" }}
+                  field="expire_date"
+                  sortable
+                  filter
+                  header="Expire Date"
+                  body={expireDateBodyTemplate}
+                  filterPlaceholder="Search by expire date"
+                />
+                <Column
+                  footer="Region Laccy"
+                  style={{ flexGrow: 1, flexBasis: "250px" }}
+                  field="region_lacci"
+                  header="Region Laccy"
+                  filter
+                  filterPlaceholder="Search by region lacci"
+                />
+                <Column
+                  footer="Cluster Sales"
+                  style={{ flexGrow: 1, flexBasis: "250px" }}
+                  field="cluster_sales"
+                  header="Cluster Sales"
+                  filter
+                  filterPlaceholder="Search by Cluster"
+                />
+                <Column
+                  footer="Loyalty Tier"
+                  style={{ flexGrow: 1, flexBasis: "250px" }}
+                  field="loyalty_tier"
+                  header="Loyalty Tier"
+                  filter
+                  filterPlaceholder="Search by Tier"
+                />
+                <Column
+                  footer="Brand"
+                  style={{ flexGrow: 1, flexBasis: "250px" }}
+                  field="brand"
+                  header="Brand"
+                  filter
+                  filterPlaceholder="Search by Brand"
+                />
+              </DataTable>
+            </div>
           </Paper>
         </Box>
 
@@ -501,7 +429,7 @@ const Index = () => {
       </Box>
 
       {/* Modal Filter */}
-      <Dialog
+      {/* <Dialog
         fullWidth
         open={open.filter}
         onClose={() => setOpen({ ...open, filter: false })}
@@ -533,7 +461,7 @@ const Index = () => {
               />
             )}
           />
-          {/* <Gap width={0} height={10} />
+          <Gap width={0} height={10} />
           <Autocomplete
             fullWidth
             freeSolo
@@ -553,7 +481,7 @@ const Index = () => {
                 label="Cluster Sales"
               />
             )}
-          /> */}
+          />
         </DialogContent>
         <DialogActions sx={{ display: "flex", justifyContent: "space-around" }}>
           <Button sx={{ color: "#001A41" }} onClick={handleCloseFilter}>
@@ -561,7 +489,7 @@ const Index = () => {
           </Button>
           <Button onClick={handleFilter}>Apply</Button>
         </DialogActions>
-      </Dialog>
+      </Dialog> */}
       {/* Show Detail Customer */}
       <Dialog
         fullWidth
