@@ -29,8 +29,8 @@ import { ExpandLess, ExpandMore, StarBorder } from "@mui/icons-material";
 import SidebarItem from "./sidebarItem";
 import { SmallCopy } from "../../atoms";
 
-const drawerWidth = 260;
-const drawerHeight = "50%";
+const drawerWidth = 300;
+const drawerHeight = "70%";
 const drawerPosition = "25%";
 
 const openedMixin = (theme: Theme): CSSObject => ({
@@ -98,7 +98,7 @@ const Index: React.FC<LayoutProps> = ({ children }: LayoutProps) => {
       <CssBaseline />
       <Drawer variant="permanent" open={open} anchor="right">
         {open == false ? (
-          <Toolbar>
+          <Toolbar sx={{ "&.MuiToolbar-root": { padding: "16px" } }}>
             <IconButton color="inherit" aria-label="open drawer" edge="start">
               <img
                 src={LogoTsel}
@@ -108,7 +108,7 @@ const Index: React.FC<LayoutProps> = ({ children }: LayoutProps) => {
             </IconButton>
           </Toolbar>
         ) : (
-          <DrawerHeader sx={{ justifyContent: "center" }}>
+          <DrawerHeader sx={{ justifyContent: "" }}>
             <img
               src={TelkomselLabel}
               srcSet={TelkomselLabel}
@@ -125,13 +125,14 @@ const Index: React.FC<LayoutProps> = ({ children }: LayoutProps) => {
               openMenu={open}
             />
           ))}
+          <div style={{ height: "50px" }}> </div>
         </List>
-
         <IconButton
           style={{
-            position: "absolute", //Here is the trick
+            position: "fixed", //Here is the trick
             bottom: 35,
-            left: -10,
+            zIndex: 10,
+            right: open ? drawerWidth - 30 : 40,
           }}
           onClick={() => setOpenList((prev) => !prev)}
         >
@@ -148,8 +149,7 @@ const Index: React.FC<LayoutProps> = ({ children }: LayoutProps) => {
             bottom: 10,
           }}
         >
-          <Divider />
-
+          {/* <Divider /> */}
           <ListItem
             disablePadding
             sx={{
@@ -159,6 +159,10 @@ const Index: React.FC<LayoutProps> = ({ children }: LayoutProps) => {
           >
             <ListItemButton
               sx={{
+                position: "fixed",
+                bottom: 32,
+                zIndex: 9,
+                backgroundColor: "#FFF",
                 minHeight: 48,
                 justifyContent: open ? "initial" : "center",
                 px: 2.5,
