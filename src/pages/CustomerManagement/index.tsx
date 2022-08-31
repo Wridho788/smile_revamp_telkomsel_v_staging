@@ -31,6 +31,8 @@ import {
 } from "./initial";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
+import { Skeleton } from "primereact/skeleton";
+
 import {
   Delete,
   FilterAlt,
@@ -258,92 +260,90 @@ const Index = () => {
         <Gap width={0} height={20} />
         <Box>
           <Paper>
-            <Container>
-              <div className="card">
-                <DataTable
-                  value={customers}
-                  lazy
-                  filterDisplay="row"
-                  responsiveLayout="scroll"
-                  dataKey="id"
-                  paginator
-                  first={lazyParams.first}
-                  rows={10}
-                  totalRecords={totalRecords}
-                  onPage={onPage}
-                  onSort={onSort}
-                  onFilter={onFilter}
-                  filters={lazyParams.filters}
-                  loading={loading}
-                  scrollable
-                  scrollDirection="both"
-                  selectionMode="single"
-                  onRowSelect={onRowSelect}
-                >
-                  <Column
-                    footer="MSISDN"
-                    style={{ flexGrow: 1, flexBasis: "250px" }}
-                    field="msisdn"
-                    header="MSISDN"
-                    sortable
-                    filter
-                    filterPlaceholder="Search by msisdn"
-                  />
-                  <Column
-                    footer="Activation Date"
-                    style={{ flexGrow: 1, flexBasis: "250px" }}
-                    field="activation_date"
-                    sortable
-                    filter
-                    header="Avtivation Date"
-                    body={activationDateBodyTemplate}
-                    filterPlaceholder="Search by activation date"
-                  />
-                  <Column
-                    footer="Expire Date"
-                    style={{ flexGrow: 1, flexBasis: "250px" }}
-                    field="expire_date"
-                    sortable
-                    filter
-                    header="Expire Date"
-                    body={expireDateBodyTemplate}
-                    filterPlaceholder="Search by expire date"
-                  />
-                  <Column
-                    footer="Region Laccy"
-                    style={{ flexGrow: 1, flexBasis: "250px" }}
-                    field="region_lacci"
-                    header="Region Laccy"
-                    filter
-                    filterPlaceholder="Search by region lacci"
-                  />
-                  <Column
-                    footer="Cluster Sales"
-                    style={{ flexGrow: 1, flexBasis: "250px" }}
-                    field="cluster_sales"
-                    header="Cluster Sales"
-                    filter
-                    filterPlaceholder="Search by Cluster"
-                  />
-                  <Column
-                    footer="Loyalty Tier"
-                    style={{ flexGrow: 1, flexBasis: "250px" }}
-                    field="loyalty_tier"
-                    header="Loyalty Tier"
-                    filter
-                    filterPlaceholder="Search by Tier"
-                  />
-                  <Column
-                    footer="Brand"
-                    style={{ flexGrow: 1, flexBasis: "250px" }}
-                    field="brand"
-                    header="Brand"
-                    filter
-                    filterPlaceholder="Search by Brand"
-                  />
-                </DataTable>
-              </div>
-            </Container>
+            <div className="card">
+              <DataTable
+                value={customers}
+                lazy
+                filterDisplay="row"
+                responsiveLayout="scroll"
+                dataKey="id"
+                paginator
+                first={lazyParams.first}
+                rows={10}
+                totalRecords={totalRecords}
+                onPage={onPage}
+                onSort={onSort}
+                onFilter={onFilter}
+                filters={lazyParams.filters}
+                loading={loading}
+                scrollable
+                scrollDirection="both"
+                selectionMode="single"
+                onRowSelect={onRowSelect}
+              >
+                <Column
+                  footer="MSISDN"
+                  style={{ flexGrow: 1, flexBasis: "250px" }}
+                  field="msisdn"
+                  header="MSISDN"
+                  sortable
+                  filter
+                  filterPlaceholder="Search by msisdn"
+                />
+                <Column
+                  footer="Activation Date"
+                  style={{ flexGrow: 1, flexBasis: "250px" }}
+                  field="activation_date"
+                  sortable
+                  filter
+                  header="Avtivation Date"
+                  body={activationDateBodyTemplate}
+                  filterPlaceholder="Search by activation date"
+                />
+                <Column
+                  footer="Expire Date"
+                  style={{ flexGrow: 1, flexBasis: "250px" }}
+                  field="expire_date"
+                  sortable
+                  filter
+                  header="Expire Date"
+                  body={expireDateBodyTemplate}
+                  filterPlaceholder="Search by expire date"
+                />
+                <Column
+                  footer="Region Laccy"
+                  style={{ flexGrow: 1, flexBasis: "250px" }}
+                  field="region_lacci"
+                  header="Region Laccy"
+                  filter
+                  filterPlaceholder="Search by region lacci"
+                />
+                <Column
+                  footer="Cluster Sales"
+                  style={{ flexGrow: 1, flexBasis: "250px" }}
+                  field="cluster_sales"
+                  header="Cluster Sales"
+                  filter
+                  filterPlaceholder="Search by Cluster"
+                />
+                <Column
+                  footer="Loyalty Tier"
+                  style={{ flexGrow: 1, flexBasis: "250px" }}
+                  field="loyalty_tier"
+                  header="Loyalty Tier"
+                  filter
+                  filterPlaceholder="Search by Tier"
+                />
+                <Column
+                  footer="Brand"
+                  style={{ flexGrow: 1, flexBasis: "250px" }}
+                  field="brand"
+                  header="Brand"
+                  filter
+                  filterPlaceholder="Search by Brand"
+                />
+              </DataTable>
+            </div>
           </Paper>
         </Box>
 

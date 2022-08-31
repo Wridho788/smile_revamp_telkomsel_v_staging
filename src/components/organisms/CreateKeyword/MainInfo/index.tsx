@@ -1,10 +1,19 @@
-import { Box, Stack } from "@mui/material";
+import { Box, Button, Divider, Grid, IconButton, Stack } from "@mui/material";
 import * as React from "react";
-import { MainInfoAuction } from "..";
+import {
+  MainInfoAuction,
+  MainInfoCoreProduct,
+  MainInfoDirectRedeem,
+  MainInfoDonation,
+  MainInfoLuckyDraw,
+} from "..";
 import {
   Select,
   OutlinedTextField,
   ResponsiveDateTimePicker,
+  Subtitle,
+  BodyCopy,
+  ResponsiveTimePicker,
 } from "../../../atoms";
 import {
   useCustomerListQuery,
@@ -30,6 +39,9 @@ import {
 import { useState } from "react";
 import { useMerchantManagementListQuery } from "../../../../redux/features/merchant/merchant-api-slice";
 import { useChannelListQuery } from "../../../../redux/features/channel/merchant-api-slice";
+import { ICreateKeyword } from "../interface";
+import AddBoxIcon from "@mui/icons-material/AddBox";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 interface IMainInfoProps {}
 
@@ -48,20 +60,24 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
     useCustomerListQuery(FilterInitial);
 
   const keywordCreate = CreateKeywordGeneral;
-  // const [keywordType, setKeywordType] = useState(keywordCreate.keyword_type);
+  const [keywordType, setKeywordType] = useState("");
   const [name, setName] = React.useState<string>(keywordCreate.name);
   const [startPeriod, setStartPeriod] = React.useState(
     keywordCreate.start_period
   );
   const [endPeriod, setEndPeriod] = React.useState(keywordCreate.end_period);
-  const [forNewRedeemer, setForNewRedeemer] = React.useState(
-    keywordCreate.for_new_redeemer === true ? "1" : "2"
-  );
+
   const [pointType, setPointType] = React.useState<[]>(
     keywordCreate.point_type
   );
-  const [pointValue, setPointValue] = React.useState<string>(
-    keywordCreate.point_value
+  const [poinValue, setPoinValue] = React.useState<string>(
+    keywordCreate.poin_value
+  );
+  const [poinRedeemed, setPoinRedeemed] = React.useState<number>(
+    keywordCreate.poin_redeemed
+  );
+  const [forNewRedeemer, setForNewRedeemer] = React.useState(
+    keywordCreate.for_new_redeemer === true ? "1" : "2"
   );
   const [maxRedeemPermissonMsisdn, setMaxRedeemPermissonMsisdn] =
     React.useState<number>(keywordCreate.max_redeem_per_msisdn);
@@ -69,17 +85,23 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
   const [maxRedeemCounter, setMaxRedeemCounter] = React.useState<number>(
     keywordCreate.max_redeem_counter
   );
-  const [channelValidation, setChannelValidation] = useState<[]>(
-    keywordCreate.channel_validation
+  const [channelValidation, setChannelValidation] = useState(
+    keywordCreate.channel_validation === true ? "1" : "2"
   );
+  // const [channelValidation, setChannelValidation] = useState<[]>(
+  //   keywordCreate.channel_validation
+  // );
   const [merchandiseKeyword, setMerchandiseKeyword] = useState(
     keywordCreate.merchandise_keyword === true ? "1" : "2"
   );
+  const [smsMasking, setSmsMasking] = useState<string>(
+    keywordCreate.sms_masking
+  );
+
   const [merchant, setMerchant] = useState<string>(keywordCreate.merchant);
   const [merchantName, setMerchantName] = useState<string>(
     keywordCreate.merchant_name
   );
-
   const [telkomselLos, setTelkomselLos] = useState(
     keywordCreate.telkomsel_los === true ? "1" : "2"
   );
@@ -111,20 +133,25 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
   const [keywordParent, setKeywordParent] = React.useState<string>(
     keywordCreate.keyword_parent
   );
+
   React.useEffect(() => {
-    // keywordCreate.keyword_type = keywordType
+    // keywordCreate.keyword_type = keywordType;
+    keywordCreate.keyword_parent = keywordParent;
     keywordCreate.name = name;
     keywordCreate.start_period = startPeriod;
     keywordCreate.end_period = endPeriod;
     keywordCreate.point_type = pointType;
-    keywordCreate.point_value = pointValue;
+    keywordCreate.poin_value = poinValue;
     keywordCreate.for_new_redeemer = forNewRedeemer === "1" ? true : false;
+    keywordCreate.poin_redeemed = Number(poinRedeemed);
     keywordCreate.max_mode = maxMode;
     keywordCreate.max_redeem_counter = Number(maxRedeemCounter);
     keywordCreate.max_redeem_per_msisdn = Number(maxRedeemPermissonMsisdn);
-    keywordCreate.channel_validation = channelValidation;
+    keywordCreate.channel_validation = channelValidation === "1" ? true : false;
+    // keywordCreate.channel_validation = channelValidation;
     keywordCreate.merchandise_keyword =
       merchandiseKeyword === "1" ? true : false;
+    keywordCreate.sms_masking = smsMasking;
     keywordCreate.merchant = merchant;
     keywordCreate.merchant_name = merchantName;
     keywordCreate.telkomsel_los = telkomselLos === "1" ? true : false;
@@ -136,15 +163,14 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
     keywordCreate.enable_coorporate = enableCorporate === "1" ? true : false;
     keywordCreate.customer_tier = customerTier;
     keywordCreate.comment_approval = commentApproval;
-    keywordCreate.keyword_parent = keywordParent;
-    console.log(keywordCreate);
+    // console.log(keywordCreate);
     return;
   }, [
     name,
     startPeriod,
     endPeriod,
     pointType,
-    pointValue,
+    poinValue,
     maxRedeemPermissonMsisdn,
     maxMode,
     maxRedeemCounter,
@@ -163,27 +189,47 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
     customerTier,
     commentApproval,
     keywordParent,
-    forNewRedeemer,
     keywordCreate,
+    poinRedeemed,
+    forNewRedeemer,
+    smsMasking,
   ]);
+
+  const [keywordCreateState, setKeywordCreateState] =
+    React.useState<ICreateKeyword>(keywordCreate);
+  const [stateTrigger, setStateTrigger] = React.useState<boolean>(false);
+
+  React.useEffect(() => {
+    setKeywordCreateState(keywordCreate);
+  }, [keywordCreate, stateTrigger]);
+
   return (
     <Box display="flex" justifyContent="center" px="5%" py="1vw">
-      <Stack spacing={"1vw"} width={"100%"}>
-        <Box px="7vw">
-          {/* <Select
+      <Stack spacing="1vw" width="100%">
+        <Stack spacing="1vw" px="7vw" pb="3vw">
+          <Select
             label="Type"
             placeholder="Option"
             options={keywordTypeOption.data}
             value={keywordType}
             handleChange={setKeywordType}
-          /> */}
-        </Box>
-        <Stack spacing={"1vw"} px="7vw" pb="3vw">
+          />
+          <Divider textAlign="left" sx={{ pt: "1.2vw", pb: "0.6vw" }}>
+            <Subtitle textTransform="uppercase">General Information</Subtitle>
+          </Divider>
+          <Select
+            label="Keyword Group"
+            placeholder="Option"
+            options={keywordParentOption.data}
+            value={keywordParent}
+            optionLabel={"name"}
+            handleChange={setKeywordParent}
+          />
           <OutlinedTextField
-            label="Name"
-            placeholder="Name"
+            label="Keyword Name"
+            placeholder="Merdeka2000"
             value={name}
-            handleChange={setName}
+            handleChange={(value: string) => setName(value.replace(/\s/g, ""))}
             variant={"outlined"}
           />
           <ResponsiveDateTimePicker
@@ -210,8 +256,8 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
             label="Point Value"
             placeholder="Option"
             options={PointValueOption}
-            value={pointValue}
-            handleChange={setPointValue}
+            value={poinValue}
+            handleChange={setPoinValue}
           />
           <Select
             label="For New Redeemer"
@@ -219,6 +265,14 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
             options={BooleanOption}
             value={forNewRedeemer}
             handleChange={setForNewRedeemer}
+          />
+          <OutlinedTextField
+            type={"number"}
+            label="POIN Redeemed"
+            placeholder="100"
+            value={poinRedeemed}
+            handleChange={setPoinRedeemed}
+            variant={"outlined"}
           />
           <Select
             label="Max Mode"
@@ -235,6 +289,7 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
             handleChange={setMaxRedeemCounter}
             variant={"outlined"}
           />
+
           <OutlinedTextField
             type={"number"}
             label="Max Redeem Permisson Msisdn"
@@ -244,6 +299,13 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
             variant={"outlined"}
           />
           <Select
+            label="Channel Validation"
+            placeholder="Option"
+            options={BooleanOption}
+            value={channelValidation}
+            handleChange={setChannelValidation}
+          />
+          {/* <Select
             multiple
             label="Channel Validation"
             placeholder="Option"
@@ -251,7 +313,7 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
             options={channelOption.data}
             optionLabel={"name"}
             handleChange={setChannelValidation}
-          />
+          /> */}
           <Select
             label="Merchandise Keyword"
             placeholder="Option"
@@ -259,6 +321,94 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
             value={merchandiseKeyword}
             handleChange={setMerchandiseKeyword}
           />
+          <OutlinedTextField
+            label="SMS Masking"
+            placeholder="SMS Masking"
+            value={smsMasking}
+            handleChange={setSmsMasking}
+            variant={"outlined"}
+          />
+          <Grid container columns={11}>
+            <Grid item xs={4}>
+              <BodyCopy>Shift</BodyCopy>
+            </Grid>
+            <Grid item xs={7}>
+              <Stack gap="1vw">
+                {keywordCreate.keyword_shift.map((_, idx) => (
+                  <Grid
+                    key={`keyword_shift__item__${idx}`}
+                    container
+                    columns={7}
+                    spacing="1vw"
+                  >
+                    <Grid item xs={3}>
+                      <ResponsiveTimePicker
+                        direction="column"
+                        label="From"
+                        placeholder="From"
+                        value={keywordCreateState.keyword_shift[idx].from}
+                        handleChange={(value: any) => {
+                          keywordCreate.keyword_shift[idx].from = value;
+                          setStateTrigger(!stateTrigger);
+                        }}
+                      />
+                    </Grid>
+                    <Grid item xs={3}>
+                      <ResponsiveTimePicker
+                        direction="column"
+                        label="To"
+                        placeholder="To"
+                        value={keywordCreateState.keyword_shift[idx].to}
+                        handleChange={(value: any) => {
+                          keywordCreate.keyword_shift[idx].to = value;
+                          setStateTrigger(!stateTrigger);
+                        }}
+                      />
+                    </Grid>
+                    <Grid
+                      item
+                      xs={1}
+                      display="flex"
+                      justifyContent="end"
+                      alignItems="center"
+                      mt="1.3vw"
+                    >
+                      <IconButton
+                        onClick={() => {
+                          keywordCreate.keyword_shift.length > 1 &&
+                            keywordCreate.keyword_shift.splice(idx, 1);
+                          setStateTrigger(!stateTrigger);
+                        }}
+                        aria-label="delete"
+                        size="large"
+                        sx={{ color: "primary.main" }}
+                      >
+                        <DeleteIcon fontSize="inherit" />
+                      </IconButton>
+                    </Grid>
+                  </Grid>
+                ))}
+                <Button
+                  onClick={() => {
+                    keywordCreate.keyword_shift.push({
+                      from: new Date().getTime(),
+                      to: new Date().getTime(),
+                    });
+                    setStateTrigger(!stateTrigger);
+                  }}
+                  color="primary"
+                  startIcon={<AddBoxIcon fontSize="large" />}
+                  sx={{
+                    paddingInline: "1.5vw",
+                    paddingBlock: "0.5vw",
+                  }}
+                >
+                  Add Shift Time
+                </Button>
+              </Stack>
+            </Grid>
+          </Grid>
+
           <Select
             label="Merchant"
             placeholder="Option"
@@ -344,16 +494,17 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
             handleChange={setCommentApproval}
             variant={"outlined"}
           />
-          <Select
-            label="Keyword Parent"
-            placeholder="Option"
-            options={keywordParentOption.data}
-            value={keywordParent}
-            optionLabel={"name"}
-            handleChange={setKeywordParent}
-          />
         </Stack>
-        {/*{type === "Auction" && <MainInfoAuction/>}*/}
+        {keywordTypeOption.data.find((item) => item["_id"] === keywordType)
+          ?.set_value === "Auction and Racing POIN" && <MainInfoAuction />}
+        {keywordTypeOption.data.find((item) => item["_id"] === keywordType)
+          ?.set_value === "Redeem Core Product" && <MainInfoCoreProduct />}
+        {keywordTypeOption.data.find((item) => item["_id"] === keywordType)
+          ?.set_value === "Lucky Draw" && <MainInfoLuckyDraw />}
+        {keywordTypeOption.data.find((item) => item["_id"] === keywordType)
+          ?.set_value === "Direct Redeem" && <MainInfoDirectRedeem />}
+        {keywordTypeOption.data.find((item) => item["_id"] === keywordType)
+          ?.set_value === "Free Gift" && <MainInfoDonation />}
       </Stack>
     </Box>
   );
