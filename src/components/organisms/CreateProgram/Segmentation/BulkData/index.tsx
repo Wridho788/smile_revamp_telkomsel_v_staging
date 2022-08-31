@@ -43,7 +43,8 @@ const BulkData: React.FunctionComponent<ISegmentationProps> = () => {
     const [importFile, {isLoading: isUpdate, isSuccess}] = useImportListMutation()
 
     const [typeMSSIDN, setTypeMSSIDN] = React.useState("");
-    const [fileName, setFileName] = useState<any>();
+    const [fileName, setFileName] = useState<string>('');
+    const [filePath, setFilePath] = useState<any>();
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [warningShow, setWarningShow] = useState<boolean>(false);
     const [successShow, setSuccessShow] = useState<boolean>(false);
@@ -70,22 +71,24 @@ const BulkData: React.FunctionComponent<ISegmentationProps> = () => {
     const importExcel = (e: any) => {
         const file = e.target.files[0];
         if (!getExention(file)) {
-            return alert("Invalid file input, Select txt file");
+            return alert("Invalid file input, Select txt or csv file");
         }
-        setFileName(file);
+        setFileName(file.name);
+        setFilePath(file);
     }
 
     const handleProcess = async () => {
-        if (!typeMSSIDN || !fileName) {
+        if (!typeMSSIDN || !filePath) {
             setWarningShow(true)
             return
         }
 
         const Data = {
-            "file": fileName,
+            "file": filePath,
             "type": typeMSSIDN
         }
         await importFile({Data})
+        setFileName('')
         setWarningShow(false)
         setSuccessShow(true)
     }
@@ -122,6 +125,13 @@ const BulkData: React.FunctionComponent<ISegmentationProps> = () => {
                         File Choices
                         <input type="file" onChange={importExcel} hidden/>
                     </Button>
+
+                    {
+                        fileName &&
+                        <Alert variant="outlined" severity="success" >
+                            <BodyCopy>File Name : {fileName}</BodyCopy>
+                        </Alert>
+                    }
                 </Stack>
                 <Select
                     label="Segmentation Type"
@@ -134,9 +144,7 @@ const BulkData: React.FunctionComponent<ISegmentationProps> = () => {
                     sx={{maxWidth: "50%"}}
                 />
                 <Stack direction="row" alignItems="center" mt="1.5vw">
-                    <Button onClick={() => {
-                        handleProcess()
-                    }} variant="contained" component="label">
+                    <Button onClick={() => handleProcess()} variant="contained" component="label">
                         Process
                     </Button>
                 </Stack>
