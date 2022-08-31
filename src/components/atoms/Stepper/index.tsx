@@ -148,7 +148,7 @@ export default function HorizontalLinearStepper({
                         if (res.error) {
                             messageErrorHandler(res.error.data.message)
                         } else {
-                            Swal.fire("Success!", "Keyword has been created!", "success");
+                            Swal.fire("Success!", "Program has been created!", "success");
                             console.log("res : ");
                             nav("/program-management")
                         }
