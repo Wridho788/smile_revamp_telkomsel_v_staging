@@ -68,7 +68,7 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
     useEffect(() => {
         programData._id = fetchDetail._id;
     }, [fetchDetail]);
-    ;
+
     const {data: pointTypeOption = {data: []}} = useGetPointTypeQuery();
     const {data: mechanismOption = {data: []}} = useGetMechanismQuery();
     const {data: ownerOption = {data: []}} = useGetLocationTypeQuery();
