@@ -366,7 +366,6 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
                 />
                 <OutlinedTextField
                     InputProps={{inputProps: {min: 70, max: 100}}}
-                    type={"number"}
                     label="Threshold Alarm Voucher"
                     placeholder="Threshold Alrm Voucher"
                     value={programData.threshold_alarm_voucher}
