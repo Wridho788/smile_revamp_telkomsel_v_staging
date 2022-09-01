@@ -15,6 +15,7 @@ import {
   useGetMechanismQuery,
   useGetLocationTypeQuery
 } from "../../../../redux/features/lov/lov-api-slice";
+import Swal from "sweetalert2";
 
 const style = {
   position: "absolute" as "absolute",
@@ -65,11 +66,21 @@ const ProgramDetailsModal: FC<IProgramDetailsModalProps> = ({
   const owner = ownerOption?.data.find(({ _id }: any) => _id === data.program_owner );
 
   const approveHandler = async () => {
-    await approveProgram(data["_id"] ?? "");
+    approveProgram(data["_id"] ?? "").then((res: any) => {
+      if (res?.error) {
+        handleClose();
+        Swal.fire(res.error.data.message, "", "warning");
+      }
+    });
   };
 
   const rejectHandler = async () => {
-    await rejectProgram(data["_id"] ?? "");
+    rejectProgram(data["_id"] ?? "").then((res: any) => {
+      if (res?.error) {
+        handleClose();
+        Swal.fire(res.error.data.message, "", "warning");
+      }
+    });
   };
 
   return (
