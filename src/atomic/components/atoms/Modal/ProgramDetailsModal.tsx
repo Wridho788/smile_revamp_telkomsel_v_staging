@@ -70,6 +70,11 @@ const ProgramDetailsModal: FC<IProgramDetailsModalProps> = ({
       if (res?.error) {
         handleClose();
         Swal.fire(res.error.data.message, "", "warning");
+      } else {
+        if (res?.data.status === 200) {
+          handleClose();
+          Swal.fire(res?.data.message, "", "success");
+        }
       }
     });
   };
@@ -79,6 +84,11 @@ const ProgramDetailsModal: FC<IProgramDetailsModalProps> = ({
       if (res?.error) {
         handleClose();
         Swal.fire(res.error.data.message, "", "warning");
+      } else {
+        if (res?.data.status === 200) {
+          handleClose();
+          Swal.fire(res?.data.message, "", "success");
+        }
       }
     });
   };
