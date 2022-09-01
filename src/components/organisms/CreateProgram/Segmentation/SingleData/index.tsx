@@ -91,7 +91,7 @@ const SingleData: React.FunctionComponent<ISegmentationProps> = () => {
             setWarningShow(true)
             return
         }
-        await createProgramTempList(whitelistArray).then((res: any) => {
+        await createProgramTempList({"set": whitelistArray}).then((res: any) => {
             if (res.error) {
                 setOpen(true)
                 setMessageError(res.error.data.message)
@@ -106,7 +106,7 @@ const SingleData: React.FunctionComponent<ISegmentationProps> = () => {
             setWarningShow(true)
             return
         }
-        createProgramTempList(blacklistArray).then((res: any) => {
+        createProgramTempList({"set": blacklistArray}).then((res: any) => {
             if (res.error) {
                 setOpen(true)
                 setMessageError(res.error.data.message)

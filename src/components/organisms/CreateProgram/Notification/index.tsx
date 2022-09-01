@@ -68,6 +68,7 @@ const Notification: React.FunctionComponent<INotificationProps> = ({}: INotifica
     const {data: notificationTemplateDetail1 = NotificationTemplateInitial} = useNotificationTemplateDetailQuery(template1)
     const [variableAppend0, setVariableAppend0] = useState('');
     const [variableAppend1, setVariableAppend1] = useState('');
+    const [trigger, setTrigger] = useState(false);
     useEffect(() => {
         programNotification.program_notification[0].template = template0
         if (JSON.stringify(notificationTemplateDetail0.notif_content)) {
@@ -83,9 +84,11 @@ const Notification: React.FunctionComponent<INotificationProps> = ({}: INotifica
     }, [template1, notificationTemplateDetail1]);
     useEffect(() => {
         setTemplateContent0(`${templateContent0} ${variableAppend0}`)
+        setTrigger(!trigger)
     }, [variableAppend0])
     useEffect(() => {
         setTemplateContent1(`${templateContent1}  ${variableAppend1}`)
+        setTrigger(!trigger)
     }, [variableAppend1])
 
     React.useEffect(() => {
@@ -106,7 +109,6 @@ const Notification: React.FunctionComponent<INotificationProps> = ({}: INotifica
         templateContent0,
         templateContent1
     ]);
-
     return (
         <>
             {programNotificationOption.data.map((item, i) => (
@@ -165,8 +167,7 @@ const Notification: React.FunctionComponent<INotificationProps> = ({}: INotifica
                                                 <Grid>
                                                     <ListItem disablePadding>
                                                         <ListItemButton
-                                                            onClick={() => i == 0 ? setVariableAppend0(item) : setVariableAppend1(item)}
-                                                            disabled={i == 0 ? templateContent0.includes(item) : templateContent1.includes(item)}>
+                                                            onClick={() => i == 0 ? setVariableAppend0(item) : setVariableAppend1(item)}>
                                                             <AddBox color={"primary"}/>
                                                             <BodyCopy>{item}</BodyCopy>
                                                         </ListItemButton>
