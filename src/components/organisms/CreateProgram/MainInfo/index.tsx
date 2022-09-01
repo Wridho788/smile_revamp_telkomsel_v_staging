@@ -360,7 +360,7 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
                     value={programData.threshold_alarm_expired}
                     options={ThresholdAlarmExpiredOption}
                     handleChange={(value: any) => {
-                        programData.threshold_alarm_expired = value;
+                        programData.threshold_alarm_expired = Number(value);
                         setStateTrigger(!stateTrigger);
                     }}
                 />
@@ -371,7 +371,7 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
                     placeholder="Threshold Alrm Voucher"
                     value={programData.threshold_alarm_voucher}
                     handleChange={(value: any) => {
-                        programData.threshold_alarm_voucher = value;
+                        programData.threshold_alarm_voucher = Number(value);
                         setStateTrigger(!stateTrigger);
                     }}
                     variant={"outlined"}
