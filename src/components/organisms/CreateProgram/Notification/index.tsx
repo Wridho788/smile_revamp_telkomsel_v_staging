@@ -3,10 +3,11 @@ import {Grid, Stack, IconButton, Box, Button, CircularProgress, ListItem} from "
 import DeleteIcon from "@mui/icons-material/Delete";
 import {OutlinedTextField, Select} from "../../../atoms";
 import {
+    useGetDetailLovQuery,
     useGetNotifReceiverQuery,
     useGetNotifTypeQuery,
     useGetNotifViaQuery,
-    useGetPointTypeQuery, useGetProgramNotificationQuery,
+    useGetPointTypeQuery, useGetProgramNotificationQuery, useLazyGetDetailLovQuery,
 } from "../../../../redux/features/lov/lov-api-slice";
 import {
     useNotificationTemplateDetailQuery,
@@ -33,19 +34,22 @@ interface INotificationProps {
 }
 
 const Notification: React.FunctionComponent<INotificationProps> = ({}: INotificationProps) => {
+
     let programData = ProgramDetailInitial.data;
-    let { _id } = useParams();
-    const { data: fetchDetail = programData } = useDetailProgramQuery(
-        _id ?? ""
-    );
+    const [getPointTypeDetail, {data: pointTypeDetail}] = useLazyGetDetailLovQuery()
+    const [poinTypeSuggestion, setPoinTypeSuggestion] = useState('');
     useEffect(() => {
-        programData._id = fetchDetail._id;
-    }, [fetchDetail]);
+        getPointTypeDetail(programData.point_type)
+        if (pointTypeDetail) {
+            if (pointTypeDetail.set_value) {
+                setPoinTypeSuggestion(pointTypeDetail.set_value)
+            }
+        }
+    }, [pointTypeDetail]);
 
     const programNotification = ProgramDetailInitial.data
 
-    const variableList = [programData.name, Moment(programData.start_period).format("d-m-Y"), programData.point_type]
-
+    const variableList = [programData.name, Moment(programData.start_period).format("d-m-Y"), poinTypeSuggestion]
     const [via0, setVia0] = React.useState<string>(programNotification.program_notification[0].via);
     const [via1, setVia1] = React.useState<string>(programNotification.program_notification[1].via);
     const [notif_type0, setReceiver0] = React.useState<string>(programNotification.program_notification[0].notif_type);
@@ -64,6 +68,7 @@ const Notification: React.FunctionComponent<INotificationProps> = ({}: INotifica
     const {data: notificationTemplateDetail1 = NotificationTemplateInitial} = useNotificationTemplateDetailQuery(template1)
     const [variableAppend0, setVariableAppend0] = useState('');
     const [variableAppend1, setVariableAppend1] = useState('');
+    const [trigger, setTrigger] = useState(false);
     useEffect(() => {
         programNotification.program_notification[0].template = template0
         if (JSON.stringify(notificationTemplateDetail0.notif_content)) {
@@ -79,9 +84,11 @@ const Notification: React.FunctionComponent<INotificationProps> = ({}: INotifica
     }, [template1, notificationTemplateDetail1]);
     useEffect(() => {
         setTemplateContent0(`${templateContent0} ${variableAppend0}`)
+        setTrigger(!trigger)
     }, [variableAppend0])
     useEffect(() => {
         setTemplateContent1(`${templateContent1}  ${variableAppend1}`)
+        setTrigger(!trigger)
     }, [variableAppend1])
 
     React.useEffect(() => {
@@ -102,7 +109,6 @@ const Notification: React.FunctionComponent<INotificationProps> = ({}: INotifica
         templateContent0,
         templateContent1
     ]);
-
     return (
         <>
             {programNotificationOption.data.map((item, i) => (
@@ -117,7 +123,7 @@ const Notification: React.FunctionComponent<INotificationProps> = ({}: INotifica
 
                         <Stack spacing={"1vw"} width={"100%"}>
                             <Grid container>
-                              <H3 color={"primary"}> {item.set_value}</H3>
+                                <H3 color={"primary"}> {item.set_value}</H3>
                             </Grid>
                             <Select
                                 variant={"outlined"}
@@ -160,7 +166,8 @@ const Notification: React.FunctionComponent<INotificationProps> = ({}: INotifica
                                             variableList.map((item) => (
                                                 <Grid>
                                                     <ListItem disablePadding>
-                                                        <ListItemButton onClick={() => i==0 ? setVariableAppend0(item) : setVariableAppend1(item)} disabled={i==0 ? templateContent0.includes(item) : templateContent1.includes(item)}>
+                                                        <ListItemButton
+                                                            onClick={() => i == 0 ? setVariableAppend0(item) : setVariableAppend1(item)}>
                                                             <AddBox color={"primary"}/>
                                                             <BodyCopy>{item}</BodyCopy>
                                                         </ListItemButton>

@@ -131,13 +131,10 @@ const Programs: React.FunctionComponent = () => {
         //       : false
         //     : false
         // }
-        roleAccess={
-          defaultRoleManager !== undefined && accountAuth !== undefined
-            ? defaultRoleManager === defaultRoleManager
-              ? true
-              : false
-            : false
-        }
+        // roleAccess={
+        //   defaultRoleManager !== undefined && accountAuth !== undefined
+        // }
+        roleAccess={true}
       />
       <Stack direction={"row"} justifyContent={"space-between"}>
         <H2 color={"secondary.dark"}>Program</H2>

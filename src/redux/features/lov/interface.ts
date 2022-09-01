@@ -1,4 +1,4 @@
-interface IData {
+export interface IData {
     _id: string
     group_name?: string
     set_value?:string

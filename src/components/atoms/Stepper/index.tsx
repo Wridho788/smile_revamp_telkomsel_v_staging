@@ -16,7 +16,7 @@ import {
   useCreateProgramMutation,
   useUpdateProgramMutation,
 } from "../../../redux/features/program/program-api-slice";
-import { CircularProgress } from "@mui/material";
+import { CircularProgress, Snackbar } from "@mui/material";
 import { CreateKeywordInitial } from "../../../pages/CreateKeyword/initial";
 import { CreateKeywordGeneral } from "../../organisms/CreateKeyword/initial";
 import { useKeywordGeneralCreateMutation } from "../../../redux/features/keyword/keyword-api-slice";
@@ -110,6 +110,7 @@ export default function HorizontalLinearStepper({
   setActiveStep,
   slug,
   type,
+  messageErrorHandler,
 }: {
   children?: any;
   optionalStep?: number;
@@ -118,6 +119,7 @@ export default function HorizontalLinearStepper({
   setActiveStep?: any;
   slug?: string;
   type?: string;
+  messageErrorHandler?: any;
 }) {
   const nav = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
@@ -126,7 +128,7 @@ export default function HorizontalLinearStepper({
   const [createKeywordGeneral, response] = useKeywordGeneralCreateMutation();
   const [skipped, setSkipped] = React.useState<Set<number>>(new Set<number>());
   useEffect(() => {}, [isLoading]);
-
+  const [open, setOpen] = useState(true);
   const isStepOptional = (step: number) => {
     return optionalStep ? step === optionalStep : false;
   };
@@ -140,14 +142,17 @@ export default function HorizontalLinearStepper({
       setIsLoading(true);
       if (type === "program") {
         slug === "insert"
-          ? await createProgram(CreateProgramInitial)
+          ? await createProgram(CreateProgramInitial).then((res: any) => {
+              console.log(res);
+              if (res.error) {
+                messageErrorHandler(res.error.data.message);
+              } else {
+                Swal.fire("Success!", "Program has been created!", "success");
+                console.log("res : ");
+                nav("/program-management");
+              }
+            })
           : await updateProgram(CreateProgramInitial);
-
-        Swal.fire("Success!", "Keyword has been created!", "success");
-        console.log("res : ");
-        // console.log("response : ", response);
-        nav("/program-management");
-        // window.location.href = "/program-management";
       } else if (type === "keyword") {
         slug === "insert"
           ? await createKeywordGeneral(CreateKeywordGeneral)
