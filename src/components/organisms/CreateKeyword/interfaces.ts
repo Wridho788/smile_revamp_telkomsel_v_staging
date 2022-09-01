@@ -14,14 +14,18 @@ export interface IKeywordBonus {
 
 export interface IKeywordNotification {
   via: string;
-  receiver: string;
   notif_type: string;
   notification: string;
   transaction_type: string;
-  notification_content: string;
+  notification_content: string | undefined;
 }
 
 interface IKeywordScheduleShift {
+  from: any;
+  to: any;
+}
+
+interface IKeywordShift {
   from: any;
   to: any;
 }
@@ -32,7 +36,7 @@ export interface ICreateKeyword {
   name: string;
   start_period: any;
   end_period: any;
-  point_type: [];
+  point_type: string;
   poin_value: string;
   poin_redeemed: number;
   max_mode: string;
@@ -48,12 +52,12 @@ export interface ICreateKeyword {
   multiwhitelist: boolean;
   multiwhitelist_program: string;
   channel_validation: boolean;
-  channel_validation_list: [];
-  program_experience: [];
+  channel_validation_list: string[];
+  program_experience: string[];
   merchant: string;
-  segmentation_customer_tier: [];
-  segmentation_customer_brand: [];
-  segmentation_customer_most_redeem: [];
+  segmentation_customer_tier: string[];
+  segmentation_customer_brand: string[];
+  segmentation_customer_most_redeem: string[];
   segmentation_customer_prepaid_registration: boolean;
   segmentation_customer_los_operator: string;
   segmentation_customer_los: number;
@@ -66,6 +70,15 @@ export interface ICreateKeyword {
   segmentation_customer_arpu_min: number;
   segmentation_customer_arpu_max: number;
   segmentation_employee_numbers: boolean;
+
+  keyword_verification: string;
+  program_title_expose: string;
+  timezone: string;
+  segmentation_customer_type: string;
+  segmentation_customer_preferences_bcp: string;
+  keyword_shift: IKeywordShift[];
+  segmentation_customer_arpu: number;
+
   keyword_bonus: Array<IKeywordBonus>;
   keyword_notification: Array<IKeywordNotification>;
 }

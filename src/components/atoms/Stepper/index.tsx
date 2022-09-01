@@ -11,8 +11,7 @@ import StepConnector, {
   stepConnectorClasses,
 } from "@mui/material/StepConnector";
 import { StepIconProps } from "@mui/material/StepIcon";
-import {
-} from "../../../app/redux/Utils/InitialState/ProgramInitial";
+import {} from "../../../app/redux/Utils/InitialState/ProgramInitial";
 import {
   useCreateProgramMutation,
   useUpdateProgramMutation,
@@ -24,7 +23,7 @@ import { useKeywordGeneralCreateMutation } from "../../../redux/features/keyword
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-import {CreateProgramInitial} from "../../../pages/CreateProgram/programInitial";
+import { CreateProgramInitial } from "../../../pages/CreateProgram/programInitial";
 
 const ColorlibConnector = styled(StepConnector)(({ theme }) => ({
   [`&.${stepConnectorClasses.alternativeLabel}`]: {
@@ -144,23 +143,33 @@ export default function HorizontalLinearStepper({
           ? await createProgram(CreateProgramInitial)
           : await updateProgram(CreateProgramInitial);
 
-          Swal.fire("Success!", "Keyword has been created!", "success");
-          console.log("res : ");
-          // console.log("response : ", response);
-          nav("/program-management")
+        Swal.fire("Success!", "Keyword has been created!", "success");
+        console.log("res : ");
+        // console.log("response : ", response);
+        nav("/program-management");
         // window.location.href = "/program-management";
       } else if (type === "keyword") {
         slug === "insert"
           ? await createKeywordGeneral(CreateKeywordGeneral)
               .then((res: any) => {
-                res.data.status === 200 &&
+                if (res.data) {
                   Swal.fire("Success!", "Keyword has been created!", "success");
-                console.log("res : ", res);
-                // console.log("response : ", response);
-                nav("/keyword");
+                  console.log("data : ", res.data);
+                }
+                if (res.error) {
+                  Swal.fire(
+                    "Failed!",
+                    "Keyword has noot been created!",
+                    "error"
+                  );
+                  console.log("error : ", res.error);
+                }
               })
               .catch((err) => {
                 console.error(err);
+              })
+              .finally(() => {
+                nav("/keyword-management");
               })
           : await updateProgram(CreateKeywordGeneral);
         // window.location.href = "/keyword";

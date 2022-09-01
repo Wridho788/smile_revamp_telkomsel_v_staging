@@ -17,7 +17,8 @@ import {
   ResponsiveDatePicker,
 } from "../../../atoms";
 import {
-  useCustomerListQuery,
+  useCustomerBadgeListQuery,
+  useCustomerBrandListQuery,
   useCustomerTierListQuery,
 } from "../../../../redux/features/customer/customer-api-slice";
 import {
@@ -25,9 +26,7 @@ import {
   useGetPointTypeQuery,
 } from "../../../../redux/features/lov/lov-api-slice";
 import { FilterInitial } from "../../../../redux/utils/initial-general";
-import { useKeywordListQuery } from "../../../../redux/features/keyword/keyword-api-slice";
 import { CreateKeywordGeneral } from "../initial";
-import { useState } from "react";
 import { useMerchantManagementListQuery } from "../../../../redux/features/merchant/merchant-api-slice";
 import { useChannelListQuery } from "../../../../redux/features/channel/merchant-api-slice";
 import { ICreateKeyword } from "../interfaces";
@@ -35,6 +34,7 @@ import AddBoxIcon from "@mui/icons-material/AddBox";
 import DeleteIcon from "@mui/icons-material/Delete";
 import {
   BooleanOptions,
+  ComparisonOptions,
   KeywordScheduleTypeOptions,
   MaxModeOptions,
   PoinValueOptions,
@@ -45,27 +45,23 @@ interface IMainInfoProps {}
 
 const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
   const { data: keywordTypeOptions = { data: [] } } = useGetKeywordTypeQuery();
+  const { data: pointTypeOptions = { data: [] } } = useGetPointTypeQuery();
   const { data: programListOptions = { data: [] } } =
     useProgramListQuery(FilterInitial);
   const { data: channelOptions = { data: [] } } =
     useChannelListQuery(FilterInitial);
-
-  const { data: customerTierOption = { data: [] } } =
-    useCustomerTierListQuery(FilterInitial);
-  const { data: pointTypeOption = { data: [] } } = useGetPointTypeQuery();
-  const { data: keywordParentOption = { data: [] } } =
-    useKeywordListQuery(FilterInitial);
-  const { data: merchantManagementOption = { data: [] } } =
+  const { data: customerBadgeOptions = { data: [] } } =
+    useCustomerBadgeListQuery(FilterInitial);
+  const { data: merchantManagementOptions = { data: [] } } =
     useMerchantManagementListQuery(FilterInitial);
-
-  const { data: customerOption = { data: [] } } =
-    useCustomerListQuery(FilterInitial);
+  const { data: customerTierOptions = { data: [] } } =
+    useCustomerTierListQuery(FilterInitial);
+  const { data: customerBrandOptions = { data: [] } } =
+    useCustomerBrandListQuery(FilterInitial);
 
   const keywordCreate = CreateKeywordGeneral;
-
   const [keywordCreateState, setKeywordCreateState] =
     React.useState<ICreateKeyword>(keywordCreate);
-
   const [stateTrigger, setStateTrigger] = React.useState<boolean>(false);
 
   React.useEffect(() => {
@@ -90,7 +86,7 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
               setStateTrigger(!stateTrigger);
             }}
           />
-          <Divider textAlign="left" sx={{ pt: "1.2vw", pb: "0.6vw" }}>
+          <Divider textAlign="left" sx={{ pt: "2vw", pb: "1vw" }}>
             <Subtitle textTransform="uppercase">General Information</Subtitle>
           </Divider>
           <OutlinedTextField
@@ -133,12 +129,11 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
             }}
           />
           <Select
-            multiple
             label="Point Type"
             placeholder="Option"
-            options={pointTypeOption.data}
+            options={pointTypeOptions.data}
             value={keywordCreateState.point_type}
-            handleChange={(value: []) => {
+            handleChange={(value: string) => {
               keywordCreate.point_type = value;
               setStateTrigger(!stateTrigger);
             }}
@@ -205,16 +200,18 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
               setStateTrigger(!stateTrigger);
             }}
           />
-          <OutlinedTextField
-            label="SMS Masking Content"
-            placeholder="SMS Masking Content"
-            variant="outlined"
-            value={keywordCreateState.sms_masking}
-            handleChange={(value: string) => {
-              keywordCreate.sms_masking = value;
-              setStateTrigger(!stateTrigger);
-            }}
-          />
+          {keywordCreateState.enable_sms_masking !== false && (
+            <OutlinedTextField
+              label="SMS Masking Content"
+              placeholder="SMS Masking Content"
+              variant="outlined"
+              value={keywordCreateState.sms_masking}
+              handleChange={(value: string) => {
+                keywordCreate.sms_masking = value;
+                setStateTrigger(!stateTrigger);
+              }}
+            />
+          )}
           <Select
             label="Keyword Schedule"
             placeholder="Option"
@@ -222,21 +219,12 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
             value={keywordCreateState.keyword_schedule_type}
             handleChange={(value: string) => {
               keywordCreate.keyword_schedule_type = value;
-              if (value === "Shift") {
-                keywordCreate.keyword_schedule_shift = [
-                  {
-                    from: new Date().getTime(),
-                    to: new Date().getTime(),
-                  },
-                ];
-              } else if (value === "Daily") {
-                keywordCreate.keyword_schedule_shift = [
-                  {
-                    from: new Date(),
-                    to: new Date(),
-                  },
-                ];
-              }
+              keywordCreate.keyword_schedule_shift = [
+                {
+                  from: new Date(),
+                  to: new Date(),
+                },
+              ];
               setStateTrigger(!stateTrigger);
             }}
           />
@@ -264,7 +252,7 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
                           }
                           handleChange={(value: any) => {
                             keywordCreate.keyword_schedule_shift[idx].from =
-                              value.getTime();
+                              value;
                             setStateTrigger(!stateTrigger);
                           }}
                         />
@@ -279,7 +267,7 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
                           }
                           handleChange={(value: any) => {
                             keywordCreate.keyword_schedule_shift[idx].to =
-                              value.getTime();
+                              value;
                             setStateTrigger(!stateTrigger);
                           }}
                         />
@@ -416,7 +404,98 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
                       paddingBlock: "0.5vw",
                     }}
                   >
-                    Add Shift Time
+                    Add Daily Time
+                  </Button>
+                </Stack>
+              </Grid>
+            </Grid>
+          )}
+          {keywordCreateState.keyword_schedule_type === "Hourly" && (
+            <Grid container columns={11}>
+              <Grid item xs={4}>
+                <BodyCopy>Hourly</BodyCopy>
+              </Grid>
+              <Grid item xs={7}>
+                <Stack gap="1vw">
+                  {keywordCreate.keyword_schedule_shift.map((_, idx) => (
+                    <Grid
+                      key={`keywordScheduleShift__item__${idx}`}
+                      container
+                      columns={7}
+                      spacing="1vw"
+                    >
+                      <Grid item xs={3}>
+                        <ResponsiveTimePicker
+                          direction="column"
+                          label="From"
+                          placeholder="From"
+                          value={
+                            keywordCreateState.keyword_schedule_shift[idx].from
+                          }
+                          handleChange={(value: any) => {
+                            keywordCreate.keyword_schedule_shift[idx].from =
+                              value;
+                            setStateTrigger(!stateTrigger);
+                          }}
+                        />
+                      </Grid>
+                      <Grid item xs={3}>
+                        <ResponsiveTimePicker
+                          direction="column"
+                          label="To"
+                          placeholder="To"
+                          value={
+                            keywordCreateState.keyword_schedule_shift[idx].to
+                          }
+                          handleChange={(value: any) => {
+                            keywordCreate.keyword_schedule_shift[idx].to =
+                              value;
+                            setStateTrigger(!stateTrigger);
+                          }}
+                        />
+                      </Grid>
+                      <Grid
+                        item
+                        xs={1}
+                        display="flex"
+                        justifyContent="end"
+                        alignItems="center"
+                        mt="1.3vw"
+                      >
+                        <IconButton
+                          onClick={() => {
+                            keywordCreate.keyword_schedule_shift.length > 1 &&
+                              keywordCreate.keyword_schedule_shift.splice(
+                                idx,
+                                1
+                              );
+                            setStateTrigger(!stateTrigger);
+                          }}
+                          aria-label="delete"
+                          size="large"
+                          sx={{ color: "primary.main" }}
+                        >
+                          <DeleteIcon fontSize="inherit" />
+                        </IconButton>
+                      </Grid>
+                    </Grid>
+                  ))}
+                  <Button
+                    onClick={() => {
+                      keywordCreate.keyword_schedule_shift.push({
+                        from: new Date().getTime(),
+                        to: new Date().getTime(),
+                      });
+                      setStateTrigger(!stateTrigger);
+                    }}
+                    color="primary"
+                    startIcon={<AddBoxIcon fontSize="large" />}
+                    sx={{
+                      paddingInline: "1.5vw",
+                      paddingBlock: "0.5vw",
+                    }}
+                  >
+                    Add Hourly Time
                   </Button>
                 </Stack>
               </Grid>
@@ -464,17 +543,19 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
               setStateTrigger(!stateTrigger);
             }}
           />
-          <Select
-            label="Multiwhitelist Destination"
-            placeholder="Option"
-            options={programListOptions.data}
-            optionLabel="name"
-            value={keywordCreateState.multiwhitelist_program}
-            handleChange={(value: string) => {
-              keywordCreate.multiwhitelist_program = value;
-              setStateTrigger(!stateTrigger);
-            }}
-          />
+          {keywordCreateState.multiwhitelist !== false && (
+            <Select
+              label="Multiwhitelist Destination"
+              placeholder="Option"
+              options={programListOptions.data}
+              optionLabel="name"
+              value={keywordCreateState.multiwhitelist_program}
+              handleChange={(value: string) => {
+                keywordCreate.multiwhitelist_program = value;
+                setStateTrigger(!stateTrigger);
+              }}
+            />
+          )}
           <Select
             label="Channel Validation"
             placeholder="Option"
@@ -485,145 +566,240 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
               setStateTrigger(!stateTrigger);
             }}
           />
-          <Select
-            label="Channel List"
-            placeholder="Option"
-            options={programListOptions.data}
-            optionLabel="name"
-            value={keywordCreateState.multiwhitelist_program}
-            handleChange={(value: string) => {
-              keywordCreate.multiwhitelist_program = value;
-              setStateTrigger(!stateTrigger);
-            }}
-          />
+          {keywordCreateState.channel_validation !== false && (
+            <Select
+              multiple
+              label="Channel List"
+              placeholder="Option"
+              options={channelOptions.data}
+              optionLabel="name"
+              value={keywordCreateState.channel_validation_list}
+              handleChange={(value: []) => {
+                keywordCreate.channel_validation_list = value;
+                setStateTrigger(!stateTrigger);
+              }}
+            />
+          )}
           <Select
             multiple
-            label="Channel List"
+            label="Program Experience"
             placeholder="Option"
-            options={channelOptions.data}
+            options={customerBadgeOptions.data}
             optionLabel="name"
-            value={keywordCreateState.channel_validation_list}
+            value={keywordCreateState.program_experience}
             handleChange={(value: []) => {
-              keywordCreate.channel_validation_list = value;
+              keywordCreate.program_experience = value;
               setStateTrigger(!stateTrigger);
             }}
           />
-
-          {/* 
-          
+          <Divider textAlign="left" sx={{ pt: "2vw", pb: "1vw" }}>
+            <Subtitle textTransform="uppercase">Merchant</Subtitle>
+          </Divider>
           <Select
-            label="Channel Validation"
-            placeholder="Option"
-            options={BooleanOption}
-            value={channelValidation}
-            handleChange={setChannelValidation}
-          /> */}
-
-          {/* <Select
-            multiple
-            label="Channel Validation"
-            placeholder="Option"
-            value={channelValidation}
-            options={channelOption.data}
-            optionLabel={"name"}
-            handleChange={setChannelValidation}
-          /> */}
-
-          {/* <Select
             label="Merchant"
             placeholder="Option"
-            value={merchant}
-            options={merchantManagementOption.data}
+            options={merchantManagementOptions.data}
             optionLabel={"company_name"}
-            handleChange={setMerchant}
+            value={keywordCreateState.merchant}
+            handleChange={(value: string) => {
+              keywordCreate.merchant = value;
+              setStateTrigger(!stateTrigger);
+            }}
           />
-          <OutlinedTextField
-            label="Merchant Name"
-            placeholder="Merchant Name"
-            value={merchantName}
-            handleChange={setMerchantName}
-            variant="outlined"
-          />
-
-          <Select
-            label="Telkomsel Los"
-            placeholder="Option"
-            options={BooleanOption}
-            value={telkomselLos}
-            handleChange={setTelkomselLos}
-          />
-          <Select
-            label="Telkomsel Los Type"
-            placeholder="Option"
-            options={TelkomselLOSTypeOption}
-            value={telkomselLosType}
-            handleChange={setTelkomselLosType}
-          />
-          <Select
-            label="Telkomsel Los Operator"
-            placeholder="Option"
-            options={TelkomselLOSOperatorOption}
-            value={telkomselLosOperator}
-            handleChange={setTelkomselLosOperator}
-          />
-          <OutlinedTextField
-            type="number"
-            label="Telkomsel Los Value"
-            placeholder="Telkomsel Los Value"
-            value={telkomselLosValue}
-            handleChange={setTelkomselLosValue}
-            variant="outlined"
-          />
-          <OutlinedTextField
-            type="number"
-            label="Telkomsel Los Range Min"
-            placeholder="Telkomsel Los Range Min"
-            value={telkomselLosRangeMin}
-            handleChange={setTelkomselLosRangeMin}
-            variant="outlined"
-          />
-          <OutlinedTextField
-            type="number"
-            label="Telkomsel Los Range Max"
-            placeholder="Telkomsel Los Range Max"
-            value={telkomselLosRangeMax}
-            handleChange={setTelkomselLosRangeMax}
-            variant="outlined"
-          />
-          <Select
-            label="Enable Corporate"
-            placeholder="Option"
-            options={BooleanOption}
-            value={enableCorporate}
-            handleChange={setEnableCorporate}
-          />
-
+          <Divider textAlign="left" sx={{ pt: "2vw", pb: "1vw" }}>
+            <Subtitle textTransform="uppercase">Segmentation</Subtitle>
+          </Divider>
           <Select
             multiple
             label="Customer Tier"
             placeholder="Option"
-            options={customerTierOption.data}
-            value={customerTier}
-            optionLabel={"name"}
-            handleChange={setCustomerTier}
+            options={customerTierOptions.data}
+            optionLabel="name"
+            value={keywordCreateState.segmentation_customer_tier}
+            handleChange={(value: []) => {
+              keywordCreate.segmentation_customer_tier = value;
+              setStateTrigger(!stateTrigger);
+            }}
           />
-          <OutlinedTextField
-            label="Comment Approval"
-            placeholder="Comment Approval"
-            value={commentApproval}
-            handleChange={setCommentApproval}
-            variant="outlined"
+          <Select
+            multiple
+            label="Customer Brand"
+            placeholder="Option"
+            options={customerBrandOptions.data}
+            optionLabel="name"
+            value={keywordCreateState.segmentation_customer_brand}
+            handleChange={(value: []) => {
+              keywordCreate.segmentation_customer_brand = value;
+              setStateTrigger(!stateTrigger);
+            }}
           />
-          <Divider textAlign="left" sx={{ pt: "1.2vw", pb: "0.6vw" }}>
-            <Subtitle textTransform="uppercase">Segmentation</Subtitle>
-          </Divider>
+          <Select
+            multiple
+            label="Customer Most Redeem"
+            placeholder="Option"
+            options={customerBadgeOptions.data}
+            optionLabel="name"
+            value={keywordCreateState.segmentation_customer_most_redeem}
+            handleChange={(value: []) => {
+              keywordCreate.segmentation_customer_most_redeem = value;
+              setStateTrigger(!stateTrigger);
+            }}
+          />
+          <Select
+            label="Customer Prepaid Registration"
+            placeholder="Option"
+            options={BooleanOptions}
+            value={
+              keywordCreateState.segmentation_customer_prepaid_registration
+            }
+            handleChange={(value: boolean) => {
+              keywordCreate.segmentation_customer_prepaid_registration = value;
+              setStateTrigger(!stateTrigger);
+            }}
+          />
+          <Select
+            label="Telkomsel LOS Operator"
+            placeholder="Option"
+            options={ComparisonOptions}
+            value={keywordCreateState.segmentation_customer_los_operator}
+            handleChange={(value: string) => {
+              keywordCreate.segmentation_customer_los_operator = value;
+              setStateTrigger(!stateTrigger);
+            }}
+          />
+          {keywordCreateState.segmentation_customer_los_operator !==
+            "Ranged" && (
+            <OutlinedTextField
+              type="number"
+              label="Telkomsel LOS Value"
+              variant="outlined"
+              InputProps={{ inputProps: { min: 0 } }}
+              value={keywordCreateState.segmentation_customer_los}
+              handleChange={(value: number) => {
+                keywordCreate.segmentation_customer_los = Number(value);
+                setStateTrigger(!stateTrigger);
+              }}
+            />
+          )}
+          {keywordCreateState.segmentation_customer_los_operator ===
+            "Ranged" && (
+            <OutlinedTextField
+              type="number"
+              label="Telkomsel LOS Range Min"
+              variant="outlined"
+              InputProps={{ inputProps: { min: 0 } }}
+              value={keywordCreateState.segmentation_customer_los_min}
+              handleChange={(value: number) => {
+                keywordCreate.segmentation_customer_los_min = Number(value);
+                setStateTrigger(!stateTrigger);
+              }}
+            />
+          )}
+          {keywordCreateState.segmentation_customer_los_operator ===
+            "Ranged" && (
+            <OutlinedTextField
+              type="number"
+              label="Telkomsel LOS Range Max"
+              variant="outlined"
+              InputProps={{ inputProps: { min: 0 } }}
+              value={keywordCreateState.segmentation_customer_los_max}
+              handleChange={(value: number) => {
+                keywordCreate.segmentation_customer_los_max = Number(value);
+                setStateTrigger(!stateTrigger);
+              }}
+            />
+          )}
           <Select
             label="New Redeemer"
             placeholder="Option"
-            options={BooleanOption}
-            value={forNewRedeemer}
-            handleChange={setForNewRedeemer}
-          /> */}
+            options={BooleanOptions}
+            value={keywordCreateState.for_new_redeemer}
+            handleChange={(value: boolean) => {
+              keywordCreate.for_new_redeemer = value;
+              setStateTrigger(!stateTrigger);
+            }}
+          />
+          <Select
+            label="Enabled Corporate"
+            placeholder="Option"
+            options={BooleanOptions}
+            value={keywordCreateState.enable_corporate}
+            handleChange={(value: boolean) => {
+              keywordCreate.enable_corporate = value;
+              setStateTrigger(!stateTrigger);
+            }}
+          />
+          <Select
+            label="Customer KYC"
+            placeholder="Option"
+            options={BooleanOptions}
+            value={keywordCreateState.segmentation_customer_kyc_completeness}
+            handleChange={(value: boolean) => {
+              keywordCreate.segmentation_customer_kyc_completeness = value;
+              setStateTrigger(!stateTrigger);
+            }}
+          />
+          <Select
+            label="Customer ARPU Operator"
+            placeholder="Option"
+            options={ComparisonOptions}
+            value={keywordCreateState.segmentation_customer_arpu_operator}
+            handleChange={(value: string) => {
+              keywordCreate.segmentation_customer_arpu_operator = value;
+              setStateTrigger(!stateTrigger);
+            }}
+          />
+          {keywordCreateState.segmentation_customer_arpu_operator !== "" && (
+            <OutlinedTextField
+              type="number"
+              label="Customer ARPU"
+              variant="outlined"
+              InputProps={{ inputProps: { min: 0 } }}
+              value={keywordCreateState.segmentation_customer_arpu}
+              handleChange={(value: number) => {
+                keywordCreate.segmentation_customer_arpu = Number(value);
+                setStateTrigger(!stateTrigger);
+              }}
+            />
+          )}
+          {keywordCreateState.segmentation_customer_arpu_operator ===
+            "Ranged" && (
+            <OutlinedTextField
+              type="number"
+              label="Customer ARPU MIN"
+              variant="outlined"
+              InputProps={{ inputProps: { min: 0 } }}
+              value={keywordCreateState.segmentation_customer_arpu_min}
+              handleChange={(value: number) => {
+                keywordCreate.segmentation_customer_arpu_min = Number(value);
+                setStateTrigger(!stateTrigger);
+              }}
+            />
+          )}
+          {keywordCreateState.segmentation_customer_arpu_operator ===
+            "Ranged" && (
+            <OutlinedTextField
+              type="number"
+              label="Customer ARPU MAX"
+              variant="outlined"
+              InputProps={{ inputProps: { min: 0 } }}
+              value={keywordCreateState.segmentation_customer_arpu_max}
+              handleChange={(value: number) => {
+                keywordCreate.segmentation_customer_arpu_max = Number(value);
+                setStateTrigger(!stateTrigger);
+              }}
+            />
+          )}
+          <Select
+            label="Telkomsel Employee Numbers"
+            placeholder="Option"
+            options={BooleanOptions}
+            value={keywordCreateState.segmentation_employee_numbers}
+            handleChange={(value: boolean) => {
+              keywordCreate.segmentation_employee_numbers = value;
+              setStateTrigger(!stateTrigger);
+            }}
+          />
         </Stack>
         {keywordTypeOptions.data.find(
           (item) => item["_id"] === keywordCreate.keyword_type
