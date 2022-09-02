@@ -1,4 +1,4 @@
-export const noticeUploadData = {
+export const noticeUploadDataInitial = {
     label: "Please take look this note before uploading your file",
     listCondition: [
         "File extention must be in .csv or .txt",
@@ -7,3 +7,16 @@ export const noticeUploadData = {
         "Each MSISDN must be align in 1 row ( 1 row 1 MSISDN )"
     ]
 }
+
+export const segmentationOptionInitial = [
+    {
+        _id: "1",
+        type: "whitelist",
+        filename: "",
+    },
+    {
+        _id: "2",
+        type: "blacklist",
+        filename: ""
+    },
+];

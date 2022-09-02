@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC } from "react";
 import Box from "@mui/material/Box";
 import ModalCustom from "@mui/material/Modal";
 import { IProgramDetailsModalProps } from "./Modal.type";
@@ -7,9 +7,15 @@ import {
   useApproveProgramMutation,
   useRejectProgramMutation,
 } from "../../../../redux/features/program/program-api-slice";
-import {BodyCopy, H2, OutlinedTextField, SmallCopy} from "../../../../components";
-import { Edit } from "@mui/icons-material";
+import {BodyCopy, H2 } from "../../../../components";
+import {Edit, WarningAmber} from "@mui/icons-material";
 import Moment from "moment";
+import {
+  useGetPointTypeQuery,
+  useGetMechanismQuery,
+  useGetLocationTypeQuery
+} from "../../../../redux/features/lov/lov-api-slice";
+import Swal from "sweetalert2";
 
 const style = {
   position: "absolute" as "absolute",
@@ -44,18 +50,47 @@ const ProgramDetailsModal: FC<IProgramDetailsModalProps> = ({
   data,
   roleAccess,
 }) => {
-  const [rejectionIssue, setRejectionIssue] = useState("");
+  // const [rejectionIssue, setRejectionIssue] = useState("");
+
   const [approveProgram, { isLoading: isLoadingApprove }] =
     useApproveProgramMutation();
   const [rejectProgram, { isLoading: isLoadingReject }] =
     useRejectProgramMutation();
 
+  const { data: pointTypeOptions } = useGetPointTypeQuery();
+  const { data: mechanismOptions } = useGetMechanismQuery();
+  const { data: ownerOption } = useGetLocationTypeQuery();
+
+  const pointType = pointTypeOptions?.data.find(({ _id }: any) => _id === data.point_type);
+  const mechanism = mechanismOptions?.data.find(({ _id }: any) => _id === data.program_mechanism);
+  const owner = ownerOption?.data.find(({ _id }: any) => _id === data.program_owner );
+
   const approveHandler = async () => {
-    await approveProgram(data["_id"] ?? "");
+    approveProgram(data["_id"] ?? "").then((res: any) => {
+      if (res?.error) {
+        handleClose();
+        Swal.fire(res.error.data.message, "", "warning");
+      } else {
+        if (res?.data.status === 200) {
+          handleClose();
+          Swal.fire(res?.data.message, "", "success");
+        }
+      }
+    });
   };
 
   const rejectHandler = async () => {
-    await rejectProgram(data["_id"] ?? "");
+    rejectProgram(data["_id"] ?? "").then((res: any) => {
+      if (res?.error) {
+        handleClose();
+        Swal.fire(res.error.data.message, "", "warning");
+      } else {
+        if (res?.data.status === 200) {
+          handleClose();
+          Swal.fire(res?.data.message, "", "success");
+        }
+      }
+    });
   };
 
   return (
@@ -72,7 +107,8 @@ const ProgramDetailsModal: FC<IProgramDetailsModalProps> = ({
           <H2>{data.name ?? "Title"}</H2>
           <BodyCopy>Program ID : {data["_id"] ?? "Description"}</BodyCopy>
         </Box>
-        {data?.program_approval?.length > 0 ? (
+        {/* TODO: Checking status "Approval" of Detail Program */}
+        {data?.status?.set_value !== 'New' ? (
           <Stack
             direction="row"
             alignItems="center"
@@ -96,38 +132,56 @@ const ProgramDetailsModal: FC<IProgramDetailsModalProps> = ({
             <Stack
               direction="row"
               alignItems="center"
-              justifyContent="end"
-              spacing="1vw"
-              mt="2vw"
+              justifyContent="space-between"
+              spacing="2vw"
+              mt="1vw"
+              sx={{ p: 2, backgroundColor: '#E5E5E5', borderRadius: 2 }}
             >
-              <Button
-                disabled={isLoadingApprove}
-                onClick={approveHandler}
-                variant={"contained"}
-                color="success"
-                sx={{ color: "white" }}
+              <Stack
+                direction="row"
+                spacing="1vw"
               >
-                Approve
-              </Button>
-              <Button
-                disabled={isLoadingReject}
-                onClick={rejectHandler}
-                variant={"contained"}
-                color="error"
+                <WarningAmber sx={{ color: '#EF6E11' }}></WarningAmber>
+                <h3>
+                  Program {data.name} is not approved yet
+                </h3>
+              </Stack>
+              <Stack
+                  direction="row"
+                sx={{
+                  justifyContent: 'space-between'
+                }}
+                spacing="1vw"
               >
-                Reject
-              </Button>
+                <Button
+                    disabled={isLoadingApprove}
+                    onClick={approveHandler}
+                    variant={"contained"}
+                    color="success"
+                    sx={{ color: "white" }}
+                >
+                  Approve
+                </Button>
+                <Button
+                    disabled={isLoadingReject}
+                    onClick={rejectHandler}
+                    variant={"contained"}
+                    color="error"
+                >
+                  Reject
+                </Button>
+              </Stack>
             </Stack>
-            <OutlinedTextField
-              direction="column"
-              label="Rejection Issue"
-              placeholder="Description"
-              variant={"outlined"}
-              value={rejectionIssue}
-              handleChange={setRejectionIssue}
-              multiline
-              rows={3}
-            />
+            {/*<OutlinedTextField*/}
+            {/*  direction="column"*/}
+            {/*  label="Rejection Issue"*/}
+            {/*  placeholder="Description"*/}
+            {/*  variant={"outlined"}*/}
+            {/*  value={rejectionIssue}*/}
+            {/*  handleChange={setRejectionIssue}*/}
+            {/*  multiline*/}
+            {/*  rows={3}*/}
+            {/*/>*/}
           </>
         ) : (
           <></>
@@ -173,19 +227,19 @@ const ProgramDetailsModal: FC<IProgramDetailsModalProps> = ({
                   </Grid>
                   <Grid item zeroMinWidth xs={4}>
                     <Typography sx={fontContent}><b>Point Type</b></Typography>
-                    <Typography sx={fontContent}>{data.point_type}</Typography>
+                    <Typography sx={fontContent}>{pointType?.set_value}</Typography>
                   </Grid>
                   <Grid item xs={8}>
                     <Typography sx={fontContent}><b>Program Mechanism</b></Typography>
-                    <Typography sx={fontContent}>{data.program_mechanism}</Typography>
+                    <Typography sx={fontContent}>{mechanism?.set_value}</Typography>
                   </Grid>
                   <Grid item xs={4}>
                     <Typography sx={fontContent}><b>Owner</b></Typography>
-                    <Typography sx={fontContent}>{data.program_owner}</Typography>
+                    <Typography sx={fontContent}>{owner?.set_value}</Typography>
                   </Grid>
                   <Grid item xs={4}>
                     <Typography sx={fontContent}><b>Owner Detail</b></Typography>
-                    <Typography sx={fontContent}>{data.program_owner_detail}</Typography>
+                    <Typography sx={fontContent}>-</Typography>
                   </Grid>
                   <Grid item xs={4}>
                     <Typography sx={fontContent}><b>Time Zone</b></Typography>

@@ -9,8 +9,8 @@ export const FilterInitial: IParams = {
 
 
 export const BooleanOption = [
-    {_id: "1", set_value: "True"},
-    {_id: "2", set_value: "False"},
+    {_id: true, set_value: "True"},
+    {_id: false, set_value: "False"},
 ];
 
 export const PointValueOption = [

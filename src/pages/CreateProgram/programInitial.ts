@@ -5,13 +5,13 @@ export const ProgramNotificationInitial = [
     {
         template: "",
         via: "",
-        notif_type: "",
+        notif_type: "62ffc38b8a01008799e78663", // default by notif group https://discord.com/channels/1005119713665359974/1005119713665359977/1014858719747637338
         template_content: ""
     },
     {
         template: "",
         via: "",
-        notif_type: "",
+        notif_type: "62ffc38b8a01008799e78663", //  default by notif group https://discord.com/channels/1005119713665359974/1005119713665359977/1014858719747637338
         template_content: ""
     },
 ]
@@ -35,7 +35,7 @@ export const CreateProgramInitial: ICreateProgram = {
     alarm_pic_type: "",
     alarm_pic: [],
     threshold_alarm_expired: 0,
-    threshold_alarm_voucher: 0,
+    threshold_alarm_voucher: 70,
     program_notification: ProgramNotificationInitial
 }
 
@@ -58,7 +58,7 @@ export const ProgramItemInitial: IProgramItem = {
     alarm_pic_type: "",
     alarm_pic: [],
     threshold_alarm_expired: 0,
-    threshold_alarm_voucher: 0,
+    threshold_alarm_voucher: 70,
     program_notification: ProgramNotificationInitial
 }
 
