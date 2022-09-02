@@ -19,6 +19,7 @@ import {
   H2,
   InputSearchable,
   PreTitle,
+  SmallCopy,
 } from "../../components";
 import { IData } from "../../redux/features/notification/interface";
 import {
@@ -248,7 +249,36 @@ const NotificationManagement = () => {
         </Box>
       </Box>
 
-      {/* Dialog of Add Merchant */}
+      {/*============================= Show Detail ======================== */}
+      {/*================================================================== */}
+      <Dialog
+        fullWidth
+        open={open.detail}
+        onClose={() => setOpen({ ...open, detail: false })}
+      >
+        <DialogTitle>Detail Notification</DialogTitle>
+        <DialogContent>
+          <SmallCopy>
+            Notification Type :{" "}
+            {notificationDetail && notificationDetail.notif_type}
+          </SmallCopy>
+          <SmallCopy>
+            Notification Name :{" "}
+            {notificationDetail && notificationDetail.notif_name}
+          </SmallCopy>
+          <SmallCopy>
+            Notification Via :{" "}
+            {notificationDetail && notificationDetail.notif_via}
+          </SmallCopy>
+          <SmallCopy>
+            Notification Content :{" "}
+            {notificationDetail && notificationDetail.notif_content}
+          </SmallCopy>
+        </DialogContent>
+      </Dialog>
+
+      {/*=========================== Dialog of Add Notification ======================== */}
+      {/* ============================================================================== */}
       <Dialog
         fullWidth
         open={open.add}
