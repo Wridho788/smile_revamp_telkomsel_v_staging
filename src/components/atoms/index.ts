@@ -25,6 +25,7 @@ import SingleBreadcrumbs from "./SingleBreadcrumbs";
 import Gap from "./Gap";
 
 import KeywordSearch from "./KeywordSearch";
+import InputSearchable from "./InputSearchable";
 
 export {
   Button,
@@ -51,4 +52,5 @@ export {
   SingleBreadcrumbs,
   KeywordSearch,
   Gap,
+  InputSearchable,
 };
