@@ -1,5 +1,5 @@
 import * as React from "react";
-import {Grid, Stack, IconButton, Box, Button, CircularProgress, ListItem} from "@mui/material";
+import {Grid, Stack, IconButton, Box, Button, CircularProgress, ListItem, Typography} from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import {OutlinedTextField, Select} from "../../../atoms";
 import {
@@ -111,77 +111,89 @@ const Notification: React.FunctionComponent<INotificationProps> = ({}: INotifica
     ]);
     return (
         <>
-            {programNotificationOption.data.map((item, i) => (
-                <Box display="flex" px="10%" py="1vw">
-                    <Grid
-                        key={`rowItem__${i}`}
-                        container
-                        border="0.1vw solid rgba(0, 0, 0, 0.1)"
-                        borderRadius="0.3vw"
-                        p="3vw"
-                    >
+            {programNotificationOption.data.length > 0 ? programNotificationOption.data.map((item, i) => (
+                    <Box display="flex" px="10%" py="1vw">
+                        <Grid
+                            key={`rowItem__${i}`}
+                            container
+                            border="0.1vw solid rgba(0, 0, 0, 0.1)"
+                            borderRadius="0.3vw"
+                            p="3vw"
+                        >
 
-                        <Stack spacing={"1vw"} width={"100%"}>
-                            <Grid container>
-                                <H3 color={"primary"}> {item.set_value}</H3>
-                            </Grid>
-                            <Select
-                                variant={"outlined"}
-                                label="Via"
-                                placeholder="Option"
-                                options={viaOption.data}
-                                value={i == 0 ? via0 : via1}
-                                handleChange={i === 0 ? setVia0 : setVia1}
-                            />
-                            <Select
-                                variant={"outlined"}
-                                label="Template"
-                                placeholder="Option"
-                                optionLabel={"notif_name"}
-                                options={notificationTemplateList.data}
-                                value={i == 0 ? template0 : template1}
-                                handleChange={i === 0 ? setTemplate0 : setTemplate1}
-                            />
-                            <Grid container>
-                                <OutlinedTextField
-                                    isRequired={false}
-                                    multiline
-                                    rows={4}
-                                    label="Template Content"
-                                    placeholder="Template Content"
-                                    variant={"outlined"}
-                                    value={i === 0 ? templateContent0 : templateContent1}
-                                    handleChange={i === 0 ? setTemplateContent0 : setTemplateContent1}
-                                />
-                            </Grid>
-                            <Grid container columns={11}>
-                                <Grid item xs={4}>
-                                    <BodyCopy>Variable</BodyCopy>
-                                    <SmallCopy fontSize={10} color={"orange"}>You can add this variable when
-                                        editing template content</SmallCopy>
+                            <Stack spacing={"1vw"} width={"100%"}>
+                                <Grid container>
+                                    <H3 color={"primary"}> {item.set_value}</H3>
                                 </Grid>
-                                <Grid item xs={7}>
-                                    <Grid container columns={12}>
-                                        {
-                                            variableList.map((item) => (
-                                                <Grid>
-                                                    <ListItem disablePadding>
-                                                        <ListItemButton
-                                                            onClick={() => i == 0 ? setVariableAppend0(item) : setVariableAppend1(item)}>
-                                                            <AddBox color={"primary"}/>
-                                                            <BodyCopy>{item}</BodyCopy>
-                                                        </ListItemButton>
-                                                    </ListItem>
-                                                </Grid>
-                                            ))
-                                        }
+                                <Select
+                                    variant={"outlined"}
+                                    label="Via"
+                                    placeholder="Option"
+                                    options={viaOption.data}
+                                    value={i == 0 ? via0 : via1}
+                                    handleChange={i === 0 ? setVia0 : setVia1}
+                                />
+                                <Select
+                                    variant={"outlined"}
+                                    label="Template"
+                                    placeholder="Option"
+                                    optionLabel={"notif_name"}
+                                    options={notificationTemplateList.data}
+                                    value={i == 0 ? template0 : template1}
+                                    handleChange={i === 0 ? setTemplate0 : setTemplate1}
+                                />
+                                <Grid container>
+                                    <OutlinedTextField
+                                        isRequired={false}
+                                        multiline
+                                        rows={4}
+                                        label="Template Content"
+                                        placeholder="Template Content"
+                                        variant={"outlined"}
+                                        value={i === 0 ? templateContent0 : templateContent1}
+                                        handleChange={i === 0 ? setTemplateContent0 : setTemplateContent1}
+                                    />
+                                </Grid>
+                                <Grid container columns={11}>
+                                    <Grid item xs={4}>
+                                        <BodyCopy>Variable</BodyCopy>
+                                        <SmallCopy fontSize={10} color={"orange"}>You can add this variable when
+                                            editing template content</SmallCopy>
+                                    </Grid>
+                                    <Grid item xs={7}>
+                                        <Grid container columns={12}>
+                                            {
+                                                variableList.map((item) => (
+                                                    <Grid>
+                                                        <ListItem disablePadding>
+                                                            <ListItemButton
+                                                                onClick={() => i == 0 ? setVariableAppend0(item) : setVariableAppend1(item)}>
+                                                                <AddBox color={"primary"}/>
+                                                                <BodyCopy>{item}</BodyCopy>
+                                                            </ListItemButton>
+                                                        </ListItem>
+                                                    </Grid>
+                                                ))
+                                            }
+                                        </Grid>
                                     </Grid>
                                 </Grid>
-                            </Grid>
-                        </Stack>
-                    </Grid>
-                </Box>
-            ))}
+                            </Stack>
+                        </Grid>
+                    </Box>
+                ))
+                :
+                <>
+                    <Box sx={{display: 'flex', justifyContent: 'center', alignItems: 'center', alignContent: 'center'}}>
+                        <CircularProgress/>
+                    </Box>
+                    <Box sx={{display: 'flex', justifyContent: 'center', alignItems: 'center', alignContent: 'center'}} mt={5}>
+                        <Typography variant={"h3"}>
+                            Generating notification, please wait...
+                        </Typography>
+                    </Box>
+                </>
+            }
         </>
     );
 };
