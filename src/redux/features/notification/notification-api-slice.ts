@@ -40,12 +40,39 @@ export const notificationSlice = createApi({
           body: body,
         }),
       });
+    const putHandler = (endpoint: string) =>
+      builder.mutation<{ success: boolean; body: any }, any>({
+        query: (body) => ({
+          url: endpoint + body["_id"] + "/edit",
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: body,
+        }),
+      });
+    const deleteHandler = (endpoint: string) =>
+      builder.mutation<{ success: boolean; _id: string }, string>({
+        query: (_id) => ({
+          url: endpoint + _id + "/delete",
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }),
+      });
     return {
       notificationTemplate: responseHandler("/template"),
       notificationTemplateDetail: detailHandler("/template/"),
 
       // POST
       addNotification: postHandler("/template"),
+
+      // PUT
+      updateNotification: putHandler("/template/"),
+
+      // DELETE
+      deleteNotification: deleteHandler("/template/"),
     };
   },
 });
@@ -59,4 +86,10 @@ export const {
 
   //   Post
   useAddNotificationMutation,
+
+  // PUT
+  useUpdateNotificationMutation,
+
+  // Delete
+  useDeleteNotificationMutation,
 } = notificationSlice;
