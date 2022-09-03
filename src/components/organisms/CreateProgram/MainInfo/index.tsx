@@ -1,5 +1,6 @@
 import {
-    Box,
+    Alert,
+    Box, Button,
     Checkbox,
     CircularProgress,
     FormControlLabel,
@@ -7,7 +8,7 @@ import {
     Grid,
     IconButton,
     Input,
-    Stack,
+    Stack, Tooltip, Typography,
 } from "@mui/material";
 import * as React from "react";
 import {
@@ -52,6 +53,7 @@ import TablePagination from "@mui/material/TablePagination";
 import {useParams} from "react-router-dom";
 import {useDetailProgramQuery, useProgramListQuery} from "../../../../redux/features/program/program-api-slice";
 import {ICreateProgram} from "../../../../pages/CreateProgram/interface";
+import CachedIcon from '@mui/icons-material/Cached';
 
 interface IMainInfoProps {
     slug: string;
@@ -114,12 +116,16 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
         useLazyAccountRoleQuery();
 
     useEffect(() => {
-        if (programData.alarm_pic_type === "PIC") {
-            getAlarmPicList(PicParamInitial);
-        } else if (programData.alarm_pic_type === "Role") {
-            getAlarmRoleList(RoleParamInitial);
-        }
-    }, [programData.alarm_pic_type, page, rowsPerPage,searchInput]);
+        // if (programData.alarm_pic_type === "PIC") {
+        //     getAlarmPicList(PicParamInitial);
+        // } else if (programData.alarm_pic_type === "Role") {
+        //     getAlarmRoleList(RoleParamInitial);
+        // }
+
+        // Setting PIC default
+        programData.alarm_pic_type = "PIC"
+        getAlarmPicList(PicParamInitial);
+    }, [programData.alarm_pic_type, page, rowsPerPage, searchInput]);
 
     const handleChangeCheckbox = (event: any) => {
         let isChecked = event.target.checked;
@@ -160,6 +166,121 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
     return (
         <Box display="flex" justifyContent="center" px="20%" py="1vw">
             <Stack spacing={"1vw"} width={"100%"}>
+
+                <Box pt={5}>
+                    <Box>
+                        <Stack sx={{width: '100%'}} spacing={2}>
+                            <Alert
+                                action={
+                                    <Tooltip placement="top"
+                                             title="This will redirect you to PIC Management page, all data you insert will be discard"
+                                             arrow>
+                                        <Button color="inherit" size="small">
+                                            PIC Management
+                                        </Button>
+                                    </Tooltip>
+                                }
+                                severity="info"
+                            >
+                                Don't find PIC ? Click button on the right corner
+                            </Alert>
+                        </Stack>
+                    </Box>
+                    {
+                        (programData.alarm_pic_type) &&
+                        <> <TableContainer component={Paper}>
+                            <Table sx={{minWidth: 650}} aria-label="simple table">
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell>
+                                            <Grid container>
+                                                <Grid xs={7}>
+                                                    <Button onClick={() => {
+                                                        getAlarmPicList(PicParamInitial)
+                                                    }} variant="outlined" color="inherit" size="small">
+                                                        <CachedIcon/>
+                                                        <Typography ml={2} variant="body1">
+                                                            Refresh PIC Data
+                                                        </Typography>
+                                                    </Button>
+
+                                                    <Typography mt={1}>
+                                                        <b style={{color: '#888'}}>Choose PIC to alert them about this
+                                                            Program</b>
+                                                    </Typography>
+
+                                                </Grid>
+                                                <Grid xs={5}>
+                                                    <Input fullWidth
+                                                           placeholder='Search...'
+                                                           onChange={(e) => setSearchInput(e.target.value)}
+                                                    />
+                                                </Grid>
+                                            </Grid>
+                                        </TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                {
+                                    alarmPicList.data.length > 0 ?
+                                        <TableBody>
+                                            {
+                                                (programData.alarm_pic_type === 'PIC' ? alarmPicList.data : alarmRoleList.data).map((row, idx) =>
+                                                    (
+                                                        <TableRow
+                                                            key={row._id}
+                                                            sx={{'&:last-child td, &:last-child th': {border: 0}}}
+                                                        >
+                                                            <TableCell component="th" scope="row">
+                                                                <FormControlLabel
+                                                                    key={`checkBox__${row._id}`}
+                                                                    control={<Checkbox onChange={handleChangeCheckbox}
+                                                                                       value={row._id}/>}
+                                                                    label={programData.alarm_pic_type === 'PIC' ? row.phone : row.name}
+                                                                />
+                                                            </TableCell>
+                                                        </TableRow>
+                                                    ))}
+                                        </TableBody> :
+                                        <>
+                                            <Box p={5}>
+                                                <Box sx={{
+                                                    display: 'flex',
+                                                    justifyContent: 'center',
+                                                    alignItems: 'center',
+                                                    alignContent: 'center'
+                                                }}>
+                                                    <CircularProgress/>
+                                                </Box>
+                                                <Box sx={{
+                                                    display: 'flex',
+                                                    justifyContent: 'center',
+                                                    alignItems: 'center',
+                                                    alignContent: 'center'
+                                                }} mt={5}>
+                                                    <Typography variant={"h3"}>
+                                                        Loading PIC Data, please wait...
+                                                    </Typography>
+                                                </Box>
+                                            </Box>
+                                        </>
+                                }
+
+                            </Table>
+                        </TableContainer>
+                            <TablePagination
+                                rowsPerPageOptions={[5, 10, 25]}
+                                component="div"
+                                count={(programData.alarm_pic_type === 'PIC' ? alarmPicList.data : alarmRoleList.data).length}
+                                rowsPerPage={rowsPerPage}
+                                page={page}
+                                onPageChange={handleChangePage}
+                                onRowsPerPageChange={handleChangeRowsPerPage}
+                            />
+                        </>
+                    }
+                </Box>
+
+
                 <OutlinedTextField
                     label="Program Group"
                     placeholder="Program Group"
@@ -289,70 +410,6 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
                         setStateTrigger(!stateTrigger);
                     }}
                 />
-                <Select
-                    label="Alarm Pic Type"
-                    placeholder="Option"
-                    options={PicTypeOption}
-                    value={programData.alarm_pic_type}
-                    handleChange={(value: any) => {
-                        programData.alarm_pic_type = value;
-                        setStateTrigger(!stateTrigger);
-                    }}
-                />
-                {
-                    (programData.alarm_pic_type) &&
-                    <> <TableContainer component={Paper}>
-                        <Table sx={{minWidth: 650}} aria-label="simple table">
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell>
-                                        <Grid container>
-                                            <Grid xs={7}>
-                                                {"Alarm " + programData.alarm_pic_type}
-                                            </Grid>
-                                            <Grid xs={5}>
-                                                <Input fullWidth
-                                                       placeholder='Search...'
-                                                       onChange={(e) => setSearchInput(e.target.value)}
-                                                />
-                                            </Grid>
-                                        </Grid>
-                                    </TableCell>
-                                </TableRow>
-                            </TableHead>
-
-                            <TableBody>
-                                {
-                                    (programData.alarm_pic_type === 'PIC' ? alarmPicList.data : alarmRoleList.data).map((row, idx) =>
-                                        (
-                                            <TableRow
-                                                key={row._id}
-                                                sx={{'&:last-child td, &:last-child th': {border: 0}}}
-                                            >
-                                                <TableCell component="th" scope="row">
-                                                    <FormControlLabel
-                                                        key={`checkBox__${row._id}`}
-                                                        control={<Checkbox onChange={handleChangeCheckbox}
-                                                                           value={row._id}/>}
-                                                        label={programData.alarm_pic_type === 'PIC' ? row.phone : row.name}
-                                                    />
-                                                </TableCell>
-                                            </TableRow>
-                                        ))}
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
-                        <TablePagination
-                            rowsPerPageOptions={[5, 10, 25]}
-                            component="div"
-                            count={(programData.alarm_pic_type === 'PIC' ? alarmPicList.data : alarmRoleList.data).length}
-                            rowsPerPage={rowsPerPage}
-                            page={page}
-                            onPageChange={handleChangePage}
-                            onRowsPerPageChange={handleChangeRowsPerPage}
-                        />
-                    </>
-                }
 
                 <Select
                     label="Threshold Alarm Experied"
@@ -375,6 +432,18 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
                     }}
                     variant={"outlined"}
                 />
+                {/*<Select*/}
+                {/*    label="Alarm Pic Type"*/}
+                {/*    placeholder="Option"*/}
+                {/*    options={PicTypeOption}*/}
+                {/*    value={programData.alarm_pic_type}*/}
+                {/*    handleChange={(value: any) => {*/}
+                {/*        programData.alarm_pic_type = value;*/}
+                {/*        setStateTrigger(!stateTrigger);*/}
+                {/*    }}*/}
+                {/*/>*/}
+
+
             </Stack>
         </Box>
     )
