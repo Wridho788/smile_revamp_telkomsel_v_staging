@@ -68,7 +68,6 @@ const Notification: React.FunctionComponent<INotificationProps> = ({}: INotifica
     const {data: notificationTemplateDetail1 = NotificationTemplateInitial} = useNotificationTemplateDetailQuery(template1)
     const [variableAppend0, setVariableAppend0] = useState('');
     const [variableAppend1, setVariableAppend1] = useState('');
-    const [trigger, setTrigger] = useState(false);
     useEffect(() => {
         programNotification.program_notification[0].template = template0
         if (JSON.stringify(notificationTemplateDetail0.notif_content)) {
@@ -82,15 +81,12 @@ const Notification: React.FunctionComponent<INotificationProps> = ({}: INotifica
             setTemplateContent1(JSON.stringify(notificationTemplateDetail1.notif_content).replaceAll('"', ''))
         }
     }, [template1, notificationTemplateDetail1]);
-    useEffect(() => {
-        setTemplateContent0(`${templateContent0} ${variableAppend0}`)
-        setTrigger(!trigger)
-    }, [variableAppend0])
-    useEffect(() => {
-        setTemplateContent1(`${templateContent1}  ${variableAppend1}`)
-        setTrigger(!trigger)
-    }, [variableAppend1])
-
+    const variableHandle0 = (variable: string) => {
+        setTemplateContent0(`${templateContent0} ${variable}`)
+    }
+    const variableHandle1 = (variable: string) => {
+        setTemplateContent1(`${templateContent1} ${variable}`)
+    }
     React.useEffect(() => {
         programNotification.program_notification[0].via = via0
         programNotification.program_notification[1].via = via1
@@ -167,7 +163,7 @@ const Notification: React.FunctionComponent<INotificationProps> = ({}: INotifica
                                                     <Grid>
                                                         <ListItem disablePadding>
                                                             <ListItemButton
-                                                                onClick={() => i == 0 ? setVariableAppend0(item) : setVariableAppend1(item)}>
+                                                                onClick={() => i == 0 ? variableHandle0(item) : variableHandle1(item)}>
                                                                 <AddBox color={"primary"}/>
                                                                 <BodyCopy>{item}</BodyCopy>
                                                             </ListItemButton>
@@ -187,7 +183,8 @@ const Notification: React.FunctionComponent<INotificationProps> = ({}: INotifica
                     <Box sx={{display: 'flex', justifyContent: 'center', alignItems: 'center', alignContent: 'center'}}>
                         <CircularProgress/>
                     </Box>
-                    <Box sx={{display: 'flex', justifyContent: 'center', alignItems: 'center', alignContent: 'center'}} mt={5}>
+                    <Box sx={{display: 'flex', justifyContent: 'center', alignItems: 'center', alignContent: 'center'}}
+                         mt={5}>
                         <Typography variant={"h3"}>
                             Generating notification, please wait...
                         </Typography>
