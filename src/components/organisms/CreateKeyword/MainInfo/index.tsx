@@ -27,7 +27,6 @@ import {
 } from "../../../../redux/features/lov/lov-api-slice";
 import { FilterInitial } from "../../../../redux/utils/initial-general";
 import { CreateKeywordGeneral } from "../initial";
-import { useMerchantManagementListQuery } from "../../../../redux/features/merchant/merchant-api-slice";
 import { useChannelListQuery } from "../../../../redux/features/channel/merchant-api-slice";
 import { ICreateKeyword } from "../interfaces";
 import AddBoxIcon from "@mui/icons-material/AddBox";
@@ -40,6 +39,7 @@ import {
   PoinValueOptions,
 } from "../options";
 import { useProgramListQuery } from "../../../../redux/features/program/program-api-slice";
+import Merchant from "./DataTable/Merchant";
 
 interface IMainInfoProps {}
 
@@ -52,8 +52,6 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
     useChannelListQuery(FilterInitial);
   const { data: customerBadgeOptions = { data: [] } } =
     useCustomerBadgeListQuery(FilterInitial);
-  const { data: merchantManagementOptions = { data: [] } } =
-    useMerchantManagementListQuery(FilterInitial);
   const { data: customerTierOptions = { data: [] } } =
     useCustomerTierListQuery(FilterInitial);
   const { data: customerBrandOptions = { data: [] } } =
@@ -595,16 +593,11 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
           <Divider textAlign="left" sx={{ pt: "2vw", pb: "1vw" }}>
             <Subtitle textTransform="uppercase">Merchant</Subtitle>
           </Divider>
-          <Select
-            label="Merchant"
-            placeholder="Option"
-            options={merchantManagementOptions.data}
-            optionLabel={"company_name"}
-            value={keywordCreateState.merchant}
-            handleChange={(value: string) => {
-              keywordCreate.merchant = value;
-              setStateTrigger(!stateTrigger);
-            }}
+          <Merchant
+            keywordCreateState={keywordCreateState}
+            keywordCreate={keywordCreate}
+            stateTrigger={stateTrigger}
+            setStateTrigger={setStateTrigger}
           />
           <Divider textAlign="left" sx={{ pt: "2vw", pb: "1vw" }}>
             <Subtitle textTransform="uppercase">Segmentation</Subtitle>
