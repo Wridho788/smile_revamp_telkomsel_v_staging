@@ -171,8 +171,8 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
                       keywordCreate.keyword_bonus[idx].payment = value;
                       setStateTrigger(!stateTrigger);
                     }}
-                    variant={"outlined"}
-                    direction={"column"}
+                    variant="outlined"
+                    direction="column"
                   /> */}
                 </Grid>
 
@@ -192,8 +192,8 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
                         keywordCreate.keyword_bonus[idx].granular = value;
                         setStateTrigger(!stateTrigger);
                       }}
-                      variant={"outlined"}
-                      direction={"column"}
+                      variant="outlined"
+                      direction="column"
                     />
                   )}
                 </Grid>
@@ -214,53 +214,59 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
                         keywordCreate.keyword_bonus[idx].bid = value;
                         setStateTrigger(!stateTrigger);
                       }}
-                      variant={"outlined"}
-                      direction={"column"}
+                      variant="outlined"
+                      direction="column"
                     />
                   )}
                 </Grid>
 
                 <Grid item xs={4}>
                   <OutlinedTextField
-                    type={"number"}
+                    type="number"
                     label="Quantity"
                     placeholder="Quantity"
-                    value={keywordCreateState.keyword_bonus[idx].qty_denom}
+                    value={keywordCreateState.keyword_bonus[
+                      idx
+                    ].qty_denom.toString()}
                     handleChange={(value: any) => {
                       keywordCreate.keyword_bonus[idx].qty_denom =
                         Number(value);
                       setStateTrigger(!stateTrigger);
                     }}
-                    variant={"outlined"}
-                    direction={"column"}
+                    variant="outlined"
+                    direction="column"
                   />
                 </Grid>
                 <Grid item xs={4}>
                   <OutlinedTextField
-                    type={"number"}
+                    type="number"
                     label="Limit"
                     placeholder="Limit"
-                    value={keywordCreateState.keyword_bonus[idx].limit}
+                    value={keywordCreateState.keyword_bonus[
+                      idx
+                    ].limit.toString()}
                     handleChange={(value: any) => {
                       keywordCreate.keyword_bonus[idx].limit = Number(value);
                       setStateTrigger(!stateTrigger);
                     }}
-                    variant={"outlined"}
-                    direction={"column"}
+                    variant="outlined"
+                    direction="column"
                   />
                 </Grid>
                 <Grid item xs={4}>
                   <OutlinedTextField
-                    type={"number"}
+                    type="number"
                     label="Stock"
                     placeholder="Stock"
-                    value={keywordCreateState.keyword_bonus[idx].stock}
+                    value={keywordCreateState.keyword_bonus[
+                      idx
+                    ].stock.toString()}
                     handleChange={(value: any) => {
                       keywordCreate.keyword_bonus[idx].stock = Number(value);
                       setStateTrigger(!stateTrigger);
                     }}
-                    variant={"outlined"}
-                    direction={"column"}
+                    variant="outlined"
+                    direction="column"
                   />
                 </Grid>
               </Grid>

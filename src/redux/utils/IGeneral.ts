@@ -14,6 +14,13 @@ export interface IParams {
   filter?: any;
   sort?: any;
 }
+export interface IParamsPrime {
+  first?: number;
+  rows?: number;
+  sortField?: string;
+  sortOrder?: number;
+  filters?: any;
+}
 
 export interface IParamsPrime {
   lazyEvent: string;

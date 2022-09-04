@@ -27,7 +27,6 @@ import {
 } from "../../../../redux/features/lov/lov-api-slice";
 import { FilterInitial } from "../../../../redux/utils/initial-general";
 import { CreateKeywordGeneral } from "../initial";
-import { useMerchantManagementListQuery } from "../../../../redux/features/merchant/merchant-api-slice";
 import { useChannelListQuery } from "../../../../redux/features/channel/merchant-api-slice";
 import { ICreateKeyword } from "../interfaces";
 import AddBoxIcon from "@mui/icons-material/AddBox";
@@ -40,6 +39,7 @@ import {
   PoinValueOptions,
 } from "../options";
 import { useProgramListQuery } from "../../../../redux/features/program/program-api-slice";
+import Merchant from "./DataTable/Merchant";
 
 interface IMainInfoProps {}
 
@@ -52,8 +52,6 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
     useChannelListQuery(FilterInitial);
   const { data: customerBadgeOptions = { data: [] } } =
     useCustomerBadgeListQuery(FilterInitial);
-  const { data: merchantManagementOptions = { data: [] } } =
-    useMerchantManagementListQuery(FilterInitial);
   const { data: customerTierOptions = { data: [] } } =
     useCustomerTierListQuery(FilterInitial);
   const { data: customerBrandOptions = { data: [] } } =
@@ -153,7 +151,7 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
             label="POIN Redeemed"
             variant="outlined"
             InputProps={{ inputProps: { min: 0 } }}
-            value={keywordCreateState.poin_redeemed}
+            value={keywordCreateState.poin_redeemed.toString()}
             handleChange={(value: number) => {
               keywordCreate.poin_redeemed = Number(value);
               setStateTrigger(!stateTrigger);
@@ -174,7 +172,7 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
             label="Max Redeem Counter"
             variant="outlined"
             InputProps={{ inputProps: { min: 0 } }}
-            value={keywordCreateState.max_redeem_counter}
+            value={keywordCreateState.max_redeem_counter.toString()}
             handleChange={(value: number) => {
               keywordCreate.max_redeem_counter = Number(value);
               setStateTrigger(!stateTrigger);
@@ -516,7 +514,7 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
             label="Total Budget"
             variant="outlined"
             InputProps={{ inputProps: { min: 0 } }}
-            value={keywordCreateState.total_anggaran}
+            value={keywordCreateState.total_anggaran.toString()}
             handleChange={(value: number) => {
               keywordCreate.total_anggaran = Number(value);
               setStateTrigger(!stateTrigger);
@@ -527,7 +525,7 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
             label="Customer Value"
             variant="outlined"
             InputProps={{ inputProps: { min: 0 } }}
-            value={keywordCreateState.customer_value}
+            value={keywordCreateState.customer_value.toString()}
             handleChange={(value: number) => {
               keywordCreate.customer_value = Number(value);
               setStateTrigger(!stateTrigger);
@@ -595,16 +593,10 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
           <Divider textAlign="left" sx={{ pt: "2vw", pb: "1vw" }}>
             <Subtitle textTransform="uppercase">Merchant</Subtitle>
           </Divider>
-          <Select
-            label="Merchant"
-            placeholder="Option"
-            options={merchantManagementOptions.data}
-            optionLabel={"company_name"}
-            value={keywordCreateState.merchant}
-            handleChange={(value: string) => {
-              keywordCreate.merchant = value;
-              setStateTrigger(!stateTrigger);
-            }}
+          <Merchant
+            keywordCreate={keywordCreate}
+            stateTrigger={stateTrigger}
+            setStateTrigger={setStateTrigger}
           />
           <Divider textAlign="left" sx={{ pt: "2vw", pb: "1vw" }}>
             <Subtitle textTransform="uppercase">Segmentation</Subtitle>
@@ -674,7 +666,7 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
               label="Telkomsel LOS Value"
               variant="outlined"
               InputProps={{ inputProps: { min: 0 } }}
-              value={keywordCreateState.segmentation_customer_los}
+              value={keywordCreateState.segmentation_customer_los.toString()}
               handleChange={(value: number) => {
                 keywordCreate.segmentation_customer_los = Number(value);
                 setStateTrigger(!stateTrigger);
@@ -688,7 +680,7 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
               label="Telkomsel LOS Range Min"
               variant="outlined"
               InputProps={{ inputProps: { min: 0 } }}
-              value={keywordCreateState.segmentation_customer_los_min}
+              value={keywordCreateState.segmentation_customer_los_min.toString()}
               handleChange={(value: number) => {
                 keywordCreate.segmentation_customer_los_min = Number(value);
                 setStateTrigger(!stateTrigger);
@@ -702,7 +694,7 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
               label="Telkomsel LOS Range Max"
               variant="outlined"
               InputProps={{ inputProps: { min: 0 } }}
-              value={keywordCreateState.segmentation_customer_los_max}
+              value={keywordCreateState.segmentation_customer_los_max.toString()}
               handleChange={(value: number) => {
                 keywordCreate.segmentation_customer_los_max = Number(value);
                 setStateTrigger(!stateTrigger);
@@ -755,7 +747,7 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
               label="Customer ARPU"
               variant="outlined"
               InputProps={{ inputProps: { min: 0 } }}
-              value={keywordCreateState.segmentation_customer_arpu}
+              value={keywordCreateState.segmentation_customer_arpu.toString()}
               handleChange={(value: number) => {
                 keywordCreate.segmentation_customer_arpu = Number(value);
                 setStateTrigger(!stateTrigger);
@@ -769,7 +761,7 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
               label="Customer ARPU MIN"
               variant="outlined"
               InputProps={{ inputProps: { min: 0 } }}
-              value={keywordCreateState.segmentation_customer_arpu_min}
+              value={keywordCreateState.segmentation_customer_arpu_min.toString()}
               handleChange={(value: number) => {
                 keywordCreate.segmentation_customer_arpu_min = Number(value);
                 setStateTrigger(!stateTrigger);
@@ -783,7 +775,7 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
               label="Customer ARPU MAX"
               variant="outlined"
               InputProps={{ inputProps: { min: 0 } }}
-              value={keywordCreateState.segmentation_customer_arpu_max}
+              value={keywordCreateState.segmentation_customer_arpu_max.toString()}
               handleChange={(value: number) => {
                 keywordCreate.segmentation_customer_arpu_max = Number(value);
                 setStateTrigger(!stateTrigger);

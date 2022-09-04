@@ -4,11 +4,9 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { OutlinedTextField, Select } from "../../../atoms";
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import {
-  useGetNotifReceiverQuery,
   useGetNotifTypeQuery,
   useGetNotifViaQuery,
   useGetPointTypeQuery,
-  useGetTransactionTypeQuery,
 } from "../../../../redux/features/lov/lov-api-slice";
 import { CreateKeywordGeneral } from "../initial";
 import { ICreateKeyword } from "../interfaces";
@@ -75,7 +73,7 @@ const Notification: React.FunctionComponent<INotificationProps> = (props) => {
                         value;
                       setStateTrigger(!stateTrigger);
                     }}
-                    variant={"outlined"}
+                    variant="outlined"
                     direction={"column"}
                   />
                 </Grid>
@@ -138,7 +136,7 @@ const Notification: React.FunctionComponent<INotificationProps> = (props) => {
                               .notification
                         )?.notif_name
                       }
-                      variant={"outlined"}
+                      variant="outlined"
                       multiline
                       rows={3}
                       value={
