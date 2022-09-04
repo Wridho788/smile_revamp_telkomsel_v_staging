@@ -594,7 +594,6 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
             <Subtitle textTransform="uppercase">Merchant</Subtitle>
           </Divider>
           <Merchant
-            keywordCreateState={keywordCreateState}
             keywordCreate={keywordCreate}
             stateTrigger={stateTrigger}
             setStateTrigger={setStateTrigger}
