@@ -21,7 +21,8 @@ export interface IProgramNotification {
     template_content: string
 }
 export interface ICreateProgram {
-    _id?: string
+    _id?: string,
+    program_group:string,
     name: string,
     desc: string,
     start_period: Date,
@@ -43,7 +44,8 @@ export interface ICreateProgram {
 }
 
 export interface IProgramItem {
-    _id?: string
+    _id?: string,
+    program_group:string,
     name: string,
     desc: string,
     start_period: Date,

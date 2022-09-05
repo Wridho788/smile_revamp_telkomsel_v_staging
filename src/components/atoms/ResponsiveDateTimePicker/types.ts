@@ -7,4 +7,5 @@ export interface IResponsiveDateTimePickerProps {
   leftColumn?: number;
   rightColumn?: number;
   direction?: "row" | "column";
+  isRequired?:boolean
 }

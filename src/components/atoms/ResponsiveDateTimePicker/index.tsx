@@ -5,7 +5,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { IResponsiveDateTimePickerProps } from "./types";
 import { Grid } from "@mui/material";
 import { BodyCopy } from "../Typography";
-import {DatePicker, DateTimePicker} from "@mui/x-date-pickers";
+import { DateTimePicker } from "@mui/x-date-pickers";
 
 const Index: React.FunctionComponent<IResponsiveDateTimePickerProps> = ({
   label,
@@ -16,6 +16,7 @@ const Index: React.FunctionComponent<IResponsiveDateTimePickerProps> = ({
   leftColumn = 4,
   rightColumn = 7,
   direction = "row",
+  isRequired = true,
 }) => {
   return (
     <Grid
@@ -27,7 +28,18 @@ const Index: React.FunctionComponent<IResponsiveDateTimePickerProps> = ({
         item
         xs={!label ? 0 : direction === "column" ? rightColumn : leftColumn}
       >
-        <BodyCopy>{label}</BodyCopy>
+        <Grid container>
+          <Grid>
+            <BodyCopy>{label}</BodyCopy>
+          </Grid>
+          {isRequired && (
+            <Grid>
+              <BodyCopy color={"red"} sx={{ marginLeft: "5px" }}>
+                *
+              </BodyCopy>
+            </Grid>
+          )}
+        </Grid>
       </Grid>
       <Grid item xs={rightColumn} mt={direction === "column" ? "0.3vw" : 0}>
         <LocalizationProvider dateAdapter={AdapterDateFns}>

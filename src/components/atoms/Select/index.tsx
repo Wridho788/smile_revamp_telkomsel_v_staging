@@ -5,6 +5,7 @@ import {
   SelectChangeEvent,
   OutlinedInput,
   Grid,
+  Box,
 } from "@mui/material";
 import * as React from "react";
 import { BodyCopy } from "../Typography";
@@ -22,6 +23,7 @@ const Index: React.FunctionComponent<ISelectProps> = ({
   leftColumn = 4,
   rightColumn = 7,
   direction = "row",
+  isRequired = true,
   ...props
 }) => {
   return (
@@ -33,8 +35,20 @@ const Index: React.FunctionComponent<ISelectProps> = ({
       <Grid
         item
         xs={!label ? 0 : direction === "column" ? rightColumn : leftColumn}
+        pt={0.8}
       >
-        <BodyCopy>{label}</BodyCopy>
+        <Grid container>
+          <Grid>
+            <BodyCopy>{label}</BodyCopy>
+          </Grid>
+          {isRequired && (
+            <Grid>
+              <BodyCopy color={"red"} sx={{ marginLeft: "5px" }}>
+                *
+              </BodyCopy>
+            </Grid>
+          )}
+        </Grid>
       </Grid>
       <Grid item xs={rightColumn} mt={direction === "column" ? "0.3vw" : 0}>
         <FormControl sx={{ width: "100%" }}>
