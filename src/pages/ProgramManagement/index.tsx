@@ -1,9 +1,6 @@
 import React from "react";
 import { Box, Grid } from "@mui/material";
 import { Programs } from "../../components";
-import programsData from "../../mock-data/programs-data.json";
-import CreateProgramForm from "../../components/organisms/CreateProgramForm";
-
 const ProgramManagement = () => {
   return (
     <Box
