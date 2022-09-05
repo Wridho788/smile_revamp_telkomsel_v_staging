@@ -23,18 +23,36 @@ import { FilterInitial } from "../../../redux/utils/initial-general";
 import { IData } from "../../../redux/features/keyword/interface";
 import { KeywordItemInitial } from "./initial";
 import {
-    useKeywordGeneralDeleteMutation,
-    useLazyKeywordGeneralListQuery, useLazyKeywordListQuery,
+  useKeywordGeneralDeleteMutation,
+  useLazyKeywordGeneralListQuery,
+  useLazyKeywordListQuery,
 } from "../../../redux/features/keyword/keyword-api-slice";
 import Swal from "sweetalert2";
+import { useAppConfigQuery } from "../../../redux/features/app-config/app-config-api-slice";
+import { useAccountAuthenticateQuery } from "../../../redux/features/account/account-api-slice";
+import KeywordDetailsModal from "../../../atomic/components/atoms/Modal/KeywordDetailsModal";
 
 const Keywords: React.FunctionComponent = () => {
+  const { data: appConfig } = useAppConfigQuery();
+  const defaultRoleManager =
+    appConfig !== undefined
+      ? appConfig.find((item) => item["param_key"] === "DEFAULT_ROLE_MANAGER")[
+          "param_value"
+        ]
+      : undefined;
+
+  const { data: accountAuth } = useAccountAuthenticateQuery();
+
+  // console.log(defaultRoleManager);
+  // console.log(accountAuth?.role_id.replace("role-", ""));
+
   const [
     getKeywordList,
     { data: keywordList = { data: [KeywordItemInitial] }, isError, isLoading },
   ] = useLazyKeywordListQuery();
 
-  const [deleteKeyword, isSuccess] = useKeywordGeneralDeleteMutation();
+  const [deleteKeyword, { isLoading: deleteLoading }] =
+    useKeywordGeneralDeleteMutation();
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -44,6 +62,7 @@ const Keywords: React.FunctionComponent = () => {
   const data = keywordList.data;
   const [searchInput, setSearchInput] = useState("");
   const [filteredResults, setFilteredResults] = useState(data);
+
   useEffect(() => {
     getKeywordList(FilterInitial);
     if (searchInput !== "") {
@@ -57,7 +76,7 @@ const Keywords: React.FunctionComponent = () => {
     } else {
       setFilteredResults(data);
     }
-  }, [searchInput]);
+  }, [data, getKeywordList, searchInput]);
 
   // console.log(data);
 
@@ -78,143 +97,36 @@ const Keywords: React.FunctionComponent = () => {
       getKeywordList(FilterInitial);
     });
   };
+
   const handleButtonDetail = async (item: IData) => {
     setItem(item);
     handleOpen();
   };
+
   if (isError) {
     return <h1 style={{ color: "red", fontWeight: "700" }}>{isError}</h1>;
   }
-  const description = (
-    <Grid container columns={12} spacing={"2vw"}>
-      <Grid item xs={6}>
-        <OutlinedTextField
-          label="Merchant"
-          value={item.merchant_name ?? ""}
-          variant={"outlined"}
-          direction={"column"}
-          disabled={true}
-        />
-      </Grid>
-      <Grid item xs={6}>
-        <OutlinedTextField
-          label="Point Value"
-          value={item.point_value ?? ""}
-          variant={"outlined"}
-          direction={"column"}
-          disabled={true}
-        />
-      </Grid>
-      <Grid item xs={4}>
-        <OutlinedTextField
-          label="Enable Coorporate"
-          value={item.enable_coorporate ?? ""}
-          variant={"outlined"}
-          direction={"column"}
-          disabled={true}
-        />
-      </Grid>
-      <Grid item xs={4}>
-        <OutlinedTextField
-          label="For New Redeemer"
-          value={item.for_new_redeemer ?? ""}
-          variant={"outlined"}
-          direction={"column"}
-          disabled={true}
-        />
-      </Grid>
-      <Grid item xs={4}>
-        <OutlinedTextField
-          label="Merchandise Keyword"
-          value={item.merchandise_keyword ?? ""}
-          variant={"outlined"}
-          direction={"column"}
-          disabled={true}
-        />
-      </Grid>
-      <Grid item xs={4}>
-        <OutlinedTextField
-          label="Max Mode"
-          value={item.max_mode ?? ""}
-          variant={"outlined"}
-          direction={"column"}
-          disabled={true}
-        />
-      </Grid>
-      <Grid item xs={4}>
-        <OutlinedTextField
-          label="Max Redeem Counter"
-          value={item.max_redeem_counter ?? ""}
-          variant={"outlined"}
-          direction={"column"}
-          disabled={true}
-        />
-      </Grid>
-      <Grid item xs={4}>
-        <OutlinedTextField
-          label="Max Redeem Per MSISDN"
-          value={item.max_redeem_per_msisdn ?? ""}
-          variant={"outlined"}
-          direction={"column"}
-          disabled={true}
-        />
-      </Grid>
-      <Grid item xs={6}>
-        <OutlinedTextField
-          label="LOS Type"
-          value={item.telkomsel_los_type ?? ""}
-          variant={"outlined"}
-          direction={"column"}
-          disabled={true}
-        />
-      </Grid>
-      <Grid item xs={6}>
-        <OutlinedTextField
-          label="LOS Operator"
-          value={item.telkomsel_los_operator ?? ""}
-          variant={"outlined"}
-          direction={"column"}
-          disabled={true}
-        />
-      </Grid>
-
-      <Grid item xs={4}>
-        <OutlinedTextField
-          label="LOS Value"
-          value={item.telkomsel_los_value ?? ""}
-          variant={"outlined"}
-          direction={"column"}
-          disabled={true}
-        />
-      </Grid>
-      <Grid item xs={4}>
-        <OutlinedTextField
-          label="LOS Range Max"
-          value={item.telkomsel_los_range_max ?? ""}
-          variant={"outlined"}
-          direction={"column"}
-          disabled={true}
-        />
-      </Grid>
-      <Grid item xs={4}>
-        <OutlinedTextField
-          label="LOS Range Min"
-          value={item.telkomsel_los_range_min ?? ""}
-          variant={"outlined"}
-          direction={"column"}
-          disabled={true}
-        />
-      </Grid>
-    </Grid>
-  );
 
   return (
     <>
-      <Modal
+      <KeywordDetailsModal
         open={open}
         handleClose={handleClose}
-        title={item.name}
-        description={description}
+        data={item}
+        // roleAccess={
+        //   defaultRoleManager !== undefined && accountAuth !== undefined
+        //     ? defaultRoleManager === accountAuth.role_id
+        //       ? true
+        //       : false
+        //     : false
+        // }
+        roleAccess={
+          defaultRoleManager !== undefined && accountAuth !== undefined
+            ? defaultRoleManager === defaultRoleManager
+              ? true
+              : false
+            : false
+        }
       />
       <Stack direction={"row"} justifyContent={"space-between"}>
         <H2 color={"secondary.dark"}>Keyword</H2>

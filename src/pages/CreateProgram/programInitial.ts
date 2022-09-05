@@ -5,19 +5,20 @@ export const ProgramNotificationInitial = [
     {
         template: "",
         via: "",
-        notif_type: "",
+        notif_type: "62ffc38b8a01008799e78663", // default by notif group https://discord.com/channels/1005119713665359974/1005119713665359977/1014858719747637338
         template_content: ""
     },
     {
         template: "",
         via: "",
-        notif_type: "",
+        notif_type: "62ffc38b8a01008799e78663", //  default by notif group https://discord.com/channels/1005119713665359974/1005119713665359977/1014858719747637338
         template_content: ""
     },
 ]
 
 export const CreateProgramInitial: ICreateProgram = {
     _id: "",
+    program_group: "",
     name: "",
     desc: "",
     start_period: new Date,
@@ -26,20 +27,21 @@ export const CreateProgramInitial: ICreateProgram = {
     program_mechanism: "",
     program_owner: "",
     program_owner_detail: "",
-    keyword_registration: "",
+    keyword_registration: "62ffc1d68a01008799e785cb",
     whitelist_counter: true,
     logic: "",
     program_time_zone: "",
-    program_parent: "",
+    program_parent: "630ecf3ef07ffec987fa31c5",
     alarm_pic_type: "",
     alarm_pic: [],
     threshold_alarm_expired: 0,
-    threshold_alarm_voucher: 0,
+    threshold_alarm_voucher: 70,
     program_notification: ProgramNotificationInitial
 }
 
 export const ProgramItemInitial: IProgramItem = {
     _id: "",
+    program_group: "",
     name: "",
     desc: "",
     start_period: new Date,
@@ -48,15 +50,15 @@ export const ProgramItemInitial: IProgramItem = {
     program_mechanism: "",
     program_owner: "",
     program_owner_detail: "",
-    keyword_registration: "",
+    keyword_registration: "62ffc1d68a01008799e785cb",
     whitelist_counter: true,
     logic: "",
     program_time_zone: "",
-    program_parent: "",
+    program_parent: "630ecf3ef07ffec987fa31c5",
     alarm_pic_type: "",
     alarm_pic: [],
     threshold_alarm_expired: 0,
-    threshold_alarm_voucher: 0,
+    threshold_alarm_voucher: 70,
     program_notification: ProgramNotificationInitial
 }
 

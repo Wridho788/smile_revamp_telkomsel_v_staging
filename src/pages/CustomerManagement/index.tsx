@@ -6,49 +6,41 @@ import {
   Card,
   CardActions,
   CardContent,
-  Chip,
   Container,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
-  FormControl,
   Grid,
   Icon,
-  OutlinedInput,
   Paper,
   TextField,
 } from "@mui/material";
-import {
-  DrawerNav,
-  Gap,
-  H1,
-  H2,
-  PreTitle,
-  SmallCopy,
-  Subtitle,
-} from "../../components";
+import { DrawerNav, Gap, H2, SmallCopy, Subtitle } from "../../components";
 import {
   useCustomerBadgeListQuery,
   useCustomerBrandListQuery,
-  useCustomerListQuery,
   useCustomerTierListQuery,
+  useLazyCustomerListForPrimeQuery,
 } from "../../redux/features/customer/customer-api-slice";
 import {
-  TableColumnCustomer,
   CustomerInitial,
   CustomerTierInitial,
   CustomerBrandInitial,
-  TableDataRows,
+  LocationInitial,
 } from "./initial";
-import DataTable, { TableColumn } from "react-data-table-component";
+import { DataTable } from "primereact/datatable";
+import { Column } from "primereact/column";
+import { Skeleton } from "primereact/skeleton";
+
 import {
   Delete,
   FilterAlt,
   ModeEditOutlineOutlined,
-  VisibilityOutlined,
 } from "@mui/icons-material";
 import { ICustomers } from "../../redux/features/customer/interface";
+import { useLocationTemplateQuery } from "../../redux/features/location/location-api-slice";
+import { format } from "date-fns";
 
 const Index = () => {
   // ============== Local State =================
@@ -57,18 +49,19 @@ const Index = () => {
     detail: false,
   });
   const [filter, setFilter] = React.useState({
-    msisdn: "",
+    search: "",
     cluster_sales: "",
     region: "",
   });
   const [queryFilter, setQueryFilter] = React.useState({
-    msisdn: "",
+    search: "",
     cluster_sales: "",
     region: "",
   });
+  const [searchKey, setSearchKey] = React.useState<string>("msisdn");
   const [paginationCustomer, setPaginationCustomer] = React.useState({
     page: 0,
-    limit: 3,
+    limit: 10,
   });
   const [paginationBrand, setPaginationBrand] = React.useState({
     page: 0,
@@ -89,62 +82,65 @@ const Index = () => {
 
   // ================= Fetching with RTK ===================
 
-  const {
-    data: customerList = { data: [CustomerInitial] },
-    isError: customerError,
-    isLoading: loadingCustomer,
-  } = useCustomerListQuery({
-    skip: page,
-    limit,
-    filter: `{"msisdn":"${queryFilter.msisdn}", "region_lacci": "${queryFilter.region}", "cluster_sales": "${queryFilter.cluster_sales}"}`,
-    sort: "{}",
-  });
-  const {
-    data: customerBadgeList = { data: [CustomerBrandInitial] },
-    isError: badgeError,
-    isLoading: loadingBadge,
-  } = useCustomerBadgeListQuery({
-    skip: paginationBadge.page,
-    limit,
-    filter: `{}`,
-    sort: "{}",
-  });
-  const {
-    data: customerBrandList = { data: [CustomerBrandInitial] },
-    isError: brandError,
-    isLoading: loadingBrand,
-  } = useCustomerBrandListQuery({
-    skip: paginationBrand.page,
-    limit: paginationBrand.limit,
-    filter: `{}`,
-    sort: "{}",
-  });
-  const {
-    data: customerTierList = { data: [CustomerTierInitial] },
-    isError: tierError,
-    isLoading: loadingTier,
-  } = useCustomerTierListQuery({
-    skip: paginationTier.page,
-    limit: paginationTier.limit,
-    filter: `{}`,
-    sort: "{}",
-  });
+  const [getProgramList, { data: customerList = { data: [CustomerInitial] } }] =
+    useLazyCustomerListForPrimeQuery();
 
+  const { data: customerBadgeList = { data: [CustomerBrandInitial] } } =
+    useCustomerBadgeListQuery({
+      skip: paginationBadge.page,
+      limit,
+      filter: `{}`,
+      sort: "{}",
+    });
+
+  const { data: customerBrandList = { data: [CustomerBrandInitial] } } =
+    useCustomerBrandListQuery({
+      skip: paginationBrand.page,
+      limit: paginationBrand.limit,
+      filter: `{}`,
+      sort: "{}",
+    });
+
+  const { data: customerTierList = { data: [CustomerTierInitial] } } =
+    useCustomerTierListQuery({
+      skip: paginationTier.page,
+      limit: paginationTier.limit,
+      filter: `{}`,
+      sort: "{}",
+    });
+
+  // ==================== Fetching Region =======================
+
+  const { data: locationData = { data: [LocationInitial] } } =
+    useLocationTemplateQuery({
+      skip: 0,
+      limit: 100,
+      filter: `{}`,
+      sort: "{}",
+    });
+
+  // ===== Spread data from fetching data =========
   const dataCustomer = customerList.data;
   const dataCustomerBadge = customerBadgeList.data;
   const dataCustomerBrand = customerBrandList.data;
   const dataCustomerTier = customerTierList.data;
+  const dataLocation = locationData.data;
 
   // ==================== Handler =======================
   const handleSearch = (e: any) => {
-    setFilter({ ...filter, msisdn: e.target.value });
+    setFilter({ ...filter, search: e.target.value });
+    console.log(e.target.value);
     setTimeout(
-      () => setQueryFilter({ ...queryFilter, msisdn: e.target.value }),
+      () => setQueryFilter({ ...queryFilter, search: e.target.value }),
       1000
     );
   };
   const handleChange = (e: any) => {
     setFilter({ ...filter, [e.target.name]: e.target.value });
+  };
+  const handleChangeSearchKey = (e: any) => {
+    console.log(e.target.value);
+    setSearchKey(e.target.value);
   };
   const handleFilter = async () => {
     setQueryFilter({
@@ -157,137 +153,99 @@ const Index = () => {
 
   const handleCloseFilter = async () => {
     setFilter({
-      msisdn: "",
+      search: "",
       region: "",
       cluster_sales: "",
     });
     setOpen({ ...open, filter: false });
   };
 
-  const handleShowCustomer = async (data: any) => {
-    const customerShow = await dataCustomer.filter(
-      (item) => item._id === data._id
-    );
-    setOpen({ ...open, detail: true });
-    setCustomerDetail(customerShow ? customerShow[0] : null);
+  //====== PRIME REACT =======
+  const [loading, setLoading] = React.useState(false);
+  const [totalRecords, setTotalRecords] = React.useState(0);
+  const [customers, setCustomers] = React.useState<any[]>([CustomerInitial]);
+  const [lazyParams, setLazyParams] = React.useState<any>({
+    first: 0,
+    rows: 5,
+    page: 1,
+    sortField: null,
+    sortOrder: null,
+    filters: {
+      msisdn: { value: "", matchMode: "contains" },
+      activation_date: { value: "", matchMode: "contains" },
+      expire_date: { value: "", matchMode: "contains" },
+      region_lacci: { value: "", matchMode: "contains" },
+      cluster_sales: { value: "", matchMode: "contains" },
+      loyalty_tier: { value: "", matchMode: "contains" },
+      arpu: { value: "", matchMode: "contains" },
+      brand: { value: "", matchMode: "contains" },
+    },
+  });
+
+  let loadLazyTimeout: any = null;
+
+  React.useEffect(() => {
+    loadLazyData();
+  }, [lazyParams]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const loadLazyData = () => {
+    setLoading(true);
+
+    if (loadLazyTimeout) {
+      clearTimeout(loadLazyTimeout);
+    }
+
+    //imitate delay of a backend call
+    loadLazyTimeout = setTimeout(async () => {
+      const { data }: any = await getProgramList({
+        lazyEvent: JSON.stringify(lazyParams),
+      });
+      console.log(data.payload);
+      setCustomers(data.payload.data);
+      setTotalRecords(data.payload.totalRecords);
+      setLoading(false);
+    }, Math.random() * 1000 + 250);
   };
 
-  //====================== Memo for Searching component ==========================
-  const subHeaderComponentMemo = React.useMemo(() => {
-    return (
-      <Box
-        sx={{ display: "flex", width: "100%", justifyContent: "space-between" }}
-      >
-        <div>
-          {queryFilter.region && (
-            <Box sx={{ display: "flex", alignItems: "center" }}>
-              <SmallCopy>Region: </SmallCopy>
-              <Chip
-                label={queryFilter.region}
-                variant="outlined"
-                onDelete={() => {
-                  setQueryFilter({ ...queryFilter, region: "" });
-                  setFilter({ ...filter, region: "" });
-                }}
-              />
-            </Box>
-          )}
-          {queryFilter.cluster_sales && (
-            <Box sx={{ isplay: "flex", alignItems: "center" }}>
-              <SmallCopy>Cluster Sales: </SmallCopy>
-              <Chip
-                label={queryFilter.cluster_sales}
-                variant="outlined"
-                onDelete={() => {
-                  setQueryFilter({ ...queryFilter, cluster_sales: "" });
-                  setFilter({ ...filter, cluster_sales: "" });
-                }}
-              />
-            </Box>
-          )}
-        </div>
-        <div>
-          <FormControl
-            sx={{
-              width: "25ch",
-              "& .MuiInputBase-root": {
-                borderRadius: "4px",
-              },
-            }}
-          >
-            <OutlinedInput
-              name="msisdn"
-              value={filter.msisdn}
-              onChange={handleSearch}
-              sx={{
-                "& .MuiInputBase-input": {
-                  padding: "5px 10px",
-                },
-              }}
-              placeholder="Search"
-            />
-          </FormControl>
-          <Button
-            sx={{
-              marginLeft: 3,
-              minWidth: "100px",
-              backgroundColor: "#001A41",
-            }}
-            variant="contained"
-            endIcon={<FilterAlt />}
-            onClick={() => setOpen({ ...open, filter: true })}
-          >
-            <PreTitle>Filter</PreTitle>
-          </Button>
-        </div>
-      </Box>
-    );
-  }, [filter.msisdn, queryFilter.region, queryFilter.cluster_sales]);
+  const onPage = (event: any) => {
+    setLazyParams(event);
+  };
 
-  //
-  const TableColumnCustomers: TableColumn<TableDataRows<any>>[] = [
-    {
-      name: "MSISDN",
-      selector: (row) => row.msisdn,
-    },
-    {
-      name: "Activation Date",
-      selector: (row) => row.activation_date,
-    },
-    {
-      name: "Expiration Date",
-      selector: (row) => row.expire_date,
-    },
-    {
-      name: "Region Lacci",
-      selector: (row) => row.region_lacci,
-    },
-    {
-      name: "Cluster Sales",
-      selector: (row) => row.cluster_sales,
-    },
-    {
-      name: "Loyalty Tier",
-      selector: (row) => row.loyalty_tier,
-    },
-    {
-      name: "Arpu",
-      selector: (row) => row.arpu,
-    },
-    {
-      name: "Brand",
-      selector: (row) => row.brand,
-    },
-    {
-      name: "Action",
-      ignoreRowClick: true,
-      allowOverflow: true,
-      button: true,
-      cell: (row) => (
-        <VisibilityOutlined onClick={() => handleShowCustomer(row)} />
-      ),
-    },
-  ];
+  const onSort = (event: any) => {
+    setLazyParams(event);
+  };
+
+  const onFilter = (event: any) => {
+    event["first"] = 0;
+
+    setLazyParams(event);
+  };
+
+  const onRowSelect = (event: any) => {
+    setOpen({ ...open, detail: true });
+    setCustomerDetail(event.data);
+  };
+
+  const activationDateBodyTemplate = (rowData: ICustomers) => {
+    return (
+      <React.Fragment>
+        <span className="image-text">
+          {rowData.activation_date !== "" &&
+            format(new Date(rowData.activation_date), "PPP")}
+        </span>
+      </React.Fragment>
+    );
+  };
+  const expireDateBodyTemplate = (rowData: ICustomers) => {
+    return (
+      <React.Fragment>
+        <span className="image-text">
+          {rowData.expire_date !== "" &&
+            format(new Date(rowData.expire_date), "PPP")}
+        </span>
+      </React.Fragment>
+    );
+  };
 
   return (
     <DrawerNav>
@@ -302,25 +260,90 @@ const Index = () => {
         <Gap width={0} height={20} />
         <Box>
           <Paper>
-            <Container>
+            <div className="card">
               <DataTable
-                columns={TableColumnCustomers}
-                data={dataCustomer}
-                highlightOnHover
-                pagination
-                paginationServer
-                paginationTotalRows={10}
-                paginationPerPage={paginationCustomer.limit}
-                subHeaderComponent={subHeaderComponentMemo}
-                paginationComponentOptions={{
-                  noRowsPerPage: true,
-                }}
-                onChangePage={(page) =>
-                  setPaginationCustomer({ ...paginationCustomer, page })
-                }
-                subHeader
-              />
-            </Container>
+                value={customers}
+                lazy
+                filterDisplay="row"
+                responsiveLayout="scroll"
+                dataKey="id"
+                paginator
+                first={lazyParams.first}
+                rows={10}
+                totalRecords={totalRecords}
+                onPage={onPage}
+                onSort={onSort}
+                onFilter={onFilter}
+                filters={lazyParams.filters}
+                loading={loading}
+                scrollable
+                scrollDirection="both"
+                selectionMode="single"
+                onRowSelect={onRowSelect}
+              >
+                <Column
+                  footer="MSISDN"
+                  style={{ flexGrow: 1, flexBasis: "250px" }}
+                  field="msisdn"
+                  header="MSISDN"
+                  sortable
+                  filter
+                  filterPlaceholder="Search by msisdn"
+                />
+                <Column
+                  footer="Activation Date"
+                  style={{ flexGrow: 1, flexBasis: "250px" }}
+                  field="activation_date"
+                  sortable
+                  filter
+                  header="Avtivation Date"
+                  body={activationDateBodyTemplate}
+                  filterPlaceholder="Search by activation date"
+                />
+                <Column
+                  footer="Expire Date"
+                  style={{ flexGrow: 1, flexBasis: "250px" }}
+                  field="expire_date"
+                  sortable
+                  filter
+                  header="Expire Date"
+                  body={expireDateBodyTemplate}
+                  filterPlaceholder="Search by expire date"
+                />
+                <Column
+                  footer="Region Laccy"
+                  style={{ flexGrow: 1, flexBasis: "250px" }}
+                  field="region_lacci"
+                  header="Region Laccy"
+                  filter
+                  filterPlaceholder="Search by region lacci"
+                />
+                <Column
+                  footer="Cluster Sales"
+                  style={{ flexGrow: 1, flexBasis: "250px" }}
+                  field="cluster_sales"
+                  header="Cluster Sales"
+                  filter
+                  filterPlaceholder="Search by Cluster"
+                />
+                <Column
+                  footer="Loyalty Tier"
+                  style={{ flexGrow: 1, flexBasis: "250px" }}
+                  field="loyalty_tier"
+                  header="Loyalty Tier"
+                  filter
+                  filterPlaceholder="Search by Tier"
+                />
+                <Column
+                  footer="Brand"
+                  style={{ flexGrow: 1, flexBasis: "250px" }}
+                  field="brand"
+                  header="Brand"
+                  filter
+                  filterPlaceholder="Search by Brand"
+                />
+              </DataTable>
+            </div>
           </Paper>
         </Box>
 
@@ -333,7 +356,7 @@ const Index = () => {
             <Grid item>No Data</Grid>
           ) : (
             dataCustomerBadge.map((data: any) => (
-              <Grid item sm={6} md={3} lg={3}>
+              <Grid key={data._id} item sm={6} md={3} lg={3}>
                 <Card sx={{ minWidth: 275 }}>
                   <CardContent>
                     <Subtitle>{data.name}</Subtitle>
@@ -406,7 +429,7 @@ const Index = () => {
       </Box>
 
       {/* Modal Filter */}
-      <Dialog
+      {/* <Dialog
         fullWidth
         open={open.filter}
         onClose={() => setOpen({ ...open, filter: false })}
@@ -423,7 +446,7 @@ const Index = () => {
             freeSolo
             disableClearable
             id="combo-box-demo"
-            options={[""]}
+            options={dataLocation.map((option) => option.name)}
             sx={{ margin: "10px 0" }}
             value={filter.region}
             onChange={(e: any, newValue: string) =>
@@ -466,7 +489,7 @@ const Index = () => {
           </Button>
           <Button onClick={handleFilter}>Apply</Button>
         </DialogActions>
-      </Dialog>
+      </Dialog> */}
       {/* Show Detail Customer */}
       <Dialog
         fullWidth
@@ -486,55 +509,44 @@ const Index = () => {
             {customerDetail && customerDetail.loyalty_tier.join()}
           </SmallCopy>
           <SmallCopy>
-            Customer LOS: {customerDetail && customerDetail.loyalty_tier.join()}
+            Customer LOS: {customerDetail && customerDetail.los}
           </SmallCopy>
-          <SmallCopy>
+          {/* <SmallCopy>
             Customer Type:{" "}
-            {customerDetail && customerDetail.loyalty_tier.join()}
+            {customerDetail && customerDetail.}
+          </SmallCopy> */}
+          <SmallCopy>
+            Customer Location-City: {customerDetail && customerDetail.kabupaten}
           </SmallCopy>
           <SmallCopy>
-            Customer Location-City:{" "}
-            {customerDetail && customerDetail.loyalty_tier.join()}
+            Customer Brand: {customerDetail && customerDetail.brand.join()}
           </SmallCopy>
           <SmallCopy>
-            Customer Brand:{" "}
-            {customerDetail && customerDetail.loyalty_tier.join()}
+            Customer ARPU: {customerDetail && customerDetail.arpu}
           </SmallCopy>
-          <SmallCopy>
-            Customer ARPU:{" "}
-            {customerDetail && customerDetail.loyalty_tier.join()}
-          </SmallCopy>
-          <SmallCopy>
-            Customer BCP Profile:{" "}
-            {customerDetail && customerDetail.loyalty_tier.join()}
-          </SmallCopy>
+          {/* <SmallCopy>
+            Customer BCP Profile: {customerDetail && customerDetail.}
+          </SmallCopy> */}
           <SmallCopy>
             Customer Prepaid Registration:{" "}
-            {customerDetail && customerDetail.loyalty_tier.join()}
+            {customerDetail &&
+              customerDetail.activation_date &&
+              format(new Date(customerDetail.activation_date), "PPP")}
           </SmallCopy>
-          <SmallCopy>
+          {/* <SmallCopy>
             Customer Telkomsel Employee Numbers:{" "}
-            {customerDetail && customerDetail.loyalty_tier.join()}
-          </SmallCopy>
+            {customerDetail && customerDetail.}
+          </SmallCopy> */}
+          {/* <SmallCopy>IMEI: {customerDetail && customerDetail.}</SmallCopy> */}
           <SmallCopy>
-            IMEI: {customerDetail && customerDetail.loyalty_tier.join()}
+            Complete Name: {customerDetail && customerDetail.nik_rgn_name}
           </SmallCopy>
+          {/* <SmallCopy>Email: {customerDetail && customerDetail}</SmallCopy> */}
           <SmallCopy>
-            Complete Name:{" "}
-            {customerDetail && customerDetail.loyalty_tier.join()}
+            Province: {customerDetail && customerDetail.region_lacci}
           </SmallCopy>
-          <SmallCopy>
-            Email: {customerDetail && customerDetail.loyalty_tier.join()}
-          </SmallCopy>
-          <SmallCopy>
-            Province: {customerDetail && customerDetail.loyalty_tier.join()}
-          </SmallCopy>
-          <SmallCopy>
-            Postal Code: {customerDetail && customerDetail.loyalty_tier.join()}
-          </SmallCopy>
-          <SmallCopy>
-            Address: {customerDetail && customerDetail.loyalty_tier.join()}
-          </SmallCopy>
+          {/* <SmallCopy>Postal Code: {customerDetail && customerDetail.}</SmallCopy> */}
+          {/* <SmallCopy>Address: {customerDetail && customerDetail}</SmallCopy> */}
         </DialogContent>
       </Dialog>
     </DrawerNav>

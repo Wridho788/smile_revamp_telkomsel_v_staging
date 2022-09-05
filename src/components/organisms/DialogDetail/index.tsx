@@ -112,8 +112,9 @@ const DialogDetail: FC<Props> = (props: Props) => {
             >
               <Demo>
                 <List>
-                  {data.keywords.map((data) => (
+                  {data.keywords.map((data, idx) => (
                     <SmallCopy
+                      key={`keywords__data__${idx}`}
                       sx={{
                         border: "1px solid rgba(0,0,0,.12)",
                         padding: "11px",
@@ -192,8 +193,9 @@ const DialogDetail: FC<Props> = (props: Props) => {
             >
               <Demo>
                 <List>
-                  {data.whitelists.map((data) => (
+                  {data.whitelists.map((data, idx) => (
                     <SmallCopy
+                      key={`whitelists_data__${idx}`}
                       sx={{
                         border: "1px solid rgba(0,0,0,.12)",
                         padding: "11px",
@@ -220,8 +222,9 @@ const DialogDetail: FC<Props> = (props: Props) => {
             >
               <Demo>
                 <List>
-                  {data.blacklists.map((data) => (
+                  {data.blacklists.map((data, idx) => (
                     <SmallCopy
+                      key={`blacklists__data__${idx}`}
                       sx={{
                         border: "1px solid rgba(0,0,0,.12)",
                         padding: "11px",
@@ -240,9 +243,7 @@ const DialogDetail: FC<Props> = (props: Props) => {
         <Gap width={0} height={20} />
         <Title title="Notification" />
         <Gap width={0} height={20} />
-        <TableCustomized
-          data={data.notifications}
-        />
+        <TableCustomized data={data.notifications} />
       </Box>
     </Dialog>
   );

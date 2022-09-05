@@ -9,8 +9,8 @@ export const FilterInitial: IParams = {
 
 
 export const BooleanOption = [
-    {_id: "1", set_value: "True"},
-    {_id: "2", set_value: "False"},
+    {_id: true, set_value: "True"},
+    {_id: false, set_value: "False"},
 ];
 
 export const PointValueOption = [
@@ -53,4 +53,14 @@ export const programTimeZoneOption = [
 export const PicTypeOption = [
     {_id: "PIC", set_value: "PIC"},
     {_id: "Role", set_value: "Role"},
+]
+export const ThresholdAlarmExpiredOption = [
+    {_id: "0", set_value: "Option"},
+    {_id: "1", set_value: "H-1"},
+    {_id: "2", set_value: "H-2"},
+    {_id: "3", set_value: "H-3"},
+    {_id: "4", set_value: "H-4"},
+    {_id: "5", set_value: "H-5"},
+    {_id: "6", set_value: "H-6"},
+    {_id: "7", set_value: "H-7"},
 ]

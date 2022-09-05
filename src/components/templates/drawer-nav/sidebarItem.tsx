@@ -65,10 +65,14 @@ const SidebarItem = ({ menu, openMenu }: SidebarItemProps) => {
       </ListItemButton>
 
       <Collapse in={openList} timeout="auto" unmountOnExit>
-        <List component="div" disablePadding>
+        <List component="div" sx={{ marginLeft: 5 }} disablePadding>
           <Box>
             {menu.child?.map((child, index) => (
-              <ListItem disablePadding sx={{ display: "block" }}>
+              <ListItem
+                key={`menu__child__${index}`}
+                disablePadding
+                sx={{ display: "block" }}
+              >
                 <ListItemButton
                   component={Link}
                   to={child.path}

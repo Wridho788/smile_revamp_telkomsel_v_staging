@@ -11,20 +11,19 @@ import StepConnector, {
   stepConnectorClasses,
 } from "@mui/material/StepConnector";
 import { StepIconProps } from "@mui/material/StepIcon";
-import {
-} from "../../../app/redux/Utils/InitialState/ProgramInitial";
+import {} from "../../../app/redux/Utils/InitialState/ProgramInitial";
 import {
   useCreateProgramMutation,
   useUpdateProgramMutation,
 } from "../../../redux/features/program/program-api-slice";
-import { CircularProgress } from "@mui/material";
+import { CircularProgress, Snackbar } from "@mui/material";
 import { CreateKeywordInitial } from "../../../pages/CreateKeyword/initial";
 import { CreateKeywordGeneral } from "../../organisms/CreateKeyword/initial";
 import { useKeywordGeneralCreateMutation } from "../../../redux/features/keyword/keyword-api-slice";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-import {CreateProgramInitial} from "../../../pages/CreateProgram/programInitial";
+import { CreateProgramInitial } from "../../../pages/CreateProgram/programInitial";
 
 const ColorlibConnector = styled(StepConnector)(({ theme }) => ({
   [`&.${stepConnectorClasses.alternativeLabel}`]: {
@@ -111,6 +110,7 @@ export default function HorizontalLinearStepper({
   setActiveStep,
   slug,
   type,
+  messageErrorHandler,
 }: {
   children?: any;
   optionalStep?: number;
@@ -119,6 +119,7 @@ export default function HorizontalLinearStepper({
   setActiveStep?: any;
   slug?: string;
   type?: string;
+  messageErrorHandler?: any;
 }) {
   const nav = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
@@ -127,7 +128,7 @@ export default function HorizontalLinearStepper({
   const [createKeywordGeneral, response] = useKeywordGeneralCreateMutation();
   const [skipped, setSkipped] = React.useState<Set<number>>(new Set<number>());
   useEffect(() => {}, [isLoading]);
-
+  const [open, setOpen] = useState(true);
   const isStepOptional = (step: number) => {
     return optionalStep ? step === optionalStep : false;
   };
@@ -141,26 +142,39 @@ export default function HorizontalLinearStepper({
       setIsLoading(true);
       if (type === "program") {
         slug === "insert"
-          ? await createProgram(CreateProgramInitial)
+          ? await createProgram(CreateProgramInitial).then((res: any) => {
+              console.log(res);
+              if (res.error) {
+                messageErrorHandler(res.error.data.message);
+              } else {
+                Swal.fire("Success!", "Program has been created!", "success");
+                console.log("res : ");
+                nav("/program-management");
+              }
+            })
           : await updateProgram(CreateProgramInitial);
-
-          Swal.fire("Success!", "Keyword has been created!", "success");
-          console.log("res : ");
-          // console.log("response : ", response);
-          nav("/program-management")
-        // window.location.href = "/program-management";
       } else if (type === "keyword") {
         slug === "insert"
           ? await createKeywordGeneral(CreateKeywordGeneral)
               .then((res: any) => {
-                res.data.status === 200 &&
+                if (res.data) {
                   Swal.fire("Success!", "Keyword has been created!", "success");
-                console.log("res : ", res);
-                // console.log("response : ", response);
-                nav("/keyword");
+                  console.log("data : ", res.data);
+                }
+                if (res.error) {
+                  Swal.fire(
+                    "Failed!",
+                    "Keyword has noot been created!",
+                    "error"
+                  );
+                  console.log("error : ", res.error);
+                }
               })
               .catch((err) => {
                 console.error(err);
+              })
+              .finally(() => {
+                nav("/keyword-management");
               })
           : await updateProgram(CreateKeywordGeneral);
         // window.location.href = "/keyword";
