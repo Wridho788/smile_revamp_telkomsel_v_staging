@@ -64,7 +64,7 @@ export interface ICreateKeyword {
   segmentation_customer_los_min: number;
   segmentation_customer_los_max: number;
   for_new_redeemer: boolean;
-  enable_corporate: boolean;
+  customer_type: string;
   segmentation_customer_kyc_completeness: boolean;
   segmentation_customer_arpu_operator: string;
   segmentation_customer_arpu_min: number;

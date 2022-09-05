@@ -19,9 +19,9 @@ const Index: React.FunctionComponent<ISelectProps> = ({
   optionValue = "_id",
   value,
   handleChange,
-  totalColumn = 11,
+  totalColumn = 10,
   leftColumn = 4,
-  rightColumn = 7,
+  rightColumn = 6,
   direction = "row",
   isRequired = true,
   ...props

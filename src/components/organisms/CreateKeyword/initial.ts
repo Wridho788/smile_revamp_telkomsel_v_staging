@@ -100,7 +100,7 @@ export const CreateKeywordGeneral: ICreateKeyword = {
   poin_value: "",
   poin_redeemed: 0,
   channel_validation: false,
-  enable_corporate: false,
+  customer_type: "RegularOnly",
   channel_validation_list: [],
   program_title_expose: "",
   merchant: "",
@@ -174,3 +174,5 @@ export interface IKeywordLocationTypeGeneral {
 export const KeywordLocationTypeGeneral: IKeywordLocationTypeGeneral = {
   location_type: "",
 };
+
+export const KeywordFirstStep: boolean = false;
