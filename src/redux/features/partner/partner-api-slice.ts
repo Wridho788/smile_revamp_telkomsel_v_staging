@@ -2,13 +2,12 @@ import { createApi } from "@reduxjs/toolkit/query/react";
 import { API_HEADER } from "../../utils/header";
 import { IResponse, IData, DetailResponse } from "./interface";
 import { IParams, IParamsPrime } from "../../utils/IGeneral";
-import { ICreateProgram } from "../../../pages/CreateProgram/interface";
 
 const baseUrl = process.env.REACT_APP_BASE_URL;
 
-export const notificationSlice = createApi({
+export const partnerSlice = createApi({
   reducerPath: "notificationApi",
-  baseQuery: API_HEADER(baseUrl + "/notification"),
+  baseQuery: API_HEADER(baseUrl + "/v2/partner"),
   endpoints(builder) {
     const responseHandler = (endpoint: string) =>
       builder.query<IResponse, IParams | IParamsPrime>({
@@ -62,34 +61,32 @@ export const notificationSlice = createApi({
         }),
       });
     return {
-      notificationTemplate: responseHandler("/template"),
-      notificationTemplateDetail: detailHandler("/teACmplate/"),
+      partnerList: responseHandler("/v2/partner"),
 
       // POST
-      addNotification: postHandler("/template"),
+      addPartner: postHandler("/v2/partner"),
 
       // PUT
-      updateNotification: putHandler("/template/"),
+      updatePartner: putHandler("/v2/partner/"),
 
       // DELETE
-      deleteNotification: deleteHandler("/template/"),
+      deletePartner: deleteHandler("/v2/partner/"),
     };
   },
 });
 
 export const {
-  useNotificationTemplateQuery,
-  useNotificationTemplateDetailQuery,
+  usePartnerListQuery,
 
   // lazy
-  useLazyNotificationTemplateQuery,
+  useLazyPartnerListQuery,
 
   //   Post
-  useAddNotificationMutation,
+  useAddPartnerMutation,
 
   // PUT
-  useUpdateNotificationMutation,
+  useUpdatePartnerMutation,
 
   // Delete
-  useDeleteNotificationMutation,
-} = notificationSlice;
+  useDeletePartnerMutation,
+} = partnerSlice;

@@ -25,10 +25,15 @@ import {
   Title,
 } from "../../components";
 import DataTable, { TableColumn } from "react-data-table-component";
-import { MerchantInitial, TableMerchantDataRows } from "./initial";
+import {
+  MerchantInitial,
+  PartnerInitial,
+  TableMerchantDataRows,
+} from "./initial";
 import { Add, VisibilityOutlined } from "@mui/icons-material";
 import { useMerchantManagementListQuery } from "../../redux/features/merchant/merchant-api-slice";
 import { IMerchant } from "../../redux/features/merchant/interface";
+import { usePartnerListQuery } from "../../redux/features/partner/partner-api-slice";
 
 const MerchantManagement = () => {
   // ==================== State ==========================
@@ -48,6 +53,12 @@ const MerchantManagement = () => {
   });
   const [merchantDetail, setMerchantDetail] =
     React.useState<IMerchant | null>();
+  const [lovPartner, setLovPartner] = React.useState<any[]>([]);
+  const [initialMerchant, setInitialMerchant] = React.useState({
+    partner: "",
+    location: "",
+    pic_role: "",
+  });
 
   // ==================== Fetching Data ==================
 
@@ -62,8 +73,22 @@ const MerchantManagement = () => {
     sort: "{}",
   });
 
+  const { data: partnerList = { data: [PartnerInitial] } } =
+    usePartnerListQuery({
+      skip: 0,
+      limit: 10,
+      filter: `{}`,
+      sort: "{}",
+    });
+
   // ==================== Spreading State ================
   const dataMerchant = merchantList.data;
+  const dataPartner = partnerList.data.map((item: any) => {
+    let newItem: any = {};
+    newItem["_id"] = item._id;
+    newItem["name"] = item.partner_name;
+    return newItem;
+  });
 
   // ==================== Handler ========================
 
@@ -137,6 +162,8 @@ const MerchantManagement = () => {
       year: 2001,
     },
   ];
+
+  console.log(dataPartner);
 
   //====================== Memo for Searching component ==========================
   const subHeaderComponentMemo = React.useMemo(() => {
@@ -281,113 +308,229 @@ const MerchantManagement = () => {
                 />
               )}
             /> */}
-            <InputSearchable label="Partner" options={top100Films} />
-            <Gap width={50} height={0} />
-            <OutlinedTextField
-              placeholder="Name"
-              value=""
-              handleChange={() => {}}
-              variant="outlined"
+            <InputSearchable
+              required
+              label="Partner"
+              options={top100Films}
+              onChange={(e: any, newValue: any) =>
+                setInitialMerchant({
+                  ...initialMerchant,
+                  partner: newValue.name,
+                })
+              }
             />
           </Box>
           <Gap width={0} height={20} />
           <Box sx={{ display: "flex" }}>
-            <OutlinedTextField
-              placeholder="Name"
-              value=""
-              handleChange={() => {}}
-              variant="outlined"
+            <TextField
+              size="small"
+              fullWidth
+              label="Merchant Name"
+              value={""}
+              name="merchant_name"
+              onChange={() => {}}
+              required
             />
             <Gap width={50} height={0} />
-            <OutlinedTextField
-              placeholder="Name"
-              value=""
-              handleChange={() => {}}
-              variant="outlined"
-            />
-          </Box>
-          <Gap width={0} height={20} />
-          <Box sx={{ display: "flex" }}>
-            <InputSearchable label="Partner" options={top100Films} />
-            <Gap width={50} height={0} />
-            <InputSearchable label="Partner" options={top100Films} />
-            <Gap width={50} height={0} />
-            <OutlinedTextField
-              placeholder="Name"
-              value=""
-              handleChange={() => {}}
-              variant="outlined"
+            <TextField
+              size="small"
+              fullWidth
+              label="SIUP"
+              value={""}
+              name="siup"
+              onChange={() => {}}
+              required
             />
           </Box>
           <Gap width={0} height={20} />
           <Box sx={{ display: "flex" }}>
-            <OutlinedTextField
+            <TextField
+              size="small"
+              fullWidth
+              label="Merchant Short Code"
+              value={""}
+              name="merchant_short_code"
+              onChange={() => {}}
+              required
+            />
+            <Gap width={50} height={0} />
+            <TextField
+              size="small"
+              fullWidth
+              label="Password"
+              value={""}
+              name="password"
+              onChange={() => {}}
+              required
+            />
+          </Box>
+          <Gap width={0} height={20} />
+          <Box sx={{ display: "flex" }}>
+            <InputSearchable
+              required
+              label="Location"
+              options={top100Films}
+              onChange={(e: any, newValue: any) =>
+                setInitialMerchant({
+                  ...initialMerchant,
+                  location: newValue.name,
+                })
+              }
+            />
+            <Gap width={50} height={0} />
+            <TextField
+              size="small"
+              fullWidth
+              label="ZIP Code"
+              value={""}
+              name="zip_code"
+              onChange={() => {}}
+              required
+            />
+          </Box>
+          <Gap width={0} height={20} />
+          <Box sx={{ display: "flex" }}>
+            <TextField
+              fullWidth
+              id="outlined-multiline-static"
+              label="Notification Content"
               multiline
-              minRows={4}
-              placeholder="Name"
-              value=""
-              handleChange={() => {}}
-              variant="outlined"
+              rows={4}
+              name="notif_content"
+              onChange={() => {}}
+              value={""}
+              required
+            />
+          </Box>
+          <Gap width={0} height={20} />
+          <Box sx={{ display: "flex" }}>
+            <TextField
+              size="small"
+              fullWidth
+              label="Website"
+              value={""}
+              name="website"
+              onChange={() => {}}
+              required
+            />
+            <Gap width={50} height={0} />
+            <TextField
+              size="small"
+              fullWidth
+              label="NPWP"
+              value={""}
+              name="npwp"
+              onChange={() => {}}
+              required
             />
           </Box>
           <Gap width={0} height={20} />
           <Title title="PIC" />
           <Gap width={0} height={20} />
           <Box sx={{ display: "flex" }}>
-            <OutlinedTextField
-              placeholder="Name"
-              value=""
-              handleChange={() => {}}
-              variant="outlined"
+            <InputSearchable
+              required
+              label="PIC Role"
+              options={top100Films}
+              onChange={(e: any, newValue: any) =>
+                setInitialMerchant({
+                  ...initialMerchant,
+                  pic_role: newValue.name,
+                })
+              }
             />
             <Gap width={50} height={0} />
-            <OutlinedTextField
-              placeholder="Name"
-              value=""
-              handleChange={() => {}}
-              variant="outlined"
+            <TextField
+              size="small"
+              fullWidth
+              label="PIC Name"
+              value={""}
+              name="pic_name"
+              onChange={() => {}}
+              required
             />
           </Box>
           <Gap width={0} height={20} />
           <Box sx={{ display: "flex" }}>
-            <OutlinedTextField
-              placeholder="Name"
-              value=""
-              handleChange={() => {}}
-              variant="outlined"
+            <TextField
+              size="small"
+              fullWidth
+              label="PIC Phone"
+              value={""}
+              name="pic_phone"
+              onChange={() => {}}
+              required
             />
             <Gap width={50} height={0} />
-            <InputSearchable label="Partner" options={top100Films} />
+            <TextField
+              size="small"
+              fullWidth
+              label="PIC Email"
+              value={""}
+              name="pic_email"
+              onChange={() => {}}
+              required
+            />
           </Box>
           <Gap width={0} height={20} />
-          <Title title="OUTLET Management" />
-          <Gap width={0} height={20} />
           <Box sx={{ display: "flex" }}>
-            <OutlinedTextField
-              placeholder="Name"
-              value=""
-              handleChange={() => {}}
-              variant="outlined"
+            <TextField
+              sx={{ width: "100%" }}
+              size="small"
+              fullWidth
+              label="PIC KTP"
+              value={""}
+              name="pic_ktp"
+              onChange={() => {}}
+              required
             />
             <Gap width={50} height={0} />
-            <OutlinedTextField
-              placeholder="Name"
-              value=""
-              handleChange={() => {}}
-              variant="outlined"
+            <Box sx={{ width: "100%" }}></Box>
+          </Box>
+          <Gap width={0} height={20} />
+          <Title title="Bank" />
+          <Gap width={0} height={20} />
+          <Box sx={{ display: "flex" }}>
+            <TextField
+              size="small"
+              fullWidth
+              label="Bank Name"
+              value={""}
+              name="bank_name"
+              onChange={() => {}}
+              required
+            />
+            <Gap width={50} height={0} />
+            <TextField
+              size="small"
+              fullWidth
+              label="Bank Account Name"
+              value={""}
+              name="bank_account_name"
+              onChange={() => {}}
+              required
             />
           </Box>
           <Gap width={0} height={20} />
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-            <OutlinedTextField
+            <TextField
               sx={{ width: "100%" }}
-              placeholder="Name"
-              value=""
-              handleChange={() => {}}
-              variant="outlined"
+              size="small"
+              fullWidth
+              label="ZIP Code"
+              value={""}
+              name="zip_code"
+              onChange={() => {}}
+              required
             />
             <Gap width={50} height={0} />
             <Box sx={{ width: "100%" }}></Box>
+          </Box>
+          <Gap width={0} height={20} />
+          <Box sx={{ display: "flex" }}>
+            <Button variant="contained" sx={{ width: "100%" }}>
+              SAVE
+            </Button>
           </Box>
           <Gap width={0} height={20} />
         </Stack>

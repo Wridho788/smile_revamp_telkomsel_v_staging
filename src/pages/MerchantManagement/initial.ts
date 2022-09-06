@@ -22,3 +22,15 @@ export const MerchantInitial: IMerchant = {
   province: "",
   city: "",
 };
+
+export const PartnerInitial = {
+  _id: "",
+  partner_code: "",
+  partner_name: "",
+  partner_status: "",
+  created_by: "",
+  created_at: "",
+  updated_at: "",
+  deleted_at: null,
+  __v: 0,
+};
