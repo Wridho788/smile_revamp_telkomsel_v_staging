@@ -1,5 +1,5 @@
 import React, { Dispatch, SetStateAction } from "react";
-import { Button, Divider, Grid, IconButton, Stack } from "@mui/material";
+import { Button, Grid, IconButton, Stack } from "@mui/material";
 import {
   Select,
   OutlinedTextField,
@@ -108,7 +108,7 @@ const General: React.FunctionComponent<IGeneralProps> = ({
             }}
           />
           <Select
-            label="Point Type"
+            label="POIN Type"
             placeholder="Option"
             options={pointTypeOptions.data}
             value={keywordCreateState.point_type}
@@ -118,7 +118,7 @@ const General: React.FunctionComponent<IGeneralProps> = ({
             }}
           />
           <Select
-            label="Point Value"
+            label="POIN Value"
             placeholder="Option"
             options={PoinValueOptions}
             value={keywordCreateState.poin_value}
