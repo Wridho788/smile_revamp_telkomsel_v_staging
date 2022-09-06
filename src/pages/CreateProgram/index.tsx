@@ -13,7 +13,7 @@ const CreateProgram = () => {
     const [messageError, setMessageError] = useState('');
     const [open, setOpen] = useState(false);
     const [activeStep, setActiveStep] = React.useState<number>(0);
-    const steps = ["Main Info", "Segmentation", "Notification"];
+    const steps = ["Main Info", "Notification", "Segmentation"];
     useEffect(() => {
         if (messageError) {
             setOpen(true)
@@ -21,20 +21,20 @@ const CreateProgram = () => {
     }, [messageError])
     const stepsItem = [
         <MainInfo slug={"insert"}/>,
-        <Segmentation/>,
         <Notification/>,
+        <Segmentation/>,
     ];
 
     return (
         <DrawerNav>
-            <Box
+            <Box px="3vw"
                 sx={{
                     paddingBlock: "3vw",
                     paddingInline: "20vw",
                 }}
             >
-                <Snackbar  open={open} autoHideDuration={6000} onClose={() => setOpen(false)}>
-                    <Alert onClose={() => setOpen(false)} severity="error" sx={{ width: '100%' }}>
+                <Snackbar open={open} autoHideDuration={6000} onClose={() => setOpen(false)}>
+                    <Alert onClose={() => setOpen(false)} severity="error" sx={{width: '100%'}}>
                         {messageError}
                     </Alert>
                 </Snackbar>

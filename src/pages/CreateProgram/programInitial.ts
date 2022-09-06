@@ -27,7 +27,8 @@ export const CreateProgramInitial: ICreateProgram = {
     program_mechanism: "",
     program_owner: "",
     program_owner_detail: "",
-    keyword_registration: "62ffc1d68a01008799e785cb",
+    keyword_registration: "",
+    point_registration: "",
     whitelist_counter: true,
     logic: "",
     program_time_zone: "",
@@ -50,7 +51,8 @@ export const ProgramItemInitial: IProgramItem = {
     program_mechanism: "",
     program_owner: "",
     program_owner_detail: "",
-    keyword_registration: "62ffc1d68a01008799e785cb",
+    keyword_registration: "",
+    point_registration: "",
     whitelist_counter: true,
     logic: "",
     program_time_zone: "",
@@ -80,3 +82,5 @@ export const NotificationTemplateInitial: IData = {
 export const notificationTemplateDetailInitial: DetailResponse = {
     data: NotificationTemplateInitial
 }
+
+export const variableInitial = ["[PROGRAM]", "[START_PERIOD]", "[POINT_TYPE]", "[REASON]"]

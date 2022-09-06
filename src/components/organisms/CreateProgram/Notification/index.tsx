@@ -17,7 +17,7 @@ import {FilterInitial} from "../../../../redux/utils/initial-general";
 import {useEffect, useState} from "react";
 import {
     NotificationTemplateInitial,
-    ProgramDetailInitial
+    ProgramDetailInitial, variableInitial
 } from "../../../../pages/CreateProgram/programInitial";
 import {AddBox, Gif, Girl, Warning} from "@mui/icons-material";
 import BodyCopy from "../../../atoms/Typography/BodyCopy";
@@ -36,20 +36,8 @@ interface INotificationProps {
 const Notification: React.FunctionComponent<INotificationProps> = ({}: INotificationProps) => {
 
     let programData = ProgramDetailInitial.data;
-    const [getPointTypeDetail, {data: pointTypeDetail}] = useLazyGetDetailLovQuery()
-    const [poinTypeSuggestion, setPoinTypeSuggestion] = useState('');
-    useEffect(() => {
-        getPointTypeDetail(programData.point_type)
-        if (pointTypeDetail) {
-            if (pointTypeDetail.set_value) {
-                setPoinTypeSuggestion(pointTypeDetail.set_value)
-            }
-        }
-    }, [pointTypeDetail]);
-
     const programNotification = ProgramDetailInitial.data
 
-    const variableList = [programData.name, Moment(programData.start_period).format("d-m-Y"), poinTypeSuggestion]
     const [via0, setVia0] = React.useState<string>(programNotification.program_notification[0].via);
     const [via1, setVia1] = React.useState<string>(programNotification.program_notification[1].via);
     const [notif_type0, setReceiver0] = React.useState<string>(programNotification.program_notification[0].notif_type);
@@ -159,7 +147,7 @@ const Notification: React.FunctionComponent<INotificationProps> = ({}: INotifica
                                     <Grid item xs={7}>
                                         <Grid container columns={12}>
                                             {
-                                                variableList.map((item) => (
+                                                variableInitial.map((item) => (
                                                     <Grid>
                                                         <ListItem disablePadding>
                                                             <ListItemButton

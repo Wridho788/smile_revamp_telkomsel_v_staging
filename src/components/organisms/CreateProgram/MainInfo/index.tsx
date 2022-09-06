@@ -291,6 +291,28 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
                         setStateTrigger(!stateTrigger);
                     }}
                 />
+
+                <OutlinedTextField
+                    label="Keyword Registration"
+                    placeholder="Keyword Registration"
+                    variant={"outlined"}
+                    value={programData.keyword_registration}
+                    handleChange={(value: any) => {
+                        programData.keyword_registration = value;
+                        setStateTrigger(!stateTrigger);
+                    }}
+                />
+
+                <OutlinedTextField
+                    label="Point Registration"
+                    placeholder="Point Registration"
+                    variant={"outlined"}
+                    value={programData.keyword_registration}
+                    handleChange={(value: any) => {
+                        programData.keyword_registration = value;
+                        setStateTrigger(!stateTrigger);
+                    }}
+                />
                 <OutlinedTextField
                     label="Program Name"
                     placeholder="Program Name"
@@ -314,7 +336,6 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
                     rows={4}
                     isRequired={false}
                 />
-
                 <ResponsiveDateTimePicker
                     label="Start Period"
                     placeholder="Start Period"

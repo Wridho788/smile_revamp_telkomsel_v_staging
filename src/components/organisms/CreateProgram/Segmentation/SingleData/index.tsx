@@ -20,13 +20,14 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import {Add, Delete} from "@mui/icons-material";
 import {
-    useCreateProgramMutation, useCreateProgramTempListMutation,
+    useCreateProgramMutation, useCreateProgramSegmentationAddMutation,
     useDeleteProgramTempListMutation,
     useImportListMutation, useLazyProgramTempListQuery,
 
 } from "../../../../../redux/features/program/program-api-slice";
 import Swal from "sweetalert2";
 import {IBlacklist, IWhitelist} from "./SingleData.type";
+import {useParams} from "react-router-dom";
 
 interface ISegmentationProps {
 }
@@ -48,7 +49,8 @@ const whitelistArray: any = []
 const blacklistArray: any = []
 const SingleData: React.FunctionComponent<ISegmentationProps> = () => {
 
-    const [createProgramTempList] = useCreateProgramTempListMutation();
+    let {programId} = useParams();
+    const [createProgramTempList] = useCreateProgramSegmentationAddMutation();
     const [whitelistMsisdn, setWhitelistMsisdn] = useState<string>('');
     const [blacklistMsisdn, setBlacklistMsisdn] = useState<string>('');
     const [counter, setCounter] = useState<number>(0);
@@ -61,17 +63,18 @@ const SingleData: React.FunctionComponent<ISegmentationProps> = () => {
         const data: IWhitelist = {
             type: "whitelist",
             msisdn: whitelistMsisdn,
-            counter: Number(counter)
+            counter: Number(counter),
+            program:programId ?? ''
         }
         whitelistArray.push(data)
         setWhitelistMsisdn('')
         setCounter(0)
-        console.log(whitelistArray)
     }
     const blacklistHandle = () => {
         const data: IBlacklist = {
             type: "blacklist",
             msisdn: blacklistMsisdn,
+            program:programId ?? ''
         }
         blacklistArray.push(data)
         setBlacklistMsisdn('')

@@ -15,6 +15,7 @@ import {
 } from "../../pages";
 import SpecificProgramTemplate from "../../atomic/containers/pages/GeneralProgramRegistration";
 import NotificationManagement from "../../pages/NotificationManagement";
+import {Segmentation} from "../../components/organisms/CreateProgram";
 
 const Index = () => (
     <Routes>
@@ -25,6 +26,7 @@ const Index = () => (
         <Route path="/keyword-management" element={<Keyword/>}/>
         <Route path="/create-program" element={<CreateProgram/>}/>
         <Route path="/edit-program/:_id" element={<EditProgram/>}/>
+        <Route path="/program-edit/segmentation/:programId" element={<Segmentation/>}/>
         <Route path="/create-keyword" element={<CreateKeyword/>}/>
         <Route path="/merchant-management" element={<MerchantManagement/>}/>
         <Route path="/login" element={<Auth/>}/>
