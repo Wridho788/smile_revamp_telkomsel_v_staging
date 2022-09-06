@@ -85,7 +85,10 @@ import { ICreateKeyword } from "./interfaces";
 // };
 
 export const CreateKeywordGeneral: ICreateKeyword = {
+  program_id: "",
+  program_experience: [],
   name: "",
+  program_title_expose: "",
   start_period: new Date(),
   end_period: new Date(),
   keyword_type: "",
@@ -102,7 +105,7 @@ export const CreateKeywordGeneral: ICreateKeyword = {
   channel_validation: false,
   customer_type: "RegularOnly",
   channel_validation_list: [],
-  program_title_expose: "",
+  eligibility_locations: false,
   merchant: "",
   merchandise_keyword: false,
   keyword_schedule_type: "",
@@ -117,7 +120,6 @@ export const CreateKeywordGeneral: ICreateKeyword = {
   for_new_redeemer: false,
   max_mode: "",
   max_redeem_counter: 0,
-  program_experience: [],
   segmentation_customer_tier: [],
   segmentation_customer_los_operator: "",
   segmentation_customer_los: 0,

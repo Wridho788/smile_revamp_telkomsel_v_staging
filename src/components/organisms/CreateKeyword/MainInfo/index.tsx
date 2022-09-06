@@ -14,6 +14,8 @@ import { ICreateKeyword } from "../interfaces";
 import Merchant from "./Merchant";
 import General from "./General";
 import Segmentation from "./Segmentation";
+import Program from "./Program";
+import Location from "./Location";
 
 interface IMainInfoProps {}
 
@@ -37,7 +39,7 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
     <Box display="flex" justifyContent="center" px="5%" py="1vw">
       <Stack spacing="1vw" width="100%">
         <Stack spacing="1vw" px="4vw">
-          <Select
+          {/* <Select
             label="Type"
             placeholder="Option"
             options={keywordTypeOptions.data}
@@ -46,8 +48,20 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
               keywordCreate.keyword_type = value;
               setStateTrigger(!stateTrigger);
             }}
+          /> */}
+          <Program
+            keywordCreateState={keywordCreateState}
+            keywordCreate={keywordCreate}
+            stateTrigger={stateTrigger}
+            setStateTrigger={setStateTrigger}
           />
           <General
+            keywordCreateState={keywordCreateState}
+            keywordCreate={keywordCreate}
+            stateTrigger={stateTrigger}
+            setStateTrigger={setStateTrigger}
+          />
+          <Location
             keywordCreateState={keywordCreateState}
             keywordCreate={keywordCreate}
             stateTrigger={stateTrigger}

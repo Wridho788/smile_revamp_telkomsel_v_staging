@@ -31,9 +31,12 @@ interface IKeywordShift {
 }
 
 export interface ICreateKeyword {
+  program_id: string;
+  program_experience: string[];
+  name: string;
+  program_title_expose: string;
   keyword_type: string;
   keyword_parent: string;
-  name: string;
   start_period: any;
   end_period: any;
   point_type: string;
@@ -53,7 +56,7 @@ export interface ICreateKeyword {
   multiwhitelist_program: string;
   channel_validation: boolean;
   channel_validation_list: string[];
-  program_experience: string[];
+  eligibility_locations: boolean;
   merchant: string;
   segmentation_customer_tier: string[];
   segmentation_customer_brand: string[];
@@ -72,7 +75,6 @@ export interface ICreateKeyword {
   segmentation_employee_numbers: boolean;
 
   keyword_verification: string;
-  program_title_expose: string;
   timezone: string;
   segmentation_customer_type: string;
   segmentation_customer_preferences_bcp: string;

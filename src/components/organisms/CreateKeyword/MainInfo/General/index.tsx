@@ -47,8 +47,8 @@ const General: React.FunctionComponent<IGeneralProps> = ({
     useProgramListQuery(FilterInitial);
   const { data: channelOptions = { data: [] } } =
     useChannelListQuery(FilterInitial);
-  const { data: customerBadgeOptions = { data: [] } } =
-    useCustomerBadgeListQuery(FilterInitial);
+  // const { data: customerBadgeOptions = { data: [] } } =
+  //   useCustomerBadgeListQuery(FilterInitial);
   return (
     <Accordion sx={{ p: "1vw" }}>
       <AccordionSummary
@@ -62,7 +62,7 @@ const General: React.FunctionComponent<IGeneralProps> = ({
       </AccordionSummary>
       <AccordionDetails>
         <Stack spacing="1vw" px="2vw" py="0.5vw">
-          <OutlinedTextField
+          {/* <OutlinedTextField
             label="Keyword Group"
             placeholder="Keyword Group"
             variant="outlined"
@@ -71,15 +71,25 @@ const General: React.FunctionComponent<IGeneralProps> = ({
               keywordCreate.keyword_parent = value;
               setStateTrigger(!stateTrigger);
             }}
-          />
+          /> */}
           <OutlinedTextField
-            label="Keyword Name"
+            label="Keyword Redeem Name"
             placeholder="Merdeka2000"
             variant="outlined"
             inputProps={{ maxLength: 16 }}
             value={keywordCreateState.name}
             handleChange={(value: string) => {
-              keywordCreate.name = value.replace(/\s/g, "");
+              keywordCreate.name = value.replace(/[^a-zA-Z0-9]/g, "");
+              setStateTrigger(!stateTrigger);
+            }}
+          />
+          <OutlinedTextField
+            label="Program Name to be Expose"
+            placeholder="Program Name to be Expose"
+            variant="outlined"
+            value={keywordCreateState.program_title_expose}
+            handleChange={(value: string) => {
+              keywordCreate.program_title_expose = value;
               setStateTrigger(!stateTrigger);
             }}
           />
@@ -170,7 +180,7 @@ const General: React.FunctionComponent<IGeneralProps> = ({
             }}
           />
           <Select
-            label="Enable SMS Masking"
+            label="SMS Masking"
             placeholder="Option"
             options={BooleanOptions}
             value={keywordCreateState.enable_sms_masking}
@@ -208,11 +218,11 @@ const General: React.FunctionComponent<IGeneralProps> = ({
             }}
           />
           {keywordCreateState.keyword_schedule_type === "Shift" && (
-            <Grid container columns={11}>
+            <Grid container columns={10}>
               <Grid item xs={4}>
                 <BodyCopy>Shift</BodyCopy>
               </Grid>
-              <Grid item xs={7}>
+              <Grid item xs={6}>
                 <Stack gap="1vw">
                   {keywordCreate.keyword_schedule_shift.map((_, idx) => (
                     <Grid
@@ -311,11 +321,11 @@ const General: React.FunctionComponent<IGeneralProps> = ({
             </Grid>
           )}
           {keywordCreateState.keyword_schedule_type === "Daily" && (
-            <Grid container columns={11}>
+            <Grid container columns={10}>
               <Grid item xs={4}>
                 <BodyCopy>Daily</BodyCopy>
               </Grid>
-              <Grid item xs={7}>
+              <Grid item xs={6}>
                 <Stack gap="1vw">
                   {keywordCreate.keyword_schedule_shift.map((_, idx) => (
                     <Grid
@@ -415,11 +425,11 @@ const General: React.FunctionComponent<IGeneralProps> = ({
             </Grid>
           )}
           {keywordCreateState.keyword_schedule_type === "Hourly" && (
-            <Grid container columns={11}>
+            <Grid container columns={10}>
               <Grid item xs={4}>
                 <BodyCopy>Hourly</BodyCopy>
               </Grid>
-              <Grid item xs={7}>
+              <Grid item xs={6}>
                 <Stack gap="1vw">
                   {keywordCreate.keyword_schedule_shift.map((_, idx) => (
                     <Grid
@@ -601,7 +611,7 @@ const General: React.FunctionComponent<IGeneralProps> = ({
               }}
             />
           )}
-          <Select
+          {/* <Select
             multiple
             label="Program Experience"
             placeholder="Option"
@@ -612,7 +622,7 @@ const General: React.FunctionComponent<IGeneralProps> = ({
               keywordCreate.program_experience = value;
               setStateTrigger(!stateTrigger);
             }}
-          />
+          /> */}
         </Stack>
       </AccordionDetails>
     </Accordion>
