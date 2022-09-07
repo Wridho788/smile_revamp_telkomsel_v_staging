@@ -18,6 +18,7 @@ import {
 
 import SpecificProgramTemplate from "../../atomic/containers/pages/GeneralProgramRegistration";
 import NotificationManagement from "../../pages/NotificationManagement";
+import {Segmentation} from "../../components/organisms/CreateProgram";
 
 // "AuthProvider" & "Protected"
 import AuthProvider from "../AuthProvider";

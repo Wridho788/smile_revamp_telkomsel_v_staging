@@ -14,6 +14,7 @@ import {
 } from "../../../../../redux/features/program/program-api-slice";
 import {noticeUploadDataInitial, segmentationOptionInitial} from "../inital";
 import ListItemText from "@mui/material/ListItemText";
+import {useParams} from "react-router-dom";
 
 interface ISegmentationProps {
 }
@@ -21,6 +22,8 @@ interface ISegmentationProps {
 const EXTENSIONS = ["txt", "csv"];
 
 const BulkData: React.FunctionComponent<ISegmentationProps> = () => {
+
+        let {programId} = useParams();
         const [importFile, {isLoading: isUpdate, isSuccess}] = useImportListMutation()
         const [whitelistPath, setWhitelistPath] = useState<any>();
         const [blacklistPath, setBlacklistPath] = useState<any>();
@@ -32,26 +35,26 @@ const BulkData: React.FunctionComponent<ISegmentationProps> = () => {
             return EXTENSIONS.includes(extension); // return boolean
         };
 
-    const whitelistUpload = (e: any) => {
-        const file = e.target.files[0];
-        if (!getExention(file)) {
-            return alert("Invalid file input, Select txt or csv file");
+        const whitelistUpload = (e: any) => {
+            const file = e.target.files[0];
+            if (!getExention(file)) {
+                return alert("Invalid file input, Select txt or csv file");
+            }
+            segmentationOption[0].filename = file.name
+            setWhitelistPath(file);
+            setTriggerState(!triggerState)
+            console.log(segmentationOption[0].filename)
         }
-        segmentationOption[0].filename = file.name
-        setWhitelistPath(file);
-        setTriggerState(!triggerState)
-        console.log(segmentationOption[0].filename)
-    }
 
-    const blacklistUpload = (e: any) => {
-        const file = e.target.files[0];
-        if (!getExention(file)) {
-            return alert("Invalid file input, Select txt or csv file");
+        const blacklistUpload = (e: any) => {
+            const file = e.target.files[0];
+            if (!getExention(file)) {
+                return alert("Invalid file input, Select txt or csv file");
+            }
+            segmentationOption[1].filename = file.name
+            setBlacklistPath(file);
+            setTriggerState(!triggerState)
         }
-        segmentationOption[1].filename = file.name
-        setBlacklistPath(file);
-        setTriggerState(!triggerState)
-    }
 
         const segmentationOption = segmentationOptionInitial
         const [triggerState, setTriggerState] = useState<boolean>(false)
@@ -67,12 +70,14 @@ const BulkData: React.FunctionComponent<ISegmentationProps> = () => {
             }
             await importFile({
                 "file": whitelistPath,
-                "type": 'whitelist'
+                "type": 'whitelist',
+                'program': programId
             })
 
             await importFile({
                 "file": blacklistPath,
-                "type": 'blacklist'
+                "type": 'blacklist',
+                'program': programId
             })
             segmentationOption[0].filename = ''
             segmentationOption[1].filename = ''
@@ -123,7 +128,7 @@ const BulkData: React.FunctionComponent<ISegmentationProps> = () => {
 
                                             {
                                                 item.filename &&
-                                                    <BodyCopy>File Name : {item.filename}</BodyCopy>
+                                                <BodyCopy>File Name : {item.filename}</BodyCopy>
                                             }
                                         </Stack>
                                     </Box>
