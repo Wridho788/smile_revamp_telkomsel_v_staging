@@ -272,12 +272,15 @@ const ProgramDetailsModal: FC<IProgramDetailsModalProps> = ({
                 >
                   Program Notification
                 </Typography>
-                <IconButton href={"/edit-program/".concat(data._id)} sx={fontContentIcon}>
+                <IconButton
+                    href={"/edit-program/notification/".concat(data._id)}
+                    sx={fontContentIcon}
+                >
                   <Edit sx={{ fontSize: 14 }}></Edit>
                 </IconButton>
               </Stack>
 
-              <Box mt={1}>
+              <Stack spacing={2}>
                 {data["program_notification"].map((_item: any, _index: number) => (
                   <Card sx={{ display: 'flex', justifyContent : 'space-between', alignItems: 'center', padding: 1 }} key={_index}>
                     <Box sx={{ display: 'flex', flexDirection: 'column' }}>
@@ -293,7 +296,7 @@ const ProgramDetailsModal: FC<IProgramDetailsModalProps> = ({
                     <Chip label={_item.via.set_value} size="small" />
                   </Card>
                 ))}
-              </Box>
+              </Stack>
             </Grid>
           </Grid>
         </Grid>

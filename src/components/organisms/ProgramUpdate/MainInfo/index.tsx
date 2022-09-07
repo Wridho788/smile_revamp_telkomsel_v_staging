@@ -67,7 +67,7 @@ const MainInfo: React.FunctionComponent = () => {
         programDetail.program_time_zone = fetchDetail?.program_time_zone || '';
         programDetail.threshold_alarm_expired = fetchDetail?.threshold_alarm_expired || 0;
         programDetail.threshold_alarm_voucher = fetchDetail?.threshold_alarm_voucher || 0;
-    }, [fetchDetail]);
+    });
 
 
     // Owner Detail, Owner, Program Mechanism, Point Type

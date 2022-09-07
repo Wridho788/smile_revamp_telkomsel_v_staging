@@ -12,11 +12,13 @@ import {
     MerchantManagement,
     CustomerManagement,
     Auth,
-    ProgramMainInfoUpdate
+    ProgramMainInfoUpdate,
+    ProgramNotificationUpdate
 } from "../../pages";
 
 import SpecificProgramTemplate from "../../atomic/containers/pages/GeneralProgramRegistration";
 import NotificationManagement from "../../pages/NotificationManagement";
+import {Segmentation} from "../../components/organisms/CreateProgram";
 
 // "AuthProvider" & "Protected"
 import AuthProvider from "../AuthProvider";
@@ -74,6 +76,12 @@ const Index = () => (
             <Route path="/edit-program/main-info/:_id" element={
                 <Protected>
                     <ProgramMainInfoUpdate />
+                </Protected>
+            }/>
+
+            <Route path="/edit-program/notification/:_id" element={
+                <Protected>
+                    <ProgramNotificationUpdate />
                 </Protected>
             }/>
 
