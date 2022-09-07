@@ -436,7 +436,7 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
                 <Select
                     label="Threshold Alarm Experied"
                     placeholder="Option"
-                    value={programData.threshold_alarm_expired}
+                    value={Number(programData.threshold_alarm_expired)}
                     options={ThresholdAlarmExpiredOption}
                     handleChange={(value: any) => {
                         programData.threshold_alarm_expired = Number(value);
