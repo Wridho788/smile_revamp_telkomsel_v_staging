@@ -113,20 +113,20 @@ const Keywords: React.FunctionComponent = () => {
         open={open}
         handleClose={handleClose}
         data={item}
-        // roleAccess={
-        //   defaultRoleManager !== undefined && accountAuth !== undefined
-        //     ? defaultRoleManager === accountAuth.role_id
-        //       ? true
-        //       : false
-        //     : false
-        // }
         roleAccess={
           defaultRoleManager !== undefined && accountAuth !== undefined
-            ? defaultRoleManager === defaultRoleManager
+            ? defaultRoleManager === accountAuth.role_id
               ? true
               : false
             : false
         }
+        // roleAccess={
+        //   defaultRoleManager !== undefined && accountAuth !== undefined
+        //     ? defaultRoleManager === defaultRoleManager
+        //       ? true
+        //       : false
+        //     : false
+        // }
       />
       <Stack direction={"row"} justifyContent={"space-between"}>
         <H2 color={"secondary.dark"}>Keyword</H2>
