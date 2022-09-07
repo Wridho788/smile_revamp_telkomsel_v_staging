@@ -272,7 +272,10 @@ const ProgramDetailsModal: FC<IProgramDetailsModalProps> = ({
                 >
                   Program Notification
                 </Typography>
-                <IconButton href={"/edit-program/".concat(data._id)} sx={fontContentIcon}>
+                <IconButton
+                    href={"/edit-program/notification/".concat(data._id)}
+                    sx={fontContentIcon}
+                >
                   <Edit sx={{ fontSize: 14 }}></Edit>
                 </IconButton>
               </Stack>
