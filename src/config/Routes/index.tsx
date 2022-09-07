@@ -12,7 +12,8 @@ import {
     MerchantManagement,
     CustomerManagement,
     Auth,
-    ProgramMainInfoUpdate
+    ProgramMainInfoUpdate,
+    ProgramNotificationUpdate
 } from "../../pages";
 
 import SpecificProgramTemplate from "../../atomic/containers/pages/GeneralProgramRegistration";
@@ -75,6 +76,12 @@ const Index = () => (
             <Route path="/edit-program/main-info/:_id" element={
                 <Protected>
                     <ProgramMainInfoUpdate />
+                </Protected>
+            }/>
+
+            <Route path="/edit-program/notification/:_id" element={
+                <Protected>
+                    <ProgramNotificationUpdate />
                 </Protected>
             }/>
 

@@ -55,10 +55,10 @@ export const programSlice = createApi({
                     body: body,
                 }),
             });
-        const putHandler = (endpoint: string, step: string = '') =>
+        const putHandler = (endpoint: string, step: string = '', isId: boolean = true) =>
             builder.mutation<{ success: boolean; body: any }, any>({
                 query: (body) => ({
-                    url: endpoint + body["_id"] + step || "/edit",
+                    url: isId ? (endpoint + body["_id"] + step || "/edit") : endpoint,
                     method: "PUT",
                     headers: {
                         "Content-Type": "application/json",
@@ -81,7 +81,7 @@ export const programSlice = createApi({
             programList: responseHandler(baseUrl + "/v2/program"),
             programTempList: responseHandler("/temp_list"),
             programSegmentationList: responseHandler("/segmentation"),
-            detailProgram: detailHandler(baseUrl + "/v2/program"),
+            detailProgram: detailHandler(baseUrl + "/v2/program/"),
             approveProgram: approvalHandler("approve"),
             rejectProgram: approvalHandler("reject"),
 
@@ -95,6 +95,7 @@ export const programSlice = createApi({
             // put
             updateProgram: putHandler(baseUrl + "/v2/program/"),
             updateProgramMainInfo: putHandler(baseUrl + "/v2/program/", "/edit/main-info"),
+            updateProgramNotification: putHandler(baseUrl + "/v2/program/edit/notification", '',false),
 
             // delete
             deleteProgram: deleteHandler(baseUrl + "/v2/program/"),
@@ -106,7 +107,7 @@ export const programSlice = createApi({
 export const {
     useProgramListQuery,
     useLazyProgramListQuery,
-    useProgramTempListQuery,
+    // useProgramTempListQuery,
     useLazyProgramTempListQuery,
     useCreateProgramMutation,
     useImportListMutation,
@@ -118,4 +119,5 @@ export const {
     useUpdateProgramMutation,
     useCreateProgramSegmentationAddMutation,
     useUpdateProgramMainInfoMutation,
+    useUpdateProgramNotificationMutation
 } = programSlice;
