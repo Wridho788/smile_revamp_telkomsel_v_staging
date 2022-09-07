@@ -20,6 +20,7 @@ import General from "./General";
 import Segmentation from "./Segmentation";
 import Program from "./Program";
 import Location from "./Location";
+import Notification from "./Notification";
 
 interface IMainInfoProps {}
 
@@ -86,6 +87,12 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
             setStateTrigger={setStateTrigger}
           />
           <Segmentation
+            keywordCreateState={keywordCreateState}
+            keywordCreate={keywordCreate}
+            stateTrigger={stateTrigger}
+            setStateTrigger={setStateTrigger}
+          />
+          <Notification
             keywordCreateState={keywordCreateState}
             keywordCreate={keywordCreate}
             stateTrigger={stateTrigger}

@@ -331,8 +331,8 @@ const General: React.FunctionComponent<IGeneralProps> = ({
                   <Button
                     onClick={() => {
                       keywordCreate.keyword_schedule_shift.push({
-                        from: new Date().getTime(),
-                        to: new Date().getTime(),
+                        from: new Date(),
+                        to: new Date(),
                       });
                       setStateTrigger(!stateTrigger);
                     }}
@@ -538,8 +538,8 @@ const General: React.FunctionComponent<IGeneralProps> = ({
                   <Button
                     onClick={() => {
                       keywordCreate.keyword_schedule_shift.push({
-                        from: new Date().getTime(),
-                        to: new Date().getTime(),
+                        from: new Date(),
+                        to: new Date(),
                       });
                       setStateTrigger(!stateTrigger);
                     }}
