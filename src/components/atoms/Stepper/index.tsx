@@ -151,7 +151,7 @@ export default function HorizontalLinearStepper({
                         } else {
                             Swal.fire("Success!", "Program has been created!", "success");
                             console.log("res : ");
-                            nav("/program-management");
+                            nav(`/edit-program/main-info/${res.data._id}`);
                         }
                     })
                     : await updateProgram(CreateProgramInitial);
