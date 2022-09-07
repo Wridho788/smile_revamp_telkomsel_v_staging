@@ -106,7 +106,7 @@ const MainInfo: React.FunctionComponent = () => {
         }).then((res) => {
             // Confirmed
             if (res.isConfirmed) {
-                updateProgramMainInfo(programDetail).then((res: any) => {
+                updateProgramMainInfo(data).then((res: any) => {
                     if (res?.error) {
                         Swal.fire(res.error.data.message, "", "warning");
                     } else {
