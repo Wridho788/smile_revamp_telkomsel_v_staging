@@ -1,7 +1,6 @@
-import {createApi} from '@reduxjs/toolkit/query/react';
-import {API_HEADER} from "../../utils/header";
-import {IAuthSignIn, IData, IResponse} from "./interface";
-import {IParams} from "../../utils/IGeneral";
+import { createApi } from '@reduxjs/toolkit/query/react';
+import { API_HEADER } from "../../utils/header";
+import { IAuthSignIn, IData } from "./interface";
 
 const baseUrl = process.env.REACT_APP_BASE_URL
 
@@ -9,7 +8,6 @@ export const authSlice = createApi({
     reducerPath: 'authApi',
     baseQuery: API_HEADER(baseUrl + '/oauth', false),
     endpoints(builder) {
-
         const postHandler = (endpoint: string) =>
             builder.mutation<{ success: IData; body: IAuthSignIn }, any>({
                 query: (body) => ({
@@ -24,13 +22,14 @@ export const authSlice = createApi({
 
         return {
             signIn: postHandler( '/signin'),
-            refreshToken: builder.mutation<{ success: boolean }, any>({
-                query: () => ({
+            refreshToken: builder.mutation<{ success: boolean; body: string }, any>({
+                query: (body) => ({
                     url: baseUrl + '/oauth/refresh_token',
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
+                    body: body
                 }),
             })
         };
