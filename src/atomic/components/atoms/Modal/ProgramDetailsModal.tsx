@@ -277,7 +277,7 @@ const ProgramDetailsModal: FC<IProgramDetailsModalProps> = ({
                 </IconButton>
               </Stack>
 
-              <Box mt={1}>
+              <Stack spacing={2}>
                 {data["program_notification"].map((_item: any, _index: number) => (
                   <Card sx={{ display: 'flex', justifyContent : 'space-between', alignItems: 'center', padding: 1 }} key={_index}>
                     <Box sx={{ display: 'flex', flexDirection: 'column' }}>
@@ -293,7 +293,7 @@ const ProgramDetailsModal: FC<IProgramDetailsModalProps> = ({
                     <Chip label={_item.via.set_value} size="small" />
                   </Card>
                 ))}
-              </Box>
+              </Stack>
             </Grid>
           </Grid>
         </Grid>

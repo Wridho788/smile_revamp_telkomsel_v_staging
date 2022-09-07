@@ -81,7 +81,7 @@ export const programSlice = createApi({
             programList: responseHandler(baseUrl + "/v2/program"),
             programTempList: responseHandler("/temp_list"),
             programSegmentationList: responseHandler("/segmentation"),
-            detailProgram: detailHandler(baseUrl + "/v2/program"),
+            detailProgram: detailHandler(baseUrl + "/v2/program/"),
             approveProgram: approvalHandler("approve"),
             rejectProgram: approvalHandler("reject"),
 
