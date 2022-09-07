@@ -115,7 +115,7 @@ const Keywords: React.FunctionComponent = () => {
         data={item}
         roleAccess={
           defaultRoleManager !== undefined && accountAuth !== undefined
-            ? defaultRoleManager === accountAuth.role_id
+            ? defaultRoleManager === accountAuth.role
               ? true
               : false
             : false

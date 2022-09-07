@@ -26,8 +26,9 @@ export interface IResponseAuthenticate {
   birthdate: any;
   status: string;
   last_access_time: string;
-  __v: number;
+  role: string;
   role_id: string;
+  __v: number;
 }
 
 export interface IProgramImportFile {

@@ -122,7 +122,6 @@ const Programs: React.FunctionComponent = () => {
       <li>{Moment(item.end_period ?? "2000-10-10").format("Y-m-d")}</li>
     </>
   );
-
   return (
     <>
       <ProgramDetailsModal
@@ -131,7 +130,7 @@ const Programs: React.FunctionComponent = () => {
         data={item}
         roleAccess={
           defaultRoleManager !== undefined && accountAuth !== undefined
-            ? defaultRoleManager === accountAuth.role_id
+            ? defaultRoleManager === accountAuth.role
               ? true
               : false
             : false
