@@ -32,6 +32,7 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import InputAdornment from "@mui/material/InputAdornment";
 import { IKeywordLocationTypeGeneral } from "../../initial";
+import { useLocationTemplateQuery } from "../../../../../redux/features/location/location-api-slice";
 
 interface ILocationProps {
   keywordCreateState: ICreateKeyword;
@@ -58,6 +59,8 @@ const Location: React.FunctionComponent<ILocationProps> = ({
     useChannelListQuery(FilterInitial);
   const { data: locationTypeOptions = { data: [] } } =
     useGetLocationTypeQuery();
+  const { data: locationOptions = { data: [] } } =
+    useLocationTemplateQuery(FilterInitial);
   // const { data: customerBadgeOptions = { data: [] } } =
   //   useCustomerBadgeListQuery(FilterInitial);
 
@@ -97,6 +100,30 @@ const Location: React.FunctionComponent<ILocationProps> = ({
               }}
             />
           )}
+          {keywordLocationTypeState.location_type.length > 0 &&
+            locationOptions.data.find(
+              (e) => e["type"] === keywordLocationTypeState.location_type
+            ) !== undefined && (
+              <Grid item xs={3}>
+                <Select
+                  multiple
+                  label="Location"
+                  placeholder="Option"
+                  options={[
+                    locationOptions.data.find(
+                      (e) =>
+                        e["type"] === keywordLocationTypeState.location_type
+                    ),
+                  ]}
+                  optionLabel={"name"}
+                  value={keywordCreateState.locations}
+                  handleChange={(value: any) => {
+                    keywordCreate.locations = value;
+                    setStateTrigger(!stateTrigger);
+                  }}
+                />
+              </Grid>
+            )}
 
           {/* {keywordCreateState.eligibility_locations !== false && (
             <Stack gap="1vw" pt="1vw">
