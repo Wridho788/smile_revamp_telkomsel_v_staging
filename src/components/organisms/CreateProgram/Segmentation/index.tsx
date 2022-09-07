@@ -59,6 +59,7 @@ const Segmentation: React.FunctionComponent<ISegmentationProps> = () => {
                         </Button>
                         <Box sx={{flex: "1 1 auto"}}/>
                         <Button
+                            onClick={() => nav('/program-management')}
                             color="primary"
                             sx={{
                                 width: "50%",
