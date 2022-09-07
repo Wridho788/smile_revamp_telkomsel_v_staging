@@ -122,7 +122,7 @@ const Index = () => (
             }/>
 
             <Route
-                path={"/edit-program/segmentation/:_id"}
+                path={"/edit-program/segmentation/:programId"}
                 element={
                     <Protected>
                         <Segmentation/>
