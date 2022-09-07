@@ -85,7 +85,7 @@ const Location: React.FunctionComponent<ILocationProps> = ({
               }}
             />
           )}
-          {keywordCreateState.eligibility_locations !== false && (
+          {/* {keywordCreateState.eligibility_locations !== false && (
             <Stack gap="1vw" pt="1vw">
               {keywordCreate.keyword_schedule_shift.map((_, idx) => (
                 <Grid
@@ -171,7 +171,7 @@ const Location: React.FunctionComponent<ILocationProps> = ({
                 Add Location
               </Button>
             </Stack>
-          )}
+          )} */}
         </Stack>
       </AccordionDetails>
     </Accordion>

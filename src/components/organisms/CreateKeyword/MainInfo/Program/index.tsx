@@ -100,8 +100,12 @@ const Program: React.FunctionComponent<IProgramProps> = ({
             </Box>
           )}
           value={keywordCreateState.program_experience}
-          handleChange={(value: []) => {
-            keywordCreate.program_experience = value;
+          handleChange={(value: any) => {
+            if (value.length > 0) {
+              keywordCreate.program_experience[0] = value[0];
+            } else {
+              keywordCreate.program_experience = value;
+            }
             setStateTrigger(!stateTrigger);
           }}
         />
