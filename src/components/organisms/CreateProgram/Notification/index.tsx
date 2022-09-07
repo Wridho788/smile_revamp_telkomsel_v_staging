@@ -38,6 +38,7 @@ const Notification: React.FunctionComponent<INotificationProps> = ({}: INotifica
                         notif_type: list[i]._id
                     }
                     programNotification.push(obj)
+                    setStateTrigger(!stateTrigger)
                 }
             }
         }
