@@ -31,9 +31,12 @@ interface IKeywordShift {
 }
 
 export interface ICreateKeyword {
+  program_id: string;
+  program_experience: string[];
+  name: string;
+  program_title_expose: string;
   keyword_type: string;
   keyword_parent: string;
-  name: string;
   start_period: any;
   end_period: any;
   point_type: string;
@@ -53,7 +56,7 @@ export interface ICreateKeyword {
   multiwhitelist_program: string;
   channel_validation: boolean;
   channel_validation_list: string[];
-  program_experience: string[];
+  eligibility_locations: boolean;
   merchant: string;
   segmentation_customer_tier: string[];
   segmentation_customer_brand: string[];
@@ -64,20 +67,24 @@ export interface ICreateKeyword {
   segmentation_customer_los_min: number;
   segmentation_customer_los_max: number;
   for_new_redeemer: boolean;
-  enable_corporate: boolean;
+  customer_type: string;
+  locations: string[];
   segmentation_customer_kyc_completeness: boolean;
   segmentation_customer_arpu_operator: string;
+  segmentation_customer_arpu: number;
   segmentation_customer_arpu_min: number;
   segmentation_customer_arpu_max: number;
   segmentation_employee_numbers: boolean;
+  segmentation_customer_poin_balance_operator: string;
+  segmentation_customer_poin_balance: number;
+  segmentation_customer_poin_balance_min: number;
+  segmentation_customer_poin_balance_max: number;
 
   keyword_verification: string;
-  program_title_expose: string;
   timezone: string;
   segmentation_customer_type: string;
   segmentation_customer_preferences_bcp: string;
   keyword_shift: IKeywordShift[];
-  segmentation_customer_arpu: number;
 
   keyword_bonus: Array<IKeywordBonus>;
   keyword_notification: Array<IKeywordNotification>;

@@ -5,6 +5,7 @@ export interface IData {
   start_period?: string;
   end_period?: string;
   point_type?: string;
+  program_approval?: string;
   program_mechanism?: string;
   program_owner?: string;
   logic?: string;

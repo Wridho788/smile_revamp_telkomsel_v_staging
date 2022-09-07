@@ -3,6 +3,11 @@ import { ICreateKeyword } from "../../interfaces";
 import React, { useState, useEffect, Dispatch, SetStateAction } from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
+import Accordion from "@mui/material/Accordion";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { Subtitle } from "../../../../atoms";
 
 interface IMerchantProps {
   keywordCreate: ICreateKeyword;
@@ -76,49 +81,65 @@ const Merchant: React.FunctionComponent<IMerchantProps> = ({
   };
 
   return (
-    <DataTable
-      value={merchants}
-      lazy
-      filterDisplay="row"
-      responsiveLayout="scroll"
-      dataKey="_id"
-      paginator
-      first={lazyParams.first}
-      rows={3}
-      totalRecords={totalRecords}
-      onPage={onPage}
-      onSort={onSort}
-      sortField={lazyParams.sortField}
-      sortOrder={lazyParams.sortOrder}
-      onFilter={onFilter}
-      loading={loading}
-      selection={selectedMerchant}
-      onSelectionChange={onSelectionChange}
-      filters={lazyParams.filters}
-    >
-      <Column selectionMode="single" headerStyle={{ width: "1vw" }}></Column>
-      <Column
-        field="merchant_name"
-        header="Merchant Name"
-        sortable
-        filter
-        filterPlaceholder="Search by merchant name"
-      />
-      <Column
-        field="address"
-        sortable
-        filter
-        header="Address"
-        filterPlaceholder="Search by address"
-      />
-      <Column
-        field="npwp"
-        sortable
-        filter
-        header="NPWP"
-        filterPlaceholder="Search by NPWP"
-      />
-    </DataTable>
+    <Accordion sx={{ p: "1vw" }}>
+      <AccordionSummary
+        expandIcon={<ExpandMoreIcon fontSize="large" />}
+        aria-controls="panel1a-content"
+        id="panel1a-header"
+      >
+        <Subtitle textTransform="uppercase">
+          merchant redeem eligibility
+        </Subtitle>
+      </AccordionSummary>
+      <AccordionDetails>
+        <DataTable
+          value={merchants}
+          lazy
+          filterDisplay="row"
+          responsiveLayout="scroll"
+          dataKey="_id"
+          paginator
+          first={lazyParams.first}
+          rows={3}
+          totalRecords={totalRecords}
+          onPage={onPage}
+          onSort={onSort}
+          sortField={lazyParams.sortField}
+          sortOrder={lazyParams.sortOrder}
+          onFilter={onFilter}
+          loading={loading}
+          selection={selectedMerchant}
+          onSelectionChange={onSelectionChange}
+          filters={lazyParams.filters}
+        >
+          <Column
+            selectionMode="single"
+            headerStyle={{ width: "1vw" }}
+          ></Column>
+          <Column
+            field="merchant_name"
+            header="Merchant Name"
+            sortable
+            filter
+            filterPlaceholder="Search by merchant name"
+          />
+          <Column
+            field="address"
+            sortable
+            filter
+            header="Address"
+            filterPlaceholder="Search by address"
+          />
+          <Column
+            field="npwp"
+            sortable
+            filter
+            header="NPWP"
+            filterPlaceholder="Search by NPWP"
+          />
+        </DataTable>
+      </AccordionDetails>
+    </Accordion>
   );
 };
 

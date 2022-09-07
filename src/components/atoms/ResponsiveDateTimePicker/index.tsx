@@ -12,12 +12,16 @@ const Index: React.FunctionComponent<IResponsiveDateTimePickerProps> = ({
   placeholder,
   value,
   handleChange,
-  totalColumn = 11,
+  totalColumn = 10,
   leftColumn = 4,
-  rightColumn = 7,
+  rightColumn = 6,
   direction = "row",
   isRequired = true,
+  minDateTime,
 }) => {
+  const onKeyDown = (e: { preventDefault: () => void }) => {
+    e.preventDefault();
+  };
   return (
     <Grid
       container
@@ -48,6 +52,7 @@ const Index: React.FunctionComponent<IResponsiveDateTimePickerProps> = ({
             onChange={(newValue) => {
               handleChange(newValue);
             }}
+            minDateTime={minDateTime}
             renderInput={({ error, ...params }) => (
               <TextField
                 required={isRequired}
@@ -55,6 +60,7 @@ const Index: React.FunctionComponent<IResponsiveDateTimePickerProps> = ({
                 error={false}
                 size="small"
                 sx={{ minWidth: "100%" }}
+                onKeyDown={onKeyDown}
                 {...params}
               />
             )}
