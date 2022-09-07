@@ -58,6 +58,7 @@ const MainInfo: React.FunctionComponent = () => {
         programDetail.name = fetchDetail?.name || '';
         programDetail.desc = fetchDetail?.desc || '';
         programDetail.start_period = fetchDetail?.start_period || new Date();
+        programDetail.end_period = fetchDetail?.end_period || new Date();
         programDetail.point_type = fetchDetail?.point_type || '';
         programDetail.program_mechanism = fetchDetail?.program_mechanism || '';
         programDetail.program_owner = fetchDetail?.program_owner || '';
@@ -315,7 +316,7 @@ const MainInfo: React.FunctionComponent = () => {
                                         placeholder="Option"
                                         value={programDetail.threshold_alarm_expired}
                                         handleChange={(value: any) => {
-                                            onChangeProgramMainInfo(value, 'threshold_alarm_expired');
+                                            onChangeProgramMainInfo(Number(value), 'threshold_alarm_expired');
                                             programDetail.threshold_alarm_expired = Number(value);
                                             setStateTrigger(!stateTrigger);
                                         }}
@@ -328,7 +329,7 @@ const MainInfo: React.FunctionComponent = () => {
                                         placeholder="Threshold Alarm Voucher"
                                         value={programDetail.threshold_alarm_voucher}
                                         handleChange={(value: any) => {
-                                            onChangeProgramMainInfo(value, 'threshold_alarm_voucher');
+                                            onChangeProgramMainInfo(Number(value), 'threshold_alarm_voucher');
                                             programDetail.threshold_alarm_voucher = Number(value);
                                             setStateTrigger(!stateTrigger);
                                         }}
