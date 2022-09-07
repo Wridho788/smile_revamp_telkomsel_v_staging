@@ -55,6 +55,7 @@ const Index: React.FunctionComponent<IResponsiveDateTimePickerProps> = ({
             minDateTime={minDateTime}
             renderInput={({ error, ...params }) => (
               <TextField
+                aria-readonly={true}
                 required={isRequired}
                 label={placeholder}
                 error={false}

@@ -121,6 +121,14 @@ const Index = () => (
                     </Protected>
             }/>
 
+            <Route
+                path={"/edit-program/segmentation/:_id"}
+                element={
+                    <Protected>
+                        <Segmentation/>
+                    </Protected>
+                }/>
+
         </Routes>
     </AuthProvider>
 );

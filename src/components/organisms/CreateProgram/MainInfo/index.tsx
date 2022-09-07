@@ -348,6 +348,7 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
                 <ResponsiveDateTimePicker
                     label="End Period"
                     placeholder="End Period"
+                    minDateTime={programData.start_period}
                     value={programData.end_period}
                     handleChange={(value: any) => {
                         programData.end_period = value;
