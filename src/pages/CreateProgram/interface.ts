@@ -1,5 +1,3 @@
-
-
 export interface IProgramBonus {
     bonus_type: string,
     location: string
@@ -20,9 +18,10 @@ export interface IProgramNotification {
     notif_type: string
     template_content: string
 }
+
 export interface ICreateProgram {
     _id?: string,
-    program_group:string,
+    program_group: string,
     name: string,
     desc: string,
     start_period: Date,
@@ -32,7 +31,7 @@ export interface ICreateProgram {
     program_owner: string,
     program_owner_detail: string,
     keyword_registration: string,
-    point_registration: string,
+    point_registration: number,
     whitelist_counter: boolean,
     logic: string,
     program_time_zone: string,
@@ -41,12 +40,12 @@ export interface ICreateProgram {
     alarm_pic: string[],
     threshold_alarm_expired: number,
     threshold_alarm_voucher: number,
-    program_notification: Array<IProgramNotification>,
+    program_notification: any []
 }
 
 export interface IProgramItem {
     _id?: string,
-    program_group:string,
+    program_group: string,
     name: string,
     desc: string,
     start_period: Date,
@@ -56,7 +55,7 @@ export interface IProgramItem {
     program_owner: string,
     program_owner_detail: string,
     keyword_registration: string,
-    point_registration: string,
+    point_registration: number,
     whitelist_counter: boolean,
     logic: string,
     program_time_zone: string,
@@ -65,13 +64,14 @@ export interface IProgramItem {
     alarm_pic: string[],
     threshold_alarm_expired: number,
     threshold_alarm_voucher: number,
-    program_notification: Array<IProgramNotification>,
+    program_notification: any []
 }
 
 export interface IProgramList {
     data: Array<IProgramItem>
     total: number
 }
+
 export interface IFindProgram {
     data: ICreateProgram
 }

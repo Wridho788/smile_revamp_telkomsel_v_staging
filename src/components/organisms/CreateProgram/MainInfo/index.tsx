@@ -307,9 +307,9 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
                     label="Point Registration"
                     placeholder="Point Registration"
                     variant={"outlined"}
-                    value={programData.keyword_registration}
+                    value={programData.point_registration}
                     handleChange={(value: any) => {
-                        programData.keyword_registration = value;
+                        programData.point_registration = Number(value);
                         setStateTrigger(!stateTrigger);
                     }}
                 />

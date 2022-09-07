@@ -13,7 +13,7 @@ const CreateProgram = () => {
     const [messageError, setMessageError] = useState('');
     const [open, setOpen] = useState(false);
     const [activeStep, setActiveStep] = React.useState<number>(0);
-    const steps = ["Main Info", "Notification", "Segmentation"];
+    const steps = ["Main Info", "Notification"];
     useEffect(() => {
         if (messageError) {
             setOpen(true)
@@ -22,7 +22,6 @@ const CreateProgram = () => {
     const stepsItem = [
         <MainInfo slug={"insert"}/>,
         <Notification/>,
-        <Segmentation/>,
     ];
 
     return (
