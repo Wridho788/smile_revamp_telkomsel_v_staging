@@ -10,7 +10,10 @@ import {
   ResponsiveDatePicker,
 } from "../../../../atoms";
 import { useCustomerBadgeListQuery } from "../../../../../redux/features/customer/customer-api-slice";
-import { useGetPointTypeQuery } from "../../../../../redux/features/lov/lov-api-slice";
+import {
+  useGetLocationTypeQuery,
+  useGetPointTypeQuery,
+} from "../../../../../redux/features/lov/lov-api-slice";
 import { FilterInitial } from "../../../../../redux/utils/initial-general";
 import { useChannelListQuery } from "../../../../../redux/features/channel/merchant-api-slice";
 import { ICreateKeyword } from "../../interfaces";
@@ -28,12 +31,15 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import InputAdornment from "@mui/material/InputAdornment";
+import { IKeywordLocationTypeGeneral } from "../../initial";
 
 interface ILocationProps {
   keywordCreateState: ICreateKeyword;
   keywordCreate: ICreateKeyword;
   stateTrigger: boolean;
   setStateTrigger: Dispatch<SetStateAction<boolean>>;
+  keywordLocationTypeState: IKeywordLocationTypeGeneral;
+  keywordLocationType: IKeywordLocationTypeGeneral;
 }
 
 const Location: React.FunctionComponent<ILocationProps> = ({
@@ -41,14 +47,20 @@ const Location: React.FunctionComponent<ILocationProps> = ({
   keywordCreate,
   stateTrigger,
   setStateTrigger,
+  keywordLocationTypeState,
+  keywordLocationType,
 }) => {
+  console.log(keywordLocationTypeState);
   const { data: pointTypeOptions = { data: [] } } = useGetPointTypeQuery();
   const { data: programListOptions = { data: [] } } =
     useProgramListQuery(FilterInitial);
   const { data: channelOptions = { data: [] } } =
     useChannelListQuery(FilterInitial);
+  const { data: locationTypeOptions = { data: [] } } =
+    useGetLocationTypeQuery();
   // const { data: customerBadgeOptions = { data: [] } } =
   //   useCustomerBadgeListQuery(FilterInitial);
+
   return (
     <Accordion sx={{ p: "1vw" }}>
       <AccordionSummary
@@ -76,15 +88,16 @@ const Location: React.FunctionComponent<ILocationProps> = ({
             <Select
               label="Location Type"
               placeholder="Option"
-              options={programListOptions.data}
-              optionLabel="name"
-              value={keywordCreateState.multiwhitelist_program}
+              options={locationTypeOptions.data}
+              value={keywordLocationTypeState.location_type}
               handleChange={(value: string) => {
-                keywordCreate.multiwhitelist_program = value;
+                keywordLocationType.location_type = value;
+                keywordCreate.locations = [];
                 setStateTrigger(!stateTrigger);
               }}
             />
           )}
+
           {/* {keywordCreateState.eligibility_locations !== false && (
             <Stack gap="1vw" pt="1vw">
               {keywordCreate.keyword_schedule_shift.map((_, idx) => (

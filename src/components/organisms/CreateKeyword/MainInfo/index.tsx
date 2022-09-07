@@ -9,7 +9,11 @@ import {
 } from "..";
 import { Select } from "../../../atoms";
 import { useGetKeywordTypeQuery } from "../../../../redux/features/lov/lov-api-slice";
-import { CreateKeywordGeneral } from "../initial";
+import {
+  CreateKeywordGeneral,
+  IKeywordLocationTypeGeneral,
+  KeywordLocationTypeGeneral,
+} from "../initial";
 import { ICreateKeyword } from "../interfaces";
 import Merchant from "./Merchant";
 import General from "./General";
@@ -23,13 +27,20 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
   const { data: keywordTypeOptions = { data: [] } } = useGetKeywordTypeQuery();
 
   const keywordCreate = CreateKeywordGeneral;
+  const keywordLocationType = KeywordLocationTypeGeneral;
   const [keywordCreateState, setKeywordCreateState] =
     React.useState<ICreateKeyword>(keywordCreate);
+  const [keywordLocationTypeState, setKeywordLocationTypeState] =
+    React.useState<IKeywordLocationTypeGeneral>(keywordLocationType);
   const [stateTrigger, setStateTrigger] = React.useState<boolean>(false);
 
   React.useEffect(() => {
     setKeywordCreateState(keywordCreate);
   }, [keywordCreate]);
+
+  React.useEffect(() => {
+    setKeywordLocationTypeState(keywordLocationType);
+  }, [keywordLocationType, stateTrigger]);
 
   React.useEffect(() => {
     console.log(keywordCreate);
@@ -66,6 +77,8 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
             keywordCreate={keywordCreate}
             stateTrigger={stateTrigger}
             setStateTrigger={setStateTrigger}
+            keywordLocationTypeState={keywordLocationTypeState}
+            keywordLocationType={keywordLocationType}
           />
           <Merchant
             keywordCreate={keywordCreate}

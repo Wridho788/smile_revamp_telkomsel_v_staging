@@ -120,6 +120,7 @@ export const CreateKeywordGeneral: ICreateKeyword = {
   for_new_redeemer: false,
   max_mode: "",
   max_redeem_counter: 0,
+  locations: [],
   segmentation_customer_tier: [],
   segmentation_customer_los_operator: "",
   segmentation_customer_los: 0,
@@ -134,8 +135,12 @@ export const CreateKeywordGeneral: ICreateKeyword = {
   segmentation_customer_arpu: 0,
   segmentation_customer_arpu_min: 0,
   segmentation_customer_arpu_max: 0,
-  segmentation_customer_preferences_bcp: "",
   segmentation_employee_numbers: false,
+  segmentation_customer_poin_balance_operator: "",
+  segmentation_customer_poin_balance: 0,
+  segmentation_customer_poin_balance_min: 0,
+  segmentation_customer_poin_balance_max: 0,
+  segmentation_customer_preferences_bcp: "",
   keyword_parent: "",
   keyword_bonus: [
     {

@@ -317,6 +317,112 @@ const Segmentation: React.FunctionComponent<ISegmentationProps> = ({
               setStateTrigger(!stateTrigger);
             }}
           />
+
+          <Select
+            label="Customer POIN Balance Operator"
+            placeholder="Option"
+            options={ComparisonOptions}
+            value={
+              keywordCreateState.segmentation_customer_poin_balance_operator
+            }
+            handleChange={(value: string) => {
+              keywordCreate.segmentation_customer_poin_balance_operator = value;
+              setStateTrigger(!stateTrigger);
+            }}
+          />
+          {keywordCreateState.segmentation_customer_poin_balance_operator !==
+            "" &&
+            keywordCreateState.segmentation_customer_poin_balance_operator !==
+              "Ranged" && (
+              <OutlinedTextField
+                type="number"
+                label="Customer POIN Balance"
+                variant="outlined"
+                InputProps={{
+                  inputProps: { min: 0 },
+                  startAdornment: (
+                    <InputAdornment position="start">Rp</InputAdornment>
+                  ),
+                }}
+                value={keywordCreateState.segmentation_customer_poin_balance.toString()}
+                handleChange={(value: number) => {
+                  keywordCreate.segmentation_customer_poin_balance =
+                    Number(value);
+                  setStateTrigger(!stateTrigger);
+                }}
+              />
+            )}
+          {keywordCreateState.segmentation_customer_poin_balance_operator ===
+            "Ranged" && (
+            <OutlinedTextField
+              type="number"
+              label="Customer POIN Balance MIN"
+              variant="outlined"
+              InputProps={{
+                inputProps: { min: 0 },
+                startAdornment: (
+                  <InputAdornment position="start">Rp</InputAdornment>
+                ),
+              }}
+              value={keywordCreateState.segmentation_customer_poin_balance_min.toString()}
+              handleChange={(value: number) => {
+                keywordCreate.segmentation_customer_poin_balance_min =
+                  Number(value);
+                if (
+                  keywordCreateState.segmentation_customer_poin_balance_max <
+                  value
+                ) {
+                  keywordCreate.segmentation_customer_poin_balance_max =
+                    Number(value);
+                }
+                setStateTrigger(!stateTrigger);
+              }}
+            />
+          )}
+          {keywordCreateState.segmentation_customer_poin_balance_operator ===
+            "Ranged" && (
+            <OutlinedTextField
+              type="number"
+              label="Customer POIN Balance MAX"
+              variant="outlined"
+              error={
+                keywordCreateState.segmentation_customer_poin_balance_max <
+                keywordCreateState.segmentation_customer_poin_balance_min
+                  ? true
+                  : false
+              }
+              helperText={
+                keywordCreateState.segmentation_customer_poin_balance_max <
+                keywordCreateState.segmentation_customer_poin_balance_min
+                  ? `must be greater than or equal to ${keywordCreateState.segmentation_customer_poin_balance_min}`
+                  : ""
+              }
+              onBlur={() => {
+                if (
+                  keywordCreateState.segmentation_customer_poin_balance_max <
+                  keywordCreateState.segmentation_customer_poin_balance_min
+                ) {
+                  keywordCreate.segmentation_customer_poin_balance_max =
+                    keywordCreate.segmentation_customer_poin_balance_min;
+                  setStateTrigger(!stateTrigger);
+                }
+              }}
+              InputProps={{
+                inputProps: {
+                  min: keywordCreateState.segmentation_customer_poin_balance_min,
+                },
+                startAdornment: (
+                  <InputAdornment position="start">Rp</InputAdornment>
+                ),
+              }}
+              value={keywordCreateState.segmentation_customer_poin_balance_max.toString()}
+              handleChange={(value: number) => {
+                keywordCreate.segmentation_customer_poin_balance_max =
+                  Number(value);
+                setStateTrigger(!stateTrigger);
+              }}
+            />
+          )}
         </Stack>
       </AccordionDetails>
     </Accordion>

@@ -26,17 +26,6 @@ const Program: React.FunctionComponent<IProgramProps> = ({
     useProgramListQuery(FilterInitial);
   const { data: programExperienceOptions = { data: [] } } =
     useGetProgramExperienceQuery();
-
-  const handleDelete = (e: React.MouseEvent, value: string) => {
-    e.preventDefault();
-    console.log("clicked delete");
-    keywordCreate.program_experience = _without(
-      [...keywordCreateState.program_experience],
-      value
-    );
-    setStateTrigger(!stateTrigger);
-  };
-
   return (
     <Box sx={{ px: "2vw" }}>
       <Stack spacing="2vw" px="2vw" py="0.5vw">
@@ -77,7 +66,6 @@ const Program: React.FunctionComponent<IProgramProps> = ({
           renderValue={(selected: any) => (
             <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
               {selected.map((value: any) => {
-                console.log(value);
                 return (
                   <Chip
                     key={value}
@@ -92,7 +80,14 @@ const Program: React.FunctionComponent<IProgramProps> = ({
                         onMouseDown={(event: any) => event.stopPropagation()}
                       />
                     }
-                    onDelete={(e) => handleDelete(e, value)}
+                    onDelete={(e) => {
+                      e.preventDefault();
+                      keywordCreate.program_experience = _without(
+                        [...keywordCreateState.program_experience],
+                        value
+                      );
+                      setStateTrigger(!stateTrigger);
+                    }}
                     onClick={() => console.log("clicked chip")}
                   />
                 );
@@ -100,9 +95,9 @@ const Program: React.FunctionComponent<IProgramProps> = ({
             </Box>
           )}
           value={keywordCreateState.program_experience}
-          handleChange={(value: any) => {
+          handleChange={(value: Array<string>) => {
             if (value.length > 0) {
-              keywordCreate.program_experience[0] = value[0];
+              keywordCreate.program_experience = [value[value.length - 1]];
             } else {
               keywordCreate.program_experience = value;
             }

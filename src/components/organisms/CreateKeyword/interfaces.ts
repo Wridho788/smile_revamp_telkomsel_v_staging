@@ -68,18 +68,23 @@ export interface ICreateKeyword {
   segmentation_customer_los_max: number;
   for_new_redeemer: boolean;
   customer_type: string;
+  locations: string[];
   segmentation_customer_kyc_completeness: boolean;
   segmentation_customer_arpu_operator: string;
+  segmentation_customer_arpu: number;
   segmentation_customer_arpu_min: number;
   segmentation_customer_arpu_max: number;
   segmentation_employee_numbers: boolean;
+  segmentation_customer_poin_balance_operator: string;
+  segmentation_customer_poin_balance: number;
+  segmentation_customer_poin_balance_min: number;
+  segmentation_customer_poin_balance_max: number;
 
   keyword_verification: string;
   timezone: string;
   segmentation_customer_type: string;
   segmentation_customer_preferences_bcp: string;
   keyword_shift: IKeywordShift[];
-  segmentation_customer_arpu: number;
 
   keyword_bonus: Array<IKeywordBonus>;
   keyword_notification: Array<IKeywordNotification>;

@@ -10,7 +10,10 @@ import {
   ResponsiveDatePicker,
 } from "../../../../atoms";
 import { useCustomerBadgeListQuery } from "../../../../../redux/features/customer/customer-api-slice";
-import { useGetPointTypeQuery } from "../../../../../redux/features/lov/lov-api-slice";
+import {
+  useGetPointTypeQuery,
+  useGetProgramExperienceQuery,
+} from "../../../../../redux/features/lov/lov-api-slice";
 import { FilterInitial } from "../../../../../redux/utils/initial-general";
 import { useChannelListQuery } from "../../../../../redux/features/channel/merchant-api-slice";
 import { ICreateKeyword } from "../../interfaces";
@@ -47,6 +50,8 @@ const General: React.FunctionComponent<IGeneralProps> = ({
     useProgramListQuery(FilterInitial);
   const { data: channelOptions = { data: [] } } =
     useChannelListQuery(FilterInitial);
+  const { data: programExperienceOptions = { data: [] } } =
+    useGetProgramExperienceQuery();
   // const { data: customerBadgeOptions = { data: [] } } =
   //   useCustomerBadgeListQuery(FilterInitial);
   return (
@@ -73,7 +78,13 @@ const General: React.FunctionComponent<IGeneralProps> = ({
             }}
           /> */}
           <OutlinedTextField
-            label="Keyword Redeem Name"
+            label={
+              programExperienceOptions.data.find(
+                (e) => e["_id"] === keywordCreateState.program_experience[0]
+              )?.set_value === "Auction"
+                ? "Keyword Bid Name"
+                : "Keyword Redeem Name"
+            }
             placeholder="Merdeka2000"
             variant="outlined"
             inputProps={{ maxLength: 16 }}
@@ -137,27 +148,35 @@ const General: React.FunctionComponent<IGeneralProps> = ({
               setStateTrigger(!stateTrigger);
             }}
           />
-          <OutlinedTextField
-            type="number"
-            label="POIN Redeemed"
-            variant="outlined"
-            InputProps={{ inputProps: { min: 0 } }}
-            value={keywordCreateState.poin_redeemed.toString()}
-            handleChange={(value: number) => {
-              keywordCreate.poin_redeemed = Number(value);
-              setStateTrigger(!stateTrigger);
-            }}
-          />
-          <Select
-            label="Max Mode"
-            placeholder="Option"
-            options={MaxModeOptions}
-            value={keywordCreateState.max_mode}
-            handleChange={(value: string) => {
-              keywordCreate.max_mode = value;
-              setStateTrigger(!stateTrigger);
-            }}
-          />
+          {programExperienceOptions.data.find(
+            (e) => e["_id"] === keywordCreateState.program_experience[0]
+          )?.set_value !== "Auction" && (
+            <OutlinedTextField
+              type="number"
+              label="POIN Redeemed"
+              variant="outlined"
+              InputProps={{ inputProps: { min: 0 } }}
+              value={keywordCreateState.poin_redeemed.toString()}
+              handleChange={(value: number) => {
+                keywordCreate.poin_redeemed = Number(value);
+                setStateTrigger(!stateTrigger);
+              }}
+            />
+          )}
+          {programExperienceOptions.data.find(
+            (e) => e["_id"] === keywordCreateState.program_experience[0]
+          )?.set_value !== "Auction" && (
+            <Select
+              label="Max Mode"
+              placeholder="Option"
+              options={MaxModeOptions}
+              value={keywordCreateState.max_mode}
+              handleChange={(value: string) => {
+                keywordCreate.max_mode = value;
+                setStateTrigger(!stateTrigger);
+              }}
+            />
+          )}
           <OutlinedTextField
             type="number"
             label="Max Redeem Counter"
@@ -169,16 +188,20 @@ const General: React.FunctionComponent<IGeneralProps> = ({
               setStateTrigger(!stateTrigger);
             }}
           />
-          <Select
-            label="Merchandise Keyword"
-            placeholder="Option"
-            options={BooleanOptions}
-            value={keywordCreateState.merchandise_keyword}
-            handleChange={(value: boolean) => {
-              keywordCreate.merchandise_keyword = value;
-              setStateTrigger(!stateTrigger);
-            }}
-          />
+          {programExperienceOptions.data.find(
+            (e) => e["_id"] === keywordCreateState.program_experience[0]
+          )?.set_value !== "Auction" && (
+            <Select
+              label="Merchandise Keyword"
+              placeholder="Option"
+              options={BooleanOptions}
+              value={keywordCreateState.merchandise_keyword}
+              handleChange={(value: boolean) => {
+                keywordCreate.merchandise_keyword = value;
+                setStateTrigger(!stateTrigger);
+              }}
+            />
+          )}
           <Select
             label="SMS Masking"
             placeholder="Option"
@@ -202,7 +225,13 @@ const General: React.FunctionComponent<IGeneralProps> = ({
             />
           )}
           <Select
-            label="Keyword Schedule"
+            label={
+              programExperienceOptions.data.find(
+                (e) => e["_id"] === keywordCreateState.program_experience[0]
+              )?.set_value === "Auction"
+                ? "Auction Phase"
+                : "Keyword Schedule"
+            }
             placeholder="Option"
             options={KeywordScheduleTypeOptions}
             value={keywordCreateState.keyword_schedule_type}
@@ -564,29 +593,36 @@ const General: React.FunctionComponent<IGeneralProps> = ({
               setStateTrigger(!stateTrigger);
             }}
           />
-          <Select
-            label="Multiwhitelist"
-            placeholder="Option"
-            options={BooleanOptions}
-            value={keywordCreateState.multiwhitelist}
-            handleChange={(value: boolean) => {
-              keywordCreate.multiwhitelist = value;
-              setStateTrigger(!stateTrigger);
-            }}
-          />
-          {keywordCreateState.multiwhitelist !== false && (
+          {programExperienceOptions.data.find(
+            (e) => e["_id"] === keywordCreateState.program_experience[0]
+          )?.set_value !== "Auction" && (
             <Select
-              label="Multiwhitelist Destination"
+              label="Multiwhitelist"
               placeholder="Option"
-              options={programListOptions.data}
-              optionLabel="name"
-              value={keywordCreateState.multiwhitelist_program}
-              handleChange={(value: string) => {
-                keywordCreate.multiwhitelist_program = value;
+              options={BooleanOptions}
+              value={keywordCreateState.multiwhitelist}
+              handleChange={(value: boolean) => {
+                keywordCreate.multiwhitelist = value;
                 setStateTrigger(!stateTrigger);
               }}
             />
           )}
+          {programExperienceOptions.data.find(
+            (e) => e["_id"] === keywordCreateState.program_experience[0]
+          )?.set_value !== "Auction" &&
+            keywordCreateState.multiwhitelist !== false && (
+              <Select
+                label="Multiwhitelist Destination"
+                placeholder="Option"
+                options={programListOptions.data}
+                optionLabel="name"
+                value={keywordCreateState.multiwhitelist_program}
+                handleChange={(value: string) => {
+                  keywordCreate.multiwhitelist_program = value;
+                  setStateTrigger(!stateTrigger);
+                }}
+              />
+            )}
           <Select
             label="Channel Validation"
             placeholder="Option"
