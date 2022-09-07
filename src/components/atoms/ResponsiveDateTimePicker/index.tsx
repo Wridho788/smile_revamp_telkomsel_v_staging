@@ -50,6 +50,7 @@ const Index: React.FunctionComponent<IResponsiveDateTimePickerProps> = ({
             }}
             renderInput={({ error, ...params }) => (
               <TextField
+                required={isRequired}
                 label={placeholder}
                 error={false}
                 size="small"

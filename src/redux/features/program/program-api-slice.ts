@@ -86,11 +86,11 @@ export const programSlice = createApi({
             rejectProgram: approvalHandler("reject"),
 
             // import file
-            importList: importFileHandler("/import_list"),
+            importList: importFileHandler("/segmentation"),
 
             // post
             createProgram: postHandler(baseUrl + "/v2/program"),
-            createProgramTempList: postHandler("/temp_list"),
+            createProgramSegmentationAdd: postHandler("/segmentation/add"),
 
             // put
             updateProgram: putHandler(baseUrl + "/v2/program/"),
@@ -116,6 +116,6 @@ export const {
     useApproveProgramMutation,
     useRejectProgramMutation,
     useUpdateProgramMutation,
+    useCreateProgramSegmentationAddMutation,
     useUpdateProgramMainInfoMutation,
-    useCreateProgramTempListMutation
 } = programSlice;

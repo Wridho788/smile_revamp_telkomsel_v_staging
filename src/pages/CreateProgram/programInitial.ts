@@ -1,20 +1,6 @@
 import {ICreateProgram, IFindProgram, IProgramItem, IProgramNotification, IProgramList} from "./interface";
 import {DetailResponse, IData} from "../../redux/features/notification/interface";
 
-export const ProgramNotificationInitial = [
-    {
-        template: "",
-        via: "",
-        notif_type: "62ffc38b8a01008799e78663", // default by notif group https://discord.com/channels/1005119713665359974/1005119713665359977/1014858719747637338
-        template_content: ""
-    },
-    {
-        template: "",
-        via: "",
-        notif_type: "62ffc38b8a01008799e78663", //  default by notif group https://discord.com/channels/1005119713665359974/1005119713665359977/1014858719747637338
-        template_content: ""
-    },
-]
 
 export const CreateProgramInitial: ICreateProgram = {
     _id: "",
@@ -27,7 +13,8 @@ export const CreateProgramInitial: ICreateProgram = {
     program_mechanism: "",
     program_owner: "",
     program_owner_detail: "",
-    keyword_registration: "62ffc1d68a01008799e785cb",
+    keyword_registration: "",
+    point_registration: 0,
     whitelist_counter: true,
     logic: "",
     program_time_zone: "",
@@ -36,7 +23,7 @@ export const CreateProgramInitial: ICreateProgram = {
     alarm_pic: [],
     threshold_alarm_expired: 0,
     threshold_alarm_voucher: 70,
-    program_notification: ProgramNotificationInitial
+    program_notification: []
 }
 
 export const ProgramItemInitial: IProgramItem = {
@@ -50,7 +37,8 @@ export const ProgramItemInitial: IProgramItem = {
     program_mechanism: "",
     program_owner: "",
     program_owner_detail: "",
-    keyword_registration: "62ffc1d68a01008799e785cb",
+    keyword_registration: "",
+    point_registration: 0,
     whitelist_counter: true,
     logic: "",
     program_time_zone: "",
@@ -59,7 +47,7 @@ export const ProgramItemInitial: IProgramItem = {
     alarm_pic: [],
     threshold_alarm_expired: 0,
     threshold_alarm_voucher: 70,
-    program_notification: ProgramNotificationInitial
+    program_notification: []
 }
 
 
@@ -70,13 +58,5 @@ export const ProgramListInitial: IProgramList = {
 export const ProgramDetailInitial: IFindProgram = {
     data: CreateProgramInitial,
 }
-export const NotificationTemplateInitial: IData = {
-        _id: "",
-        notif_type: "",
-        notif_via: "",
-        notif_content: "",
-    }
 
-export const notificationTemplateDetailInitial: DetailResponse = {
-    data: NotificationTemplateInitial
-}
+export const variableInitial = ["[PROGRAM]", "[START_PERIOD]", "[POINT_TYPE]", "[REASON]"]

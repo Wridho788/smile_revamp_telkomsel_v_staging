@@ -53,6 +53,7 @@ const Index: React.FunctionComponent<ISelectProps> = ({
       <Grid item xs={rightColumn} mt={direction === "column" ? "0.3vw" : 0}>
         <FormControl sx={{ width: "100%" }}>
           <Select
+            required={isRequired}
             value={value}
             onChange={(event: SelectChangeEvent) => {
               handleChange(event.target.value);
