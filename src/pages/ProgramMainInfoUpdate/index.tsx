@@ -6,10 +6,12 @@ import * as React from "react";
 import { DrawerNav } from "../../components";
 import MainInfo from "../../components/organisms/ProgramUpdate/MainInfo";
 
-export default function ProgramMainInfoUpdate() {
+const ProgramMainInfoUpdate = () => {
     return (
         <DrawerNav>
             <MainInfo />
         </DrawerNav>
     )
 }
+
+export default ProgramMainInfoUpdate;
