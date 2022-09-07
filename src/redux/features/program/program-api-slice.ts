@@ -55,10 +55,10 @@ export const programSlice = createApi({
                     body: body,
                 }),
             });
-        const putHandler = (endpoint: string) =>
+        const putHandler = (endpoint: string, step: string = '') =>
             builder.mutation<{ success: boolean; body: any }, any>({
                 query: (body) => ({
-                    url: endpoint + body["_id"] + "/edit",
+                    url: endpoint + body["_id"] + step || "/edit",
                     method: "PUT",
                     headers: {
                         "Content-Type": "application/json",
@@ -94,6 +94,7 @@ export const programSlice = createApi({
 
             // put
             updateProgram: putHandler(baseUrl + "/v2/program/"),
+            updateProgramMainInfo: putHandler(baseUrl + "/v2/program/", "/edit/main-info"),
 
             // delete
             deleteProgram: deleteHandler(baseUrl + "/v2/program/"),
@@ -115,5 +116,6 @@ export const {
     useApproveProgramMutation,
     useRejectProgramMutation,
     useUpdateProgramMutation,
-    useCreateProgramSegmentationAddMutation
+    useCreateProgramSegmentationAddMutation,
+    useUpdateProgramMainInfoMutation,
 } = programSlice;
