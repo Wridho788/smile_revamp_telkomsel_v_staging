@@ -53,7 +53,7 @@ const Notification: React.FunctionComponent<INotificationProps> = ({
       </AccordionSummary>
       <AccordionDetails>
         <Stack spacing="1vw" px="2vw" py="0.5vw">
-          {keywordCreate.keyword_notification.map((_, idx) => (
+          {/* {keywordCreate.keyword_notification.map((_, idx) => (
             <Stack key={idx} spacing="1vw">
               <Select
                 direction="column"
@@ -179,14 +179,14 @@ const Notification: React.FunctionComponent<INotificationProps> = ({
                   direction="column"
                   label="From"
                   placeholder="From"
-                  value={keywordCreateState.start_period}
+                  value={keywordCreateState.eligibility.start_period}
                   handleChange={(value: string) => {
-                    keywordCreate.start_period = value;
+                    keywordCreate.eligibility.start_period = value;
                     if (
-                      Date.parse(keywordCreateState.end_period) <=
+                      Date.parse(keywordCreateState.eligibility.end_period) <=
                       Date.parse(value)
                     ) {
-                      keywordCreate.end_period = value;
+                      keywordCreate.eligibility.end_period = value;
                     }
                     setStateTrigger(!stateTrigger);
                   }}
@@ -195,16 +195,16 @@ const Notification: React.FunctionComponent<INotificationProps> = ({
                   direction="column"
                   label="To"
                   placeholder="To"
-                  minDateTime={keywordCreateState.start_period}
-                  value={keywordCreateState.end_period}
+                  minDateTime={keywordCreateState.eligibility.start_period}
+                  value={keywordCreateState.eligibility.end_period}
                   handleChange={(value: string) => {
-                    keywordCreate.end_period = value;
+                    keywordCreate.eligibility.end_period = value;
                     setStateTrigger(!stateTrigger);
                   }}
                 />
               </Stack>
             </Stack>
-          ))}
+          ))} */}
         </Stack>
       </AccordionDetails>
     </Accordion>

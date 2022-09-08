@@ -54,9 +54,9 @@ const Segmentation: React.FunctionComponent<ISegmentationProps> = ({
             placeholder="Option"
             options={customerTierOptions.data}
             optionLabel="name"
-            value={keywordCreateState.segmentation_customer_tier}
+            value={keywordCreateState.eligibility.segmentation_customer_tier}
             handleChange={(value: []) => {
-              keywordCreate.segmentation_customer_tier = value;
+              keywordCreate.eligibility.segmentation_customer_tier = value;
               setStateTrigger(!stateTrigger);
             }}
           />
@@ -66,9 +66,9 @@ const Segmentation: React.FunctionComponent<ISegmentationProps> = ({
             placeholder="Option"
             options={customerBrandOptions.data}
             optionLabel="name"
-            value={keywordCreateState.segmentation_customer_brand}
+            value={keywordCreateState.eligibility.segmentation_customer_brand}
             handleChange={(value: []) => {
-              keywordCreate.segmentation_customer_brand = value;
+              keywordCreate.eligibility.segmentation_customer_brand = value;
               setStateTrigger(!stateTrigger);
             }}
           />
@@ -78,9 +78,12 @@ const Segmentation: React.FunctionComponent<ISegmentationProps> = ({
             placeholder="Option"
             options={customerBadgeOptions.data}
             optionLabel="name"
-            value={keywordCreateState.segmentation_customer_most_redeem}
+            value={
+              keywordCreateState.eligibility.segmentation_customer_most_redeem
+            }
             handleChange={(value: []) => {
-              keywordCreate.segmentation_customer_most_redeem = value;
+              keywordCreate.eligibility.segmentation_customer_most_redeem =
+                value;
               setStateTrigger(!stateTrigger);
             }}
           />
@@ -89,10 +92,12 @@ const Segmentation: React.FunctionComponent<ISegmentationProps> = ({
             placeholder="Option"
             options={BooleanOptions}
             value={
-              keywordCreateState.segmentation_customer_prepaid_registration
+              keywordCreateState.eligibility
+                .segmentation_customer_prepaid_registration
             }
             handleChange={(value: boolean) => {
-              keywordCreate.segmentation_customer_prepaid_registration = value;
+              keywordCreate.eligibility.segmentation_customer_prepaid_registration =
+                value;
               setStateTrigger(!stateTrigger);
             }}
           />
@@ -100,13 +105,16 @@ const Segmentation: React.FunctionComponent<ISegmentationProps> = ({
             label="Telkomsel LOS Operator"
             placeholder="Option"
             options={ComparisonOptions}
-            value={keywordCreateState.segmentation_customer_los_operator}
+            value={
+              keywordCreateState.eligibility.segmentation_customer_los_operator
+            }
             handleChange={(value: string) => {
-              keywordCreate.segmentation_customer_los_operator = value;
+              keywordCreate.eligibility.segmentation_customer_los_operator =
+                value;
               setStateTrigger(!stateTrigger);
             }}
           />
-          {keywordCreateState.segmentation_customer_los_operator !==
+          {keywordCreateState.eligibility.segmentation_customer_los_operator !==
             "Ranged" && (
             <OutlinedTextField
               type="number"
@@ -118,66 +126,74 @@ const Segmentation: React.FunctionComponent<ISegmentationProps> = ({
                   <InputAdornment position="end">Day(s)</InputAdornment>
                 ),
               }}
-              value={keywordCreateState.segmentation_customer_los.toString()}
+              value={keywordCreateState.eligibility.segmentation_customer_los.toString()}
               handleChange={(value: number) => {
-                keywordCreate.segmentation_customer_los = Number(value);
+                keywordCreate.eligibility.segmentation_customer_los =
+                  Number(value);
                 setStateTrigger(!stateTrigger);
               }}
             />
           )}
-          {keywordCreateState.segmentation_customer_los_operator ===
+          {keywordCreateState.eligibility.segmentation_customer_los_operator ===
             "Ranged" && (
             <OutlinedTextField
               type="number"
               label="Telkomsel LOS Range Min"
               variant="outlined"
               InputProps={{ inputProps: { min: 0 } }}
-              value={keywordCreateState.segmentation_customer_los_min.toString()}
+              value={keywordCreateState.eligibility.segmentation_customer_los_min.toString()}
               handleChange={(value: number) => {
-                keywordCreate.segmentation_customer_los_min = Number(value);
-                if (keywordCreateState.segmentation_customer_los_max < value) {
-                  keywordCreate.segmentation_customer_los_max = Number(value);
+                keywordCreate.eligibility.segmentation_customer_los_min =
+                  Number(value);
+                if (
+                  keywordCreateState.eligibility.segmentation_customer_los_max <
+                  value
+                ) {
+                  keywordCreate.eligibility.segmentation_customer_los_max =
+                    Number(value);
                 }
                 setStateTrigger(!stateTrigger);
               }}
             />
           )}
-          {keywordCreateState.segmentation_customer_los_operator ===
+          {keywordCreateState.eligibility.segmentation_customer_los_operator ===
             "Ranged" && (
             <OutlinedTextField
               type="number"
               label="Telkomsel LOS Range Max"
               variant="outlined"
               error={
-                keywordCreateState.segmentation_customer_los_max <
-                keywordCreateState.segmentation_customer_los_min
+                keywordCreateState.eligibility.segmentation_customer_los_max <
+                keywordCreateState.eligibility.segmentation_customer_los_min
                   ? true
                   : false
               }
               helperText={
-                keywordCreateState.segmentation_customer_los_max <
-                keywordCreateState.segmentation_customer_los_min
-                  ? `must be greater than or equal to ${keywordCreateState.segmentation_customer_los_min}`
+                keywordCreateState.eligibility.segmentation_customer_los_max <
+                keywordCreateState.eligibility.segmentation_customer_los_min
+                  ? `must be greater than or equal to ${keywordCreateState.eligibility.segmentation_customer_los_min}`
                   : ""
               }
               onBlur={() => {
                 if (
-                  keywordCreateState.segmentation_customer_los_max <
-                  keywordCreateState.segmentation_customer_los_min
+                  keywordCreateState.eligibility.segmentation_customer_los_max <
+                  keywordCreateState.eligibility.segmentation_customer_los_min
                 ) {
-                  keywordCreate.segmentation_customer_los_max =
-                    keywordCreate.segmentation_customer_los_min;
+                  keywordCreate.eligibility.segmentation_customer_los_max =
+                    keywordCreate.eligibility.segmentation_customer_los_min;
                   setStateTrigger(!stateTrigger);
                 }
               }}
               InputProps={{
                 inputProps: {
-                  min: keywordCreateState.segmentation_customer_los_min,
+                  min: keywordCreateState.eligibility
+                    .segmentation_customer_los_min,
                 },
               }}
-              value={keywordCreateState.segmentation_customer_los_max.toString()}
+              value={keywordCreateState.eligibility.segmentation_customer_los_max.toString()}
               handleChange={(value: number) => {
-                keywordCreate.segmentation_customer_los_max = Number(value);
+                keywordCreate.eligibility.segmentation_customer_los_max =
+                  Number(value);
                 setStateTrigger(!stateTrigger);
               }}
             />
@@ -186,9 +202,9 @@ const Segmentation: React.FunctionComponent<ISegmentationProps> = ({
             label="New Redeemer"
             placeholder="Option"
             options={BooleanOptions}
-            value={keywordCreateState.for_new_redeemer}
+            value={keywordCreateState.eligibility.for_new_redeemer}
             handleChange={(value: boolean) => {
-              keywordCreate.for_new_redeemer = value;
+              keywordCreate.eligibility.for_new_redeemer = value;
               setStateTrigger(!stateTrigger);
             }}
           />
@@ -196,9 +212,9 @@ const Segmentation: React.FunctionComponent<ISegmentationProps> = ({
             label="Customer Type"
             placeholder="Option"
             options={CustomerTypeOptions}
-            value={keywordCreateState.customer_type}
+            value={keywordCreateState.eligibility.segmentation_customer_type}
             handleChange={(value: string) => {
-              keywordCreate.customer_type = value;
+              keywordCreate.eligibility.segmentation_customer_type = value;
               setStateTrigger(!stateTrigger);
             }}
           />
@@ -206,9 +222,13 @@ const Segmentation: React.FunctionComponent<ISegmentationProps> = ({
             label="Customer KYC Completness"
             placeholder="Option"
             options={BooleanOptions}
-            value={keywordCreateState.segmentation_customer_kyc_completeness}
+            value={
+              keywordCreateState.eligibility
+                .segmentation_customer_kyc_completeness
+            }
             handleChange={(value: boolean) => {
-              keywordCreate.segmentation_customer_kyc_completeness = value;
+              keywordCreate.eligibility.segmentation_customer_kyc_completeness =
+                value;
               setStateTrigger(!stateTrigger);
             }}
           />
@@ -216,15 +236,19 @@ const Segmentation: React.FunctionComponent<ISegmentationProps> = ({
             label="Customer ARPU Operator"
             placeholder="Option"
             options={ComparisonOptions}
-            value={keywordCreateState.segmentation_customer_arpu_operator}
+            value={
+              keywordCreateState.eligibility.segmentation_customer_arpu_operator
+            }
             handleChange={(value: string) => {
-              keywordCreate.segmentation_customer_arpu_operator = value;
+              keywordCreate.eligibility.segmentation_customer_arpu_operator =
+                value;
               setStateTrigger(!stateTrigger);
             }}
           />
-          {keywordCreateState.segmentation_customer_arpu_operator !== "" &&
-            keywordCreateState.segmentation_customer_arpu_operator !==
-              "Ranged" && (
+          {keywordCreateState.eligibility
+            .segmentation_customer_arpu_operator !== "" &&
+            keywordCreateState.eligibility
+              .segmentation_customer_arpu_operator !== "Ranged" && (
               <OutlinedTextField
                 type="number"
                 label="Customer ARPU"
@@ -235,15 +259,16 @@ const Segmentation: React.FunctionComponent<ISegmentationProps> = ({
                     <InputAdornment position="start">Rp</InputAdornment>
                   ),
                 }}
-                value={keywordCreateState.segmentation_customer_arpu.toString()}
+                value={keywordCreateState.eligibility.segmentation_customer_arpu.toString()}
                 handleChange={(value: number) => {
-                  keywordCreate.segmentation_customer_arpu = Number(value);
+                  keywordCreate.eligibility.segmentation_customer_arpu =
+                    Number(value);
                   setStateTrigger(!stateTrigger);
                 }}
               />
             )}
-          {keywordCreateState.segmentation_customer_arpu_operator ===
-            "Ranged" && (
+          {keywordCreateState.eligibility
+            .segmentation_customer_arpu_operator === "Ranged" && (
             <OutlinedTextField
               type="number"
               label="Customer ARPU MIN"
@@ -254,55 +279,63 @@ const Segmentation: React.FunctionComponent<ISegmentationProps> = ({
                   <InputAdornment position="start">Rp</InputAdornment>
                 ),
               }}
-              value={keywordCreateState.segmentation_customer_arpu_min.toString()}
+              value={keywordCreateState.eligibility.segmentation_customer_arpu_min.toString()}
               handleChange={(value: number) => {
-                keywordCreate.segmentation_customer_arpu_min = Number(value);
-                if (keywordCreateState.segmentation_customer_arpu_max < value) {
-                  keywordCreate.segmentation_customer_arpu_max = Number(value);
+                keywordCreate.eligibility.segmentation_customer_arpu_min =
+                  Number(value);
+                if (
+                  keywordCreateState.eligibility
+                    .segmentation_customer_arpu_max < value
+                ) {
+                  keywordCreate.eligibility.segmentation_customer_arpu_max =
+                    Number(value);
                 }
                 setStateTrigger(!stateTrigger);
               }}
             />
           )}
-          {keywordCreateState.segmentation_customer_arpu_operator ===
-            "Ranged" && (
+          {keywordCreateState.eligibility
+            .segmentation_customer_arpu_operator === "Ranged" && (
             <OutlinedTextField
               type="number"
               label="Customer ARPU MAX"
               variant="outlined"
               error={
-                keywordCreateState.segmentation_customer_arpu_max <
-                keywordCreateState.segmentation_customer_arpu_min
+                keywordCreateState.eligibility.segmentation_customer_arpu_max <
+                keywordCreateState.eligibility.segmentation_customer_arpu_min
                   ? true
                   : false
               }
               helperText={
-                keywordCreateState.segmentation_customer_arpu_max <
-                keywordCreateState.segmentation_customer_arpu_min
-                  ? `must be greater than or equal to ${keywordCreateState.segmentation_customer_arpu_min}`
+                keywordCreateState.eligibility.segmentation_customer_arpu_max <
+                keywordCreateState.eligibility.segmentation_customer_arpu_min
+                  ? `must be greater than or equal to ${keywordCreateState.eligibility.segmentation_customer_arpu_min}`
                   : ""
               }
               onBlur={() => {
                 if (
-                  keywordCreateState.segmentation_customer_arpu_max <
-                  keywordCreateState.segmentation_customer_arpu_min
+                  keywordCreateState.eligibility
+                    .segmentation_customer_arpu_max <
+                  keywordCreateState.eligibility.segmentation_customer_arpu_min
                 ) {
-                  keywordCreate.segmentation_customer_arpu_max =
-                    keywordCreate.segmentation_customer_arpu_min;
+                  keywordCreate.eligibility.segmentation_customer_arpu_max =
+                    keywordCreate.eligibility.segmentation_customer_arpu_min;
                   setStateTrigger(!stateTrigger);
                 }
               }}
               InputProps={{
                 inputProps: {
-                  min: keywordCreateState.segmentation_customer_arpu_min,
+                  min: keywordCreateState.eligibility
+                    .segmentation_customer_arpu_min,
                 },
                 startAdornment: (
                   <InputAdornment position="start">Rp</InputAdornment>
                 ),
               }}
-              value={keywordCreateState.segmentation_customer_arpu_max.toString()}
+              value={keywordCreateState.eligibility.segmentation_customer_arpu_max.toString()}
               handleChange={(value: number) => {
-                keywordCreate.segmentation_customer_arpu_max = Number(value);
+                keywordCreate.eligibility.segmentation_customer_arpu_max =
+                  Number(value);
                 setStateTrigger(!stateTrigger);
               }}
             />
@@ -311,9 +344,9 @@ const Segmentation: React.FunctionComponent<ISegmentationProps> = ({
             label="Telkomsel Employee Numbers"
             placeholder="Option"
             options={BooleanOptions}
-            value={keywordCreateState.segmentation_employee_numbers}
+            value={keywordCreateState.eligibility.segmentation_employee_numbers}
             handleChange={(value: boolean) => {
-              keywordCreate.segmentation_employee_numbers = value;
+              keywordCreate.eligibility.segmentation_employee_numbers = value;
               setStateTrigger(!stateTrigger);
             }}
           />
@@ -323,17 +356,19 @@ const Segmentation: React.FunctionComponent<ISegmentationProps> = ({
             placeholder="Option"
             options={ComparisonOptions}
             value={
-              keywordCreateState.segmentation_customer_poin_balance_operator
+              keywordCreateState.eligibility
+                .segmentation_customer_poin_balance_operator
             }
             handleChange={(value: string) => {
-              keywordCreate.segmentation_customer_poin_balance_operator = value;
+              keywordCreate.eligibility.segmentation_customer_poin_balance_operator =
+                value;
               setStateTrigger(!stateTrigger);
             }}
           />
-          {keywordCreateState.segmentation_customer_poin_balance_operator !==
-            "" &&
-            keywordCreateState.segmentation_customer_poin_balance_operator !==
-              "Ranged" && (
+          {keywordCreateState.eligibility
+            .segmentation_customer_poin_balance_operator !== "" &&
+            keywordCreateState.eligibility
+              .segmentation_customer_poin_balance_operator !== "Ranged" && (
               <OutlinedTextField
                 type="number"
                 label="Customer POIN Balance"
@@ -344,16 +379,16 @@ const Segmentation: React.FunctionComponent<ISegmentationProps> = ({
                     <InputAdornment position="start">Rp</InputAdornment>
                   ),
                 }}
-                value={keywordCreateState.segmentation_customer_poin_balance.toString()}
+                value={keywordCreateState.eligibility.segmentation_customer_poin_balance.toString()}
                 handleChange={(value: number) => {
-                  keywordCreate.segmentation_customer_poin_balance =
+                  keywordCreate.eligibility.segmentation_customer_poin_balance =
                     Number(value);
                   setStateTrigger(!stateTrigger);
                 }}
               />
             )}
-          {keywordCreateState.segmentation_customer_poin_balance_operator ===
-            "Ranged" && (
+          {keywordCreateState.eligibility
+            .segmentation_customer_poin_balance_operator === "Ranged" && (
             <OutlinedTextField
               type="number"
               label="Customer POIN Balance MIN"
@@ -364,60 +399,67 @@ const Segmentation: React.FunctionComponent<ISegmentationProps> = ({
                   <InputAdornment position="start">Rp</InputAdornment>
                 ),
               }}
-              value={keywordCreateState.segmentation_customer_poin_balance_min.toString()}
+              value={keywordCreateState.eligibility.segmentation_customer_poin_balance_min.toString()}
               handleChange={(value: number) => {
-                keywordCreate.segmentation_customer_poin_balance_min =
+                keywordCreate.eligibility.segmentation_customer_poin_balance_min =
                   Number(value);
                 if (
-                  keywordCreateState.segmentation_customer_poin_balance_max <
-                  value
+                  keywordCreateState.eligibility
+                    .segmentation_customer_poin_balance_max < value
                 ) {
-                  keywordCreate.segmentation_customer_poin_balance_max =
+                  keywordCreate.eligibility.segmentation_customer_poin_balance_max =
                     Number(value);
                 }
                 setStateTrigger(!stateTrigger);
               }}
             />
           )}
-          {keywordCreateState.segmentation_customer_poin_balance_operator ===
-            "Ranged" && (
+          {keywordCreateState.eligibility
+            .segmentation_customer_poin_balance_operator === "Ranged" && (
             <OutlinedTextField
               type="number"
               label="Customer POIN Balance MAX"
               variant="outlined"
               error={
-                keywordCreateState.segmentation_customer_poin_balance_max <
-                keywordCreateState.segmentation_customer_poin_balance_min
+                keywordCreateState.eligibility
+                  .segmentation_customer_poin_balance_max <
+                keywordCreateState.eligibility
+                  .segmentation_customer_poin_balance_min
                   ? true
                   : false
               }
               helperText={
-                keywordCreateState.segmentation_customer_poin_balance_max <
-                keywordCreateState.segmentation_customer_poin_balance_min
-                  ? `must be greater than or equal to ${keywordCreateState.segmentation_customer_poin_balance_min}`
+                keywordCreateState.eligibility
+                  .segmentation_customer_poin_balance_max <
+                keywordCreateState.eligibility
+                  .segmentation_customer_poin_balance_min
+                  ? `must be greater than or equal to ${keywordCreateState.eligibility.segmentation_customer_poin_balance_min}`
                   : ""
               }
               onBlur={() => {
                 if (
-                  keywordCreateState.segmentation_customer_poin_balance_max <
-                  keywordCreateState.segmentation_customer_poin_balance_min
+                  keywordCreateState.eligibility
+                    .segmentation_customer_poin_balance_max <
+                  keywordCreateState.eligibility
+                    .segmentation_customer_poin_balance_min
                 ) {
-                  keywordCreate.segmentation_customer_poin_balance_max =
-                    keywordCreate.segmentation_customer_poin_balance_min;
+                  keywordCreate.eligibility.segmentation_customer_poin_balance_max =
+                    keywordCreate.eligibility.segmentation_customer_poin_balance_min;
                   setStateTrigger(!stateTrigger);
                 }
               }}
               InputProps={{
                 inputProps: {
-                  min: keywordCreateState.segmentation_customer_poin_balance_min,
+                  min: keywordCreateState.eligibility
+                    .segmentation_customer_poin_balance_min,
                 },
                 startAdornment: (
                   <InputAdornment position="start">Rp</InputAdornment>
                 ),
               }}
-              value={keywordCreateState.segmentation_customer_poin_balance_max.toString()}
+              value={keywordCreateState.eligibility.segmentation_customer_poin_balance_max.toString()}
               handleChange={(value: number) => {
-                keywordCreate.segmentation_customer_poin_balance_max =
+                keywordCreate.eligibility.segmentation_customer_poin_balance_max =
                   Number(value);
                 setStateTrigger(!stateTrigger);
               }}

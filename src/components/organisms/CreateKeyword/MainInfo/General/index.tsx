@@ -71,16 +71,18 @@ const General: React.FunctionComponent<IGeneralProps> = ({
             label="Keyword Group"
             placeholder="Keyword Group"
             variant="outlined"
-            value={keywordCreateState.keyword_parent}
+            value={keywordCreateState.eligibility.keyword_parent}
             handleChange={(value: string) => {
-              keywordCreate.keyword_parent = value;
+              keywordCreate.eligibility.keyword_parent = value;
               setStateTrigger(!stateTrigger);
             }}
           /> */}
           <OutlinedTextField
             label={
               programExperienceOptions.data.find(
-                (e) => e["_id"] === keywordCreateState.program_experience[0]
+                (e) =>
+                  e["_id"] ===
+                  keywordCreateState.eligibility.program_experience[0]
               )?.set_value === "Auction"
                 ? "Keyword Bid Name"
                 : "Keyword Redeem Name"
@@ -88,9 +90,12 @@ const General: React.FunctionComponent<IGeneralProps> = ({
             placeholder="Merdeka2000"
             variant="outlined"
             inputProps={{ maxLength: 16 }}
-            value={keywordCreateState.name}
+            value={keywordCreateState.eligibility.name}
             handleChange={(value: string) => {
-              keywordCreate.name = value.replace(/[^a-zA-Z0-9]/g, "");
+              keywordCreate.eligibility.name = value.replace(
+                /[^a-zA-Z0-9]/g,
+                ""
+              );
               setStateTrigger(!stateTrigger);
             }}
           />
@@ -98,22 +103,23 @@ const General: React.FunctionComponent<IGeneralProps> = ({
             label="Program Name to be Expose"
             placeholder="Program Name to be Expose"
             variant="outlined"
-            value={keywordCreateState.program_title_expose}
+            value={keywordCreateState.eligibility.program_title_expose}
             handleChange={(value: string) => {
-              keywordCreate.program_title_expose = value;
+              keywordCreate.eligibility.program_title_expose = value;
               setStateTrigger(!stateTrigger);
             }}
           />
           <ResponsiveDateTimePicker
             label="Start Period"
             placeholder="Start Period"
-            value={keywordCreateState.start_period}
+            value={keywordCreateState.eligibility.start_period}
             handleChange={(value: string) => {
-              keywordCreate.start_period = value;
+              keywordCreate.eligibility.start_period = value;
               if (
-                Date.parse(keywordCreateState.end_period) <= Date.parse(value)
+                Date.parse(keywordCreateState.eligibility.end_period) <=
+                Date.parse(value)
               ) {
-                keywordCreate.end_period = value;
+                keywordCreate.eligibility.end_period = value;
               }
               setStateTrigger(!stateTrigger);
             }}
@@ -121,10 +127,10 @@ const General: React.FunctionComponent<IGeneralProps> = ({
           <ResponsiveDateTimePicker
             label="End Period"
             placeholder="End Period"
-            minDateTime={keywordCreateState.start_period}
-            value={keywordCreateState.end_period}
+            minDateTime={keywordCreateState.eligibility.start_period}
+            value={keywordCreateState.eligibility.end_period}
             handleChange={(value: string) => {
-              keywordCreate.end_period = value;
+              keywordCreate.eligibility.end_period = value;
               setStateTrigger(!stateTrigger);
             }}
           />
@@ -132,9 +138,9 @@ const General: React.FunctionComponent<IGeneralProps> = ({
             label="POIN Type"
             placeholder="Option"
             options={pointTypeOptions.data}
-            value={keywordCreateState.point_type}
+            value={keywordCreateState.eligibility.point_type}
             handleChange={(value: string) => {
-              keywordCreate.point_type = value;
+              keywordCreate.eligibility.point_type = value;
               setStateTrigger(!stateTrigger);
             }}
           />
@@ -142,37 +148,39 @@ const General: React.FunctionComponent<IGeneralProps> = ({
             label="POIN Value"
             placeholder="Option"
             options={PoinValueOptions}
-            value={keywordCreateState.poin_value}
+            value={keywordCreateState.eligibility.poin_value}
             handleChange={(value: string) => {
-              keywordCreate.poin_value = value;
+              keywordCreate.eligibility.poin_value = value;
               setStateTrigger(!stateTrigger);
             }}
           />
           {programExperienceOptions.data.find(
-            (e) => e["_id"] === keywordCreateState.program_experience[0]
+            (e) =>
+              e["_id"] === keywordCreateState.eligibility.program_experience[0]
           )?.set_value !== "Auction" && (
             <OutlinedTextField
               type="number"
               label="POIN Redeemed"
               variant="outlined"
               InputProps={{ inputProps: { min: 0 } }}
-              value={keywordCreateState.poin_redeemed.toString()}
+              value={keywordCreateState.eligibility.poin_redeemed.toString()}
               handleChange={(value: number) => {
-                keywordCreate.poin_redeemed = Number(value);
+                keywordCreate.eligibility.poin_redeemed = Number(value);
                 setStateTrigger(!stateTrigger);
               }}
             />
           )}
           {programExperienceOptions.data.find(
-            (e) => e["_id"] === keywordCreateState.program_experience[0]
+            (e) =>
+              e["_id"] === keywordCreateState.eligibility.program_experience[0]
           )?.set_value !== "Auction" && (
             <Select
               label="Max Mode"
               placeholder="Option"
               options={MaxModeOptions}
-              value={keywordCreateState.max_mode}
+              value={keywordCreateState.eligibility.max_mode}
               handleChange={(value: string) => {
-                keywordCreate.max_mode = value;
+                keywordCreate.eligibility.max_mode = value;
                 setStateTrigger(!stateTrigger);
               }}
             />
@@ -182,22 +190,23 @@ const General: React.FunctionComponent<IGeneralProps> = ({
             label="Max Redeem Counter"
             variant="outlined"
             InputProps={{ inputProps: { min: 0 } }}
-            value={keywordCreateState.max_redeem_counter.toString()}
+            value={keywordCreateState.eligibility.max_redeem_counter.toString()}
             handleChange={(value: number) => {
-              keywordCreate.max_redeem_counter = Number(value);
+              keywordCreate.eligibility.max_redeem_counter = Number(value);
               setStateTrigger(!stateTrigger);
             }}
           />
           {programExperienceOptions.data.find(
-            (e) => e["_id"] === keywordCreateState.program_experience[0]
+            (e) =>
+              e["_id"] === keywordCreateState.eligibility.program_experience[0]
           )?.set_value !== "Auction" && (
             <Select
               label="Merchandise Keyword"
               placeholder="Option"
               options={BooleanOptions}
-              value={keywordCreateState.merchandise_keyword}
+              value={keywordCreateState.eligibility.merchandise_keyword}
               handleChange={(value: boolean) => {
-                keywordCreate.merchandise_keyword = value;
+                keywordCreate.eligibility.merchandise_keyword = value;
                 setStateTrigger(!stateTrigger);
               }}
             />
@@ -206,20 +215,20 @@ const General: React.FunctionComponent<IGeneralProps> = ({
             label="SMS Masking"
             placeholder="Option"
             options={BooleanOptions}
-            value={keywordCreateState.enable_sms_masking}
+            value={keywordCreateState.eligibility.enable_sms_masking}
             handleChange={(value: boolean) => {
-              keywordCreate.enable_sms_masking = value;
+              keywordCreate.eligibility.enable_sms_masking = value;
               setStateTrigger(!stateTrigger);
             }}
           />
-          {keywordCreateState.enable_sms_masking !== false && (
+          {keywordCreateState.eligibility.enable_sms_masking !== false && (
             <OutlinedTextField
               label="SMS Masking Content"
               placeholder="SMS Masking Content"
               variant="outlined"
-              value={keywordCreateState.sms_masking}
+              value={keywordCreateState.eligibility.sms_masking}
               handleChange={(value: string) => {
-                keywordCreate.sms_masking = value;
+                keywordCreate.eligibility.sms_masking = value;
                 setStateTrigger(!stateTrigger);
               }}
             />
@@ -227,17 +236,19 @@ const General: React.FunctionComponent<IGeneralProps> = ({
           <Select
             label={
               programExperienceOptions.data.find(
-                (e) => e["_id"] === keywordCreateState.program_experience[0]
+                (e) =>
+                  e["_id"] ===
+                  keywordCreateState.eligibility.program_experience[0]
               )?.set_value === "Auction"
                 ? "Auction Phase"
                 : "Keyword Schedule"
             }
             placeholder="Option"
             options={KeywordScheduleTypeOptions}
-            value={keywordCreateState.keyword_schedule_type}
+            value={keywordCreateState.eligibility.keyword_schedule}
             handleChange={(value: string) => {
-              keywordCreate.keyword_schedule_type = value;
-              keywordCreate.keyword_schedule_shift = [
+              keywordCreate.eligibility.keyword_schedule = value;
+              keywordCreate.eligibility.keyword_shift = [
                 {
                   from: new Date(),
                   to: new Date(),
@@ -246,14 +257,14 @@ const General: React.FunctionComponent<IGeneralProps> = ({
               setStateTrigger(!stateTrigger);
             }}
           />
-          {keywordCreateState.keyword_schedule_type === "Shift" && (
+          {keywordCreateState.eligibility.keyword_schedule === "Shift" && (
             <Grid container columns={10}>
               <Grid item xs={4}>
                 <BodyCopy>Shift</BodyCopy>
               </Grid>
               <Grid item xs={6}>
                 <Stack gap="1vw">
-                  {keywordCreate.keyword_schedule_shift.map((_, idx) => (
+                  {keywordCreate.eligibility.keyword_shift.map((_, idx) => (
                     <Grid
                       key={`keywordScheduleShift__item__${idx}`}
                       container
@@ -266,18 +277,20 @@ const General: React.FunctionComponent<IGeneralProps> = ({
                           label="From"
                           placeholder="From"
                           value={
-                            keywordCreateState.keyword_schedule_shift[idx].from
+                            keywordCreateState.eligibility.keyword_shift[idx]
+                              .from
                           }
                           handleChange={(value: any) => {
-                            keywordCreate.keyword_schedule_shift[idx].from =
+                            keywordCreate.eligibility.keyword_shift[idx].from =
                               value;
                             if (
                               Date.parse(
-                                keywordCreateState.keyword_schedule_shift[idx]
-                                  .to
+                                keywordCreateState.eligibility.keyword_shift[
+                                  idx
+                                ].to
                               ) <= Date.parse(value)
                             ) {
-                              keywordCreate.keyword_schedule_shift[idx].to =
+                              keywordCreate.eligibility.keyword_shift[idx].to =
                                 value;
                             }
                             setStateTrigger(!stateTrigger);
@@ -290,13 +303,14 @@ const General: React.FunctionComponent<IGeneralProps> = ({
                           label="To"
                           placeholder="To"
                           minTime={
-                            keywordCreateState.keyword_schedule_shift[idx].from
+                            keywordCreateState.eligibility.keyword_shift[idx]
+                              .from
                           }
                           value={
-                            keywordCreateState.keyword_schedule_shift[idx].to
+                            keywordCreateState.eligibility.keyword_shift[idx].to
                           }
                           handleChange={(value: any) => {
-                            keywordCreate.keyword_schedule_shift[idx].to =
+                            keywordCreate.eligibility.keyword_shift[idx].to =
                               value;
                             setStateTrigger(!stateTrigger);
                           }}
@@ -312,8 +326,9 @@ const General: React.FunctionComponent<IGeneralProps> = ({
                       >
                         <IconButton
                           onClick={() => {
-                            keywordCreate.keyword_schedule_shift.length > 1 &&
-                              keywordCreate.keyword_schedule_shift.splice(
+                            keywordCreate.eligibility.keyword_shift.length >
+                              1 &&
+                              keywordCreate.eligibility.keyword_shift.splice(
                                 idx,
                                 1
                               );
@@ -330,7 +345,7 @@ const General: React.FunctionComponent<IGeneralProps> = ({
                   ))}
                   <Button
                     onClick={() => {
-                      keywordCreate.keyword_schedule_shift.push({
+                      keywordCreate.eligibility.keyword_shift.push({
                         from: new Date(),
                         to: new Date(),
                       });
@@ -349,14 +364,14 @@ const General: React.FunctionComponent<IGeneralProps> = ({
               </Grid>
             </Grid>
           )}
-          {keywordCreateState.keyword_schedule_type === "Daily" && (
+          {keywordCreateState.eligibility.keyword_schedule === "Daily" && (
             <Grid container columns={10}>
               <Grid item xs={4}>
                 <BodyCopy>Daily</BodyCopy>
               </Grid>
               <Grid item xs={6}>
                 <Stack gap="1vw">
-                  {keywordCreate.keyword_schedule_shift.map((_, idx) => (
+                  {keywordCreate.eligibility.keyword_shift.map((_, idx) => (
                     <Grid
                       key={`keywordScheduleShift__item__${idx}`}
                       container
@@ -369,18 +384,20 @@ const General: React.FunctionComponent<IGeneralProps> = ({
                           label="From"
                           placeholder="From"
                           value={
-                            keywordCreateState.keyword_schedule_shift[idx].from
+                            keywordCreateState.eligibility.keyword_shift[idx]
+                              .from
                           }
                           handleChange={(value: any) => {
-                            keywordCreate.keyword_schedule_shift[idx].from =
+                            keywordCreate.eligibility.keyword_shift[idx].from =
                               value;
                             if (
                               Date.parse(
-                                keywordCreateState.keyword_schedule_shift[idx]
-                                  .to
+                                keywordCreateState.eligibility.keyword_shift[
+                                  idx
+                                ].to
                               ) <= Date.parse(value)
                             ) {
-                              keywordCreate.keyword_schedule_shift[idx].to =
+                              keywordCreate.eligibility.keyword_shift[idx].to =
                                 value;
                             }
                             setStateTrigger(!stateTrigger);
@@ -393,13 +410,14 @@ const General: React.FunctionComponent<IGeneralProps> = ({
                           label="To"
                           placeholder="To"
                           minDate={
-                            keywordCreateState.keyword_schedule_shift[idx].from
+                            keywordCreateState.eligibility.keyword_shift[idx]
+                              .from
                           }
                           value={
-                            keywordCreateState.keyword_schedule_shift[idx].to
+                            keywordCreateState.eligibility.keyword_shift[idx].to
                           }
                           handleChange={(value: any) => {
-                            keywordCreate.keyword_schedule_shift[idx].to =
+                            keywordCreate.eligibility.keyword_shift[idx].to =
                               value;
 
                             setStateTrigger(!stateTrigger);
@@ -416,8 +434,9 @@ const General: React.FunctionComponent<IGeneralProps> = ({
                       >
                         <IconButton
                           onClick={() => {
-                            keywordCreate.keyword_schedule_shift.length > 1 &&
-                              keywordCreate.keyword_schedule_shift.splice(
+                            keywordCreate.eligibility.keyword_shift.length >
+                              1 &&
+                              keywordCreate.eligibility.keyword_shift.splice(
                                 idx,
                                 1
                               );
@@ -434,7 +453,7 @@ const General: React.FunctionComponent<IGeneralProps> = ({
                   ))}
                   <Button
                     onClick={() => {
-                      keywordCreate.keyword_schedule_shift.push({
+                      keywordCreate.eligibility.keyword_shift.push({
                         from: new Date(),
                         to: new Date(),
                       });
@@ -453,14 +472,14 @@ const General: React.FunctionComponent<IGeneralProps> = ({
               </Grid>
             </Grid>
           )}
-          {keywordCreateState.keyword_schedule_type === "Hourly" && (
+          {keywordCreateState.eligibility.keyword_schedule === "Hourly" && (
             <Grid container columns={10}>
               <Grid item xs={4}>
                 <BodyCopy>Hourly</BodyCopy>
               </Grid>
               <Grid item xs={6}>
                 <Stack gap="1vw">
-                  {keywordCreate.keyword_schedule_shift.map((_, idx) => (
+                  {keywordCreate.eligibility.keyword_shift.map((_, idx) => (
                     <Grid
                       key={`keywordScheduleShift__item__${idx}`}
                       container
@@ -473,18 +492,20 @@ const General: React.FunctionComponent<IGeneralProps> = ({
                           label="From"
                           placeholder="From"
                           value={
-                            keywordCreateState.keyword_schedule_shift[idx].from
+                            keywordCreateState.eligibility.keyword_shift[idx]
+                              .from
                           }
                           handleChange={(value: any) => {
-                            keywordCreate.keyword_schedule_shift[idx].from =
+                            keywordCreate.eligibility.keyword_shift[idx].from =
                               value;
                             if (
                               Date.parse(
-                                keywordCreateState.keyword_schedule_shift[idx]
-                                  .to
+                                keywordCreateState.eligibility.keyword_shift[
+                                  idx
+                                ].to
                               ) <= Date.parse(value)
                             ) {
-                              keywordCreate.keyword_schedule_shift[idx].to =
+                              keywordCreate.eligibility.keyword_shift[idx].to =
                                 value;
                             }
                             setStateTrigger(!stateTrigger);
@@ -497,13 +518,14 @@ const General: React.FunctionComponent<IGeneralProps> = ({
                           label="To"
                           placeholder="To"
                           minTime={
-                            keywordCreateState.keyword_schedule_shift[idx].from
+                            keywordCreateState.eligibility.keyword_shift[idx]
+                              .from
                           }
                           value={
-                            keywordCreateState.keyword_schedule_shift[idx].to
+                            keywordCreateState.eligibility.keyword_shift[idx].to
                           }
                           handleChange={(value: any) => {
-                            keywordCreate.keyword_schedule_shift[idx].to =
+                            keywordCreate.eligibility.keyword_shift[idx].to =
                               value;
                             setStateTrigger(!stateTrigger);
                           }}
@@ -519,8 +541,9 @@ const General: React.FunctionComponent<IGeneralProps> = ({
                       >
                         <IconButton
                           onClick={() => {
-                            keywordCreate.keyword_schedule_shift.length > 1 &&
-                              keywordCreate.keyword_schedule_shift.splice(
+                            keywordCreate.eligibility.keyword_shift.length >
+                              1 &&
+                              keywordCreate.eligibility.keyword_shift.splice(
                                 idx,
                                 1
                               );
@@ -537,7 +560,7 @@ const General: React.FunctionComponent<IGeneralProps> = ({
                   ))}
                   <Button
                     onClick={() => {
-                      keywordCreate.keyword_schedule_shift.push({
+                      keywordCreate.eligibility.keyword_shift.push({
                         from: new Date(),
                         to: new Date(),
                       });
@@ -560,9 +583,9 @@ const General: React.FunctionComponent<IGeneralProps> = ({
             label="Subsidized Program"
             placeholder="Option"
             options={BooleanOptions}
-            value={keywordCreateState.program_bersubsidi}
+            value={keywordCreateState.eligibility.program_bersubsidi}
             handleChange={(value: boolean) => {
-              keywordCreate.program_bersubsidi = value;
+              keywordCreate.eligibility.program_bersubsidi = value;
               setStateTrigger(!stateTrigger);
             }}
           />
@@ -576,9 +599,9 @@ const General: React.FunctionComponent<IGeneralProps> = ({
                 <InputAdornment position="start">Rp</InputAdornment>
               ),
             }}
-            value={keywordCreateState.total_anggaran.toString()}
+            value={keywordCreateState.eligibility.total_budget.toString()}
             handleChange={(value: number) => {
-              keywordCreate.total_anggaran = Number(value);
+              keywordCreate.eligibility.total_budget = Number(value);
               setStateTrigger(!stateTrigger);
             }}
           />
@@ -587,38 +610,40 @@ const General: React.FunctionComponent<IGeneralProps> = ({
             label="Customer Value"
             variant="outlined"
             InputProps={{ inputProps: { min: 0 } }}
-            value={keywordCreateState.customer_value.toString()}
+            value={keywordCreateState.eligibility.customer_value.toString()}
             handleChange={(value: number) => {
-              keywordCreate.customer_value = Number(value);
+              keywordCreate.eligibility.customer_value = Number(value);
               setStateTrigger(!stateTrigger);
             }}
           />
           {programExperienceOptions.data.find(
-            (e) => e["_id"] === keywordCreateState.program_experience[0]
+            (e) =>
+              e["_id"] === keywordCreateState.eligibility.program_experience[0]
           )?.set_value !== "Auction" && (
             <Select
               label="Multiwhitelist"
               placeholder="Option"
               options={BooleanOptions}
-              value={keywordCreateState.multiwhitelist}
+              value={keywordCreateState.eligibility.multiwhitelist}
               handleChange={(value: boolean) => {
-                keywordCreate.multiwhitelist = value;
+                keywordCreate.eligibility.multiwhitelist = value;
                 setStateTrigger(!stateTrigger);
               }}
             />
           )}
           {programExperienceOptions.data.find(
-            (e) => e["_id"] === keywordCreateState.program_experience[0]
+            (e) =>
+              e["_id"] === keywordCreateState.eligibility.program_experience[0]
           )?.set_value !== "Auction" &&
-            keywordCreateState.multiwhitelist !== false && (
+            keywordCreateState.eligibility.multiwhitelist !== false && (
               <Select
                 label="Multiwhitelist Destination"
                 placeholder="Option"
                 options={programListOptions.data}
                 optionLabel="name"
-                value={keywordCreateState.multiwhitelist_program}
+                value={keywordCreateState.eligibility.multiwhitelist_program}
                 handleChange={(value: string) => {
-                  keywordCreate.multiwhitelist_program = value;
+                  keywordCreate.eligibility.multiwhitelist_program = value;
                   setStateTrigger(!stateTrigger);
                 }}
               />
@@ -627,22 +652,23 @@ const General: React.FunctionComponent<IGeneralProps> = ({
             label="Channel Validation"
             placeholder="Option"
             options={BooleanOptions}
-            value={keywordCreateState.channel_validation}
+            value={keywordCreateState.eligibility.channel_validation}
             handleChange={(value: boolean) => {
-              keywordCreate.channel_validation = value;
+              keywordCreate.eligibility.channel_validation = value;
               setStateTrigger(!stateTrigger);
             }}
           />
-          {keywordCreateState.channel_validation !== false && (
+          {keywordCreateState.eligibility.channel_validation !== false && (
             <Select
+              isRequired={false}
               multiple
               label="Channel List"
               placeholder="Option"
               options={channelOptions.data}
               optionLabel="name"
-              value={keywordCreateState.channel_validation_list}
+              value={keywordCreateState.eligibility.channel_validation_list}
               handleChange={(value: []) => {
-                keywordCreate.channel_validation_list = value;
+                keywordCreate.eligibility.channel_validation_list = value;
                 setStateTrigger(!stateTrigger);
               }}
             />
@@ -653,9 +679,9 @@ const General: React.FunctionComponent<IGeneralProps> = ({
             placeholder="Option"
             options={customerBadgeOptions.data}
             optionLabel="name"
-            value={keywordCreateState.program_experience}
+            value={keywordCreateState.eligibility.program_experience}
             handleChange={(value: []) => {
-              keywordCreate.program_experience = value;
+              keywordCreate.eligibility.program_experience = value;
               setStateTrigger(!stateTrigger);
             }}
           /> */}
