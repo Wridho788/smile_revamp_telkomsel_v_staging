@@ -3,8 +3,9 @@ import {
   IKeywordEligibility,
   ICreateKeyword,
   IKeywordLocationTypeGeneral,
-  INotification,
+  IKeywordBonus,
   IKeywordNotificationInitial,
+  IBonusLuckyDrawInitial,
 } from "./interfaces";
 
 const KeywordShift: IKeywordShift = {
@@ -66,27 +67,18 @@ const KeywordEligibility: IKeywordEligibility = {
   keyword_shift: [KeywordShift],
 };
 
-const Notification: INotification = {
-  code_identifier: "",
-  notification_content: "",
-  start_period: new Date(),
-  end_period: new Date(),
-  notif_type: "",
-  via: "",
+const bonusLuckyDrawInitial: IBonusLuckyDrawInitial = {
+  bonus_type: "lucky_draw",
+  lucky_draw_reguler: true,
+  lucky_draw_allow_inject_coupon: false,
+  lucky_draw_prize: "",
+  stock_location: [],
+  redeem_after_verification: false,
 };
 
 export const CreateKeywordGeneral: ICreateKeyword = {
   eligibility: KeywordEligibility,
-  bonus: [
-    {
-      bonus_type: "telco_postpaid",
-      telco_post_product_name: "telco_post_product_name",
-      telco_post_bid: "telco_post_bid",
-      telco_post_api_config: "telco_post_api_config",
-      telco_post_stock_perlocation: 10,
-      redeem_after_verification: false,
-    },
-  ],
+  bonus: [bonusLuckyDrawInitial],
   notification: [
     {
       code_identifier: "",
@@ -147,6 +139,10 @@ export const KeywordNotificationInitial: IKeywordNotificationInitial[] = [
     follow_period: false,
   },
 ];
+
+export const KeywordBonus: IKeywordBonus = {
+  bonus_type: [],
+};
 
 export const KeywordFirstStep: boolean = false;
 
