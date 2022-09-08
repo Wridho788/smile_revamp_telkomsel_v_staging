@@ -75,7 +75,7 @@ const Merchant: React.FunctionComponent<IMerchantProps> = ({
   };
   const onSelectionChange = (event: any) => {
     const value = event.value;
-    keywordCreate.merchant = value["_id"];
+    keywordCreate.eligibility.merchant = value["_id"];
     setStateTrigger(!stateTrigger);
     setSelectedMerchant(value);
   };

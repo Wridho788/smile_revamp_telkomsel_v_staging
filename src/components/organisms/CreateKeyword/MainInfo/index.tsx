@@ -28,10 +28,10 @@ import {
 import { FilterInitial } from "../../../../redux/utils/initial-general";
 import { useChannelListQuery } from "../../../../redux/features/channel/channel-api-slice";
  import{ CreateKeywordGeneral,
-  IKeywordLocationTypeGeneral,
+  
   KeywordLocationTypeGeneral,
 } from "../initial";
-import { ICreateKeyword } from "../interfaces";
+import { ICreateKeyword,IKeywordLocationTypeGeneral } from "../interfaces";
 import Merchant from "./Merchant";
 import General from "./General";
 import Segmentation from "./Segmentation";
@@ -42,7 +42,7 @@ import Notification from "./Notification";
 interface IMainInfoProps {}
 
 const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
-  const { data: keywordTypeOptions = { data: [] } } = useGetKeywordTypeQuery();
+  // const { data: keywordTypeOptions = { data: [] } } = useGetKeywordTypeQuery();
 
   const keywordCreate = CreateKeywordGeneral;
   const keywordLocationType = KeywordLocationTypeGeneral;
@@ -116,7 +116,7 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
             setStateTrigger={setStateTrigger}
           />
         </Stack>
-        {keywordTypeOptions.data.find(
+        {/* {keywordTypeOptions.data.find(
           (item) => item["_id"] === keywordCreate.keyword_type
         )?.set_value === "Auction and Racing POIN" && <MainInfoAuction />}
         {keywordTypeOptions.data.find(
@@ -130,7 +130,7 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
         )?.set_value === "Direct Redeem" && <MainInfoDirectRedeem />}
         {keywordTypeOptions.data.find(
           (item) => item["_id"] === keywordCreate.keyword_type
-        )?.set_value === "Free Gift" && <MainInfoDonation />}
+        )?.set_value === "Free Gift" && <MainInfoDonation />} */}
       </Stack>
     </Box>
   );

@@ -1,56 +1,53 @@
 import * as React from "react";
-import { Grid, Stack, IconButton, Box, Button } from "@mui/material";
-import DeleteIcon from "@mui/icons-material/Delete";
-import { OutlinedTextField, Select } from "../../../atoms";
-import AddBoxIcon from "@mui/icons-material/AddBox";
-import {
-  useGetBonusTypeQuery,
-  useGetLocationTypeQuery,
-} from "../../../../redux/features/lov/lov-api-slice";
-import { FilterInitial } from "../../../../redux/utils/initial-general";
-import {
-  CreateKeywordGeneral,
-  IKeywordLocationTypeGeneral,
-  KeywordLocationTypeGeneral,
-} from "../initial";
-import { ICreateKeyword } from "../interfaces";
-import { useProductSelectBoxQuery } from "../../../../redux/features/product/product-api-slice";
-import { useLocationTemplateQuery } from "../../../../redux/features/location/location-api-slice";
+import { Box } from "@mui/material";
+// import { Grid, Stack, IconButton, Box, Button } from "@mui/material";
+// import DeleteIcon from "@mui/icons-material/Delete";
+// import { OutlinedTextField, Select } from "../../../atoms";
+// import AddBoxIcon from "@mui/icons-material/AddBox";
+// import {
+//   useGetBonusTypeQuery,
+//   useGetLocationTypeQuery,
+// } from "../../../../redux/features/lov/lov-api-slice";
+// import { FilterInitial } from "../../../../redux/utils/initial-general";
+// import { CreateKeywordGeneral, KeywordLocationTypeGeneral } from "../initial";
+// import { ICreateKeyword, IKeywordLocationTypeGeneral } from "../interfaces";
+// import { useProductSelectBoxQuery } from "../../../../redux/features/product/product-api-slice";
+// import { useLocationTemplateQuery } from "../../../../redux/features/location/location-api-slice";
 
 interface IBonusProps {}
 
 const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
-  const { data: bonusTypeOptions = { data: [] } } = useGetBonusTypeQuery();
-  const { data: bonusLocationTypeOptions = { data: [] } } =
-    useGetLocationTypeQuery();
-  const { data: bonusProductOptions = [] } =
-    useProductSelectBoxQuery(FilterInitial);
-  const { data: bonusLocationOptions = { data: [] } } =
-    useLocationTemplateQuery(FilterInitial);
+  // const { data: bonusTypeOptions = { data: [] } } = useGetBonusTypeQuery();
+  // const { data: bonusLocationTypeOptions = { data: [] } } =
+  //   useGetLocationTypeQuery();
+  // const { data: bonusProductOptions = [] } =
+  //   useProductSelectBoxQuery(FilterInitial);
+  // const { data: bonusLocationOptions = { data: [] } } =
+  //   useLocationTemplateQuery(FilterInitial);
 
-  const keywordCreate = CreateKeywordGeneral;
-  const keywordLocationType = KeywordLocationTypeGeneral;
-  const [keywordCreateState, setKeywordCreateState] =
-    React.useState<ICreateKeyword>(keywordCreate);
-  const [keywordLocationTypeState, setKeywordLocationTypeState] =
-    React.useState<IKeywordLocationTypeGeneral>(keywordLocationType);
-  const [stateTrigger, setStateTrigger] = React.useState<boolean>(false);
+  // const keywordCreate = CreateKeywordGeneral;
+  // const keywordLocationType = KeywordLocationTypeGeneral;
+  // const [keywordCreateState, setKeywordCreateState] =
+  //   React.useState<ICreateKeyword>(keywordCreate);
+  // const [keywordLocationTypeState, setKeywordLocationTypeState] =
+  //   React.useState<IKeywordLocationTypeGeneral>(keywordLocationType);
+  // const [stateTrigger, setStateTrigger] = React.useState<boolean>(false);
 
-  React.useEffect(() => {
-    setKeywordCreateState(keywordCreate);
-  }, [keywordCreate, stateTrigger]);
+  // React.useEffect(() => {
+  //   setKeywordCreateState(keywordCreate);
+  // }, [keywordCreate, stateTrigger]);
 
-  React.useEffect(() => {
-    setKeywordLocationTypeState(keywordLocationType);
-  }, [keywordLocationType, stateTrigger]);
+  // React.useEffect(() => {
+  //   setKeywordLocationTypeState(keywordLocationType);
+  // }, [keywordLocationType, stateTrigger]);
 
-  React.useEffect(() => {
-    console.log(keywordCreate);
-  }, [keywordCreate, stateTrigger]);
+  // React.useEffect(() => {
+  //   console.log(keywordCreate);
+  // }, [keywordCreate, stateTrigger]);
 
   return (
     <Box pt="1vw">
-      <Stack maxWidth={"100%"} spacing="2vw">
+      {/* <Stack maxWidth={"100%"} spacing="2vw">
         {keywordCreate.keyword_bonus.map((_, idx) => (
           <Grid key={`rowItem__${idx}`} container columns={12} px="3vw">
             <Grid
@@ -163,17 +160,6 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
                       setStateTrigger(!stateTrigger);
                     }}
                   />
-                  {/* <OutlinedTextField
-                    label="Payment"
-                    placeholder="Payment"
-                    value={keywordCreateState.keyword_bonus[idx].payment}
-                    handleChange={(value: any) => {
-                      keywordCreate.keyword_bonus[idx].payment = value;
-                      setStateTrigger(!stateTrigger);
-                    }}
-                    variant="outlined"
-                    direction="column"
-                  /> */}
                 </Grid>
 
                 <Grid item xs={4}>
@@ -322,7 +308,7 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
             Add
           </Button>
         </Box>
-      </Stack>
+      </Stack> */}
     </Box>
   );
 };

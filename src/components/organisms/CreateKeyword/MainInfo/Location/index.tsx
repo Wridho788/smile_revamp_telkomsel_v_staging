@@ -3,13 +3,12 @@ import { Grid, Stack } from "@mui/material";
 import { Select, Subtitle } from "../../../../atoms";
 import { useGetLocationTypeQuery } from "../../../../../redux/features/lov/lov-api-slice";
 import { FilterInitial } from "../../../../../redux/utils/initial-general";
-import { ICreateKeyword } from "../../interfaces";
+import { ICreateKeyword, IKeywordLocationTypeGeneral } from "../../interfaces";
 import { BooleanOptions } from "../../options";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { IKeywordLocationTypeGeneral } from "../../initial";
 import { useLocationTemplateQuery } from "../../../../../redux/features/location/location-api-slice";
 
 interface ILocationProps {
@@ -51,13 +50,13 @@ const Location: React.FunctionComponent<ILocationProps> = ({
             label="Eligibility Location"
             placeholder="Option"
             options={BooleanOptions}
-            value={keywordCreateState.eligibility_locations}
+            value={keywordCreateState.eligibility.eligibility_locations}
             handleChange={(value: boolean) => {
-              keywordCreate.eligibility_locations = value;
+              keywordCreate.eligibility.eligibility_locations = value;
               setStateTrigger(!stateTrigger);
             }}
           />
-          {keywordCreateState.eligibility_locations !== false && (
+          {keywordCreateState.eligibility.eligibility_locations !== false && (
             <Select
               label="Location Type"
               placeholder="Option"
@@ -65,7 +64,7 @@ const Location: React.FunctionComponent<ILocationProps> = ({
               value={keywordLocationTypeState.location_type}
               handleChange={(value: string) => {
                 keywordLocationType.location_type = value;
-                keywordCreate.locations = [];
+                keywordCreate.eligibility.locations = [];
                 setStateTrigger(!stateTrigger);
               }}
             />
@@ -86,9 +85,9 @@ const Location: React.FunctionComponent<ILocationProps> = ({
                     ),
                   ]}
                   optionLabel={"name"}
-                  value={keywordCreateState.locations}
+                  value={keywordCreateState.eligibility.locations}
                   handleChange={(value: any) => {
-                    keywordCreate.locations = value;
+                    keywordCreate.eligibility.locations = value;
                     setStateTrigger(!stateTrigger);
                   }}
                 />

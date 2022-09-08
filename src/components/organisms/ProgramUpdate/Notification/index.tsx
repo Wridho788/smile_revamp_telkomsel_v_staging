@@ -37,11 +37,10 @@ const Notification: React.FunctionComponent = () => {
 
     const [poinTypeSuggestion, setPoinTypeSuggestion] = useState('');
     const [stateTrigger, setStateTrigger] = React.useState<boolean>(false);
-    const [listNotification, setListNotification] = React.useState<any>([]);
 
     const changeListNotification = (list: any, i: number, field: string, value: any) => {
         let temp: any = cloneDeep(list);
-        let clone: any = cloneDeep(fetchDetail?.program_notification);
+        let clone: any = cloneDeep(programDetail?.program_notification);
 
         if (typeof temp[`${field}`] === 'string') {
             temp[`${field}`] = value;
@@ -51,7 +50,7 @@ const Notification: React.FunctionComponent = () => {
 
         clone[i] = temp;
         programDetail.program_notification = clone;
-        setListNotification(programDetail.program_notification);
+        setStateTrigger(!stateTrigger);
     }
 
     // TODO: Get Detail Program
@@ -67,6 +66,7 @@ const Notification: React.FunctionComponent = () => {
                 programDetail.program_notification = initial?.program_notification;
                 setStateTrigger(!stateTrigger);
             }
+            setStateTrigger(!stateTrigger);
         }
     }, [initial]);
 
@@ -85,10 +85,10 @@ const Notification: React.FunctionComponent = () => {
             denyButtonText: 'No'
         }).then((res) => {
             const payload: any = { data: [] };
-            listNotification.map((item: any) => {
+            programDetail.program_notification.map((item: any) => {
                payload.data.push({
-                   _id,
-                   via: item.via_detail[0]._id,
+                   _id: item._id,
+                   via: item.via_detail.length ? item.via_detail[0]._id : '',
                    template: item.template,
                    template_content: item.template_content
                })
@@ -96,15 +96,21 @@ const Notification: React.FunctionComponent = () => {
 
             // Confirmed
             if (res.isConfirmed) {
-                updateProgramNotification(payload).then((res: any) => {
-                    if (res?.error) {
-                        Swal.fire(res.error.data.message, "", "warning");
-                    } else {
-                        Swal.fire("Updated Program Data!", "", "success").then(() => {
-                            navigate('/program-management');
-                        });
-                    }
-                });
+                if (programDetail.program_notification.length) {
+                    updateProgramNotification(payload).then((res: any) => {
+                        if (res?.error) {
+                            Swal.fire(res.error.data.message, "", "warning");
+                        } else {
+                            Swal.fire("Updated Program Data!", "", "success").then(() => {
+                                navigate('/program-management');
+                            });
+                        }
+                    });
+                } else {
+                    Swal.fire("Updated Program Data!", "", "success").then(() => {
+                        navigate('/program-management');
+                    });
+                }
             }
 
             // Denied
@@ -177,7 +183,7 @@ const Notification: React.FunctionComponent = () => {
                                                         value={item.via_detail.length ? item.via_detail[0]._id : ''}
                                                         handleChange={(value: string) => {
                                                             changeListNotification(item, i, "via_detail", value);
-                                                            setStateTrigger(!stateTrigger);
+                                                            // setStateTrigger(!stateTrigger);
                                                         }}
                                                     />
                                                     <Select
@@ -200,7 +206,7 @@ const Notification: React.FunctionComponent = () => {
                                                             value={item.template_content}
                                                             handleChange={(value: string) => {
                                                                 changeListNotification(item, i, "template_content", value);
-                                                                setStateTrigger(!stateTrigger);
+                                                                // setStateTrigger(!stateTrigger);
                                                             }}
                                                         />
                                                     </Grid>
