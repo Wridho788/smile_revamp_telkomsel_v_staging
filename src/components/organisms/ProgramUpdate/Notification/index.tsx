@@ -87,8 +87,8 @@ const Notification: React.FunctionComponent = () => {
             const payload: any = { data: [] };
             listNotification.map((item: any) => {
                payload.data.push({
-                   _id,
-                   via: item.via_detail[0]._id,
+                   _id: item.notif_type,
+                   via: item.via_detail.length ? item.via_detail[0]._id : '',
                    template: item.template,
                    template_content: item.template_content
                })
@@ -96,15 +96,21 @@ const Notification: React.FunctionComponent = () => {
 
             // Confirmed
             if (res.isConfirmed) {
-                updateProgramNotification(payload).then((res: any) => {
-                    if (res?.error) {
-                        Swal.fire(res.error.data.message, "", "warning");
-                    } else {
-                        Swal.fire("Updated Program Data!", "", "success").then(() => {
-                            navigate('/program-management');
-                        });
-                    }
-                });
+                if (listNotification.length) {
+                    updateProgramNotification(payload).then((res: any) => {
+                        if (res?.error) {
+                            Swal.fire(res.error.data.message, "", "warning");
+                        } else {
+                            Swal.fire("Updated Program Data!", "", "success").then(() => {
+                                navigate('/program-management');
+                            });
+                        }
+                    });
+                } else {
+                    Swal.fire("Updated Program Data!", "", "success").then(() => {
+                        navigate('/program-management');
+                    });
+                }
             }
 
             // Denied
