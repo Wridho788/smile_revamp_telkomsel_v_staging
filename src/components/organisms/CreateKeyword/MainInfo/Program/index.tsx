@@ -36,24 +36,24 @@ const Program: React.FunctionComponent<IProgramProps> = ({
             (e) => e.program_approval !== ""
           )}
           optionLabel="name"
-          value={keywordCreateState.program_id}
+          value={keywordCreateState.eligibility.program_id}
           handleChange={(value: string) => {
-            keywordCreate.program_id = value;
+            keywordCreate.eligibility.program_id = value;
             setStateTrigger(!stateTrigger);
           }}
         />
-        {keywordCreateState.program_id !== "" && (
+        {keywordCreateState.eligibility.program_id !== "" && (
           <Stack spacing="1vw">
             <BodyCopy color="primary" align="center">
               {`This Keyword must be follow program [${
                 programListOptions.data.find(
-                  (e) => e["_id"] === keywordCreateState.program_id
+                  (e) => e["_id"] === keywordCreateState.eligibility.program_id
                 )?.name
               }] Information`}
             </BodyCopy>
             <Information
               program={programListOptions.data.find(
-                (e) => e["_id"] === keywordCreateState.program_id
+                (e) => e["_id"] === keywordCreateState.eligibility.program_id
               )}
             />
           </Stack>
@@ -82,8 +82,8 @@ const Program: React.FunctionComponent<IProgramProps> = ({
                     }
                     onDelete={(e) => {
                       e.preventDefault();
-                      keywordCreate.program_experience = _without(
-                        [...keywordCreateState.program_experience],
+                      keywordCreate.eligibility.program_experience = _without(
+                        [...keywordCreateState.eligibility.program_experience],
                         value
                       );
                       setStateTrigger(!stateTrigger);
@@ -94,12 +94,14 @@ const Program: React.FunctionComponent<IProgramProps> = ({
               })}
             </Box>
           )}
-          value={keywordCreateState.program_experience}
+          value={keywordCreateState.eligibility.program_experience}
           handleChange={(value: Array<string>) => {
             if (value.length > 0) {
-              keywordCreate.program_experience = [value[value.length - 1]];
+              keywordCreate.eligibility.program_experience = [
+                value[value.length - 1],
+              ];
             } else {
-              keywordCreate.program_experience = value;
+              keywordCreate.eligibility.program_experience = value;
             }
             setStateTrigger(!stateTrigger);
           }}

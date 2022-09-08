@@ -94,7 +94,7 @@ export const keywordSlice = createApi({
 
       // general
       keywordGeneralList: responseHandler("/general"),
-      keywordGeneralCreate: postHandler(baseUrl + "/v3/keyword/general"),
+      keywordGeneralCreate: postHandler(baseUrl + "/v1/keyword"),
       keywordGeneralUpdate: putHandler("/general"),
       keywordGeneralDelete: deleteHandler("/general/"),
 
