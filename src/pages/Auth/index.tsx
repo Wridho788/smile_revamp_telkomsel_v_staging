@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import env from "react-dotenv";
 import { useNavigate } from "react-router-dom";
 
 import { TelkomselLabel } from "../../assets/images"
@@ -11,36 +12,40 @@ import { IAuthSignIn } from "../../redux/features/auth/interface";
 
 import { useSignInMutation } from "../../redux/features/auth/auth-api-slice";
 
+import { useAuth } from "../../config/AuthProvider";
+
 const Auth: React.FunctionComponent = () => {
+    const { setToken }: any = useAuth();
+
     const [username, setUsername] = React.useState<string>("");
     const [password, setPassword] = React.useState<string>("");
-    const [clientId, setClientId] = React.useState<string>("");
-    const [clientSecret, setClientSecret] = React.useState<string>("");
 
     const onHandleUsername = (value: string) => setUsername(value);
     const onHandlePassword = (value: string) => setPassword(value);
-    const onHandleClientId = (value: string) => setClientId(value);
-    const onHandleClientSecret = (value: string) => setClientSecret(value);
 
-    const [signIn, isLoading] = useSignInMutation();
+    const [signIn] = useSignInMutation();
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const navigate = useNavigate();
 
     const onSubmit = () => {
+        setIsLoading(true);
+
         const data: IAuthSignIn = {
             username,
             zpassword: password,
-            client_id: clientId,
-            client_secret: clientSecret
+            client_id: env.REACT_APP_CLIENT_ID,
+            client_secret: env.REACT_APP_CLIENT_SECRET
         };
 
         // For while type "any"
         signIn(data).then((res: any) => {
             if (res?.data) {
-                localStorage.setItem('access_token',res.data.access_token);
-                localStorage.setItem('refresh_token', res.data.refresh_token);
+                setToken('access_token', res.data.access_token);
+                setToken('refresh_token', res.data.refresh_token);
 
-                navigate('/', { replace: true });
+                navigate('/');
+                setIsLoading(false);
             } else if (res.error) {
                 if (typeof res.error.data.message === 'string') {
                     Swal.fire(res.error.data.message, "", "warning");
@@ -90,27 +95,10 @@ const Auth: React.FunctionComponent = () => {
                             type="password"
                             handleChange={onHandlePassword}
                         />
-                        <OutlinedTextField
-                            label="Client ID"
-                            placeholder="Client ID"
-                            value={clientId}
-                            variant={"outlined"}
-                            direction="column"
-                            handleChange={onHandleClientId}
-                        />
-                        <OutlinedTextField
-                            label="Client Secret"
-                            placeholder="Client Secret"
-                            value={clientSecret}
-                            variant={"outlined"}
-                            direction="column"
-                            type="password"
-                            handleChange={onHandleClientSecret}
-                        />
 
                         <Box display="flex" justifyContent="center" paddingY={2}>
                             <Button variant="outlined" onClick={onSubmit} sx={{ paddingY: 1 }} fullWidth>
-                                {!isLoading ? (<CircularProgress size={20} />) : "Login"}
+                                {isLoading ? (<CircularProgress size={20} />) : "Login"}
                             </Button>
                         </Box>
 

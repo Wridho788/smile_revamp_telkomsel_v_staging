@@ -3,19 +3,28 @@
  * Description: Initial authentication in routes "src/config/Routes/index.tsx"
  * **/
 
-import React from "react";
+import React, { useState } from "react";
 
 const AuthContext = React.createContext(null);
 
 /* For While type is "any" */
 const AuthProvider = ({ children }: any) => {
-    let access_token = localStorage.getItem('access_token');
-    let refresh_token = localStorage.getItem('refresh_token');
+    const [accessToken, setAccessToken] = useState<any>('');
+    const [refreshToken, setRefreshToken] = useState<any>('');
+
+    const updateToken = (value: string, key: string): void => {
+        setAccessToken(localStorage.getItem('access_token'));
+        setRefreshToken(localStorage.getItem('refresh_token'));
+
+        if (key === 'refresh_token') setRefreshToken(value);
+        if (key === 'access_token') setAccessToken(value);
+    };
 
     /* For While type is "any" */
     const authentication: any = {
-        access_token,
-        refresh_token
+        access_token: accessToken,
+        refresh_token: refreshToken,
+        setToken: updateToken
     }
 
     return (
