@@ -41,8 +41,8 @@ const Auth: React.FunctionComponent = () => {
         // For while type "any"
         signIn(data).then((res: any) => {
             if (res?.data) {
-                setToken('access_token', res.data.access_token);
-                setToken('refresh_token', res.data.refresh_token);
+                setToken(res.data.access_token, 'access_token');
+                setToken(res.data.refresh_token, 'refresh_token');
 
                 navigate('/');
                 setIsLoading(false);
