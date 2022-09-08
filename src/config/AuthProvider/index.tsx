@@ -9,8 +9,8 @@ const AuthContext = React.createContext(null);
 
 /* For While type is "any" */
 const AuthProvider = ({ children }: any) => {
-    const [accessToken, setAccessToken] = useState<any>('');
-    const [refreshToken, setRefreshToken] = useState<any>('');
+    const [accessToken, setAccessToken] = useState<any>(localStorage.getItem('access_token'));
+    const [refreshToken, setRefreshToken] = useState<any>(localStorage.getItem('refresh_token'));
 
     const updateToken = (value: string, key: string): void => {
         setAccessToken(localStorage.getItem('access_token'));
