@@ -4,6 +4,7 @@
 
 import React, { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { cloneDeep } from "lodash";
 
 import {
     H2,
@@ -46,30 +47,31 @@ import { ProgramDetailInitial } from "../../../../pages/CreateProgram/programIni
 import Swal from "sweetalert2";
 
 const MainInfo: React.FunctionComponent = () => {
-    let programDetail: any = ProgramDetailInitial.data;
-
     const { _id } = useParams();
     const navigate = useNavigate();
 
     // TODO: Get Detail Program
     const { data: fetchDetail, isLoading } = useDetailProgramQuery(_id ?? '');
-    useEffect(() => {
-        programDetail._id = fetchDetail?._id;
-        programDetail.name = fetchDetail?.name || '';
-        programDetail.desc = fetchDetail?.desc || '';
-        programDetail.start_period = fetchDetail?.start_period || new Date();
-        programDetail.end_period = fetchDetail?.end_period || new Date();
-        programDetail.point_type = fetchDetail?.point_type || '';
-        programDetail.program_mechanism = fetchDetail?.program_mechanism || '';
-        programDetail.program_owner = fetchDetail?.program_owner || '';
-        programDetail.program_owner_detail = fetchDetail?.program_owner_detail || '';
-        programDetail.whitelist_counter = fetchDetail?.whitelist_counter || false;
-        programDetail.logic = fetchDetail?.logic || '';
-        programDetail.program_time_zone = fetchDetail?.program_time_zone || '';
-        programDetail.threshold_alarm_expired = fetchDetail?.threshold_alarm_expired || 0;
-        programDetail.threshold_alarm_voucher = fetchDetail?.threshold_alarm_voucher || 0;
-    });
+    let initial: any = fetchDetail, programDetail: any = ProgramDetailInitial.data;
 
+    useEffect(() => {
+        if (initial) {
+            programDetail._id = initial?._id;
+            programDetail.name = initial?.name || '';
+            programDetail.desc = initial?.desc || '';
+            programDetail.start_period = initial?.start_period || new Date();
+            programDetail.end_period = initial?.end_period || new Date();
+            programDetail.point_type = initial?.point_type || '';
+            programDetail.program_mechanism = initial?.program_mechanism || '';
+            programDetail.program_owner = initial?.program_owner || '';
+            programDetail.program_owner_detail = initial?.program_owner_detail || '';
+            programDetail.whitelist_counter = initial?.whitelist_counter || false;
+            programDetail.logic = initial?.logic || '';
+            programDetail.program_time_zone = initial?.program_time_zone || '';
+            programDetail.threshold_alarm_expired = initial?.threshold_alarm_expired || 0;
+            programDetail.threshold_alarm_voucher = initial?.threshold_alarm_voucher || 0;
+        }
+    }, [initial]);
 
     // Owner Detail, Owner, Program Mechanism, Point Type
     const {data: pointTypeOption = {data: []}} = useGetPointTypeQuery();
@@ -84,18 +86,9 @@ const MainInfo: React.FunctionComponent = () => {
     });
 
     const [stateTrigger, setStateTrigger] = React.useState<boolean>(false);
-    const [data, setData] = React.useState<any>(null);
-
-    useEffect(() => {}, [stateTrigger]);
-
     const [updateProgramMainInfo] = useUpdateProgramMainInfoMutation();
 
-    const onChangeProgramMainInfo = (value: any, field: string) => {
-        const temp: any = JSON.parse(JSON.stringify(programDetail));
-        temp[`${field}`] = value;
-
-        setData(temp);
-    }
+    useEffect(() => {}, [stateTrigger]);
 
     const onSave = async () => {
         Swal.fire({
@@ -107,7 +100,7 @@ const MainInfo: React.FunctionComponent = () => {
         }).then((res) => {
             // Confirmed
             if (res.isConfirmed) {
-                updateProgramMainInfo(data).then((res: any) => {
+                updateProgramMainInfo(programDetail).then((res: any) => {
                     if (res?.error) {
                         Swal.fire(res.error.data.message, "", "warning");
                     } else {
@@ -185,7 +178,6 @@ const MainInfo: React.FunctionComponent = () => {
                                         variant={"outlined"}
                                         value={programDetail.name}
                                         handleChange={(value: string) => {
-                                            onChangeProgramMainInfo(value, 'name');
                                             programDetail.name = value;
                                             setStateTrigger(!stateTrigger);
                                         }}
@@ -196,7 +188,6 @@ const MainInfo: React.FunctionComponent = () => {
                                         variant={"outlined"}
                                         value={programDetail.desc}
                                         handleChange={(value: any) => {
-                                            onChangeProgramMainInfo(value, 'desc');
                                             programDetail.desc = value;
                                             setStateTrigger(!stateTrigger);
                                         }}
@@ -209,7 +200,6 @@ const MainInfo: React.FunctionComponent = () => {
                                         placeholder="Start Period"
                                         value={programDetail.start_period}
                                         handleChange={(value: any) => {
-                                            onChangeProgramMainInfo(value, 'start_period');
                                             programDetail.start_period = value;
                                             setStateTrigger(!stateTrigger);
                                         }}
@@ -219,7 +209,6 @@ const MainInfo: React.FunctionComponent = () => {
                                         placeholder="End Period"
                                         value={programDetail.end_period}
                                         handleChange={(value: any) => {
-                                            onChangeProgramMainInfo(value, 'end_period');
                                             programDetail.end_period = value
                                             setStateTrigger(!stateTrigger);
                                         }}
@@ -230,7 +219,6 @@ const MainInfo: React.FunctionComponent = () => {
                                         optionLabel="set_value"
                                         value={programDetail.point_type}
                                         handleChange={(value: any) => {
-                                            onChangeProgramMainInfo(value, 'point_type');
                                             programDetail.point_type = value;
                                             setStateTrigger(!stateTrigger);
                                         }}
@@ -242,7 +230,6 @@ const MainInfo: React.FunctionComponent = () => {
                                         optionLabel="set_value"
                                         value={programDetail.program_mechanism}
                                         handleChange={(value: any) => {
-                                            onChangeProgramMainInfo(value, 'program_mechanism');
                                             programDetail.program_mechanism = value;
                                             setStateTrigger(!stateTrigger);
                                         }}
@@ -254,21 +241,17 @@ const MainInfo: React.FunctionComponent = () => {
                                         optionLabel="set_value"
                                         value={programDetail.program_owner}
                                         handleChange={(value: any) => {
-                                            onChangeProgramMainInfo(value, 'program_owner');
                                             programDetail.program_owner = value;
                                             setStateTrigger(!stateTrigger);
                                         }}
                                         options={ownerOption?.data}
                                     />
-                                    {/*{*/}
-                                    {/*    (programDetail.program_owner) &&*/}
                                     <Select
                                         label="Owner Detail"
                                         placeholder="Option"
                                         optionLabel="name"
                                         value={programDetail.program_owner_detail}
                                         handleChange={(value: any) => {
-                                            onChangeProgramMainInfo(value, 'program_owner_detail');
                                             programDetail.program_owner_detail = value;
                                             setStateTrigger(!stateTrigger);
                                         }}
@@ -280,7 +263,6 @@ const MainInfo: React.FunctionComponent = () => {
                                         placeholder="Option"
                                         value={programDetail.whitelist_counter}
                                         handleChange={(value: any) => {
-                                            onChangeProgramMainInfo(value, 'whitelist_counter');
                                             programDetail.whitelist_counter = value;
                                             setStateTrigger(!stateTrigger);
                                         }}
@@ -292,7 +274,6 @@ const MainInfo: React.FunctionComponent = () => {
                                         placeholder="Option"
                                         value={programDetail.logic}
                                         handleChange={(value: any) => {
-                                            onChangeProgramMainInfo(value, 'logic');
                                             programDetail.logic = value;
                                             setStateTrigger(!stateTrigger);
                                         }}
@@ -304,7 +285,6 @@ const MainInfo: React.FunctionComponent = () => {
                                         placeholder="Option"
                                         value={programDetail.program_time_zone}
                                         handleChange={(value: any) => {
-                                            onChangeProgramMainInfo(value, 'program_time_zone');
                                             programDetail.program_time_zone = value;
                                             setStateTrigger(!stateTrigger);
                                         }}
@@ -316,7 +296,6 @@ const MainInfo: React.FunctionComponent = () => {
                                         placeholder="Option"
                                         value={programDetail.threshold_alarm_expired}
                                         handleChange={(value: any) => {
-                                            onChangeProgramMainInfo(Number(value), 'threshold_alarm_expired');
                                             programDetail.threshold_alarm_expired = Number(value);
                                             setStateTrigger(!stateTrigger);
                                         }}
@@ -329,7 +308,6 @@ const MainInfo: React.FunctionComponent = () => {
                                         placeholder="Threshold Alarm Voucher"
                                         value={programDetail.threshold_alarm_voucher}
                                         handleChange={(value: any) => {
-                                            onChangeProgramMainInfo(Number(value), 'threshold_alarm_voucher');
                                             programDetail.threshold_alarm_voucher = Number(value);
                                             setStateTrigger(!stateTrigger);
                                         }}
