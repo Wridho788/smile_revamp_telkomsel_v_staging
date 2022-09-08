@@ -85,7 +85,10 @@ import { ICreateKeyword } from "./interfaces";
 // };
 
 export const CreateKeywordGeneral: ICreateKeyword = {
+  program_id: "",
+  program_experience: [],
   name: "",
+  program_title_expose: "",
   start_period: new Date(),
   end_period: new Date(),
   keyword_type: "",
@@ -100,9 +103,9 @@ export const CreateKeywordGeneral: ICreateKeyword = {
   poin_value: "",
   poin_redeemed: 0,
   channel_validation: false,
-  enable_corporate: false,
+  customer_type: "RegularOnly",
   channel_validation_list: [],
-  program_title_expose: "",
+  eligibility_locations: false,
   merchant: "",
   merchandise_keyword: false,
   keyword_schedule_type: "",
@@ -117,7 +120,7 @@ export const CreateKeywordGeneral: ICreateKeyword = {
   for_new_redeemer: false,
   max_mode: "",
   max_redeem_counter: 0,
-  program_experience: [],
+  locations: [],
   segmentation_customer_tier: [],
   segmentation_customer_los_operator: "",
   segmentation_customer_los: 0,
@@ -132,8 +135,12 @@ export const CreateKeywordGeneral: ICreateKeyword = {
   segmentation_customer_arpu: 0,
   segmentation_customer_arpu_min: 0,
   segmentation_customer_arpu_max: 0,
-  segmentation_customer_preferences_bcp: "",
   segmentation_employee_numbers: false,
+  segmentation_customer_poin_balance_operator: "",
+  segmentation_customer_poin_balance: 0,
+  segmentation_customer_poin_balance_min: 0,
+  segmentation_customer_poin_balance_max: 0,
+  segmentation_customer_preferences_bcp: "",
   keyword_parent: "",
   keyword_bonus: [
     {
@@ -174,3 +181,5 @@ export interface IKeywordLocationTypeGeneral {
 export const KeywordLocationTypeGeneral: IKeywordLocationTypeGeneral = {
   location_type: "",
 };
+
+export const KeywordFirstStep: boolean = false;

@@ -3,16 +3,18 @@ import { Box } from "@mui/material";
 import { H2, Stepper, StepperPaper } from "../../components";
 import {
   MainInfo,
-  Notification,
+  // Notification,
   Bonus,
-  Summary,
+  // Summary,
 } from "../../components/organisms/CreateKeyword";
 import { KeywordAuctionProvider } from "../../app/context/KeywordAuction/Provider";
 
 const CreateKeyword = () => {
   const [activeStep, setActiveStep] = React.useState<number>(0);
-  const steps = ["Main Info", "Bonus", "Notification"];
-  const stepsItem = [<MainInfo />, <Bonus />, <Notification />];
+  const steps = ["Main Info", "Bonus"];
+  const stepsItem = [<MainInfo />, <Bonus />];
+  // const steps = ["Main Info", "Bonus", "Notification"];
+  // const stepsItem = [<MainInfo />, <Bonus />, <Notification />];
 
   return (
     <KeywordAuctionProvider>

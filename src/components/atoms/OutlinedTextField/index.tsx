@@ -1,4 +1,4 @@
-import {Box, Grid, TextField} from "@mui/material";
+import { Box, Grid, TextField } from "@mui/material";
 import * as React from "react";
 import { BodyCopy } from "../Typography";
 import { IOutlinedTextFieldProps } from "./types";
@@ -8,11 +8,11 @@ const Index: React.FunctionComponent<IOutlinedTextFieldProps> = ({
   placeholder,
   value,
   handleChange,
-  totalColumn = 11,
+  totalColumn = 10,
   leftColumn = 4,
-  rightColumn = 7,
+  rightColumn = 6,
   direction = "row",
-  isRequired=true,
+  isRequired = true,
   ...props
 }) => {
   return (
@@ -29,16 +29,18 @@ const Index: React.FunctionComponent<IOutlinedTextFieldProps> = ({
           <Grid>
             <BodyCopy>{label}</BodyCopy>
           </Grid>
-          {
-              (isRequired) &&
-              <Grid>
-                <BodyCopy color={"red"} sx={{marginLeft:"5px"}}>*</BodyCopy>
-              </Grid>
-          }
+          {isRequired && (
+            <Grid>
+              <BodyCopy color={"red"} sx={{ marginLeft: "5px" }}>
+                *
+              </BodyCopy>
+            </Grid>
+          )}
         </Grid>
       </Grid>
       <Grid item xs={rightColumn} mt={direction === "column" ? "0.3vw" : 0}>
         <TextField
+        required={isRequired}
           value={value}
           onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
             handleChange(event.target.value);

@@ -291,6 +291,28 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
                         setStateTrigger(!stateTrigger);
                     }}
                 />
+
+                <OutlinedTextField
+                    label="Keyword Registration"
+                    placeholder="Keyword Registration"
+                    variant={"outlined"}
+                    value={programData.keyword_registration}
+                    handleChange={(value: any) => {
+                        programData.keyword_registration = value;
+                        setStateTrigger(!stateTrigger);
+                    }}
+                />
+
+                <OutlinedTextField
+                    label="Point Registration"
+                    placeholder="Point Registration"
+                    variant={"outlined"}
+                    value={programData.point_registration}
+                    handleChange={(value: any) => {
+                        programData.point_registration = Number(value);
+                        setStateTrigger(!stateTrigger);
+                    }}
+                />
                 <OutlinedTextField
                     label="Program Name"
                     placeholder="Program Name"
@@ -314,7 +336,6 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
                     rows={4}
                     isRequired={false}
                 />
-
                 <ResponsiveDateTimePicker
                     label="Start Period"
                     placeholder="Start Period"
@@ -327,6 +348,7 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
                 <ResponsiveDateTimePicker
                     label="End Period"
                     placeholder="End Period"
+                    minDateTime={programData.start_period}
                     value={programData.end_period}
                     handleChange={(value: any) => {
                         programData.end_period = value;
@@ -414,7 +436,7 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
                 <Select
                     label="Threshold Alarm Experied"
                     placeholder="Option"
-                    value={programData.threshold_alarm_expired}
+                    value={Number(programData.threshold_alarm_expired)}
                     options={ThresholdAlarmExpiredOption}
                     handleChange={(value: any) => {
                         programData.threshold_alarm_expired = Number(value);

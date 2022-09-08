@@ -11,6 +11,8 @@ import Auth from "./Auth";
 import MerchantManagement from "./MerchantManagement";
 import CustomerManagement from "./CustomerManagement";
 import NotificationManagement from "./NotificationManagement";
+import ProgramMainInfoUpdate from "./ProgramMainInfoUpdate";
+import ProgramNotificationUpdate from "./ProgramNotificationUpdate";
 
 export {
   Option,
@@ -26,4 +28,6 @@ export {
   MerchantManagement,
   CustomerManagement,
   NotificationManagement,
+  ProgramMainInfoUpdate,
+  ProgramNotificationUpdate
 };
