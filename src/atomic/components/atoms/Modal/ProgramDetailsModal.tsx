@@ -219,11 +219,11 @@ const ProgramDetailsModal: FC<IProgramDetailsModalProps> = ({
                   </Grid>
                   <Grid item xs={4}>
                     <Typography sx={fontContent}><b>Start Period</b></Typography>
-                    <Typography sx={fontContent}>{Moment(data.start_period).format("Y-m-d")}</Typography>
+                    <Typography sx={fontContent}>{Moment(data.start_period).format("YYYY-MM-DD")}</Typography>
                   </Grid>
                   <Grid item xs={4}>
                     <Typography sx={fontContent}><b>End Period</b></Typography>
-                    <Typography sx={fontContent}>{Moment(data.end_period).format("Y-m-d")}</Typography>
+                    <Typography sx={fontContent}>{Moment(data.end_period).format("YYYY-MM-DD")}</Typography>
                   </Grid>
                   <Grid item zeroMinWidth xs={4}>
                     <Typography sx={fontContent}><b>Point Type</b></Typography>
