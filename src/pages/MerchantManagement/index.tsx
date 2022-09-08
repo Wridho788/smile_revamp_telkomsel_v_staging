@@ -1,16 +1,12 @@
 import {
-  Autocomplete,
   Box,
   Button,
-  Container,
   Dialog,
   DialogContent,
   DialogTitle,
-  FormControl,
-  OutlinedInput,
+  IconButton,
   Paper,
   Stack,
-  TextareaAutosize,
   TextField,
 } from "@mui/material";
 import React from "react";
@@ -24,54 +20,121 @@ import {
   SmallCopy,
   Title,
 } from "../../components";
-import DataTable, { TableColumn } from "react-data-table-component";
+import { DataTable } from "primereact/datatable";
+import { Column } from "primereact/column";
+import { Toolbar } from "primereact/toolbar";
 import {
   MerchantInitial,
   PartnerInitial,
   TableMerchantDataRows,
 } from "./initial";
-import { Add, VisibilityOutlined } from "@mui/icons-material";
-import { useMerchantManagementListQuery } from "../../redux/features/merchant/merchant-api-slice";
+import {
+  Add,
+  DeleteForeverOutlined,
+  DriveFileRenameOutlineOutlined,
+} from "@mui/icons-material";
+import {
+  useLazyMerchantManagementListQuery,
+  useAddMerchantManagementMutation,
+  useMerchantOutletLinkMutation,
+  useUpdateMerchantManagementMutation,
+  useDeleteMerchantManagementMutation,
+} from "../../redux/features/merchant/merchant-api-slice";
 import { IMerchant } from "../../redux/features/merchant/interface";
 import { usePartnerListQuery } from "../../redux/features/partner/partner-api-slice";
+import Swal from "sweetalert2";
+import { useGetLocationTypeQuery } from "../../redux/features/lov/lov-api-slice";
+import { useLocationTemplateQuery } from "../../redux/features/location/location-api-slice";
+import { useAccountRoleQuery } from "../../redux/features/account/account-api-slice";
+import { useOutletListQuery } from "../../redux/features/outlet/outlet-api-slice";
+import { LocationInitial } from "../CustomerManagement/initial";
+import { RoleInitial, OutletInitial } from "./initial";
 
 const MerchantManagement = () => {
   // ==================== State ==========================
-  const [paginationMerchant, setPaginationMerchant] = React.useState({
-    page: 0,
-    limit: 10,
-  });
+  const [triger, setTriger] = React.useState<boolean>(false);
+  const [loading, setLoading] = React.useState<boolean>(false);
+  const [totalRecords, setTotalRecords] = React.useState<number>(0);
+  const [merchants, setMerchants] = React.useState<IMerchant[]>([]);
+  const [location, setLocation] = React.useState<any[]>([]);
   const [open, setOpen] = React.useState({
     detail: false,
     add: false,
+    edit: false,
+    delete: false,
+    link: false,
   });
-  const [filter, setFilter] = React.useState({
-    company_name: "",
-  });
-  const [queryFilter, setQueryFilter] = React.useState({
-    company_name: "",
-  });
+
   const [merchantDetail, setMerchantDetail] =
     React.useState<IMerchant | null>();
   const [lovPartner, setLovPartner] = React.useState<any[]>([]);
+  const [locationType, setLocationType] = React.useState<string>("");
+  const [initialLink, setInitialLink] = React.useState({
+    merchant: "",
+    outlet: "",
+  });
   const [initialMerchant, setInitialMerchant] = React.useState({
-    partner: "",
-    location: "",
-    pic_role: "",
+    partner_id: "",
+    merchant_name: "",
+    merchant_short_code: "",
+    siup_number: "",
+    location_id: "",
+    zip_code: "",
+    address: "",
+    file_compro: "",
+    pic_name: "",
+    pic_phone: "",
+    pic_email: "",
+    password: "",
+    source_created_at: "",
+    nat_loc: "",
+    approver_1: "",
+    approver_2: "",
+    status_desc_1: "",
+    status_desc_2: "",
+    approver_1_status: "",
+    approver_2_status: "",
+    approver_date_1: "",
+    approver_date_2: "",
+    npwp: "",
+    is_visible: "",
+    ktp: "",
+    pic_ktp: "",
+    bank_name: "",
+    bank_account_name: "",
+    bank_account_number: "",
+    apps_name: "",
+    transaction_id: "",
+    channel: "",
+    id_business_type_1: "",
+    id_business_type_2: "",
+    callback_url: "",
+    origin_data: "",
+  });
+  const [lazyParams, setLazyParams] = React.useState<any>({
+    first: 0,
+    rows: 5,
+    page: 1,
+    sortField: null,
+    sortOrder: null,
+    filters: {
+      merchant_name: { value: "", matchMode: "contains" },
+      partner_id: { value: "", matchMode: "contains" },
+      pic_name: { value: "", matchMode: "contains" },
+      "poin_created_by_detail.first_name": { value: "", matchMode: "contains" },
+    },
   });
 
   // ==================== Fetching Data ==================
 
-  const {
-    data: merchantList = { data: [MerchantInitial] },
-    isError: customerError,
-    isLoading: loadingCustomer,
-  } = useMerchantManagementListQuery({
-    skip: paginationMerchant.page,
-    limit: paginationMerchant.limit,
-    filter: `{"company_name":"${queryFilter.company_name}"}`,
-    sort: "{}",
-  });
+  const [
+    getMerchantList,
+    {
+      data: merchantList = { data: [MerchantInitial] },
+      isError: customerError,
+      isLoading: loadingCustomer,
+    },
+  ] = useLazyMerchantManagementListQuery();
 
   const { data: partnerList = { data: [PartnerInitial] } } =
     usePartnerListQuery({
@@ -80,13 +143,78 @@ const MerchantManagement = () => {
       filter: `{}`,
       sort: "{}",
     });
+  const { data: locationTypeList = { data: [PartnerInitial] } } =
+    useGetLocationTypeQuery();
+  const { data: locationList = { data: [LocationInitial] } } =
+    useLocationTemplateQuery({
+      skip: 0,
+      limit: 10,
+      filter: `{"type": "${locationType}"}`,
+      sort: "{}",
+    });
+  const { data: picRole = { data: [RoleInitial] } } = useAccountRoleQuery({
+    skip: 0,
+    limit: 10,
+    filter: `{}`,
+    sort: "{}",
+  });
+  const { data: outletList = { payload: { data: [OutletInitial] } } }: any =
+    useOutletListQuery({
+      lazyEvent: JSON.stringify({
+        first: 0,
+        rows: 10,
+        sortField: null,
+        sortOrder: null,
+        filters: {},
+      }),
+    });
+
+  const [linkMerchantOutlet, { isLoading: loadingLink }] =
+    useMerchantOutletLinkMutation();
+  const [addMerchant, { isLoading: loadingAdd }] =
+    useAddMerchantManagementMutation();
+  const [updateMerchant, { isLoading: loadingUpdate }] =
+    useUpdateMerchantManagementMutation();
+  const [deleteMerchant, { isLoading: loadingDelete }] =
+    useDeleteMerchantManagementMutation();
 
   // ==================== Spreading State ================
   const dataMerchant = merchantList.data;
+
+  const dataMerchantList = merchants.map((item: any) => {
+    let newItem: any = {};
+    newItem["_id"] = item._id;
+    newItem["name"] = item.merchant_name;
+    return newItem;
+  });
+  const dataOutletList = outletList.payload.data.map((item: any) => {
+    let newItem: any = {};
+    newItem["_id"] = item._id;
+    newItem["name"] = item.outlet_name;
+    return newItem;
+  });
   const dataPartner = partnerList.data.map((item: any) => {
     let newItem: any = {};
     newItem["_id"] = item._id;
     newItem["name"] = item.partner_name;
+    return newItem;
+  });
+  const dataLocationType = locationTypeList.data.map((item: any) => {
+    let newItem: any = {};
+    newItem["_id"] = item._id;
+    newItem["name"] = item.set_value;
+    return newItem;
+  });
+  const dataLocation = locationList.data.map((item: any) => {
+    let newItem: any = {};
+    newItem["_id"] = item._id;
+    newItem["name"] = item.name;
+    return newItem;
+  });
+  const dataRole = picRole.data.map((item: any) => {
+    let newItem: any = {};
+    newItem["_id"] = item._id;
+    newItem["name"] = item.name;
     return newItem;
   });
 
@@ -100,129 +228,224 @@ const MerchantManagement = () => {
     setMerchantDetail(merchantShow ? merchantShow[0] : null);
   };
 
-  const handleSearch = (e: any) => {
-    setFilter({ ...filter, company_name: e.target.value });
-    setTimeout(
-      () => setQueryFilter({ ...queryFilter, company_name: e.target.value }),
-      1000
+  //   ================== side effect ====================
+  //   ===================================================
+  let loadLazyTimeout: any = null;
+  React.useEffect(() => {
+    loadLazyData();
+  }, [lazyParams, triger]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  //   ================== Load Merchant ==================
+  //   ===================================================
+  const loadLazyData = () => {
+    setLoading(true);
+
+    if (loadLazyTimeout) {
+      clearTimeout(loadLazyTimeout);
+    }
+
+    //imitate delay of a backend call
+    loadLazyTimeout = setTimeout(async () => {
+      const { data }: any = await getMerchantList({
+        lazyEvent: JSON.stringify(lazyParams),
+      });
+      setMerchants(data.payload.data);
+      setTotalRecords(data.payload.totalRecords);
+      setLoading(false);
+    }, Math.random() * 1000 + 250);
+  };
+
+  //*================ Event Handler =================
+  const onClearForm = () => {
+    setInitialMerchant({
+      partner_id: "",
+      merchant_name: "",
+      merchant_short_code: "",
+      siup_number: "",
+      location_id: "",
+      zip_code: "",
+      address: "",
+      file_compro: "",
+      pic_name: "",
+      pic_phone: "",
+      pic_email: "",
+      password: "",
+      source_created_at: "",
+      nat_loc: "",
+      approver_1: "",
+      approver_2: "",
+      status_desc_1: "",
+      status_desc_2: "",
+      approver_1_status: "",
+      approver_2_status: "",
+      approver_date_1: "",
+      approver_date_2: "",
+      npwp: "",
+      is_visible: "",
+      ktp: "",
+      pic_ktp: "",
+      bank_name: "",
+      bank_account_name: "",
+      bank_account_number: "",
+      apps_name: "",
+      transaction_id: "",
+      channel: "",
+      id_business_type_1: "",
+      id_business_type_2: "",
+      callback_url: "",
+      origin_data: "",
+    });
+  };
+  const onPage = (event: any) => {
+    setLazyParams(event);
+  };
+
+  const onSort = (event: any) => {
+    setLazyParams(event);
+  };
+
+  const onFilter = (event: any) => {
+    event["first"] = 0;
+
+    setLazyParams(event);
+  };
+
+  const onRowSelect = (event: any) => {
+    setOpen({ ...open, detail: true });
+    setMerchantDetail(event.data);
+  };
+
+  const onChange = (e: any) => {
+    setInitialMerchant({ ...initialMerchant, [e.target.name]: e.target.value });
+  };
+
+  const onAddMerchant = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    await addMerchant(initialMerchant);
+    setTriger((prev) => !prev);
+    onClearForm();
+    setOpen({ ...open, add: false });
+  };
+
+  const onShowUpdateForm = async (data: typeof MerchantInitial) => {
+    setOpen({ ...open, edit: true });
+    setMerchantDetail(data);
+    setInitialMerchant(data as any);
+  };
+  const onShowDeleteDialog = async (data: typeof MerchantInitial) => {
+    setOpen({ ...open, delete: true });
+    setMerchantDetail(data);
+  };
+  const onUpdateMerchant = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const data = {
+      _id: merchantDetail?._id,
+      partner_id: initialMerchant.partner_id,
+      merchant_name: initialMerchant.merchant_name,
+      merchant_short_code: initialMerchant.merchant_short_code,
+      siup_number: initialMerchant.siup_number,
+      location_id: initialMerchant.location_id,
+      zip_code: initialMerchant.zip_code,
+      address: initialMerchant.address,
+      file_compro: initialMerchant.file_compro,
+      pic_name: initialMerchant.pic_name,
+      pic_phone: initialMerchant.pic_phone,
+      pic_email: initialMerchant.pic_email,
+      password: initialMerchant.password,
+      npwp: initialMerchant.npwp,
+      pic_ktp: initialMerchant.pic_ktp,
+      bank_name: initialMerchant.bank_name,
+      bank_account_name: initialMerchant.bank_account_name,
+      bank_account_number: initialMerchant.bank_account_number,
+    };
+    await updateMerchant(data);
+    setTriger((prev) => !prev);
+    onClearForm();
+    console.log(data);
+    setOpen({ ...open, edit: false });
+  };
+
+  const onDeleteMerchant = async (data: typeof merchantDetail) => {
+    Swal.fire({
+      title: "Do you want to delete data?",
+      showDenyButton: true,
+      confirmButtonText: `Delete`,
+      denyButtonText: `Don't Delete`,
+    }).then(async (result) => {
+      /* Read more about isConfirmed, isDenied below */
+      if (result.isConfirmed) {
+        deleteMerchant(data ? data._id : "");
+        await Swal.fire("Deleted!", "", "success");
+        setTriger((prev) => !prev);
+      } else if (result.isDenied) {
+        Swal.fire("Data are not deleted", "", "info");
+      }
+    });
+  };
+
+  const onLinkedMerchantOutlet = async (
+    e: React.FormEvent<HTMLFormElement>
+  ) => {
+    e.preventDefault();
+    await linkMerchantOutlet(initialLink);
+    setInitialLink({
+      merchant: "",
+      outlet: "",
+    });
+    setOpen({ ...open, link: false });
+  };
+
+  //============================== Templating for Prime Datatable =================================
+  //===============================================================================================
+  const leftToolbarTemplate = () => {
+    return (
+      <React.Fragment>
+        <Button
+          sx={{ minWidth: "100px", backgroundColor: "#7B61FF" }}
+          // icon="pi pi-plus"
+          className="p-button-success mr-2"
+          variant="contained"
+          startIcon={<Add />}
+          onClick={() => setOpen({ ...open, add: true })}
+        >
+          Add Merchant
+        </Button>
+        <Gap width={10} height={0} />
+        <Button
+          sx={{
+            minWidth: "100px",
+            backgroundColor: "#83BB57",
+            "&:hover": { backgroundColor: "#83BB57" },
+          }}
+          // icon="pi pi-plus"
+          className="p-button-success mr-2"
+          variant="contained"
+          onClick={() => setOpen({ ...open, link: true })}
+        >
+          Link Merchant To Outlet
+        </Button>
+      </React.Fragment>
     );
   };
-  // ================= initial Table Column ======================
-  const TableColumnCustomers: TableColumn<TableMerchantDataRows<any>>[] = [
-    {
-      name: "Company Name",
-      selector: (row) => row.company_name,
-    },
-    {
-      name: "Partner Code",
-      selector: (row) => row.partner_code,
-    },
-    {
-      name: "Partner ID",
-      selector: (row) => row.partner_id,
-    },
-    {
-      name: "Pic Name",
-      selector: (row) => row.pic_name,
-    },
-    {
-      name: "Partner Status",
-      selector: (row) => row.partner_status,
-    },
-    {
-      name: "Action",
-      ignoreRowClick: true,
-      allowOverflow: true,
-      button: true,
-      cell: (row) => (
-        <VisibilityOutlined
-          sx={{ cursor: "pointer" }}
-          onClick={() => handleShowMerchant(row)}
-        />
-      ),
-    },
-  ];
 
-  const top100Films = [
-    { name: "The Shawshank Redemption", year: 1994 },
-    { name: "The Godfather", year: 1972 },
-    { name: "The Godfather: Part II", year: 1974 },
-    { name: "The Dark Knight", year: 2008 },
-    { name: "12 Angry Men", year: 1957 },
-    { name: "Schindler's List", year: 1993 },
-    { name: "Pulp Fiction", year: 1994 },
-    {
-      name: "The Lord of the Rings: The Return of the King",
-      year: 2003,
-    },
-    { name: "The Good, the Bad and the Ugly", year: 1966 },
-    { name: "Fight Club", year: 1999 },
-    {
-      name: "The Lord of the Rings: The Fellowship of the Ring",
-      year: 2001,
-    },
-  ];
-
-  console.log(dataPartner);
-
-  //====================== Memo for Searching component ==========================
-  const subHeaderComponentMemo = React.useMemo(() => {
+  const actionBodyTemplate = (rowData: any) => {
     return (
-      <Box
-        sx={{ display: "flex", width: "100%", justifyContent: "space-between" }}
-      >
-        <div>
-          <FormControl
-            sx={{
-              width: "25ch",
-              "& .MuiInputBase-root": {
-                borderRadius: "4px",
-              },
-            }}
-          >
-            <OutlinedInput
-              name="msisdn"
-              value={filter.company_name}
-              onChange={handleSearch}
-              sx={{
-                "& .MuiInputBase-input": {
-                  padding: "5px 10px",
-                },
-              }}
-              placeholder="Search"
-            />
-          </FormControl>
-          <Button
-            sx={{
-              marginLeft: 3,
-              minWidth: "100px",
-              backgroundColor: "#7B61FF",
-            }}
-            variant="contained"
-            startIcon={<Add />}
-            onClick={() => setOpen({ ...open, add: true })}
-          >
-            <PreTitle>Add Merchant</PreTitle>
-          </Button>
-          <Button
-            sx={{
-              marginLeft: 3,
-              minWidth: "100px",
-              backgroundColor: "#83BB57",
-              "&:hover": {
-                backgroundColor: "#83BB57",
-              },
-            }}
-            variant="contained"
-            onClick={() => setOpen({ ...open, add: true })}
-          >
-            <PreTitle>Import Merchant</PreTitle>
-          </Button>
-        </div>
-      </Box>
+      <React.Fragment>
+        <IconButton
+          sx={{ backgroundColor: "#83BB57", color: "#FFF" }}
+          onClick={() => onShowUpdateForm(rowData)}
+        >
+          <DriveFileRenameOutlineOutlined />
+        </IconButton>
+        <IconButton
+          sx={{ backgroundColor: "#ED0226", color: "#FFF" }}
+          onClick={() => onDeleteMerchant(rowData)}
+        >
+          <DeleteForeverOutlined />
+        </IconButton>
+      </React.Fragment>
     );
-  }, [filter.company_name]);
-
+  };
   return (
     <DrawerNav>
       <Box
@@ -236,29 +459,75 @@ const MerchantManagement = () => {
         <Gap width={0} height={20} />
         <Box>
           <Paper>
-            <Container>
+            <div className="card">
+              <Toolbar left={leftToolbarTemplate} />
               <DataTable
-                columns={TableColumnCustomers}
-                data={dataMerchant}
-                highlightOnHover
-                pagination
-                paginationServer
-                paginationTotalRows={50}
-                paginationPerPage={paginationMerchant.limit}
-                subHeaderComponent={subHeaderComponentMemo}
-                paginationComponentOptions={{
-                  noRowsPerPage: true,
-                }}
-                onChangePage={(page) =>
-                  setPaginationMerchant({ ...paginationMerchant, page })
-                }
-                subHeader
-              />
-            </Container>
+                value={merchants}
+                lazy
+                filterDisplay="row"
+                responsiveLayout="scroll"
+                dataKey="id"
+                paginator
+                first={lazyParams.first}
+                rows={10}
+                totalRecords={totalRecords}
+                onPage={onPage}
+                onSort={onSort}
+                onFilter={onFilter}
+                filters={lazyParams.filters}
+                loading={loading}
+                scrollable
+                scrollDirection="both"
+                selectionMode="single"
+                onRowSelect={onRowSelect}
+              >
+                <Column
+                  footer="Merchant Name"
+                  header="Merchant Name"
+                  field="merchant_name"
+                  style={{ flexGrow: 1, flexBasis: "250px" }}
+                  sortable
+                  filter
+                  filterPlaceholder="Search by merchant name"
+                />
+                <Column
+                  footer="PIC Name"
+                  header="PIC Name"
+                  field="pic_name"
+                  style={{ flexGrow: 1, flexBasis: "250px" }}
+                  sortable
+                  filter
+                  filterPlaceholder="Search by pic name"
+                />
+                <Column
+                  footer="PIC Email"
+                  header="PIC Email"
+                  field="pic_email"
+                  style={{ flexGrow: 1, flexBasis: "250px" }}
+                  sortable
+                  filter
+                  filterPlaceholder="Search by pic email"
+                />
+                <Column
+                  footer="Created By"
+                  header="Created By"
+                  field="poin_created_by_detail.first_name"
+                  style={{ flexGrow: 1, flexBasis: "250px" }}
+                  filter
+                  filterPlaceholder="Search by created"
+                />
+                <Column
+                  body={actionBodyTemplate}
+                  exportable={false}
+                  style={{ minWidth: "8rem" }}
+                />
+              </DataTable>
+            </div>
           </Paper>
         </Box>
       </Box>
-      {/* Show Detail Customer */}
+      {/*======================= Dialog of Detail Merchant ========================== */}
+      {/*============================================================================ */}
       <Dialog
         fullWidth
         open={open.detail}
@@ -281,260 +550,530 @@ const MerchantManagement = () => {
         </DialogContent>
       </Dialog>
 
-      {/* Dialog of Add Merchant */}
+      {/*======================= Dialog of Add Merchant ============================= */}
+      {/*============================================================================ */}
       <Dialog
         fullWidth
         open={open.add}
         onClose={() => setOpen({ ...open, add: false })}
       >
         <DialogTitle variant="h5">ADD MERCHANT</DialogTitle>
-        <Stack sx={{ display: "flex" }} px="3vw">
-          <Box sx={{ display: "flex" }}>
-            {/* <Autocomplete
-              fullWidth
-              freeSolo
-              disableClearable
-              id="combo-box-demo"
-              options={top100Films.map((option) => option.name)}
-              // sx={{ padding: "2px" }}
-              value={""}
-              onChange={(e: any, newValue: string) => {}}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  onChange={() => {}}
-                  name="region"
-                  label="Region"
-                />
-              )}
-            /> */}
-            <InputSearchable
-              required
-              label="Partner"
-              options={top100Films}
-              onChange={(e: any, newValue: any) =>
-                setInitialMerchant({
-                  ...initialMerchant,
-                  partner: newValue.name,
-                })
-              }
-            />
-          </Box>
-          <Gap width={0} height={20} />
-          <Box sx={{ display: "flex" }}>
-            <TextField
-              size="small"
-              fullWidth
-              label="Merchant Name"
-              value={""}
-              name="merchant_name"
-              onChange={() => {}}
-              required
-            />
-            <Gap width={50} height={0} />
-            <TextField
-              size="small"
-              fullWidth
-              label="SIUP"
-              value={""}
-              name="siup"
-              onChange={() => {}}
-              required
-            />
-          </Box>
-          <Gap width={0} height={20} />
-          <Box sx={{ display: "flex" }}>
-            <TextField
-              size="small"
-              fullWidth
-              label="Merchant Short Code"
-              value={""}
-              name="merchant_short_code"
-              onChange={() => {}}
-              required
-            />
-            <Gap width={50} height={0} />
-            <TextField
-              size="small"
-              fullWidth
-              label="Password"
-              value={""}
-              name="password"
-              onChange={() => {}}
-              required
-            />
-          </Box>
-          <Gap width={0} height={20} />
-          <Box sx={{ display: "flex" }}>
-            <InputSearchable
-              required
-              label="Location"
-              options={top100Films}
-              onChange={(e: any, newValue: any) =>
-                setInitialMerchant({
-                  ...initialMerchant,
-                  location: newValue.name,
-                })
-              }
-            />
-            <Gap width={50} height={0} />
-            <TextField
-              size="small"
-              fullWidth
-              label="ZIP Code"
-              value={""}
-              name="zip_code"
-              onChange={() => {}}
-              required
-            />
-          </Box>
-          <Gap width={0} height={20} />
-          <Box sx={{ display: "flex" }}>
-            <TextField
-              fullWidth
-              id="outlined-multiline-static"
-              label="Notification Content"
-              multiline
-              rows={4}
-              name="notif_content"
-              onChange={() => {}}
-              value={""}
-              required
-            />
-          </Box>
-          <Gap width={0} height={20} />
-          <Box sx={{ display: "flex" }}>
-            <TextField
-              size="small"
-              fullWidth
-              label="Website"
-              value={""}
-              name="website"
-              onChange={() => {}}
-              required
-            />
-            <Gap width={50} height={0} />
-            <TextField
-              size="small"
-              fullWidth
-              label="NPWP"
-              value={""}
-              name="npwp"
-              onChange={() => {}}
-              required
-            />
-          </Box>
-          <Gap width={0} height={20} />
-          <Title title="PIC" />
-          <Gap width={0} height={20} />
-          <Box sx={{ display: "flex" }}>
-            <InputSearchable
-              required
-              label="PIC Role"
-              options={top100Films}
-              onChange={(e: any, newValue: any) =>
-                setInitialMerchant({
-                  ...initialMerchant,
-                  pic_role: newValue.name,
-                })
-              }
-            />
-            <Gap width={50} height={0} />
-            <TextField
-              size="small"
-              fullWidth
-              label="PIC Name"
-              value={""}
-              name="pic_name"
-              onChange={() => {}}
-              required
-            />
-          </Box>
-          <Gap width={0} height={20} />
-          <Box sx={{ display: "flex" }}>
-            <TextField
-              size="small"
-              fullWidth
-              label="PIC Phone"
-              value={""}
-              name="pic_phone"
-              onChange={() => {}}
-              required
-            />
-            <Gap width={50} height={0} />
-            <TextField
-              size="small"
-              fullWidth
-              label="PIC Email"
-              value={""}
-              name="pic_email"
-              onChange={() => {}}
-              required
-            />
-          </Box>
-          <Gap width={0} height={20} />
-          <Box sx={{ display: "flex" }}>
-            <TextField
-              sx={{ width: "100%" }}
-              size="small"
-              fullWidth
-              label="PIC KTP"
-              value={""}
-              name="pic_ktp"
-              onChange={() => {}}
-              required
-            />
-            <Gap width={50} height={0} />
-            <Box sx={{ width: "100%" }}></Box>
-          </Box>
-          <Gap width={0} height={20} />
-          <Title title="Bank" />
-          <Gap width={0} height={20} />
-          <Box sx={{ display: "flex" }}>
-            <TextField
-              size="small"
-              fullWidth
-              label="Bank Name"
-              value={""}
-              name="bank_name"
-              onChange={() => {}}
-              required
-            />
-            <Gap width={50} height={0} />
-            <TextField
-              size="small"
-              fullWidth
-              label="Bank Account Name"
-              value={""}
-              name="bank_account_name"
-              onChange={() => {}}
-              required
-            />
-          </Box>
-          <Gap width={0} height={20} />
-          <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-            <TextField
-              sx={{ width: "100%" }}
-              size="small"
-              fullWidth
-              label="ZIP Code"
-              value={""}
-              name="zip_code"
-              onChange={() => {}}
-              required
-            />
-            <Gap width={50} height={0} />
-            <Box sx={{ width: "100%" }}></Box>
-          </Box>
-          <Gap width={0} height={20} />
-          <Box sx={{ display: "flex" }}>
-            <Button variant="contained" sx={{ width: "100%" }}>
-              SAVE
-            </Button>
-          </Box>
-          <Gap width={0} height={20} />
-        </Stack>
+        <form onSubmit={onAddMerchant}>
+          <Stack sx={{ display: "flex" }} px="3vw">
+            <Box sx={{ display: "flex" }}>
+              <InputSearchable
+                required
+                label="Partner"
+                options={dataPartner}
+                onChange={(e: any, newValue: any) =>
+                  setInitialMerchant({
+                    ...initialMerchant,
+                    partner_id: newValue._id,
+                  })
+                }
+              />
+            </Box>
+            <Gap width={0} height={20} />
+            <Box sx={{ display: "flex" }}>
+              <TextField
+                size="small"
+                fullWidth
+                label="Merchant Name"
+                value={initialMerchant.merchant_name}
+                name="merchant_name"
+                onChange={onChange}
+                required
+              />
+              <Gap width={50} height={0} />
+              <TextField
+                size="small"
+                fullWidth
+                label="SIUP"
+                value={initialMerchant.siup_number}
+                name="siup_number"
+                onChange={onChange}
+                required
+              />
+            </Box>
+            <Gap width={0} height={20} />
+            <Box sx={{ display: "flex" }}>
+              <TextField
+                size="small"
+                fullWidth
+                label="Merchant Short Code"
+                value={initialMerchant.merchant_short_code}
+                name="merchant_short_code"
+                onChange={onChange}
+                required
+              />
+              <Gap width={50} height={0} />
+              <TextField
+                size="small"
+                fullWidth
+                label="Password"
+                value={initialMerchant.password}
+                name="password"
+                onChange={onChange}
+                required
+              />
+            </Box>
+            <Gap width={0} height={20} />
+            <Box sx={{ display: "flex" }}>
+              <InputSearchable
+                required
+                label="Location Type"
+                options={dataLocationType}
+                onChange={(e: any, newValue: any) =>
+                  setLocationType(newValue._id)
+                }
+              />
+              <Gap width={50} height={0} />
+              <InputSearchable
+                required
+                label="Location"
+                options={dataLocation}
+                onChange={(e: any, newValue: any) =>
+                  setInitialMerchant({
+                    ...initialMerchant,
+                    location_id: newValue._id,
+                  })
+                }
+              />
+            </Box>
+            <Gap width={0} height={20} />
+            <Box sx={{ display: "flex" }}>
+              <TextField
+                size="small"
+                fullWidth
+                label="ZIP Code"
+                value={initialMerchant.zip_code}
+                name="zip_code"
+                onChange={onChange}
+                required
+              />
+            </Box>
+            <Gap width={0} height={20} />
+            <Box sx={{ display: "flex" }}>
+              <TextField
+                fullWidth
+                id="outlined-multiline-static"
+                label="Address"
+                multiline
+                rows={4}
+                name="address"
+                onChange={onChange}
+                value={initialMerchant.address}
+                required
+              />
+            </Box>
+            <Gap width={0} height={20} />
+            <Box sx={{ display: "flex" }}>
+              <TextField
+                size="small"
+                fullWidth
+                label="Website"
+                value={initialMerchant.file_compro}
+                name="file_compro"
+                onChange={onChange}
+                required
+              />
+              <Gap width={50} height={0} />
+              <TextField
+                size="small"
+                fullWidth
+                label="NPWP"
+                value={initialMerchant.npwp}
+                name="npwp"
+                onChange={onChange}
+                required
+              />
+            </Box>
+            <Gap width={0} height={20} />
+            <Title title="PIC" />
+            <Gap width={0} height={20} />
+            <Box sx={{ display: "flex" }}>
+              <TextField
+                size="small"
+                fullWidth
+                label="PIC Name"
+                value={initialMerchant.pic_name}
+                name="pic_name"
+                onChange={onChange}
+                required
+              />
+              <Gap width={50} height={0} />
+              <TextField
+                size="small"
+                fullWidth
+                label="PIC Email"
+                value={initialMerchant.pic_email}
+                name="pic_email"
+                onChange={onChange}
+                required
+              />
+            </Box>
+            <Gap width={0} height={20} />
+            <Box sx={{ display: "flex" }}>
+              <TextField
+                size="small"
+                fullWidth
+                label="PIC Phone"
+                value={initialMerchant.pic_phone}
+                name="pic_phone"
+                onChange={onChange}
+                required
+              />
+              <Gap width={50} height={0} />
+
+              <TextField
+                sx={{ width: "100%" }}
+                size="small"
+                fullWidth
+                label="PIC KTP"
+                value={initialMerchant.pic_ktp}
+                name="pic_ktp"
+                onChange={onChange}
+                required
+              />
+            </Box>
+            <Gap width={0} height={20} />
+            <Title title="Bank" />
+            <Gap width={0} height={20} />
+            <Box sx={{ display: "flex" }}>
+              <TextField
+                size="small"
+                fullWidth
+                label="Bank Name"
+                value={initialMerchant.bank_name}
+                name="bank_name"
+                onChange={onChange}
+                required
+              />
+              <Gap width={50} height={0} />
+              <TextField
+                size="small"
+                fullWidth
+                label="Bank Account Name"
+                value={initialMerchant.bank_account_name}
+                name="bank_account_name"
+                onChange={onChange}
+                required
+              />
+            </Box>
+            <Gap width={0} height={20} />
+            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+              <TextField
+                sx={{ width: "100%" }}
+                size="small"
+                fullWidth
+                label="Bank Account Number"
+                value={initialMerchant.bank_account_number}
+                name="bank_account_number"
+                onChange={onChange}
+                required
+              />
+              <Gap width={50} height={0} />
+              <Box sx={{ width: "100%" }}></Box>
+            </Box>
+            <Gap width={0} height={20} />
+            <Box sx={{ display: "flex" }}>
+              <Button variant="contained" sx={{ width: "100%" }} type="submit">
+                SAVE
+              </Button>
+            </Box>
+            <Gap width={0} height={20} />
+          </Stack>
+        </form>
         <Gap width={0} height={20} />
+      </Dialog>
+
+      {/*======================= Dialog of Update Merchant ========================== */}
+      {/*============================================================================ */}
+      <Dialog
+        fullWidth
+        open={open.edit}
+        onClose={() => setOpen({ ...open, edit: false })}
+      >
+        <DialogTitle variant="h5">UPDATE MERCHANT</DialogTitle>
+        <form onSubmit={onUpdateMerchant}>
+          <Stack sx={{ display: "flex" }} px="3vw">
+            <Box sx={{ display: "flex" }}>
+              <InputSearchable
+                required
+                label="Partner"
+                options={dataPartner}
+                onChange={(e: any, newValue: any) =>
+                  setInitialMerchant({
+                    ...initialMerchant,
+                    partner_id: newValue._id,
+                  })
+                }
+              />
+            </Box>
+            <Gap width={0} height={20} />
+            <Box sx={{ display: "flex" }}>
+              <TextField
+                size="small"
+                fullWidth
+                label="Merchant Name"
+                value={initialMerchant.merchant_name}
+                name="merchant_name"
+                onChange={onChange}
+                required
+              />
+              <Gap width={50} height={0} />
+              <TextField
+                size="small"
+                fullWidth
+                label="SIUP"
+                value={initialMerchant.siup_number}
+                name="siup_number"
+                onChange={onChange}
+                required
+              />
+            </Box>
+            <Gap width={0} height={20} />
+            <Box sx={{ display: "flex" }}>
+              <TextField
+                size="small"
+                fullWidth
+                label="Merchant Short Code"
+                value={initialMerchant.merchant_short_code}
+                name="merchant_short_code"
+                onChange={onChange}
+                required
+              />
+              <Gap width={50} height={0} />
+              <TextField
+                size="small"
+                fullWidth
+                label="Password"
+                value={initialMerchant.password}
+                name="password"
+                onChange={onChange}
+                required
+              />
+            </Box>
+            <Gap width={0} height={20} />
+            <Box sx={{ display: "flex" }}>
+              <InputSearchable
+                required
+                label="Location Type"
+                options={dataLocationType}
+                onChange={(e: any, newValue: any) =>
+                  setLocationType(newValue._id)
+                }
+              />
+              <Gap width={50} height={0} />
+              <InputSearchable
+                required
+                label="Location"
+                options={dataLocation}
+                onChange={(e: any, newValue: any) =>
+                  setInitialMerchant({
+                    ...initialMerchant,
+                    location_id: newValue._id,
+                  })
+                }
+              />
+            </Box>
+            <Gap width={0} height={20} />
+            <Box sx={{ display: "flex" }}>
+              <TextField
+                size="small"
+                fullWidth
+                label="ZIP Code"
+                value={initialMerchant.zip_code}
+                name="zip_code"
+                onChange={onChange}
+                required
+              />
+            </Box>
+            <Gap width={0} height={20} />
+            <Box sx={{ display: "flex" }}>
+              <TextField
+                fullWidth
+                id="outlined-multiline-static"
+                label="Address"
+                multiline
+                rows={4}
+                name="address"
+                onChange={onChange}
+                value={initialMerchant.address}
+                required
+              />
+            </Box>
+            <Gap width={0} height={20} />
+            <Box sx={{ display: "flex" }}>
+              <TextField
+                size="small"
+                fullWidth
+                label="Website"
+                value={initialMerchant.file_compro}
+                name="file_compro"
+                onChange={onChange}
+                required
+              />
+              <Gap width={50} height={0} />
+              <TextField
+                size="small"
+                fullWidth
+                label="NPWP"
+                value={initialMerchant.npwp}
+                name="npwp"
+                onChange={onChange}
+                required
+              />
+            </Box>
+            <Gap width={0} height={20} />
+            <Title title="PIC" />
+            <Gap width={0} height={20} />
+            <Box sx={{ display: "flex" }}>
+              <TextField
+                size="small"
+                fullWidth
+                label="PIC Name"
+                value={initialMerchant.pic_name}
+                name="pic_name"
+                onChange={onChange}
+                required
+              />
+              <Gap width={50} height={0} />
+              <TextField
+                size="small"
+                fullWidth
+                label="PIC Email"
+                value={initialMerchant.pic_email}
+                name="pic_email"
+                onChange={onChange}
+                required
+              />
+            </Box>
+            <Gap width={0} height={20} />
+            <Box sx={{ display: "flex" }}>
+              <TextField
+                size="small"
+                fullWidth
+                label="PIC Phone"
+                value={initialMerchant.pic_phone}
+                name="pic_phone"
+                onChange={onChange}
+                required
+              />
+              <Gap width={50} height={0} />
+
+              <TextField
+                sx={{ width: "100%" }}
+                size="small"
+                fullWidth
+                label="PIC KTP"
+                value={initialMerchant.pic_ktp}
+                name="pic_ktp"
+                onChange={onChange}
+                required
+              />
+            </Box>
+            <Gap width={0} height={20} />
+            <Title title="Bank" />
+            <Gap width={0} height={20} />
+            <Box sx={{ display: "flex" }}>
+              <TextField
+                size="small"
+                fullWidth
+                label="Bank Name"
+                value={initialMerchant.bank_name}
+                name="bank_name"
+                onChange={onChange}
+                required
+              />
+              <Gap width={50} height={0} />
+              <TextField
+                size="small"
+                fullWidth
+                label="Bank Account Name"
+                value={initialMerchant.bank_account_name}
+                name="bank_account_name"
+                onChange={onChange}
+                required
+              />
+            </Box>
+            <Gap width={0} height={20} />
+            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+              <TextField
+                sx={{ width: "100%" }}
+                size="small"
+                fullWidth
+                label="Bank Account Number"
+                value={initialMerchant.bank_account_number}
+                name="bank_account_number"
+                onChange={onChange}
+                required
+              />
+              <Gap width={50} height={0} />
+              <Box sx={{ width: "100%" }}></Box>
+            </Box>
+            <Gap width={0} height={20} />
+            <Box sx={{ display: "flex" }}>
+              <Button variant="contained" sx={{ width: "100%" }} type="submit">
+                SAVE
+              </Button>
+            </Box>
+            <Gap width={0} height={20} />
+          </Stack>
+        </form>
+        <Gap width={0} height={20} />
+      </Dialog>
+
+      {/*======================= Dialog of Link Merchant Outlet ===================== */}
+      {/*============================================================================ */}
+      <Dialog
+        open={open.link}
+        fullWidth
+        onClose={() => setOpen({ ...open, link: false })}
+      >
+        {/* <Gap width={0} height={20} /> */}
+        <form onSubmit={onLinkedMerchantOutlet}>
+          <Stack p="3vw">
+            <InputSearchable
+              required
+              label="Choose Merchant"
+              options={dataMerchantList}
+              onChange={(e: any, newValue: any) =>
+                setInitialLink({
+                  ...initialLink,
+                  merchant: newValue._id,
+                })
+              }
+            />
+            <Gap width={0} height={20} />
+            <InputSearchable
+              required
+              label="Choose Outlet"
+              options={dataOutletList}
+              onChange={(e: any, newValue: any) =>
+                setInitialLink({
+                  ...initialLink,
+                  outlet: newValue._id,
+                })
+              }
+            />
+            <Gap width={0} height={20} />
+            <Box sx={{ display: "flex" }}>
+              <Button
+                variant="contained"
+                sx={{
+                  width: "100%",
+                  backgroundColor: "#7B61FF",
+                  color: "#FFF",
+                }}
+                type="submit"
+              >
+                Link
+              </Button>
+            </Box>
+            <Gap width={0} height={20} />
+          </Stack>
+        </form>
       </Dialog>
     </DrawerNav>
   );

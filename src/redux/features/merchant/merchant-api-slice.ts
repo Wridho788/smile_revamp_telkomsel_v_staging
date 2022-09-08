@@ -38,8 +38,19 @@ export const merchantSlice = createApi({
           body: body,
         }),
       });
+    const putHandler = (endpoint: string) =>
+      builder.mutation<{ success: boolean; body: any }, any>({
+        query: (body) => ({
+          url: endpoint + body["_id"] + "/edit",
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: body,
+        }),
+      });
     const deleteHandler = (endpoint: string) =>
-      builder.mutation<{ success: boolean; id: number }, number>({
+      builder.mutation<{ success: boolean; id: string }, string>({
         query: (id) => ({
           url: endpoint + id + "/delete",
           method: "DELETE",
@@ -51,6 +62,15 @@ export const merchantSlice = createApi({
     return {
       merchantManagementList: responseHandler("/prime"),
       merchantBulkItem: responseHandler("/bulk/"),
+
+      // post
+      addMerchantManagement: postHandler("/"),
+      merchantOutletLink: postHandler(baseUrl + "/v1/merchant-outlet"),
+
+      // put
+      updateMerchantManagement: putHandler("/"),
+      // delete
+      deleteMerchantManagement: deleteHandler("/"),
     };
   },
 });
@@ -58,4 +78,8 @@ export const merchantSlice = createApi({
 export const {
   useMerchantManagementListQuery,
   useLazyMerchantManagementListQuery,
+  useMerchantOutletLinkMutation,
+  useAddMerchantManagementMutation,
+  useUpdateMerchantManagementMutation,
+  useDeleteMerchantManagementMutation,
 } = merchantSlice;

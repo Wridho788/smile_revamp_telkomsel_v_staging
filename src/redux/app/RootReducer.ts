@@ -10,6 +10,8 @@ import { channelSlice } from "../features/channel/channel-api-slice";
 import { accountSlice } from "../features/account/account-api-slice";
 import { productSlice } from "../features/product/product-api-slice";
 import { appConfigSlice } from "../features/app-config/app-config-api-slice";
+import { partnerSlice } from "../features/partner/partner-api-slice";
+import { outletSlice } from "../features/outlet/outlet-api-slice";
 
 export const rootReducer = combineReducers({
   [lovSlice.reducerPath]: lovSlice.reducer,
@@ -23,4 +25,6 @@ export const rootReducer = combineReducers({
   [accountSlice.reducerPath]: accountSlice.reducer,
   [productSlice.reducerPath]: productSlice.reducer,
   [appConfigSlice.reducerPath]: appConfigSlice.reducer,
+  [partnerSlice.reducerPath]: partnerSlice.reducer,
+  [outletSlice.reducerPath]: outletSlice.reducer,
 });

@@ -12,6 +12,8 @@ import { productSlice } from "../features/product/product-api-slice";
 import { locationSlice } from "../features/location/location-api-slice";
 import { appConfigSlice } from "../features/app-config/app-config-api-slice";
 import { accountSlice } from "../features/account/account-api-slice";
+import { partnerSlice } from "../features/partner/partner-api-slice";
+import { outletSlice } from "../features/outlet/outlet-api-slice";
 
 export const listenerMiddleware = createListenerMiddleware();
 export const store = configureStore({
@@ -30,7 +32,9 @@ export const store = configureStore({
         accountSlice.middleware,
         productSlice.middleware,
         locationSlice.middleware,
-        appConfigSlice.middleware
+        partnerSlice.middleware,
+        appConfigSlice.middleware,
+        outletSlice.middleware
       ),
 });
 

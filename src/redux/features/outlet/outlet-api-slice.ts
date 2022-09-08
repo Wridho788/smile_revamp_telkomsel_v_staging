@@ -5,9 +5,9 @@ import { IParams, IParamsPrime } from "../../utils/IGeneral";
 
 const baseUrl = process.env.REACT_APP_BASE_URL;
 
-export const partnerSlice = createApi({
-  reducerPath: "partnerApi",
-  baseQuery: API_HEADER(baseUrl + "/v2/partner"),
+export const outletSlice = createApi({
+  reducerPath: "outletApi",
+  baseQuery: API_HEADER(baseUrl + "/v1/outlet"),
   endpoints(builder) {
     const responseHandler = (endpoint: string) =>
       builder.query<IResponse, IParams | IParamsPrime>({
@@ -61,32 +61,32 @@ export const partnerSlice = createApi({
         }),
       });
     return {
-      partnerList: responseHandler("/"),
+      outletList: responseHandler("/"),
 
       // POST
-      addPartner: postHandler("/"),
+      addOutlet: postHandler("/"),
 
       // PUT
-      updatePartner: putHandler("/"),
+      updateOutlet: putHandler("/"),
 
       // DELETE
-      deletePartner: deleteHandler("/"),
+      deleteOutlet: deleteHandler("/"),
     };
   },
 });
 
 export const {
-  usePartnerListQuery,
+  useOutletListQuery,
 
   // lazy
-  useLazyPartnerListQuery,
+  useLazyOutletListQuery,
 
   //   Post
-  useAddPartnerMutation,
+  useAddOutletMutation,
 
   // PUT
-  useUpdatePartnerMutation,
+  useUpdateOutletMutation,
 
   // Delete
-  useDeletePartnerMutation,
-} = partnerSlice;
+  useDeleteOutletMutation,
+} = outletSlice;
