@@ -13,11 +13,18 @@ const AuthProvider = ({ children }: any) => {
     const [refreshToken, setRefreshToken] = useState<any>(localStorage.getItem('refresh_token'));
 
     const updateToken = (value: string, key: string): void => {
-        setAccessToken(localStorage.getItem('access_token'));
-        setRefreshToken(localStorage.getItem('refresh_token'));
 
-        if (key === 'refresh_token') setRefreshToken(value);
-        if (key === 'access_token') setAccessToken(value);
+        if (key === 'refresh_token') {
+            setRefreshToken(value);
+            localStorage.setItem('refresh_token', value);
+            setAccessToken(localStorage.getItem('access_token'));
+        }
+
+        if (key === 'access_token') {
+            setAccessToken(value);
+            localStorage.setItem('access_token', value);
+            setRefreshToken(localStorage.getItem('refresh_token'));
+        }
     };
 
     /* For While type is "any" */
