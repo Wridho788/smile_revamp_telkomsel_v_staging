@@ -2,13 +2,12 @@ import { createApi } from "@reduxjs/toolkit/query/react";
 import { API_HEADER } from "../../utils/header";
 import { IResponse, IData, DetailResponse } from "./interface";
 import { IParams, IParamsPrime } from "../../utils/IGeneral";
-import { ICreateProgram } from "../../../pages/CreateProgram/interface";
 
 const baseUrl = process.env.REACT_APP_BASE_URL;
 
-export const notificationSlice = createApi({
-  reducerPath: "notificationApi",
-  baseQuery: API_HEADER(baseUrl + "/notification"),
+export const outletSlice = createApi({
+  reducerPath: "outletApi",
+  baseQuery: API_HEADER(baseUrl + "/v1/outlet"),
   endpoints(builder) {
     const responseHandler = (endpoint: string) =>
       builder.query<IResponse, IParams | IParamsPrime>({
@@ -20,15 +19,15 @@ export const notificationSlice = createApi({
           },
         }),
       });
-    const detailHandler = (endpoint: string) =>
-      builder.query<IData, string>({
-        query: (_id: string) => ({
-          url: endpoint + _id + "/detail",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }),
-      });
+    // const detailHandler = (endpoint: string) =>
+    //   builder.query<IData, string>({
+    //     query: (_id: string) => ({
+    //       url: endpoint + _id + "/detail",
+    //       headers: {
+    //         "Content-Type": "application/json",
+    //       },
+    //     }),
+    //   });
     const postHandler = (endpoint: string) =>
       builder.mutation<{ success: boolean; body: any }, any>({
         query: (body) => ({
@@ -62,34 +61,32 @@ export const notificationSlice = createApi({
         }),
       });
     return {
-      notificationTemplate: responseHandler("/template"),
-      notificationTemplateDetail: detailHandler("/teACmplate/"),
+      outletList: responseHandler("/"),
 
       // POST
-      addNotification: postHandler("/template"),
+      addOutlet: postHandler("/"),
 
       // PUT
-      updateNotification: putHandler("/template/"),
+      updateOutlet: putHandler("/"),
 
       // DELETE
-      deleteNotification: deleteHandler("/template/"),
+      deleteOutlet: deleteHandler("/"),
     };
   },
 });
 
 export const {
-  useNotificationTemplateQuery,
-  useNotificationTemplateDetailQuery,
+  useOutletListQuery,
 
   // lazy
-  useLazyNotificationTemplateQuery,
+  useLazyOutletListQuery,
 
   //   Post
-  useAddNotificationMutation,
+  useAddOutletMutation,
 
   // PUT
-  useUpdateNotificationMutation,
+  useUpdateOutletMutation,
 
   // Delete
-  useDeleteNotificationMutation,
-} = notificationSlice;
+  useDeleteOutletMutation,
+} = outletSlice;

@@ -15,7 +15,7 @@ import {
   useGetProgramExperienceQuery,
 } from "../../../../../redux/features/lov/lov-api-slice";
 import { FilterInitial } from "../../../../../redux/utils/initial-general";
-import { useChannelListQuery } from "../../../../../redux/features/channel/merchant-api-slice";
+import { useChannelListQuery } from "../../../../../redux/features/channel/channel-api-slice";
 import { ICreateKeyword } from "../../interfaces";
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import DeleteIcon from "@mui/icons-material/Delete";

@@ -1,15 +1,37 @@
 import * as React from "react";
 import { Box, Stack } from "@mui/material";
-// import {
-//   MainInfoAuction,
-//   MainInfoCoreProduct,
-//   MainInfoDirectRedeem,
-//   MainInfoDonation,
-//   MainInfoLuckyDraw,
-// } from "..";
-// import { useGetKeywordTypeQuery } from "../../../../redux/features/lov/lov-api-slice";
-import { CreateKeywordGeneral, KeywordLocationTypeGeneral } from "../initial";
-import { ICreateKeyword, IKeywordLocationTypeGeneral } from "../interfaces";
+import {
+  MainInfoAuction,
+  MainInfoCoreProduct,
+  MainInfoDirectRedeem,
+  MainInfoDonation,
+  MainInfoLuckyDraw,
+} from "..";
+import {
+  Select,
+  OutlinedTextField,
+  ResponsiveDateTimePicker,
+  Subtitle,
+  BodyCopy,
+  ResponsiveTimePicker,
+  ResponsiveDatePicker,
+} from "../../../atoms";
+import {
+  useCustomerBadgeListQuery,
+  useCustomerBrandListQuery,
+  useCustomerTierListQuery,
+} from "../../../../redux/features/customer/customer-api-slice";
+import {
+  useGetKeywordTypeQuery,
+  useGetPointTypeQuery,
+} from "../../../../redux/features/lov/lov-api-slice";
+import { FilterInitial } from "../../../../redux/utils/initial-general";
+import { useChannelListQuery } from "../../../../redux/features/channel/channel-api-slice";
+ import{ CreateKeywordGeneral,
+  
+  KeywordLocationTypeGeneral,
+} from "../initial";
+import { ICreateKeyword,IKeywordLocationTypeGeneral } from "../interfaces";
 import Merchant from "./Merchant";
 import General from "./General";
 import Segmentation from "./Segmentation";
