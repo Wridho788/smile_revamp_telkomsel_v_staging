@@ -275,7 +275,7 @@ export default function HorizontalLinearStepper({
                         <Box>{children}</Box>
                         <Box sx={{display: "flex", flexDirection: "row", mt: "3vw"}}>
                             <Button
-                                disabled={activeStep === 0}
+                                disabled={activeStep === 0 ? true : isLoading ? true : false}
                                 onClick={handleBack}
                                 color="inherit"
                                 sx={{
@@ -295,24 +295,46 @@ export default function HorizontalLinearStepper({
                                     Skip
                                 </Button>
                             )}
-                            <Button
-                                type={"submit"}
-                                color="primary"
-                                sx={{
-                                    width: "50%",
-                                    borderTop: "3px solid",
-                                    borderLeft: "1.5px solid",
-                                    borderColor: "secondary.main",
-                                    borderRadius: 0,
-                                    paddingBlock: "1vw",
-                                }}
-                            >
-                                {activeStep === steps.length - 1
-                                    ? slug === "insert"
-                                        ? "Create"
-                                        : "Update"
-                                    : "Next"}
-                            </Button>
+                            {
+                                isLoading ?
+                                    <Button
+                                        type={"submit"}
+                                        color="primary"
+                                        disabled
+                                        sx={{
+                                            width: "50%",
+                                            borderTop: "3px solid",
+                                            borderLeft: "1.5px solid",
+                                            borderColor: "secondary.main",
+                                            borderRadius: 0,
+                                            paddingBlock: "1vw",
+                                        }}
+                                    >
+                                        {activeStep === steps.length - 1
+                                            ? slug === "insert"
+                                                ? "Loading ..."
+                                                : "Update"
+                                            : "Next"}
+                                    </Button> :
+                                    <Button
+                                        type={"submit"}
+                                        color="primary"
+                                        sx={{
+                                            width: "50%",
+                                            borderTop: "3px solid",
+                                            borderLeft: "1.5px solid",
+                                            borderColor: "secondary.main",
+                                            borderRadius: 0,
+                                            paddingBlock: "1vw",
+                                        }}
+                                    >
+                                        {activeStep === steps.length - 1
+                                            ? slug === "insert"
+                                                ? "Create"
+                                                : "Update"
+                                            : "Next"}
+                                    </Button>
+                            }
                         </Box>
                     </React.Fragment>
                 )}

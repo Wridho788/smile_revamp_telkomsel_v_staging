@@ -3,9 +3,9 @@ import {
     Alert,
     Box,
     Button, Grid, ListItem,
-    Stack,
+    Stack, Typography,
 } from "@mui/material";
-import {BodyCopy, Select} from "../../../../atoms";
+import {BodyCopy, H2, Select} from "../../../../atoms";
 import {useEffect, useState} from "react";
 import {Warning} from "@mui/icons-material";
 import {
@@ -35,6 +35,9 @@ const BulkData: React.FunctionComponent<ISegmentationProps> = () => {
             return EXTENSIONS.includes(extension); // return boolean
         };
 
+        // Handle Loading
+        const [sendBulkProcess,setSendBulkProcess ] = useState(false)
+
         const whitelistUpload = (e: any) => {
             const file = e.target.files[0];
             if (!getExention(file)) {
@@ -63,6 +66,7 @@ const BulkData: React.FunctionComponent<ISegmentationProps> = () => {
 
 
         const handleProcess = async () => {
+            setSendBulkProcess(true)
             setSuccessShow(false)
             if (!segmentationOption[0].filename && !segmentationOption[1].filename) {
                 setWarningShow(true)
@@ -83,6 +87,7 @@ const BulkData: React.FunctionComponent<ISegmentationProps> = () => {
             segmentationOption[1].filename = ''
             setWarningShow(false)
             setSuccessShow(true)
+            setSendBulkProcess(false)
         }
         return (
             <Box px="3vw">
@@ -107,6 +112,7 @@ const BulkData: React.FunctionComponent<ISegmentationProps> = () => {
                                 <Box sx={{marginRight: idx === 0 ? 3 : 0, marginLeft: idx === 0 ? 0 : 3}}>
                                     <ListItem disablePadding>
                                         <Warning color={"warning"} sx={{marginRight: "10px"}}/>
+                                        <H2>{item.type}</H2> <br/>
                                         <BodyCopy color={"red"}>{noticeUploadDataInitial.label}</BodyCopy>
                                     </ListItem>
                                     {
@@ -140,9 +146,15 @@ const BulkData: React.FunctionComponent<ISegmentationProps> = () => {
                 </Grid>
 
                 <Stack direction="row" alignItems="center" mt="1.5vw">
-                    <Button onClick={() => handleProcess()} variant="contained" component="label">
-                        Process
-                    </Button>
+                    {
+                        sendBulkProcess ?
+                            <Button variant="contained" disabled component="label">
+                                Loading ...
+                            </Button> :
+                            <Button onClick={() => handleProcess()} variant="contained" component="label">
+                                Process
+                            </Button>
+                    }
                 </Stack>
             </Box>
         );
