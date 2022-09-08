@@ -25,9 +25,9 @@ import SmallCopy from "../../../atoms/Typography/SmallCopy";
 import ListItemButton from "@mui/material/ListItemButton";
 import {useNotificationTemplateQuery} from "../../../../redux/features/notification/notification-api-slice";
 import Moment from "moment/moment";
+import {cloneDeep} from "lodash";
 
 const Notification: React.FunctionComponent = () => {
-    let programDetail: any = ProgramDetailInitial.data;
     const { _id } = useParams();
 
     const navigate = useNavigate();
@@ -40,13 +40,12 @@ const Notification: React.FunctionComponent = () => {
     const [listNotification, setListNotification] = React.useState<any>([]);
 
     const changeListNotification = (list: any, i: number, field: string, value: any) => {
-        let temp: any = JSON.parse(JSON.stringify(list));
-        let clone: any = JSON.parse(JSON.stringify(fetchDetail?.program_notification));
+        let temp: any = cloneDeep(list);
+        let clone: any = cloneDeep(fetchDetail?.program_notification);
 
         if (typeof temp[`${field}`] === 'string') {
             temp[`${field}`] = value;
         } else {
-            console.log(field, i, value);
             temp[`${field}`][0]._id = value;
         }
 
@@ -57,16 +56,22 @@ const Notification: React.FunctionComponent = () => {
 
     // TODO: Get Detail Program
     const { data: fetchDetail, isLoading } = useDetailProgramQuery(_id ?? '');
-    useEffect(() => {
-        programDetail._id = fetchDetail?._id;
-        programDetail.name = fetchDetail?.name;
-        programDetail.start_period = fetchDetail?.start_period;
-        programDetail.program_notification = fetchDetail?.program_notification;
-    });
+    let initial: any = fetchDetail, programDetail: any = ProgramDetailInitial.data;
 
     useEffect(() => {
+        if (initial) {
+            programDetail._id = initial?._id;
+            programDetail.name = initial?.name;
+            programDetail.start_period = initial?.start_period;
+            if (initial?.program_notification.length) {
+                programDetail.program_notification = initial?.program_notification;
+                setStateTrigger(!stateTrigger);
+            }
+        }
+    }, [initial]);
 
-    }, [programDetail, stateTrigger]);
+    useEffect(() => {
+    }, [stateTrigger]);
 
     const variableList = [programDetail.name, Moment(programDetail.start_period).format("d-m-Y"), poinTypeSuggestion]
     const [updateProgramNotification] = useUpdateProgramNotificationMutation();
@@ -150,84 +155,93 @@ const Notification: React.FunctionComponent = () => {
                                 marginBottom={4}
                             >
                                 {/* For while set "any" */}
-                                {programDetail?.program_notification && (programDetail.program_notification.map((item: any, i: any) => (
-                                    <Box display="flex" px="10%" py="1vw">
-                                        <Grid
-                                            key={`rowItem__${i}`}
-                                            container
-                                            border="0.1vw solid rgba(0, 0, 0, 0.1)"
-                                            borderRadius="0.3vw"
-                                            p="3vw"
-                                        >
-
-                                            <Stack spacing={"1vw"} width={"100%"}>
-                                                <Grid container>
-                                                    <H3 color={"primary"}>{item.set_value}</H3>
-                                                </Grid>
-                                                <Select
-                                                    variant={"outlined"}
-                                                    label="Via"
-                                                    placeholder="Option"
-                                                    options={viaOption.data}
-                                                    value={item.via_detail[0]._id}
-                                                    handleChange={(value: string) => {
-                                                        changeListNotification(item, i, "via_detail", value);
-                                                        setStateTrigger(!stateTrigger);
-                                                    }}
-                                                />
-                                                <Select
-                                                    variant={"outlined"}
-                                                    label="Template"
-                                                    placeholder="Option"
-                                                    optionLabel={"notif_name"}
-                                                    options={notificationTemplateList.data}
-                                                    value={item.template}
-                                                    disabled
-                                                />
-                                                <Grid container>
-                                                    <OutlinedTextField
-                                                        isRequired={false}
-                                                        multiline
-                                                        rows={4}
-                                                        label="Template Content"
-                                                        placeholder="Template Content"
+                                {programDetail.program_notification.length ? (
+                                    programDetail.program_notification.map((item: any, i: any) => (
+                                        <Box display="flex" px="10%" py="1vw">
+                                            <Grid
+                                                key={`rowItem__${i}`}
+                                                container
+                                                border="0.1vw solid rgba(0, 0, 0, 0.1)"
+                                                borderRadius="0.3vw"
+                                                p="3vw"
+                                            >
+                                                <Stack spacing={"1vw"} width={"100%"}>
+                                                    <Grid container>
+                                                        <H3 color={"primary"}>{item.set_value}</H3>
+                                                    </Grid>
+                                                    <Select
                                                         variant={"outlined"}
-                                                        value={item.template_content}
+                                                        label="Via"
+                                                        placeholder="Option"
+                                                        options={viaOption.data}
+                                                        value={item.via_detail.length ? item.via_detail[0]._id : ''}
                                                         handleChange={(value: string) => {
-                                                            changeListNotification(item, i, "template_content", value);
+                                                            changeListNotification(item, i, "via_detail", value);
                                                             setStateTrigger(!stateTrigger);
                                                         }}
                                                     />
-                                                </Grid>
-                                                <Grid container columns={11}>
-                                                    <Grid item xs={4}>
-                                                        <BodyCopy>Variable</BodyCopy>
-                                                        <SmallCopy fontSize={10} color={"orange"}>You can add this
-                                                            variable when
-                                                            editing template content</SmallCopy>
+                                                    <Select
+                                                        variant={"outlined"}
+                                                        label="Template"
+                                                        placeholder="Option"
+                                                        optionLabel={"notif_name"}
+                                                        options={notificationTemplateList.data}
+                                                        value={item.template}
+                                                        disabled
+                                                    />
+                                                    <Grid container>
+                                                        <OutlinedTextField
+                                                            isRequired={false}
+                                                            multiline
+                                                            rows={4}
+                                                            label="Template Content"
+                                                            placeholder="Template Content"
+                                                            variant={"outlined"}
+                                                            value={item.template_content}
+                                                            handleChange={(value: string) => {
+                                                                changeListNotification(item, i, "template_content", value);
+                                                                setStateTrigger(!stateTrigger);
+                                                            }}
+                                                        />
                                                     </Grid>
-                                                    <Grid item xs={7}>
-                                                        <Grid container columns={12}>
-                                                            {
-                                                                variableList.map((item) => (
-                                                                    <Grid>
-                                                                        <ListItem disablePadding>
-                                                                            <ListItemButton>
-                                                                                <AddBox color={"primary"}/>
-                                                                                <BodyCopy>{item}</BodyCopy>
-                                                                            </ListItemButton>
-                                                                        </ListItem>
-                                                                    </Grid>
-                                                                ))
-                                                            }
+                                                    <Grid container columns={11}>
+                                                        <Grid item xs={4}>
+                                                            <BodyCopy>Variable</BodyCopy>
+                                                            <SmallCopy fontSize={10} color={"orange"}>You can add this
+                                                                variable when
+                                                                editing template content</SmallCopy>
+                                                        </Grid>
+                                                        <Grid item xs={7}>
+                                                            <Grid container columns={12}>
+                                                                {
+                                                                    variableList.map((item) => (
+                                                                        <Grid>
+                                                                            <ListItem disablePadding>
+                                                                                <ListItemButton>
+                                                                                    <AddBox color={"primary"}/>
+                                                                                    <BodyCopy>{item}</BodyCopy>
+                                                                                </ListItemButton>
+                                                                            </ListItem>
+                                                                        </Grid>
+                                                                    ))
+                                                                }
+                                                            </Grid>
                                                         </Grid>
                                                     </Grid>
-                                                </Grid>
-                                            </Stack>
-                                        </Grid>
-                                    </Box>
+                                                </Stack>
+                                            </Grid>
+                                        </Box>
                                     )
-                                ))}
+                                )) : (<Box
+                                    sx={{
+                                        display: "flex",
+                                        justifyContent: "center",
+                                        alignItems: "center",
+                                        minHeight: "100vh",
+                                    }}
+                                >
+                                    <CircularProgress />
+                                </Box>)}
                             </Box>
 
                             {/* TODO: Action "Cancel" | "Save" */}
