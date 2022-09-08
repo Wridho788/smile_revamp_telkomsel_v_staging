@@ -23,7 +23,7 @@ import {
     useGetLocationTypeQuery,
     useGetMechanismQuery,
     useGetOwnerQuery,
-    useGetPointTypeQuery,
+    useGetPointTypeQuery, useGetProgramGroupQuery,
 } from "../../../../redux/features/lov/lov-api-slice";
 import {
     BooleanOption,
@@ -74,6 +74,7 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
     const {data: pointTypeOption = {data: []}} = useGetPointTypeQuery();
     const {data: mechanismOption = {data: []}} = useGetMechanismQuery();
     const {data: ownerOption = {data: []}} = useGetLocationTypeQuery();
+    const {data: groupOption = {data: []}} = useGetProgramGroupQuery();
 
     const [searchInput, setSearchInput] = useState<string>("");
     const [stateTrigger, setStateTrigger] = React.useState<boolean>(false);
@@ -281,12 +282,25 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
                 </Box>
 
 
-                <OutlinedTextField
+                {/*<OutlinedTextField*/}
+                {/*    label="Program Group"*/}
+                {/*    placeholder="Program Group"*/}
+                {/*    variant={"outlined"}*/}
+                {/*    value={programData.program_group}*/}
+                {/*    handleChange={(value: any) => {*/}
+                {/*        programData.program_group = value;*/}
+                {/*        setStateTrigger(!stateTrigger);*/}
+                {/*    }}*/}
+                {/*/>*/}
+
+                <Select
                     label="Program Group"
-                    placeholder="Program Group"
-                    variant={"outlined"}
+                    placeholder="Option"
+                    options={groupOption.data}
+                    optionLabel="group_name"
                     value={programData.program_group}
                     handleChange={(value: any) => {
+                        console.log(value)
                         programData.program_group = value;
                         setStateTrigger(!stateTrigger);
                     }}
