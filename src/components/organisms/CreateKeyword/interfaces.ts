@@ -75,16 +75,30 @@ export interface IKeywordBonus {
   payment: string;
 }
 
-export interface IKeywordNotification {
-  via: string;
+// export interface IKeywordNotification {
+//   via: string;
+//   notif_type: string;
+//   notification: string;
+//   transaction_type: string;
+//   notification_content: string | undefined;
+// }
+
+export interface INotification {
+  code_identifier: string;
+  notification_content: string;
+  start_period: Date;
+  end_period: Date;
   notif_type: string;
-  notification: string;
-  transaction_type: string;
-  notification_content: string | undefined;
+  via: string;
 }
 
 export interface IKeywordLocationTypeGeneral {
   location_type: string;
+}
+
+export interface IKeywordNotificationInitial {
+  notification_template: string;
+  follow_period: boolean;
 }
 
 export interface ICreateKeyword {

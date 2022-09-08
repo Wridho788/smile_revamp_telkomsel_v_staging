@@ -8,8 +8,16 @@ import { Box, Stack } from "@mui/material";
 //   MainInfoLuckyDraw,
 // } from "..";
 // import { useGetKeywordTypeQuery } from "../../../../redux/features/lov/lov-api-slice";
-import { CreateKeywordGeneral, KeywordLocationTypeGeneral } from "../initial";
-import { ICreateKeyword, IKeywordLocationTypeGeneral } from "../interfaces";
+import {
+  CreateKeywordGeneral,
+  KeywordLocationTypeGeneral,
+  KeywordNotificationInitial,
+} from "../initial";
+import {
+  ICreateKeyword,
+  IKeywordLocationTypeGeneral,
+  IKeywordNotificationInitial,
+} from "../interfaces";
 import Merchant from "./Merchant";
 import General from "./General";
 import Segmentation from "./Segmentation";
@@ -23,11 +31,17 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
   // const { data: keywordTypeOptions = { data: [] } } = useGetKeywordTypeQuery();
 
   const keywordCreate = CreateKeywordGeneral;
-  const keywordLocationType = KeywordLocationTypeGeneral;
   const [keywordCreateState, setKeywordCreateState] =
     React.useState<ICreateKeyword>(keywordCreate);
+
+  const keywordLocationType = KeywordLocationTypeGeneral;
   const [keywordLocationTypeState, setKeywordLocationTypeState] =
     React.useState<IKeywordLocationTypeGeneral>(keywordLocationType);
+
+  const keywordNotificationInitial = KeywordNotificationInitial;
+  const [keywordNotificationInitialState, setKeywordNotificationInitialState] =
+    React.useState<IKeywordNotificationInitial[]>(keywordNotificationInitial);
+
   const [stateTrigger, setStateTrigger] = React.useState<boolean>(false);
 
   React.useEffect(() => {
@@ -37,6 +51,10 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
   React.useEffect(() => {
     setKeywordLocationTypeState(keywordLocationType);
   }, [keywordLocationType, stateTrigger]);
+
+  React.useEffect(() => {
+    setKeywordNotificationInitialState(keywordNotificationInitial);
+  }, [keywordNotificationInitial, stateTrigger]);
 
   React.useEffect(() => {
     console.log(keywordCreate);
@@ -92,6 +110,10 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
             keywordCreate={keywordCreate}
             stateTrigger={stateTrigger}
             setStateTrigger={setStateTrigger}
+            // keywordNotificationTemplateState={keywordNotificationTemplateState}
+            // keywordNotificationTemplate={keywordNotificationTemplate}
+            keywordNotificationInitialState={keywordNotificationInitialState}
+            keywordNotificationInitial={keywordNotificationInitial}
           />
         </Stack>
         {/* {keywordTypeOptions.data.find(
