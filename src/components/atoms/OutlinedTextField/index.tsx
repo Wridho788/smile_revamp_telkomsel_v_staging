@@ -40,7 +40,7 @@ const Index: React.FunctionComponent<IOutlinedTextFieldProps> = ({
       </Grid>
       <Grid item xs={rightColumn} mt={direction === "column" ? "0.3vw" : 0}>
         <TextField
-        required={isRequired}
+          required={isRequired}
           value={value}
           onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
             handleChange(event.target.value);

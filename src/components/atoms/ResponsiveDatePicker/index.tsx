@@ -18,6 +18,7 @@ const Index: React.FunctionComponent<IResponsiveDatePickerProps> = ({
   direction = "row",
   isRequired = true,
   minDate,
+  disabled = false,
 }) => {
   const onKeyDown = (e: { preventDefault: () => void }) => {
     e.preventDefault();
@@ -53,6 +54,7 @@ const Index: React.FunctionComponent<IResponsiveDatePickerProps> = ({
               handleChange(newValue);
             }}
             minDate={minDate}
+            disabled={disabled}
             renderInput={({ error, ...params }) => (
               <TextField
                 label={placeholder}

@@ -61,30 +61,57 @@ export interface IKeywordEligibility {
   keyword_shift: IKeywordShift[];
 }
 
-export interface IKeywordBonus {
-  bonus_type: string;
-  location: string;
-  bucket: string;
-  bonus_id: string;
-  bonus_name: string | undefined;
-  bid: string;
-  granular: string;
-  stock: number;
-  qty_denom: number;
-  limit: number;
-  payment: string;
-}
+// export interface IKeywordBonus {
+//   bonus_type: string;
+//   location: string;
+//   bucket: string;
+//   bonus_id: string;
+//   bonus_name: string | undefined;
+//   bid: string;
+//   granular: string;
+//   stock: number;
+//   qty_denom: number;
+//   limit: number;
+//   payment: string;
+// }
 
-export interface IKeywordNotification {
-  via: string;
+// export interface IKeywordNotification {
+//   via: string;
+//   notif_type: string;
+//   notification: string;
+//   transaction_type: string;
+//   notification_content: string | undefined;
+// }
+
+export interface INotification {
+  code_identifier: string;
+  notification_content: string;
+  start_period: Date;
+  end_period: Date;
   notif_type: string;
-  notification: string;
-  transaction_type: string;
-  notification_content: string | undefined;
+  via: string;
 }
 
 export interface IKeywordLocationTypeGeneral {
   location_type: string;
+}
+
+export interface IKeywordNotificationInitial {
+  notification_template: string;
+  follow_period: boolean;
+}
+
+export interface IBonusLuckyDrawInitial {
+  bonus_type: string;
+  lucky_draw_reguler: boolean;
+  lucky_draw_allow_inject_coupon: boolean;
+  lucky_draw_prize: string;
+  stock_location: any[];
+  redeem_after_verification: boolean;
+}
+
+export interface IKeywordBonus {
+  bonus_type: any[];
 }
 
 export interface ICreateKeyword {

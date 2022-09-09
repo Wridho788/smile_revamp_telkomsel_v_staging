@@ -660,7 +660,6 @@ const General: React.FunctionComponent<IGeneralProps> = ({
           />
           {keywordCreateState.eligibility.channel_validation !== false && (
             <Select
-              isRequired={false}
               multiple
               label="Channel List"
               placeholder="Option"
