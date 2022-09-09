@@ -9,4 +9,5 @@ export interface IResponsiveDatePickerProps {
   direction?: "row" | "column";
   isRequired?: boolean;
   minDate?: any;
+  disabled?: boolean;
 }

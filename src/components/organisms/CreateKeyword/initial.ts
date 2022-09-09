@@ -1,17 +1,13 @@
 import {
-  IKeywordScheduleShift,
   IKeywordShift,
   IKeywordEligibility,
-  IKeywordBonus,
-  IKeywordNotification,
   ICreateKeyword,
   IKeywordLocationTypeGeneral,
+  IKeywordBonus,
+  IKeywordNotificationInitial,
+  IBonusLuckyDrawInitial,
 } from "./interfaces";
 
-const KeywordScheduleShift: IKeywordScheduleShift = {
-  from: new Date(),
-  to: new Date(),
-};
 const KeywordShift: IKeywordShift = {
   from: new Date(),
   to: new Date(),
@@ -71,48 +67,50 @@ const KeywordEligibility: IKeywordEligibility = {
   keyword_shift: [KeywordShift],
 };
 
-const KeywordBonus: IKeywordBonus = {
-  bonus_type: "",
-  location: "",
-  limit: 0,
-  stock: 0,
-  bucket: "",
-  qty_denom: 0,
-  payment: "",
-  granular: "",
-  bid: "",
-  bonus_id: "",
-  bonus_name: "",
-};
-
-const KeywordNotification: IKeywordNotification = {
-  notification: "",
-  notification_content: "",
-  notif_type: "",
-  transaction_type: "",
-  via: "",
+const bonusLuckyDrawInitial: IBonusLuckyDrawInitial = {
+  bonus_type: "lucky_draw",
+  lucky_draw_reguler: true,
+  lucky_draw_allow_inject_coupon: false,
+  lucky_draw_prize: "",
+  stock_location: [],
+  redeem_after_verification: false,
 };
 
 export const CreateKeywordGeneral: ICreateKeyword = {
   eligibility: KeywordEligibility,
-  bonus: [
-    {
-      bonus_type: "telco_postpaid",
-      telco_post_product_name: "telco_post_product_name",
-      telco_post_bid: "telco_post_bid",
-      telco_post_api_config: "telco_post_api_config",
-      telco_post_stock_perlocation: 10,
-      redeem_after_verification: false,
-    },
-  ],
+  bonus: [bonusLuckyDrawInitial],
   notification: [
     {
-      code_identifier: "JANOL2022",
-      notification_content: "Notification Template",
-      start_period: "2022-09-07T21:00:52.780Z",
-      end_period: "2022-09-07T21:00:52.780Z",
+      code_identifier: "",
+      notification_content: "",
+      start_period: new Date(),
+      end_period: new Date(),
       notif_type: "",
-      via: "sms",
+      via: "",
+    },
+    {
+      code_identifier: "",
+      notification_content: "",
+      start_period: new Date(),
+      end_period: new Date(),
+      notif_type: "",
+      via: "",
+    },
+    {
+      code_identifier: "",
+      notification_content: "",
+      start_period: new Date(),
+      end_period: new Date(),
+      notif_type: "",
+      via: "",
+    },
+    {
+      code_identifier: "",
+      notification_content: "",
+      start_period: new Date(),
+      end_period: new Date(),
+      notif_type: "",
+      via: "",
     },
   ],
   // keyword_bonus: [KeywordBonus],
@@ -123,7 +121,52 @@ export const KeywordLocationTypeGeneral: IKeywordLocationTypeGeneral = {
   location_type: "",
 };
 
+export const KeywordNotificationInitial: IKeywordNotificationInitial[] = [
+  {
+    notification_template: "",
+    follow_period: false,
+  },
+  {
+    notification_template: "",
+    follow_period: false,
+  },
+  {
+    notification_template: "",
+    follow_period: false,
+  },
+  {
+    notification_template: "",
+    follow_period: false,
+  },
+];
+
+export const KeywordBonus: IKeywordBonus = {
+  bonus_type: [],
+};
+
 export const KeywordFirstStep: boolean = false;
+
+// const KeywordBonus: IKeywordBonus = {
+//   bonus_type: "",
+//   location: "",
+//   limit: 0,
+//   stock: 0,
+//   bucket: "",
+//   qty_denom: 0,
+//   payment: "",
+//   granular: "",
+//   bid: "",
+//   bonus_id: "",
+//   bonus_name: "",
+// };
+
+// const KeywordNotification: IKeywordNotification = {
+//   notification: "",
+//   notification_content: "",
+//   notif_type: "",
+//   transaction_type: "",
+//   via: "",
+// };
 
 // export const CreateKeywordGeneral: ICreateKeyword = {
 //   keyword_type: "",

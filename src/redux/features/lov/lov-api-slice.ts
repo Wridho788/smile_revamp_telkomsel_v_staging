@@ -23,6 +23,13 @@ export const lovSlice = createApi({
         }),
       });
 
+    const detailKeywordNotificationHandler = (endpoint: string) =>
+      builder.query<IResponse, string>({
+        query: (_id: string) => ({
+          url: endpoint + _id,
+        }),
+      });
+
     return {
       getLovList: builder.query<IResponse, IParams>({
         query: (params: IParams) => ({
@@ -47,6 +54,12 @@ export const lovSlice = createApi({
       getProgramNotification: responseHandler("/program/notification"),
       getProgramExperience: responseHandler("/program/experience"),
       getDetailLov: detailHandler(baseUrl + "/v1/lov/"),
+      getProgramGroup: responseHandler(
+        "/program/group?limit=1000&skip=0&filter=%7B%7D&sort=%7B%7D"
+      ),
+      getKeywordNotification: detailKeywordNotificationHandler(
+        "/keyword_notification/"
+      ),
     };
   },
 });
@@ -70,4 +83,7 @@ export const {
   useGetProgramExperienceQuery,
   useGetDetailLovQuery,
   useLazyGetDetailLovQuery,
+  useGetProgramGroupQuery,
+  useGetKeywordNotificationQuery,
+  useLazyGetKeywordNotificationQuery,
 } = lovSlice;
