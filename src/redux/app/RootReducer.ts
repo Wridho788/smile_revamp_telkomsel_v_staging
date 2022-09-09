@@ -12,6 +12,7 @@ import { productSlice } from "../features/product/product-api-slice";
 import { appConfigSlice } from "../features/app-config/app-config-api-slice";
 import { partnerSlice } from "../features/partner/partner-api-slice";
 import { outletSlice } from "../features/outlet/outlet-api-slice";
+import {programPrimedtSlice} from "../features/program-primedt/program-primedt-api-slice";
 
 export const rootReducer = combineReducers({
   [lovSlice.reducerPath]: lovSlice.reducer,
@@ -27,4 +28,5 @@ export const rootReducer = combineReducers({
   [appConfigSlice.reducerPath]: appConfigSlice.reducer,
   [partnerSlice.reducerPath]: partnerSlice.reducer,
   [outletSlice.reducerPath]: outletSlice.reducer,
+  [programPrimedtSlice.reducerPath]: programPrimedtSlice.reducer,
 });
