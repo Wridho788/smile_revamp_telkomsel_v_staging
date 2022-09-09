@@ -11,12 +11,9 @@ import Auth from "./Auth";
 import MerchantManagement from "./MerchantManagement";
 import CustomerManagement from "./CustomerManagement";
 import NotificationManagement from "./NotificationManagement";
-<<<<<<< HEAD
 import LocationManagement from "./LocationManagement"
-=======
 import ProgramMainInfoUpdate from "./ProgramMainInfoUpdate";
 import ProgramNotificationUpdate from "./ProgramNotificationUpdate";
->>>>>>> develop
 
 export {
   Option,
@@ -32,10 +29,7 @@ export {
   MerchantManagement,
   CustomerManagement,
   NotificationManagement,
-<<<<<<< HEAD
-  LocationManagement
-=======
+  LocationManagement,
   ProgramMainInfoUpdate,
   ProgramNotificationUpdate
->>>>>>> develop
 };

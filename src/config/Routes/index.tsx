@@ -11,14 +11,10 @@ import {
     Keyword,
     MerchantManagement,
     CustomerManagement,
-<<<<<<< HEAD
     LocationManagement,
-    Auth
-=======
     Auth,
     ProgramMainInfoUpdate,
     ProgramNotificationUpdate
->>>>>>> develop
 } from "../../pages";
 
 import SpecificProgramTemplate from "../../atomic/containers/pages/GeneralProgramRegistration";
@@ -118,6 +114,8 @@ const Index = () => {
                             <NotificationManagement/>
                         </Protected>
                     }/>
+                
+                <Route path="/location-management" element={<LocationManagement/>}/>
 
                 <Route
                     path={"general-program-registration"}
@@ -135,41 +133,10 @@ const Index = () => {
                         </Protected>
                     }/>
 
-<<<<<<< HEAD
-const Index = () => (
-    <Routes>
-        <Route path="/" element={<Dashboard/>}/>
-        <Route path="/myTelkomsel" element={<MyTelkomsel/>}/>
-        <Route path="/dashboard" element={<Dashboard/>}/>
-        <Route path="/program-management" element={<ProgramPage/>}/>
-        <Route path="/keyword-management" element={<Keyword/>}/>
-        <Route path="/create-program" element={<CreateProgram/>}/>
-        <Route path="/edit-program/:_id" element={<EditProgram/>}/>
-        <Route path="/create-keyword" element={<CreateKeyword/>}/>
-        <Route path="/merchant-management" element={<MerchantManagement/>}/>
-        <Route path="/login" element={<Auth/>}/>
-        <Route
-            path="/customer-management"
-            element={<CustomerManagement/>}
-        />
-        <Route
-            path="/notification-management"
-            element={<NotificationManagement/>}
-        />
-        <Route path="/location-management" element={<LocationManagement/>}/>
-
-        <Route
-            path={"general-program-registration"}
-            element={<SpecificProgramTemplate/>}
-        />
-    </Routes>
-);
-=======
             </Routes>
         </AuthProvider>
     )
 };
->>>>>>> develop
 
 
 export default Index;

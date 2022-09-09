@@ -6,18 +6,6 @@ import { Column } from "primereact/column";
 import { LocationInitial } from "../CustomerManagement/initial";
 import { useLazyLocationTemplateForPrimeQuery } from "../../redux/features/location/location-api-slice";
 
-//data colum tabel
-const colums = [
-  {
-    header: "code",
-    field: "Kode"
-  },
-  {
-    header: "name",
-    field: "Name Location"
-  }
-]
-
 const Index = () => {
 
   const [locations, setLocations] = useState<any>();
@@ -89,14 +77,17 @@ const Index = () => {
             first={lazyParams.first}
             filters={lazyParams.filters}
           >
-            {colums.map((colum, index) => (
-              <Column
-                key={index}
-                field={colum.field}
-                header={colum.header}
-                style={{ flexGrow: 1, flexBasis: "250px" }}
-              />
-            ))}
+            <Column
+              field='code'
+              header='Kode'
+              style={{ flexGrow: 1, flexBasis: "250px" }}
+            />
+
+            <Column
+              field='name'
+              header='Name Location'
+              style={{ flexGrow: 1, flexBasis: "250px" }}
+            />
           </DataTable>
         </Box>
       </Box>
