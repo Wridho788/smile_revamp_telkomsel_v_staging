@@ -78,12 +78,9 @@ const Location: React.FunctionComponent<ILocationProps> = ({
                   multiple
                   label="Location"
                   placeholder="Option"
-                  options={[
-                    locationOptions.data.find(
-                      (e) =>
-                        e["type"] === keywordLocationTypeState.location_type
-                    ),
-                  ]}
+                  options={locationOptions.data.filter(
+                    (e) => e["type"] === keywordLocationTypeState.location_type
+                  )}
                   optionLabel={"name"}
                   value={keywordCreateState.eligibility.locations}
                   handleChange={(value: any) => {
