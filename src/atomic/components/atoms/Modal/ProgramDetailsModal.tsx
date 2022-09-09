@@ -203,7 +203,7 @@ const ProgramDetailsModal: FC<IProgramDetailsModalProps> = ({
                 >
                   Program Main Information
                 </Typography>
-                <IconButton href={"/edit-program/".concat(data._id)} sx={fontContentIcon}>
+                <IconButton href={"/edit-program/main-info/".concat(data._id)} sx={fontContentIcon}>
                   <Edit sx={{ fontSize: 14 }}></Edit>
                 </IconButton>
               </Stack>
@@ -219,11 +219,11 @@ const ProgramDetailsModal: FC<IProgramDetailsModalProps> = ({
                   </Grid>
                   <Grid item xs={4}>
                     <Typography sx={fontContent}><b>Start Period</b></Typography>
-                    <Typography sx={fontContent}>{Moment(data.start_period).format("Y-m-d")}</Typography>
+                    <Typography sx={fontContent}>{Moment(data.start_period).format("YYYY-MM-DD")}</Typography>
                   </Grid>
                   <Grid item xs={4}>
                     <Typography sx={fontContent}><b>End Period</b></Typography>
-                    <Typography sx={fontContent}>{Moment(data.end_period).format("Y-m-d")}</Typography>
+                    <Typography sx={fontContent}>{Moment(data.end_period).format("YYYY-MM-DD")}</Typography>
                   </Grid>
                   <Grid item zeroMinWidth xs={4}>
                     <Typography sx={fontContent}><b>Point Type</b></Typography>
@@ -272,12 +272,15 @@ const ProgramDetailsModal: FC<IProgramDetailsModalProps> = ({
                 >
                   Program Notification
                 </Typography>
-                <IconButton href={"/edit-program/".concat(data._id)} sx={fontContentIcon}>
+                <IconButton
+                    href={"/edit-program/notification/".concat(data._id)}
+                    sx={fontContentIcon}
+                >
                   <Edit sx={{ fontSize: 14 }}></Edit>
                 </IconButton>
               </Stack>
 
-              <Box mt={1}>
+              <Stack spacing={2}>
                 {data["program_notification"].map((_item: any, _index: number) => (
                   <Card sx={{ display: 'flex', justifyContent : 'space-between', alignItems: 'center', padding: 1 }} key={_index}>
                     <Box sx={{ display: 'flex', flexDirection: 'column' }}>
@@ -293,7 +296,7 @@ const ProgramDetailsModal: FC<IProgramDetailsModalProps> = ({
                     <Chip label={_item.via.set_value} size="small" />
                   </Card>
                 ))}
-              </Box>
+              </Stack>
             </Grid>
           </Grid>
         </Grid>

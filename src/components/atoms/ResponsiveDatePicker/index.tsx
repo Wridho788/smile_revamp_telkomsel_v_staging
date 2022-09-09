@@ -12,12 +12,17 @@ const Index: React.FunctionComponent<IResponsiveDatePickerProps> = ({
   placeholder,
   value,
   handleChange,
-  totalColumn = 11,
+  totalColumn = 10,
   leftColumn = 4,
-  rightColumn = 7,
+  rightColumn = 6,
   direction = "row",
   isRequired = true,
+  minDate,
+  disabled = false,
 }) => {
+  const onKeyDown = (e: { preventDefault: () => void }) => {
+    e.preventDefault();
+  };
   return (
     <Grid
       container
@@ -48,12 +53,15 @@ const Index: React.FunctionComponent<IResponsiveDatePickerProps> = ({
             onChange={(newValue) => {
               handleChange(newValue);
             }}
+            minDate={minDate}
+            disabled={disabled}
             renderInput={({ error, ...params }) => (
               <TextField
                 label={placeholder}
                 error={false}
                 size="small"
                 sx={{ minWidth: "100%" }}
+                onKeyDown={onKeyDown}
                 {...params}
               />
             )}

@@ -3,9 +3,9 @@ import {
     Alert,
     Box,
     Button, Grid, ListItem,
-    Stack,
+    Stack, Typography,
 } from "@mui/material";
-import {BodyCopy, Select} from "../../../../atoms";
+import {BodyCopy, H2, Select} from "../../../../atoms";
 import {useEffect, useState} from "react";
 import {Warning} from "@mui/icons-material";
 import {
@@ -14,6 +14,7 @@ import {
 } from "../../../../../redux/features/program/program-api-slice";
 import {noticeUploadDataInitial, segmentationOptionInitial} from "../inital";
 import ListItemText from "@mui/material/ListItemText";
+import {useParams} from "react-router-dom";
 
 interface ISegmentationProps {
 }
@@ -21,6 +22,8 @@ interface ISegmentationProps {
 const EXTENSIONS = ["txt", "csv"];
 
 const BulkData: React.FunctionComponent<ISegmentationProps> = () => {
+
+        let {programId} = useParams();
         const [importFile, {isLoading: isUpdate, isSuccess}] = useImportListMutation()
         const [whitelistPath, setWhitelistPath] = useState<any>();
         const [blacklistPath, setBlacklistPath] = useState<any>();
@@ -32,26 +35,29 @@ const BulkData: React.FunctionComponent<ISegmentationProps> = () => {
             return EXTENSIONS.includes(extension); // return boolean
         };
 
-    const whitelistUpload = (e: any) => {
-        const file = e.target.files[0];
-        if (!getExention(file)) {
-            return alert("Invalid file input, Select txt or csv file");
-        }
-        segmentationOption[0].filename = file.name
-        setWhitelistPath(file);
-        setTriggerState(!triggerState)
-        console.log(segmentationOption[0].filename)
-    }
+        // Handle Loading
+        const [sendBulkProcess,setSendBulkProcess ] = useState(false)
 
-    const blacklistUpload = (e: any) => {
-        const file = e.target.files[0];
-        if (!getExention(file)) {
-            return alert("Invalid file input, Select txt or csv file");
+        const whitelistUpload = (e: any) => {
+            const file = e.target.files[0];
+            if (!getExention(file)) {
+                return alert("Invalid file input, Select txt or csv file");
+            }
+            segmentationOption[0].filename = file.name
+            setWhitelistPath(file);
+            setTriggerState(!triggerState)
+            console.log(segmentationOption[0].filename)
         }
-        segmentationOption[1].filename = file.name
-        setBlacklistPath(file);
-        setTriggerState(!triggerState)
-    }
+
+        const blacklistUpload = (e: any) => {
+            const file = e.target.files[0];
+            if (!getExention(file)) {
+                return alert("Invalid file input, Select txt or csv file");
+            }
+            segmentationOption[1].filename = file.name
+            setBlacklistPath(file);
+            setTriggerState(!triggerState)
+        }
 
         const segmentationOption = segmentationOptionInitial
         const [triggerState, setTriggerState] = useState<boolean>(false)
@@ -60,6 +66,7 @@ const BulkData: React.FunctionComponent<ISegmentationProps> = () => {
 
 
         const handleProcess = async () => {
+            setSendBulkProcess(true)
             setSuccessShow(false)
             if (!segmentationOption[0].filename && !segmentationOption[1].filename) {
                 setWarningShow(true)
@@ -67,17 +74,20 @@ const BulkData: React.FunctionComponent<ISegmentationProps> = () => {
             }
             await importFile({
                 "file": whitelistPath,
-                "type": 'whitelist'
+                "type": 'whitelist',
+                'program': programId
             })
 
             await importFile({
                 "file": blacklistPath,
-                "type": 'blacklist'
+                "type": 'blacklist',
+                'program': programId
             })
             segmentationOption[0].filename = ''
             segmentationOption[1].filename = ''
             setWarningShow(false)
             setSuccessShow(true)
+            setSendBulkProcess(false)
         }
         return (
             <Box px="3vw">
@@ -102,6 +112,7 @@ const BulkData: React.FunctionComponent<ISegmentationProps> = () => {
                                 <Box sx={{marginRight: idx === 0 ? 3 : 0, marginLeft: idx === 0 ? 0 : 3}}>
                                     <ListItem disablePadding>
                                         <Warning color={"warning"} sx={{marginRight: "10px"}}/>
+                                        <H2>{item.type}</H2> <br/>
                                         <BodyCopy color={"red"}>{noticeUploadDataInitial.label}</BodyCopy>
                                     </ListItem>
                                     {
@@ -123,7 +134,7 @@ const BulkData: React.FunctionComponent<ISegmentationProps> = () => {
 
                                             {
                                                 item.filename &&
-                                                    <BodyCopy>File Name : {item.filename}</BodyCopy>
+                                                <BodyCopy>File Name : {item.filename}</BodyCopy>
                                             }
                                         </Stack>
                                     </Box>
@@ -135,9 +146,15 @@ const BulkData: React.FunctionComponent<ISegmentationProps> = () => {
                 </Grid>
 
                 <Stack direction="row" alignItems="center" mt="1.5vw">
-                    <Button onClick={() => handleProcess()} variant="contained" component="label">
-                        Process
-                    </Button>
+                    {
+                        sendBulkProcess ?
+                            <Button variant="contained" disabled component="label">
+                                Loading ...
+                            </Button> :
+                            <Button onClick={() => handleProcess()} variant="contained" component="label">
+                                Process
+                            </Button>
+                    }
                 </Stack>
             </Box>
         );

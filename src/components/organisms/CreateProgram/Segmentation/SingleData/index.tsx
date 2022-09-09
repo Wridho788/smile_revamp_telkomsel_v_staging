@@ -6,9 +6,9 @@ import {
     Button,
     CircularProgress, Grid,
     IconButton, Snackbar,
-    Stack,
+    Stack, Typography,
 } from "@mui/material";
-import {OutlinedTextField, Select} from "../../../../atoms";
+import {H2, OutlinedTextField, Select} from "../../../../atoms";
 import {useEffect, useState} from "react";
 import {programSegmentationOptions} from "../../../../../mocks/options";
 import Table from '@mui/material/Table';
@@ -20,13 +20,14 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import {Add, Delete} from "@mui/icons-material";
 import {
-    useCreateProgramMutation, useCreateProgramTempListMutation,
+    useCreateProgramMutation, useCreateProgramSegmentationAddMutation,
     useDeleteProgramTempListMutation,
     useImportListMutation, useLazyProgramTempListQuery,
 
 } from "../../../../../redux/features/program/program-api-slice";
 import Swal from "sweetalert2";
 import {IBlacklist, IWhitelist} from "./SingleData.type";
+import {useParams} from "react-router-dom";
 
 interface ISegmentationProps {
 }
@@ -48,7 +49,8 @@ const whitelistArray: any = []
 const blacklistArray: any = []
 const SingleData: React.FunctionComponent<ISegmentationProps> = () => {
 
-    const [createProgramTempList] = useCreateProgramTempListMutation();
+    let {programId} = useParams();
+    const [createProgramTempList] = useCreateProgramSegmentationAddMutation();
     const [whitelistMsisdn, setWhitelistMsisdn] = useState<string>('');
     const [blacklistMsisdn, setBlacklistMsisdn] = useState<string>('');
     const [counter, setCounter] = useState<number>(0);
@@ -57,21 +59,26 @@ const SingleData: React.FunctionComponent<ISegmentationProps> = () => {
     const [messageError, setMessageError] = useState('');
     const [warningShow, setWarningShow] = useState(false);
 
+    // Handle Loading
+    const [sendBlacklistProcess, setSendBlacklistProcess] = useState(false)
+    const [sendWhitelistProcess, setSendWhitelistProcess] = useState(false)
+
     const whitelistHandle = () => {
         const data: IWhitelist = {
             type: "whitelist",
             msisdn: whitelistMsisdn,
-            counter: Number(counter)
+            counter: Number(counter),
+            program: programId ?? ''
         }
         whitelistArray.push(data)
         setWhitelistMsisdn('')
         setCounter(0)
-        console.log(whitelistArray)
     }
     const blacklistHandle = () => {
         const data: IBlacklist = {
             type: "blacklist",
             msisdn: blacklistMsisdn,
+            program: programId ?? ''
         }
         blacklistArray.push(data)
         setBlacklistMsisdn('')
@@ -87,6 +94,7 @@ const SingleData: React.FunctionComponent<ISegmentationProps> = () => {
     }
 
     const createWhitelistHandle = async () => {
+        setSendWhitelistProcess(true)
         if (whitelistArray.length === 0) {
             setWarningShow(true)
             return
@@ -99,14 +107,15 @@ const SingleData: React.FunctionComponent<ISegmentationProps> = () => {
                 Swal.fire("Success!", "Data has been created!", "success");
             }
         })
+        setSendWhitelistProcess(false)
     }
-    const createBlacklistHandle = () => {
-        console.log(blacklistArray)
+    const createBlacklistHandle = async () => {
+        setSendBlacklistProcess(true)
         if (blacklistArray.length === 0) {
             setWarningShow(true)
             return
         }
-        createProgramTempList({"set": blacklistArray}).then((res: any) => {
+        await createProgramTempList({"set": blacklistArray}).then((res: any) => {
             if (res.error) {
                 setOpen(true)
                 setMessageError(res.error.data.message)
@@ -114,6 +123,7 @@ const SingleData: React.FunctionComponent<ISegmentationProps> = () => {
                 Swal.fire("Success!", "Data has been created!", "success");
             }
         })
+        setSendBlacklistProcess(false)
     }
     useEffect(() => {
     }, [whitelistArray, blacklistArray, whitelistMsisdn, counter, stateDelete]);
@@ -135,6 +145,10 @@ const SingleData: React.FunctionComponent<ISegmentationProps> = () => {
             </Snackbar>
             <Grid container columns={13}>
                 <Grid xs={6}>
+                    <H2>WHITELIST</H2> <br/>
+                    <ul>
+                        <li>MSISDN must begin with 628xxxxx</li>
+                    </ul>
                     <Stack spacing={"1vw"}>
                         <Grid container columns={13}>
                             <Grid xs={9}>
@@ -192,37 +206,58 @@ const SingleData: React.FunctionComponent<ISegmentationProps> = () => {
                                 </TableHead>
 
                                 <TableBody>
-                                    {whitelistArray.map((row: any) => (
-                                        <TableRow
-                                            key={row.msisdn}
-                                            sx={{'&:last-child td, &:last-child th': {border: 0}}}
-                                        >
-                                            <TableCell component="th" scope="row">
-                                                {`${row.msisdn} - Counter (${row.counter})`}
-                                            </TableCell>
-                                            <TableCell component="th" scope="row">
-                                                <IconButton
-                                                    onClick={() => deleteWhitelistHandle(row.msisdn)}
-                                                    sx={{
-                                                        width: "2.1vw",
-                                                        height: "2.1vw",
-                                                        bgcolor: "secondary",
-                                                        borderRadius: "0.4vw",
-                                                        opacity: 0.8,
-                                                    }}
-                                                >
-                                                    <Delete fontSize="inherit"/>
-                                                </IconButton>
+                                    {whitelistArray.length > 0 ? whitelistArray.map((row: any) => (
+                                            <TableRow
+                                                key={row.msisdn}
+                                                sx={{'&:last-child td, &:last-child th': {border: 0}}}
+                                            >
+                                                <TableCell component="th" scope="row">
+                                                    {`${row.msisdn} - Counter (${row.counter})`}
+                                                </TableCell>
+                                                <TableCell component="th" scope="row">
+                                                    <IconButton
+                                                        onClick={() => deleteWhitelistHandle(row.msisdn)}
+                                                        sx={{
+                                                            width: "2.1vw",
+                                                            height: "2.1vw",
+                                                            bgcolor: "secondary",
+                                                            borderRadius: "0.4vw",
+                                                            opacity: 0.8,
+                                                        }}
+                                                    >
+                                                        <Delete fontSize="inherit"/>
+                                                    </IconButton>
+                                                </TableCell>
+                                            </TableRow>
+                                        ))
+                                        :
+                                        <TableRow>
+                                            <TableCell component="th" scope="row" colSpan={2}>
+                                                <Typography variant="body1">
+                                                    No MSISDN added to this list
+                                                </Typography>
                                             </TableCell>
                                         </TableRow>
-                                    ))}
+                                    }
 
                                     <TableRow>
                                         <TableCell align={"right"} colSpan={2}>
-                                            <Button variant="contained" color="inherit"
-                                                    onClick={() => createWhitelistHandle()}>
-                                                Send
-                                            </Button>
+                                            {
+                                                whitelistArray.length > 0 &&
+                                                <>
+                                                    {
+                                                        sendWhitelistProcess ?
+                                                            <Button variant="contained" disabled color="inherit">
+                                                                Loading ...
+                                                            </Button> :
+                                                            <Button variant="contained" color="inherit"
+                                                                    onClick={() => createWhitelistHandle()}>
+                                                                Send
+                                                            </Button>
+                                                    }
+                                                </>
+
+                                            }
                                         </TableCell>
                                     </TableRow>
                                 </TableBody>
@@ -232,6 +267,10 @@ const SingleData: React.FunctionComponent<ISegmentationProps> = () => {
                 </Grid>
                 <Grid xs={1}/>
                 <Grid xs={6}>
+                    <H2>BLACKLIST</H2> <br/>
+                    <ul>
+                        <li>MSISDN must begin with 628xxxxx</li>
+                    </ul>
                     <Stack spacing={"1vw"}>
                         <Grid container sx={{marginBottom: 7}}>
                             <Grid xs={8}>
@@ -254,7 +293,7 @@ const SingleData: React.FunctionComponent<ISegmentationProps> = () => {
                                 justifyContent: "center",
                                 alignItems: "center",
                             }}>
-                                <Button variant="contained"
+                                <Button sx={{marginTop:4}} variant="contained"
                                         onClick={() => blacklistHandle()}>+
                                 </Button>
                             </Box>
@@ -271,37 +310,57 @@ const SingleData: React.FunctionComponent<ISegmentationProps> = () => {
                                 </TableHead>
 
                                 <TableBody>
-                                    {blacklistArray.map((row: any) => (
-                                        <TableRow
-                                            key={row.msisdn}
-                                            sx={{'&:last-child td, &:last-child th': {border: 0}}}
-                                        >
-                                            <TableCell component="th" scope="row">
-                                                {row.msisdn}
-                                            </TableCell>
-                                            <TableCell component="th" scope="row">
-                                                <IconButton
-                                                    onClick={() => deleteBlacklistHandle(row.msisdn)}
-                                                    sx={{
-                                                        width: "2.1vw",
-                                                        height: "2.1vw",
-                                                        bgcolor: "secondary",
-                                                        borderRadius: "0.4vw",
-                                                        opacity: 0.8,
-                                                    }}
-                                                >
-                                                    <Delete fontSize="inherit"/>
-                                                </IconButton>
+                                    {blacklistArray.length > 0 ? blacklistArray.map((row: any) => (
+                                            <TableRow
+                                                key={row.msisdn}
+                                                sx={{'&:last-child td, &:last-child th': {border: 0}}}
+                                            >
+                                                <TableCell component="th" scope="row">
+                                                    {row.msisdn}
+                                                </TableCell>
+                                                <TableCell component="th" scope="row">
+                                                    <IconButton
+                                                        onClick={() => deleteBlacklistHandle(row.msisdn)}
+                                                        sx={{
+                                                            width: "2.1vw",
+                                                            height: "2.1vw",
+                                                            bgcolor: "secondary",
+                                                            borderRadius: "0.4vw",
+                                                            opacity: 0.8,
+                                                        }}
+                                                    >
+                                                        <Delete fontSize="inherit"/>
+                                                    </IconButton>
+                                                </TableCell>
+                                            </TableRow>
+                                        ))
+                                        :
+                                        <TableRow>
+                                            <TableCell component="th" scope="row" colSpan={2}>
+                                                <Typography variant="body1">
+                                                    No MSISDN added to this list
+                                                </Typography>
                                             </TableCell>
                                         </TableRow>
-                                    ))}
+                                    }
 
                                     <TableRow>
                                         <TableCell align={"right"} colSpan={2}>
-                                            <Button variant="contained" color="inherit"
-                                                    onClick={() => createBlacklistHandle()}>
-                                                Send
-                                            </Button>
+                                            {
+                                                blacklistArray.length > 0 &&
+                                                <>
+                                                    {
+                                                        sendBlacklistProcess ?
+                                                            <Button variant="contained" disabled color="inherit">
+                                                                Loading ...
+                                                            </Button> :
+                                                            <Button variant="contained" color="inherit"
+                                                                    onClick={() => createBlacklistHandle()}>
+                                                                Send
+                                                            </Button>
+                                                    }
+                                                </>
+                                            }
                                         </TableCell>
                                     </TableRow>
                                 </TableBody>

@@ -63,7 +63,7 @@ export const notificationSlice = createApi({
       });
     return {
       notificationTemplate: responseHandler("/template"),
-      notificationTemplateDetail: detailHandler("/template/"),
+      notificationTemplateDetail: detailHandler("/teACmplate/"),
 
       // POST
       addNotification: postHandler("/template"),

@@ -1,4 +1,172 @@
-import { ICreateKeyword } from "./interfaces";
+import {
+  IKeywordShift,
+  IKeywordEligibility,
+  ICreateKeyword,
+  IKeywordLocationTypeGeneral,
+  IKeywordBonus,
+  IKeywordNotificationInitial,
+  IBonusLuckyDrawInitial,
+} from "./interfaces";
+
+const KeywordShift: IKeywordShift = {
+  from: new Date(),
+  to: new Date(),
+};
+
+const KeywordEligibility: IKeywordEligibility = {
+  name: "",
+  start_period: new Date(),
+  end_period: new Date(),
+  keyword_type: "",
+  point_type: "",
+  poin_value: "",
+  poin_redeemed: 0,
+  channel_validation: false,
+  channel_validation_list: [],
+  program_id: "",
+  eligibility_locations: false,
+  locations: [],
+  program_title_expose: "",
+  program_experience: [],
+  program_bersubsidi: false,
+  merchant: "",
+  merchandise_keyword: false,
+  keyword_schedule: "",
+  total_budget: 0,
+  customer_value: 0,
+  multiwhitelist: false,
+  multiwhitelist_program: "",
+  enable_sms_masking: false,
+  sms_masking: "",
+  timezone: "",
+  for_new_redeemer: false,
+  max_mode: "",
+  max_redeem_counter: 0,
+  segmentation_customer_tier: [],
+  segmentation_customer_los_operator: "",
+  segmentation_customer_los: 0,
+  segmentation_customer_los_max: 0,
+  segmentation_customer_los_min: 0,
+  segmentation_customer_type: "",
+  segmentation_customer_most_redeem: [],
+  segmentation_customer_brand: [],
+  segmentation_customer_prepaid_registration: false,
+  segmentation_customer_kyc_completeness: false,
+  segmentation_customer_poin_balance_operator: "",
+  segmentation_customer_poin_balance: 0,
+  segmentation_customer_poin_balance_min: 0,
+  segmentation_customer_poin_balance_max: 0,
+  segmentation_customer_preference: "",
+  segmentation_customer_arpu_operator: "",
+  segmentation_customer_arpu: 0,
+  segmentation_customer_arpu_min: 0,
+  segmentation_customer_arpu_max: 0,
+  segmentation_customer_preferences_bcp: "",
+  file: "",
+  segmentation_employee_numbers: false,
+  keyword_shift: [KeywordShift],
+};
+
+const bonusLuckyDrawInitial: IBonusLuckyDrawInitial = {
+  bonus_type: "lucky_draw",
+  lucky_draw_reguler: true,
+  lucky_draw_allow_inject_coupon: false,
+  lucky_draw_prize: "",
+  stock_location: [],
+  redeem_after_verification: false,
+};
+
+export const CreateKeywordGeneral: ICreateKeyword = {
+  eligibility: KeywordEligibility,
+  bonus: [bonusLuckyDrawInitial],
+  notification: [
+    {
+      code_identifier: "",
+      notification_content: "",
+      start_period: new Date(),
+      end_period: new Date(),
+      notif_type: "",
+      via: "",
+    },
+    {
+      code_identifier: "",
+      notification_content: "",
+      start_period: new Date(),
+      end_period: new Date(),
+      notif_type: "",
+      via: "",
+    },
+    {
+      code_identifier: "",
+      notification_content: "",
+      start_period: new Date(),
+      end_period: new Date(),
+      notif_type: "",
+      via: "",
+    },
+    {
+      code_identifier: "",
+      notification_content: "",
+      start_period: new Date(),
+      end_period: new Date(),
+      notif_type: "",
+      via: "",
+    },
+  ],
+  // keyword_bonus: [KeywordBonus],
+  // keyword_notification: [KeywordNotification],
+};
+
+export const KeywordLocationTypeGeneral: IKeywordLocationTypeGeneral = {
+  location_type: "",
+};
+
+export const KeywordNotificationInitial: IKeywordNotificationInitial[] = [
+  {
+    notification_template: "",
+    follow_period: false,
+  },
+  {
+    notification_template: "",
+    follow_period: false,
+  },
+  {
+    notification_template: "",
+    follow_period: false,
+  },
+  {
+    notification_template: "",
+    follow_period: false,
+  },
+];
+
+export const KeywordBonus: IKeywordBonus = {
+  bonus_type: [],
+};
+
+export const KeywordFirstStep: boolean = false;
+
+// const KeywordBonus: IKeywordBonus = {
+//   bonus_type: "",
+//   location: "",
+//   limit: 0,
+//   stock: 0,
+//   bucket: "",
+//   qty_denom: 0,
+//   payment: "",
+//   granular: "",
+//   bid: "",
+//   bonus_id: "",
+//   bonus_name: "",
+// };
+
+// const KeywordNotification: IKeywordNotification = {
+//   notification: "",
+//   notification_content: "",
+//   notif_type: "",
+//   transaction_type: "",
+//   via: "",
+// };
 
 // export const CreateKeywordGeneral: ICreateKeyword = {
 //   keyword_type: "",
@@ -84,93 +252,92 @@ import { ICreateKeyword } from "./interfaces";
 //   ],
 // };
 
-export const CreateKeywordGeneral: ICreateKeyword = {
-  name: "",
-  start_period: new Date(),
-  end_period: new Date(),
-  keyword_type: "",
-  point_type: "",
-  keyword_verification: "",
-  keyword_schedule_shift: [
-    {
-      from: new Date(),
-      to: new Date(),
-    },
-  ],
-  poin_value: "",
-  poin_redeemed: 0,
-  channel_validation: false,
-  enable_corporate: false,
-  channel_validation_list: [],
-  program_title_expose: "",
-  merchant: "",
-  merchandise_keyword: false,
-  keyword_schedule_type: "",
-  program_bersubsidi: false,
-  total_anggaran: 0,
-  customer_value: 0,
-  multiwhitelist: false,
-  multiwhitelist_program: "",
-  enable_sms_masking: false,
-  sms_masking: "",
-  timezone: "",
-  for_new_redeemer: false,
-  max_mode: "",
-  max_redeem_counter: 0,
-  program_experience: [],
-  segmentation_customer_tier: [],
-  segmentation_customer_los_operator: "",
-  segmentation_customer_los: 0,
-  segmentation_customer_los_max: 0,
-  segmentation_customer_los_min: 0,
-  segmentation_customer_type: "",
-  segmentation_customer_most_redeem: [],
-  segmentation_customer_brand: [],
-  segmentation_customer_prepaid_registration: false,
-  segmentation_customer_kyc_completeness: false,
-  segmentation_customer_arpu_operator: "",
-  segmentation_customer_arpu: 0,
-  segmentation_customer_arpu_min: 0,
-  segmentation_customer_arpu_max: 0,
-  segmentation_customer_preferences_bcp: "",
-  segmentation_employee_numbers: false,
-  keyword_parent: "",
-  keyword_bonus: [
-    {
-      bonus_type: "",
-      location: "",
-      limit: 0,
-      stock: 0,
-      bucket: "",
-      qty_denom: 0,
-      payment: "",
-      granular: "",
-      bid: "",
-      bonus_id: "",
-      bonus_name: "",
-    },
-  ],
-  keyword_notification: [
-    {
-      notification: "",
-      notification_content: "",
-      notif_type: "",
-      transaction_type: "",
-      via: "",
-    },
-  ],
-  keyword_shift: [
-    {
-      from: new Date(),
-      to: new Date(),
-    },
-  ],
-};
-
-export interface IKeywordLocationTypeGeneral {
-  location_type: string;
-}
-
-export const KeywordLocationTypeGeneral: IKeywordLocationTypeGeneral = {
-  location_type: "",
-};
+// export const CreateKeywordGeneral: ICreateKeyword = {
+//   program_id: "",
+//   program_experience: [],
+//   name: "",
+//   program_title_expose: "",
+//   start_period: new Date(),
+//   end_period: new Date(),
+//   keyword_type: "",
+//   point_type: "",
+//   keyword_verification: "",
+//   keyword_schedule_shift: [
+//     {
+//       from: new Date(),
+//       to: new Date(),
+//     },
+//   ],
+//   poin_value: "",
+//   poin_redeemed: 0,
+//   channel_validation: false,
+//   customer_type: "RegularOnly",
+//   channel_validation_list: [],
+//   eligibility_locations: false,
+//   merchant: "",
+//   merchandise_keyword: false,
+//   keyword_schedule_type: "",
+//   program_bersubsidi: false,
+//   total_anggaran: 0,
+//   customer_value: 0,
+//   multiwhitelist: false,
+//   multiwhitelist_program: "",
+//   enable_sms_masking: false,
+//   sms_masking: "",
+//   timezone: "",
+//   for_new_redeemer: false,
+//   max_mode: "",
+//   max_redeem_counter: 0,
+//   locations: [],
+//   segmentation_customer_tier: [],
+//   segmentation_customer_los_operator: "",
+//   segmentation_customer_los: 0,
+//   segmentation_customer_los_max: 0,
+//   segmentation_customer_los_min: 0,
+//   segmentation_customer_type: "",
+//   segmentation_customer_most_redeem: [],
+//   segmentation_customer_brand: [],
+//   segmentation_customer_prepaid_registration: false,
+//   segmentation_customer_kyc_completeness: false,
+//   segmentation_customer_arpu_operator: "",
+//   segmentation_customer_arpu: 0,
+//   segmentation_customer_arpu_min: 0,
+//   segmentation_customer_arpu_max: 0,
+//   segmentation_employee_numbers: false,
+//   segmentation_customer_poin_balance_operator: "",
+//   segmentation_customer_poin_balance: 0,
+//   segmentation_customer_poin_balance_min: 0,
+//   segmentation_customer_poin_balance_max: 0,
+//   segmentation_customer_preferences_bcp: "",
+//   keyword_parent: "",
+//   keyword_bonus: [
+//     {
+//       bonus_type: "",
+//       location: "",
+//       limit: 0,
+//       stock: 0,
+//       bucket: "",
+//       qty_denom: 0,
+//       payment: "",
+//       granular: "",
+//       bid: "",
+//       bonus_id: "",
+//       bonus_name: "",
+//     },
+//   ],
+//   keyword_notification: [
+//     {
+//       notification: "",
+//       notification_content: "",
+//       notif_type: "",
+//       transaction_type: "",
+//       via: "",
+//     },
+//   ],
+//   keyword_shift: [
+//     {
+//       from: new Date(),
+//       to: new Date(),
+//     },
+//   ],
+// };

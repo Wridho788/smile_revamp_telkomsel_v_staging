@@ -28,3 +28,9 @@ export const ComparisonOptions = [
   { _id: "MoreOrEqualTo", set_value: "MoreOrEqualTo" },
   { _id: "Ranged", set_value: "Ranged" },
 ];
+
+export const CustomerTypeOptions = [
+  { _id: "RegularOnly", set_value: "Regular Only" },
+  { _id: "CorporateOnly", set_value: "Corporate Only" },
+  { _id: "Both", set_value: "Both" },
+];

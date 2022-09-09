@@ -8,4 +8,5 @@ export interface IResponsiveTimePickerProps {
   rightColumn?: number;
   direction?: "row" | "column";
   isRequired?: boolean;
+  minTime?: any;
 }

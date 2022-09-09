@@ -23,7 +23,7 @@ import {
     useGetLocationTypeQuery,
     useGetMechanismQuery,
     useGetOwnerQuery,
-    useGetPointTypeQuery,
+    useGetPointTypeQuery, useGetProgramGroupQuery,
 } from "../../../../redux/features/lov/lov-api-slice";
 import {
     BooleanOption,
@@ -74,6 +74,7 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
     const {data: pointTypeOption = {data: []}} = useGetPointTypeQuery();
     const {data: mechanismOption = {data: []}} = useGetMechanismQuery();
     const {data: ownerOption = {data: []}} = useGetLocationTypeQuery();
+    const {data: groupOption = {data: []}} = useGetProgramGroupQuery();
 
     const [searchInput, setSearchInput] = useState<string>("");
     const [stateTrigger, setStateTrigger] = React.useState<boolean>(false);
@@ -281,13 +282,48 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
                 </Box>
 
 
-                <OutlinedTextField
+                {/*<OutlinedTextField*/}
+                {/*    label="Program Group"*/}
+                {/*    placeholder="Program Group"*/}
+                {/*    variant={"outlined"}*/}
+                {/*    value={programData.program_group}*/}
+                {/*    handleChange={(value: any) => {*/}
+                {/*        programData.program_group = value;*/}
+                {/*        setStateTrigger(!stateTrigger);*/}
+                {/*    }}*/}
+                {/*/>*/}
+
+                <Select
                     label="Program Group"
-                    placeholder="Program Group"
-                    variant={"outlined"}
+                    placeholder="Option"
+                    options={groupOption.data}
+                    optionLabel="group_name"
                     value={programData.program_group}
                     handleChange={(value: any) => {
+                        console.log(value)
                         programData.program_group = value;
+                        setStateTrigger(!stateTrigger);
+                    }}
+                />
+
+                <OutlinedTextField
+                    label="Keyword Registration"
+                    placeholder="Keyword Registration"
+                    variant={"outlined"}
+                    value={programData.keyword_registration}
+                    handleChange={(value: any) => {
+                        programData.keyword_registration = value;
+                        setStateTrigger(!stateTrigger);
+                    }}
+                />
+
+                <OutlinedTextField
+                    label="Point Registration"
+                    placeholder="Point Registration"
+                    variant={"outlined"}
+                    value={programData.point_registration}
+                    handleChange={(value: any) => {
+                        programData.point_registration = Number(value);
                         setStateTrigger(!stateTrigger);
                     }}
                 />
@@ -314,7 +350,6 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
                     rows={4}
                     isRequired={false}
                 />
-
                 <ResponsiveDateTimePicker
                     label="Start Period"
                     placeholder="Start Period"
@@ -327,6 +362,7 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
                 <ResponsiveDateTimePicker
                     label="End Period"
                     placeholder="End Period"
+                    minDateTime={programData.start_period}
                     value={programData.end_period}
                     handleChange={(value: any) => {
                         programData.end_period = value;
@@ -414,7 +450,7 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
                 <Select
                     label="Threshold Alarm Experied"
                     placeholder="Option"
-                    value={programData.threshold_alarm_expired}
+                    value={Number(programData.threshold_alarm_expired)}
                     options={ThresholdAlarmExpiredOption}
                     handleChange={(value: any) => {
                         programData.threshold_alarm_expired = Number(value);

@@ -53,7 +53,7 @@ export const menuItems: Menu[] = [
     child: [
       {
         label: "Merchant",
-        path: "/merchant",
+        path: "/merchant-management",
         alias: ["/merchant-management"],
       },
       {
