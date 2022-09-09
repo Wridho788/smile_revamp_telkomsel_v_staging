@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, {FC, useEffect} from "react";
 import Box from "@mui/material/Box";
 import ModalCustom from "@mui/material/Modal";
 import { IProgramDetailsModalProps } from "./Modal.type";
@@ -92,6 +92,7 @@ const ProgramDetailsModal: FC<IProgramDetailsModalProps> = ({
       }
     });
   };
+
 
   return (
     <ModalCustom
@@ -269,6 +270,7 @@ const ProgramDetailsModal: FC<IProgramDetailsModalProps> = ({
                     variant="subtitle1"
                     gutterBottom
                     sx={fontContentTitle}
+                    onClick={() => {console.log(data)}}
                 >
                   Program Notification
                 </Typography>
@@ -281,7 +283,7 @@ const ProgramDetailsModal: FC<IProgramDetailsModalProps> = ({
               </Stack>
 
               <Stack spacing={2}>
-                {data["program_notification"].map((_item: any, _index: number) => (
+                {data.program_notification && data.program_notification.map((_item: any, _index: number) => (
                   <Card sx={{ display: 'flex', justifyContent : 'space-between', alignItems: 'center', padding: 1 }} key={_index}>
                     <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                       <Typography sx={fontContent}>
