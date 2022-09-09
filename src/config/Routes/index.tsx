@@ -11,6 +11,7 @@ import {
     Keyword,
     MerchantManagement,
     CustomerManagement,
+    LocationManagement,
     Auth,
     ProgramMainInfoUpdate,
     ProgramNotificationUpdate
@@ -113,6 +114,8 @@ const Index = () => {
                             <NotificationManagement/>
                         </Protected>
                     }/>
+                
+                <Route path="/location-management" element={<LocationManagement/>}/>
 
                 <Route
                     path={"general-program-registration"}

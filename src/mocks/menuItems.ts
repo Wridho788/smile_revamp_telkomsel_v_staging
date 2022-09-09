@@ -9,6 +9,7 @@ import {
   BrightnessLow,
   StarsOutlined,
   ErrorOutlineOutlined,
+  ShareLocationOutlined
 } from "@mui/icons-material";
 
 export interface Menu {
@@ -68,5 +69,11 @@ export const menuItems: Menu[] = [
     hasChild: false,
     icon: ErrorOutlineOutlined,
     path: "/notification-management",
+  },
+  {
+    label: "Location Management",
+    hasChild: false,
+    icon: ShareLocationOutlined,
+    path: "/location-management",
   },
 ];
