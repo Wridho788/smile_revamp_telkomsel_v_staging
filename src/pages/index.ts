@@ -11,6 +11,7 @@ import Auth from "./Auth";
 import MerchantManagement from "./MerchantManagement";
 import CustomerManagement from "./CustomerManagement";
 import NotificationManagement from "./NotificationManagement";
+import LocationManagement from "./LocationManagement"
 
 export {
   Option,
@@ -26,4 +27,5 @@ export {
   MerchantManagement,
   CustomerManagement,
   NotificationManagement,
+  LocationManagement
 };

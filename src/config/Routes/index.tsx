@@ -11,6 +11,7 @@ import {
     Keyword,
     MerchantManagement,
     CustomerManagement,
+    LocationManagement,
     Auth
 } from "../../pages";
 import SpecificProgramTemplate from "../../atomic/containers/pages/GeneralProgramRegistration";
@@ -36,6 +37,7 @@ const Index = () => (
             path="/notification-management"
             element={<NotificationManagement/>}
         />
+        <Route path="/location-management" element={<LocationManagement/>}/>
 
         <Route
             path={"general-program-registration"}
