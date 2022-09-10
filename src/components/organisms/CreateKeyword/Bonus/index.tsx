@@ -107,26 +107,33 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
         />
         <>
           {keywordBonusHelperState.bonus_type.length > 0 &&
-            keywordBonusHelperState.bonus_type.map((_, idx) => {
-              const bonusType = bonusTypeOptions.data.find(
-                (e) => e["set_value"] === _
-              )?.set_value;
-              if (bonusType === "Lucky Draw Coupon") {
-                return (
-                  <Box key={`kbt__${idx}`}>
-                    <LuckyDraw
-                      bonusType={bonusType}
-                      keywordCreateState={keywordCreateState}
-                      keywordCreate={keywordCreate}
-                      stateTrigger={stateTrigger}
-                      setStateTrigger={setStateTrigger}
-                    />
-                  </Box>
-                );
-              } else if (bonusType === "Auction") {
-                return <Button key={`kbt__${idx}`}>Auction is Choosen</Button>;
-              } else {
-                <Box key={`kbt__${idx}`}></Box>;
+            // eslint-disable-next-line array-callback-return
+            keywordBonusHelperState.bonus_type.map((bonusType, idx) => {
+              switch (bonusType) {
+                case "Lucky Draw Coupon":
+                  return (
+                    <Box key={`bonusType__${idx}`}>
+                      <LuckyDraw
+                        bonusType={bonusType}
+                        keywordCreateState={keywordCreateState}
+                        keywordCreate={keywordCreate}
+                        stateTrigger={stateTrigger}
+                        setStateTrigger={setStateTrigger}
+                      />
+                    </Box>
+                  );
+                case "Auction":
+                  return (
+                    <Box key={`bonusType__${idx}`}>
+                      <LuckyDraw
+                        bonusType={bonusType}
+                        keywordCreateState={keywordCreateState}
+                        keywordCreate={keywordCreate}
+                        stateTrigger={stateTrigger}
+                        setStateTrigger={setStateTrigger}
+                      />
+                    </Box>
+                  );
               }
             })}
         </>
