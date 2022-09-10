@@ -1,8 +1,8 @@
-export interface IKeywordScheduleShift {
-  from: any;
-  to: any;
+export interface IKeywordEligibilityLocationHelper {
+  location_type: string;
 }
-export interface IKeywordShift {
+
+export interface IKeywordEligibilityKeywordShift {
   from: any;
   to: any;
 }
@@ -58,7 +58,45 @@ export interface IKeywordEligibility {
   segmentation_customer_preferences_bcp: string;
   file: string;
   segmentation_employee_numbers: boolean;
-  keyword_shift: IKeywordShift[];
+  keyword_shift: IKeywordEligibilityKeywordShift[];
+}
+
+export interface IKeywordBonusHelper {
+  bonus_type: any[];
+}
+
+export interface IKeywordBonusLuckyDrawLocation {
+  location_id: string;
+  stock: number;
+}
+
+export interface IKeywordBonusLuckyDraw {
+  bonus_type: string;
+  lucky_draw_reguler: boolean;
+  lucky_draw_allow_inject_coupon: boolean;
+  lucky_draw_prize: string;
+  redeem_after_verification: boolean;
+  locations: any[];
+}
+
+export interface IKeywordNotificationEligibilityHelper {
+  notification_template: string;
+  follow_period: boolean;
+}
+
+export interface IKeywordNotificationEligibility {
+  code_identifier: string;
+  notification_content: string;
+  start_period: Date;
+  end_period: Date;
+  notif_type: string;
+  via: string;
+}
+
+export interface ICreateKeyword {
+  eligibility: IKeywordEligibility;
+  bonus: any[];
+  notification: any[];
 }
 
 // export interface IKeywordBonus {
@@ -82,45 +120,6 @@ export interface IKeywordEligibility {
 //   transaction_type: string;
 //   notification_content: string | undefined;
 // }
-
-export interface INotification {
-  code_identifier: string;
-  notification_content: string;
-  start_period: Date;
-  end_period: Date;
-  notif_type: string;
-  via: string;
-}
-
-export interface IKeywordLocationTypeGeneral {
-  location_type: string;
-}
-
-export interface IKeywordNotificationInitial {
-  notification_template: string;
-  follow_period: boolean;
-}
-
-export interface IBonusLuckyDrawInitial {
-  bonus_type: string;
-  lucky_draw_reguler: boolean;
-  lucky_draw_allow_inject_coupon: boolean;
-  lucky_draw_prize: string;
-  stock_location: any[];
-  redeem_after_verification: boolean;
-}
-
-export interface IKeywordBonus {
-  bonus_type: any[];
-}
-
-export interface ICreateKeyword {
-  eligibility: IKeywordEligibility;
-  bonus: any[];
-  notification: any[];
-  // keyword_bonus: Array<IKeywordBonus>;
-  // keyword_notification: Array<IKeywordNotification>;
-}
 
 // export interface ICreateKeyword {
 //   program_id: string;

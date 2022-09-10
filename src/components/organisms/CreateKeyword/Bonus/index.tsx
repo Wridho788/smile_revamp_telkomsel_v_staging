@@ -2,9 +2,9 @@ import * as React from "react";
 import { Box, Button, Stack } from "@mui/material";
 import { Select } from "../../../atoms";
 import { useGetBonusTypeQuery } from "../../../../redux/features/lov/lov-api-slice";
-import { KeywordBonus } from "../initial";
+import { KeywordBonusHelper } from "../initial";
 import { CreateKeywordGeneral } from "../initial";
-import { ICreateKeyword, IKeywordBonus } from "../interfaces";
+import { ICreateKeyword, IKeywordBonusHelper } from "../interfaces";
 
 interface IBonusProps {}
 
@@ -15,9 +15,9 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
   const [keywordCreateState, setKeywordCreateState] =
     React.useState<ICreateKeyword>(keywordCreate);
 
-  let keywordBonus = KeywordBonus;
-  const [keywordBonusState, setKeywordBonusState] =
-    React.useState<IKeywordBonus>(keywordBonus);
+  let keywordBonusHelper = KeywordBonusHelper;
+  const [keywordBonusHelperState, setKeywordBonusHelperState] =
+    React.useState<IKeywordBonusHelper>(keywordBonusHelper);
 
   const [stateTrigger, setStateTrigger] = React.useState<boolean>(false);
 
@@ -26,9 +26,9 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
   }, [keywordCreate, stateTrigger]);
 
   React.useEffect(() => {
-    setKeywordBonusState(keywordBonus);
-    console.log(keywordBonus);
-  }, [keywordBonus, stateTrigger]);
+    setKeywordBonusHelperState(keywordBonusHelper);
+    console.log(keywordBonusHelper);
+  }, [keywordBonusHelper, stateTrigger]);
 
   React.useEffect(() => {
     console.log(keywordCreate);
@@ -41,15 +41,15 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
           multiple
           placeholder="Option"
           options={bonusTypeOptions.data}
-          value={keywordBonusState.bonus_type}
+          value={keywordBonusHelperState.bonus_type}
           handleChange={(value: []) => {
-            keywordBonus.bonus_type = value;
+            keywordBonusHelper.bonus_type = value;
             setStateTrigger(!stateTrigger);
           }}
         />
         <>
-          {keywordBonusState.bonus_type.length > 0 &&
-            keywordBonusState.bonus_type.map((_, idx) => {
+          {keywordBonusHelperState.bonus_type.length > 0 &&
+            keywordBonusHelperState.bonus_type.map((_, idx) => {
               const type = bonusTypeOptions.data.find(
                 (e) => e["_id"] === _
               )?.set_value;
