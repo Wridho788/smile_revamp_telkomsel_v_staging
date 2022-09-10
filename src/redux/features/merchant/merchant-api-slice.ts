@@ -17,13 +17,10 @@ export const merchantSlice = createApi({
         }),
       });
     const importFileHandler = (endpoint: string) =>
-      builder.mutation<{ success: boolean; body: any }, any>({
+      builder.mutation<{ success: boolean; body: any }, FormData>({
         query: (body) => ({
           url: endpoint,
           method: "POST",
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
           body: body,
         }),
       });
@@ -49,10 +46,18 @@ export const merchantSlice = createApi({
           body: body,
         }),
       });
+    const putFileHandler = (endpoint: string) =>
+      builder.mutation<{ success: boolean; body: any }, FormData | any>({
+        query: (body) => ({
+          url: endpoint + "/" + body["_id"] + "/edit",
+          method: "PUT",
+          body: body,
+        }),
+      });
     const deleteHandler = (endpoint: string) =>
       builder.mutation<{ success: boolean; id: string }, string>({
         query: (id) => ({
-          url: endpoint + id + "/delete",
+          url: endpoint + "/" + id + "/delete",
           method: "DELETE",
           headers: {
             "Content-Type": "application/json",
@@ -62,24 +67,32 @@ export const merchantSlice = createApi({
     return {
       merchantManagementList: responseHandler("/prime"),
       merchantBulkItem: responseHandler("/bulk/"),
+      merchantPartnerList: responseHandler(baseUrl + "/v1/merchant-patner"),
 
       // post
       addMerchantManagement: postHandler("/"),
+      addMerchantPartner: importFileHandler(baseUrl + "/v1/merchant-patner"),
       merchantOutletLink: postHandler(baseUrl + "/v1/merchant-outlet"),
 
       // put
       updateMerchantManagement: putHandler("/"),
+      updateMerchantPartner: putFileHandler(baseUrl + "/v1/merchant-patner"),
       // delete
       deleteMerchantManagement: deleteHandler("/"),
+      deleteMerchantPartner: deleteHandler(baseUrl + "/v1/merchant-patner"),
     };
   },
 });
 
 export const {
   useMerchantManagementListQuery,
+  useLazyMerchantPartnerListQuery,
   useLazyMerchantManagementListQuery,
   useMerchantOutletLinkMutation,
   useAddMerchantManagementMutation,
+  useAddMerchantPartnerMutation,
+  useUpdateMerchantPartnerMutation,
   useUpdateMerchantManagementMutation,
   useDeleteMerchantManagementMutation,
+  useDeleteMerchantPartnerMutation,
 } = merchantSlice;

@@ -56,6 +56,11 @@ export const menuItems: Menu[] = [
         alias: ["/merchant-management"],
       },
       {
+        label: "Partner",
+        path: "/merchant-partner-management",
+        alias: ["/merchant-partner-management"],
+      },
+      {
         label: "Outlet",
         path: "/merchant",
         alias: ["/merchant"],

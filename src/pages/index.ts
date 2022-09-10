@@ -13,6 +13,7 @@ import CustomerManagement from "./CustomerManagement";
 import NotificationManagement from "./NotificationManagement";
 import ProgramMainInfoUpdate from "./ProgramMainInfoUpdate";
 import ProgramNotificationUpdate from "./ProgramNotificationUpdate";
+import MerchantPartnerManagement from "./MerchantPartnerManagement";
 
 export {
   Option,
@@ -29,5 +30,6 @@ export {
   CustomerManagement,
   NotificationManagement,
   ProgramMainInfoUpdate,
-  ProgramNotificationUpdate
+  ProgramNotificationUpdate,
+  MerchantPartnerManagement,
 };
