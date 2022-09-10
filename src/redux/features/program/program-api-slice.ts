@@ -1,6 +1,6 @@
 import {createApi} from "@reduxjs/toolkit/query/react";
 import {API_HEADER} from "../../utils/header";
-import {IData, IProgramImportFile, IResponse} from "./interface";
+import {IData, IPayload, IProgramImportFile, IResponse} from "./interface";
 import {IParamDetail, IParams} from "../../utils/IGeneral";
 import {ICreateProgram} from "../../../pages/CreateProgram/interface";
 
@@ -80,7 +80,12 @@ export const programSlice = createApi({
             // get
             programList: responseHandler(baseUrl + "/v2/program"),
             programTempList: responseHandler("/temp_list"),
-            programSegmentationList: responseHandler("/segmentation"),
+            programSegmentationList: builder.query<IPayload, IParams>({
+                query: (params: IParams) => ({
+                    url: "/segmentation",
+                    params: params,
+                }),
+            }),
             detailProgram: detailHandler(baseUrl + "/v2/program/"),
             approveProgram: approvalHandler("approve"),
             rejectProgram: approvalHandler("reject"),
@@ -95,11 +100,11 @@ export const programSlice = createApi({
             // put
             updateProgram: putHandler(baseUrl + "/v2/program/"),
             updateProgramMainInfo: putHandler(baseUrl + "/v2/program/", "/edit/main-info"),
-            updateProgramNotification: putHandler(baseUrl + "/v2/program/edit/notification", '',false),
+            updateProgramNotification: putHandler(baseUrl + "/v2/program/edit/notification", '', false),
 
             // delete
             deleteProgram: deleteHandler(baseUrl + "/v2/program/"),
-            deleteProgramTempList: deleteHandler(baseUrl + "/v2/program/temp_list/"),
+            deleteProgramSegmentation: deleteHandler(baseUrl + "/v2/program/segmentation/"),
         };
     },
 });
@@ -112,12 +117,13 @@ export const {
     useCreateProgramMutation,
     useImportListMutation,
     useDeleteProgramMutation,
-    useDeleteProgramTempListMutation,
+    useDeleteProgramSegmentationMutation,
     useDetailProgramQuery,
     useApproveProgramMutation,
     useRejectProgramMutation,
     useUpdateProgramMutation,
     useCreateProgramSegmentationAddMutation,
     useUpdateProgramMainInfoMutation,
-    useUpdateProgramNotificationMutation
+    useUpdateProgramNotificationMutation,
+    useLazyProgramSegmentationListQuery
 } = programSlice;

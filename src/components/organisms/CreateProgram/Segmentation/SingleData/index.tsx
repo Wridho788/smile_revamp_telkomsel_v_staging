@@ -19,10 +19,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import {Add, Delete} from "@mui/icons-material";
-import {
-    useCreateProgramMutation, useCreateProgramSegmentationAddMutation,
-    useDeleteProgramTempListMutation,
-    useImportListMutation, useLazyProgramTempListQuery,
+import { useCreateProgramSegmentationAddMutation,
 
 } from "../../../../../redux/features/program/program-api-slice";
 import Swal from "sweetalert2";

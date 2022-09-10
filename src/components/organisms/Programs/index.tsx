@@ -39,7 +39,7 @@ import { ProgramItemInitial } from "./initial";
 import Swal from "sweetalert2";
 import { useAppConfigQuery } from "../../../redux/features/app-config/app-config-api-slice";
 import { useAccountAuthenticateQuery } from "../../../redux/features/account/account-api-slice";
-import ProgramDetailsModal from "../../../atomic/components/atoms/Modal/ProgramDetailsModal";
+import ProgramDetailsModal from "./Detail/ProgramDetailsModal";
 
 const Programs: React.FunctionComponent = () => {
   const { data: appConfig } = useAppConfigQuery();
