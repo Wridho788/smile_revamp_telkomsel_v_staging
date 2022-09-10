@@ -5,9 +5,11 @@ import {
   IKeywordEligibilityLocationHelper,
   IKeywordBonusHelper,
   IKeywordNotificationEligibilityHelper,
+  IKeywordNotificationLuckyDrawHelper,
   IKeywordBonusLuckyDraw,
   IKeywordNotificationEligibility,
   IKeywordBonusLuckyDrawLocation,
+  IKeywordNotificationLuckyDraw,
 } from "./interfaces";
 
 export const KeywordEligibilityLocationHelper: IKeywordEligibilityLocationHelper =
@@ -78,12 +80,12 @@ export const KeywordBonusHelper: IKeywordBonusHelper = {
   bonus_type: [],
 };
 
-const KeywordBonusLuckyDrawLocation: IKeywordBonusLuckyDrawLocation = {
+export const KeywordBonusLuckyDrawLocation: IKeywordBonusLuckyDrawLocation = {
   location_id: "",
   stock: 0,
 };
 
-const KeywordBonusLuckyDraw: IKeywordBonusLuckyDraw = {
+export const KeywordBonusLuckyDraw: IKeywordBonusLuckyDraw = {
   bonus_type: "lucky_draw",
   lucky_draw_reguler: true,
   lucky_draw_allow_inject_coupon: false,
@@ -113,6 +115,61 @@ export const KeywordNotificationEligibilityHelper: IKeywordNotificationEligibili
   ];
 
 const KeywordNotificationEligibility: IKeywordNotificationEligibility[] = [
+  {
+    code_identifier: "",
+    notification_content: "",
+    start_period: new Date(),
+    end_period: new Date(),
+    notif_type: "",
+    via: "",
+  },
+  {
+    code_identifier: "",
+    notification_content: "",
+    start_period: new Date(),
+    end_period: new Date(),
+    notif_type: "",
+    via: "",
+  },
+  {
+    code_identifier: "",
+    notification_content: "",
+    start_period: new Date(),
+    end_period: new Date(),
+    notif_type: "",
+    via: "",
+  },
+  {
+    code_identifier: "",
+    notification_content: "",
+    start_period: new Date(),
+    end_period: new Date(),
+    notif_type: "",
+    via: "",
+  },
+];
+
+export const KeywordNotificationLuckyDrawHelper: IKeywordNotificationLuckyDrawHelper[] =
+  [
+    {
+      notification_template: "",
+      follow_period: false,
+    },
+    {
+      notification_template: "",
+      follow_period: false,
+    },
+    {
+      notification_template: "",
+      follow_period: false,
+    },
+    {
+      notification_template: "",
+      follow_period: false,
+    },
+  ];
+
+const KeywordNotificationLuckyDraw: IKeywordNotificationLuckyDraw[] = [
   {
     code_identifier: "",
     notification_content: "",
