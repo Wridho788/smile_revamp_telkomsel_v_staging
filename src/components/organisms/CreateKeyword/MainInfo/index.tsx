@@ -1,64 +1,32 @@
 import * as React from "react";
 import { Box, Stack } from "@mui/material";
 import {
-  MainInfoAuction,
-  MainInfoCoreProduct,
-  MainInfoDirectRedeem,
-  MainInfoDonation,
-  MainInfoLuckyDraw,
-} from "..";
-import {
-  Select,
-  OutlinedTextField,
-  ResponsiveDateTimePicker,
-  Subtitle,
-  BodyCopy,
-  ResponsiveTimePicker,
-  ResponsiveDatePicker,
-} from "../../../atoms";
-import {
-  useCustomerBadgeListQuery,
-  useCustomerBrandListQuery,
-  useCustomerTierListQuery,
-} from "../../../../redux/features/customer/customer-api-slice";
-import {
-  useGetKeywordTypeQuery,
-  useGetPointTypeQuery,
-} from "../../../../redux/features/lov/lov-api-slice";
-import { FilterInitial } from "../../../../redux/utils/initial-general";
-import { useChannelListQuery } from "../../../../redux/features/channel/channel-api-slice";
- import{ CreateKeywordGeneral,
-  
-  KeywordLocationTypeGeneral,
+  CreateKeywordGeneral,
+  KeywordNotificationEligibilityHelper,
 } from "../initial";
-import { ICreateKeyword,IKeywordLocationTypeGeneral } from "../interfaces";
-import Merchant from "./Merchant";
-import General from "./General";
-import Segmentation from "./Segmentation";
+import {
+  ICreateKeyword,
+  IKeywordNotificationEligibilityHelper,
+} from "../interfaces";
 import Program from "./Program";
+import General from "./General";
 import Location from "./Location";
+import Merchant from "./Merchant";
+import Segmentation from "./Segmentation";
 import Notification from "./Notification";
 
 interface IMainInfoProps {}
 
 const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
-  // const { data: keywordTypeOptions = { data: [] } } = useGetKeywordTypeQuery();
-
   const keywordCreate = CreateKeywordGeneral;
-  const keywordLocationType = KeywordLocationTypeGeneral;
   const [keywordCreateState, setKeywordCreateState] =
     React.useState<ICreateKeyword>(keywordCreate);
-  const [keywordLocationTypeState, setKeywordLocationTypeState] =
-    React.useState<IKeywordLocationTypeGeneral>(keywordLocationType);
+
   const [stateTrigger, setStateTrigger] = React.useState<boolean>(false);
 
   React.useEffect(() => {
     setKeywordCreateState(keywordCreate);
   }, [keywordCreate]);
-
-  React.useEffect(() => {
-    setKeywordLocationTypeState(keywordLocationType);
-  }, [keywordLocationType, stateTrigger]);
 
   React.useEffect(() => {
     console.log(keywordCreate);
@@ -68,16 +36,6 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
     <Box display="flex" justifyContent="center" px="5%" py="1vw">
       <Stack spacing="1vw" width="100%">
         <Stack spacing="1vw" px="4vw">
-          {/* <Select
-            label="Type"
-            placeholder="Option"
-            options={keywordTypeOptions.data}
-            value={keywordCreateState.keyword_type}
-            handleChange={(value: string) => {
-              keywordCreate.keyword_type = value;
-              setStateTrigger(!stateTrigger);
-            }}
-          /> */}
           <Program
             keywordCreateState={keywordCreateState}
             keywordCreate={keywordCreate}
@@ -95,8 +53,6 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
             keywordCreate={keywordCreate}
             stateTrigger={stateTrigger}
             setStateTrigger={setStateTrigger}
-            keywordLocationTypeState={keywordLocationTypeState}
-            keywordLocationType={keywordLocationType}
           />
           <Merchant
             keywordCreate={keywordCreate}
@@ -116,21 +72,6 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
             setStateTrigger={setStateTrigger}
           />
         </Stack>
-        {/* {keywordTypeOptions.data.find(
-          (item) => item["_id"] === keywordCreate.keyword_type
-        )?.set_value === "Auction and Racing POIN" && <MainInfoAuction />}
-        {keywordTypeOptions.data.find(
-          (item) => item["_id"] === keywordCreate.keyword_type
-        )?.set_value === "Redeem Core Product" && <MainInfoCoreProduct />}
-        {keywordTypeOptions.data.find(
-          (item) => item["_id"] === keywordCreate.keyword_type
-        )?.set_value === "Lucky Draw" && <MainInfoLuckyDraw />}
-        {keywordTypeOptions.data.find(
-          (item) => item["_id"] === keywordCreate.keyword_type
-        )?.set_value === "Direct Redeem" && <MainInfoDirectRedeem />}
-        {keywordTypeOptions.data.find(
-          (item) => item["_id"] === keywordCreate.keyword_type
-        )?.set_value === "Free Gift" && <MainInfoDonation />} */}
       </Stack>
     </Box>
   );
