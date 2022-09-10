@@ -50,9 +50,8 @@ const SegmentationList: FC<ListProps> = ({...props}) => {
     };
     const handleDelete = async (_id: string) => {
         let text = "Do you want to delete data?"
-        if (window.confirm(text) == true)
-        {
-            await deleteSegmentation(_id).then((res :any) => {
+        if (window.confirm(text) == true) {
+            await deleteSegmentation(_id).then((res: any) => {
                 if (res.error) {
                     alert(res.error.data.message);
                 }
@@ -79,7 +78,7 @@ const SegmentationList: FC<ListProps> = ({...props}) => {
         if (props.programId !== '') {
             getSegmentation(segmentationParams)
         }
-    }, [props.programId, isSuccess, page, rowsPerPage, searchInput, ]);
+    }, [props.programId, isSuccess, page, rowsPerPage, searchInput,]);
 
     return (
         <TableContainer component={Paper}>
@@ -172,6 +171,8 @@ const SegmentationList: FC<ListProps> = ({...props}) => {
                 page={page}
                 onPageChange={handleChangePage}
                 onRowsPerPageChange={handleChangeRowsPerPage}
+                showFirstButton
+                showLastButton
             />
         </TableContainer>
 
