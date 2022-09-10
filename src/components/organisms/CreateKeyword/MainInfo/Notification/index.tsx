@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useEffect } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Stack, Button, Switch, Box, CircularProgress } from "@mui/material";
 import {
   Select,
@@ -10,6 +10,7 @@ import {
 import { FilterInitial } from "../../../../../redux/utils/initial-general";
 import {
   ICreateKeyword,
+  IKeywordNotificationEligibility,
   IKeywordNotificationEligibilityHelper,
 } from "../../interfaces";
 import Accordion from "@mui/material/Accordion";
@@ -22,14 +23,16 @@ import {
   useLazyGetKeywordNotificationQuery,
 } from "../../../../../redux/features/lov/lov-api-slice";
 import { useNotificationTemplateQuery } from "../../../../../redux/features/notification/notification-api-slice";
+import {
+  KeywordNotificationEligibilityHelper,
+  KeywordNotificationEligibility,
+} from "../../initial";
 
 interface INotificationProps {
   keywordCreateState: ICreateKeyword;
   keywordCreate: ICreateKeyword;
   stateTrigger: boolean;
   setStateTrigger: Dispatch<SetStateAction<boolean>>;
-  keywordNotificationEligibilityHelperState: IKeywordNotificationEligibilityHelper[];
-  keywordNotificationEligibilityHelper: IKeywordNotificationEligibilityHelper[];
 }
 
 const Notification: React.FunctionComponent<INotificationProps> = ({
@@ -37,13 +40,10 @@ const Notification: React.FunctionComponent<INotificationProps> = ({
   keywordCreate,
   stateTrigger,
   setStateTrigger,
-  keywordNotificationEligibilityHelperState,
-  keywordNotificationEligibilityHelper,
 }) => {
   const { data: viaOptions = { data: [] } } = useGetNotifViaQuery();
   const { data: templateOptions = { data: [] } } =
     useNotificationTemplateQuery(FilterInitial);
-
   const [
     getKeywordNotification,
     {
@@ -54,9 +54,37 @@ const Notification: React.FunctionComponent<INotificationProps> = ({
     },
   ] = useLazyGetKeywordNotificationQuery();
 
+  const keywordNotificationEligibilityHelper =
+    KeywordNotificationEligibilityHelper;
+  const [
+    keywordNotificationEligibilityHelperState,
+    setKeywordNotificationEligibilityHelperState,
+  ] = useState<IKeywordNotificationEligibilityHelper[]>(
+    keywordNotificationEligibilityHelper
+  );
+
+  const keywordNotificationEligibility: IKeywordNotificationEligibility[] =
+    KeywordNotificationEligibility;
+  const [
+    keywordNotificationEligibilityState,
+    setKeywordNotificationEligibilityState,
+  ] = useState<IKeywordNotificationEligibility[]>(
+    keywordNotificationEligibility
+  );
+
   useEffect(() => {
     getKeywordNotification("ELIGIBILITY_VERIFICATION");
   }, []);
+
+  useEffect(() => {
+    setKeywordNotificationEligibilityHelperState(
+      keywordNotificationEligibilityHelper
+    );
+  }, [keywordNotificationEligibilityHelper, stateTrigger]);
+
+  useEffect(() => {
+    setKeywordNotificationEligibilityState(keywordNotificationEligibility);
+  }, [keywordNotificationEligibility, stateTrigger]);
 
   return (
     <Accordion sx={{ p: "1vw" }}>
@@ -84,7 +112,7 @@ const Notification: React.FunctionComponent<INotificationProps> = ({
             </Box>
           ) : (
             keywordNotification.data.map((_: any, idx: any) => {
-              keywordCreate.notification[idx].code_identifier = _["_id"];
+              keywordNotificationEligibility[idx].code_identifier = _["_id"];
               return (
                 <Stack
                   key={idx}
@@ -119,10 +147,9 @@ const Notification: React.FunctionComponent<INotificationProps> = ({
                       keywordNotificationEligibilityHelper[
                         idx
                       ].notification_template = value;
-                      keywordCreate.notification[idx].notification_content =
-                        templateOptions?.data?.find(
-                          (e) => e["_id"] === value
-                        )?.notif_content;
+                      keywordNotificationEligibility[idx].notification_content =
+                        templateOptions?.data?.find((e) => e["_id"] === value)
+                          ?.notif_content ?? "";
                       setStateTrigger(!stateTrigger);
                     }}
                   />
@@ -135,12 +162,13 @@ const Notification: React.FunctionComponent<INotificationProps> = ({
                       multiline
                       rows={3}
                       value={
-                        keywordCreateState.notification[idx]
+                        keywordNotificationEligibilityState[idx]
                           .notification_content
                       }
                       handleChange={(value: string) => {
-                        keywordCreate.notification[idx].notification_content =
-                          value;
+                        keywordNotificationEligibility[
+                          idx
+                        ].notification_content = value;
                         setStateTrigger(!stateTrigger);
                       }}
                     />
@@ -150,7 +178,7 @@ const Notification: React.FunctionComponent<INotificationProps> = ({
                     <Stack direction="row" spacing="1vw">
                       <Button
                         onClick={() => {
-                          keywordCreate.notification[
+                          keywordNotificationEligibility[
                             idx
                           ].notification_content += `[KeywordName]`;
                           setStateTrigger(!stateTrigger);
@@ -169,7 +197,7 @@ const Notification: React.FunctionComponent<INotificationProps> = ({
                       </Button>
                       <Button
                         onClick={() => {
-                          keywordCreate.notification[
+                          keywordNotificationEligibility[
                             idx
                           ].notification_content += `[StartPeriod]`;
                           setStateTrigger(!stateTrigger);
@@ -188,7 +216,7 @@ const Notification: React.FunctionComponent<INotificationProps> = ({
                       </Button>
                       <Button
                         onClick={() => {
-                          keywordCreate.notification[
+                          keywordNotificationEligibility[
                             idx
                           ].notification_content += `[EndPeriod]`;
                           setStateTrigger(!stateTrigger);
@@ -212,9 +240,9 @@ const Notification: React.FunctionComponent<INotificationProps> = ({
                     label="Notification Via"
                     placeholder="Option"
                     options={viaOptions.data}
-                    value={keywordCreateState.notification[idx].via}
+                    value={keywordNotificationEligibilityState[idx].via}
                     handleChange={(value: string) => {
-                      keywordCreate.notification[idx].via = value;
+                      keywordNotificationEligibility[idx].via = value;
                       setStateTrigger(!stateTrigger);
                     }}
                   />
@@ -229,9 +257,9 @@ const Notification: React.FunctionComponent<INotificationProps> = ({
                           idx
                         ].follow_period = e.target.checked;
                         if (e.target.checked) {
-                          keywordCreate.notification[idx].start_period =
+                          keywordNotificationEligibility[idx].start_period =
                             keywordCreateState.eligibility.start_period;
-                          keywordCreate.notification[idx].end_period =
+                          keywordNotificationEligibility[idx].end_period =
                             keywordCreateState.eligibility.end_period;
                         }
                         setStateTrigger(!stateTrigger);
@@ -249,15 +277,18 @@ const Notification: React.FunctionComponent<INotificationProps> = ({
                       direction="column"
                       label="From"
                       placeholder="From"
-                      value={keywordCreateState.notification[idx].start_period}
-                      handleChange={(value: string) => {
-                        keywordCreate.notification[idx].start_period = value;
+                      value={
+                        keywordNotificationEligibilityState[idx].start_period
+                      }
+                      handleChange={(value: Date) => {
+                        keywordNotificationEligibility[idx].start_period =
+                          value;
                         if (
-                          Date.parse(
-                            keywordCreateState.notification[idx].end_period
-                          ) <= Date.parse(value)
+                          keywordNotificationEligibilityState[idx].end_period <=
+                          value
                         ) {
-                          keywordCreate.notification[idx].end_period = value;
+                          keywordNotificationEligibility[idx].end_period =
+                            value;
                         }
                         setStateTrigger(!stateTrigger);
                       }}
@@ -271,11 +302,13 @@ const Notification: React.FunctionComponent<INotificationProps> = ({
                       label="To"
                       placeholder="To"
                       minDateTime={
-                        keywordCreateState.notification[idx].start_period
+                        keywordNotificationEligibilityState[idx].start_period
                       }
-                      value={keywordCreateState.notification[idx].end_period}
-                      handleChange={(value: string) => {
-                        keywordCreate.notification[idx].end_period = value;
+                      value={
+                        keywordNotificationEligibilityState[idx].end_period
+                      }
+                      handleChange={(value: Date) => {
+                        keywordNotificationEligibility[idx].end_period = value;
                         setStateTrigger(!stateTrigger);
                       }}
                     />

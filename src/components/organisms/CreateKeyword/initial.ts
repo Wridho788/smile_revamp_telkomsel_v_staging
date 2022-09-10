@@ -114,40 +114,41 @@ export const KeywordNotificationEligibilityHelper: IKeywordNotificationEligibili
     },
   ];
 
-const KeywordNotificationEligibility: IKeywordNotificationEligibility[] = [
-  {
-    code_identifier: "",
-    notification_content: "",
-    start_period: new Date(),
-    end_period: new Date(),
-    notif_type: "",
-    via: "",
-  },
-  {
-    code_identifier: "",
-    notification_content: "",
-    start_period: new Date(),
-    end_period: new Date(),
-    notif_type: "",
-    via: "",
-  },
-  {
-    code_identifier: "",
-    notification_content: "",
-    start_period: new Date(),
-    end_period: new Date(),
-    notif_type: "",
-    via: "",
-  },
-  {
-    code_identifier: "",
-    notification_content: "",
-    start_period: new Date(),
-    end_period: new Date(),
-    notif_type: "",
-    via: "",
-  },
-];
+export const KeywordNotificationEligibility: IKeywordNotificationEligibility[] =
+  [
+    {
+      code_identifier: "",
+      notification_content: "",
+      start_period: new Date(),
+      end_period: new Date(),
+      notif_type: "",
+      via: "",
+    },
+    {
+      code_identifier: "",
+      notification_content: "",
+      start_period: new Date(),
+      end_period: new Date(),
+      notif_type: "",
+      via: "",
+    },
+    {
+      code_identifier: "",
+      notification_content: "",
+      start_period: new Date(),
+      end_period: new Date(),
+      notif_type: "",
+      via: "",
+    },
+    {
+      code_identifier: "",
+      notification_content: "",
+      start_period: new Date(),
+      end_period: new Date(),
+      notif_type: "",
+      via: "",
+    },
+  ];
 
 export const KeywordNotificationLuckyDrawHelper: IKeywordNotificationLuckyDrawHelper[] =
   [

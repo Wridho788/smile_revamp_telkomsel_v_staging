@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Grid, Stack } from "@mui/material";
 import { Select, Subtitle } from "../../../../atoms";
 import { useGetLocationTypeQuery } from "../../../../../redux/features/lov/lov-api-slice";
@@ -13,14 +13,13 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useLocationTemplateQuery } from "../../../../../redux/features/location/location-api-slice";
+import { KeywordEligibilityLocationHelper } from "../../initial";
 
 interface ILocationProps {
   keywordCreateState: ICreateKeyword;
   keywordCreate: ICreateKeyword;
   stateTrigger: boolean;
   setStateTrigger: Dispatch<SetStateAction<boolean>>;
-  keywordEligibilityLocationHelperState: IKeywordEligibilityLocationHelper;
-  keywordEligibilityLocationHelper: IKeywordEligibilityLocationHelper;
 }
 
 const Location: React.FunctionComponent<ILocationProps> = ({
@@ -28,13 +27,23 @@ const Location: React.FunctionComponent<ILocationProps> = ({
   keywordCreate,
   stateTrigger,
   setStateTrigger,
-  keywordEligibilityLocationHelperState,
-  keywordEligibilityLocationHelper,
 }) => {
   const { data: locationTypeOptions = { data: [] } } =
     useGetLocationTypeQuery();
   const { data: locationOptions = { data: [] } } =
     useLocationTemplateQuery(FilterInitial);
+
+  const keywordEligibilityLocationHelper = KeywordEligibilityLocationHelper;
+  const [
+    keywordEligibilityLocationHelperState,
+    setKeywordEligibilityLocationHelperState,
+  ] = useState<IKeywordEligibilityLocationHelper>(
+    keywordEligibilityLocationHelper
+  );
+
+  useEffect(() => {
+    setKeywordEligibilityLocationHelperState(keywordEligibilityLocationHelper);
+  }, [keywordEligibilityLocationHelper, stateTrigger]);
 
   return (
     <Accordion sx={{ p: "1vw" }}>
