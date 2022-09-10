@@ -28,14 +28,18 @@ import {
   KeywordNotificationEligibility,
 } from "../../initial";
 
-interface INotificationProps {
+interface INotificationLuckyDrawProps {
+  bonusType: string;
   keywordCreateState: ICreateKeyword;
   keywordCreate: ICreateKeyword;
   stateTrigger: boolean;
   setStateTrigger: Dispatch<SetStateAction<boolean>>;
 }
 
-const Notification: React.FunctionComponent<INotificationProps> = ({
+const NotificationLuckyDraw: React.FunctionComponent<
+  INotificationLuckyDrawProps
+> = ({
+  bonusType,
   keywordCreateState,
   keywordCreate,
   stateTrigger,
@@ -73,7 +77,7 @@ const Notification: React.FunctionComponent<INotificationProps> = ({
   );
 
   useEffect(() => {
-    getKeywordNotification("ELIGIBILITY_VERIFICATION");
+    getKeywordNotification("LUCKY_DRAW_NOTIFICATION");
   }, []);
 
   useEffect(() => {
@@ -93,9 +97,7 @@ const Notification: React.FunctionComponent<INotificationProps> = ({
         aria-controls="panel1a-content"
         id="panel1a-header"
       >
-        <Subtitle textTransform="uppercase">
-          notification redeem eligibility
-        </Subtitle>
+        <Subtitle textTransform="uppercase">{bonusType}</Subtitle>
       </AccordionSummary>
       <AccordionDetails>
         <Stack spacing="1vw" px="2vw" py="0.5vw">
@@ -323,4 +325,4 @@ const Notification: React.FunctionComponent<INotificationProps> = ({
   );
 };
 
-export default Notification;
+export default NotificationLuckyDraw;

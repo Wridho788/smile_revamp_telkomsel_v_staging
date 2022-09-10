@@ -11,8 +11,10 @@ import Auth from "./Auth";
 import MerchantManagement from "./MerchantManagement";
 import CustomerManagement from "./CustomerManagement";
 import NotificationManagement from "./NotificationManagement";
+import LocationManagement from "./LocationManagement"
 import ProgramMainInfoUpdate from "./ProgramMainInfoUpdate";
 import ProgramNotificationUpdate from "./ProgramNotificationUpdate";
+import MerchantPartnerManagement from "./MerchantPartnerManagement";
 
 export {
   Option,
@@ -28,6 +30,8 @@ export {
   MerchantManagement,
   CustomerManagement,
   NotificationManagement,
+  LocationManagement,
   ProgramMainInfoUpdate,
-  ProgramNotificationUpdate
+  ProgramNotificationUpdate,
+  MerchantPartnerManagement,
 };
