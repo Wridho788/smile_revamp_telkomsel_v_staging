@@ -3,7 +3,7 @@ import { Box, Button, Stack } from "@mui/material";
 import { Select } from "../../../atoms";
 import { useGetBonusTypeQuery } from "../../../../redux/features/lov/lov-api-slice";
 import { KeywordBonus } from "../initial";
-import { CreateKeywordGeneral } from "../initial";
+import { CreateKeywordGeneral, bonusLuckyDrawInitial, bonusAuctionInitial } from "../initial";
 import { ICreateKeyword, IKeywordBonus } from "../interfaces";
 
 interface IBonusProps {}

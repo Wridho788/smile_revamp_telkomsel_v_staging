@@ -6,6 +6,7 @@ import {
   IKeywordBonus,
   IKeywordNotificationInitial,
   IBonusLuckyDrawInitial,
+  IBonusAuctionInitial
 } from "./interfaces";
 
 const KeywordShift: IKeywordShift = {
@@ -67,7 +68,7 @@ const KeywordEligibility: IKeywordEligibility = {
   keyword_shift: [KeywordShift],
 };
 
-const bonusLuckyDrawInitial: IBonusLuckyDrawInitial = {
+export const bonusLuckyDrawInitial: IBonusLuckyDrawInitial = {
   bonus_type: "lucky_draw",
   lucky_draw_reguler: true,
   lucky_draw_allow_inject_coupon: false,
@@ -76,9 +77,22 @@ const bonusLuckyDrawInitial: IBonusLuckyDrawInitial = {
   redeem_after_verification: false,
 };
 
+export const bonusAuctionInitial: IBonusAuctionInitial = {
+  bonus_type: "auction",
+  auction_prize_desc_id: "",
+  auction_prize_desc_en: "",
+  auction_prize_image: "",
+  auction_poin_min_bidding: 0,
+  auction_multiplier_poin: 0,
+  auction_max_winner_inphase: 0,
+  auction_prize_name: "",
+  stock_location: [],
+  redeem_after_verification: false
+}
+
 export const CreateKeywordGeneral: ICreateKeyword = {
   eligibility: KeywordEligibility,
-  bonus: [bonusLuckyDrawInitial],
+  bonus: [],
   notification: [
     {
       code_identifier: "",

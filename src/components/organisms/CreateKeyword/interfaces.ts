@@ -101,6 +101,7 @@ export interface IKeywordNotificationInitial {
   follow_period: boolean;
 }
 
+// Bonus Type "Lucky Draw"
 export interface IBonusLuckyDrawInitial {
   bonus_type: string;
   lucky_draw_reguler: boolean;
@@ -108,6 +109,20 @@ export interface IBonusLuckyDrawInitial {
   lucky_draw_prize: string;
   stock_location: any[];
   redeem_after_verification: boolean;
+}
+
+// Bonus Type "Auction"
+export interface IBonusAuctionInitial {
+  bonus_type: string,
+  auction_prize_desc_id: string,
+  auction_prize_desc_en: string,
+  auction_prize_image: string,
+  auction_poin_min_bidding: number,
+  auction_multiplier_poin: number,
+  auction_max_winner_inphase: number,
+  auction_prize_name: string,
+  stock_location: any[],
+  redeem_after_verification: boolean
 }
 
 export interface IKeywordBonus {
