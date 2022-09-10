@@ -23,7 +23,7 @@ import {
 } from "../../../../../redux/features/lov/lov-api-slice";
 import { useNotificationTemplateQuery } from "../../../../../redux/features/notification/notification-api-slice";
 
-interface INotificationProps {
+interface ILuckyDrawProps {
   keywordCreateState: ICreateKeyword;
   keywordCreate: ICreateKeyword;
   stateTrigger: boolean;
@@ -32,7 +32,7 @@ interface INotificationProps {
   keywordNotificationEligibilityHelper: IKeywordNotificationEligibilityHelper[];
 }
 
-const Notification: React.FunctionComponent<INotificationProps> = ({
+const LuckyDraw: React.FunctionComponent<ILuckyDrawProps> = ({
   keywordCreateState,
   keywordCreate,
   stateTrigger,
@@ -290,4 +290,4 @@ const Notification: React.FunctionComponent<INotificationProps> = ({
   );
 };
 
-export default Notification;
+export default LuckyDraw;

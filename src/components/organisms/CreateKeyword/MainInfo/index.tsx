@@ -2,13 +2,13 @@ import * as React from "react";
 import { Box, Stack } from "@mui/material";
 import {
   CreateKeywordGeneral,
-  KeywordLocationTypeGeneral,
-  KeywordNotificationInitial,
+  KeywordEligibilityLocationHelper,
+  KeywordNotificationEligibilityHelper,
 } from "../initial";
 import {
   ICreateKeyword,
-  IKeywordLocationTypeGeneral,
-  IKeywordNotificationInitial,
+  IKeywordEligibilityLocationHelper,
+  IKeywordNotificationEligibilityHelper,
 } from "../interfaces";
 import Program from "./Program";
 import General from "./General";
@@ -24,13 +24,22 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
   const [keywordCreateState, setKeywordCreateState] =
     React.useState<ICreateKeyword>(keywordCreate);
 
-  const keywordLocationType = KeywordLocationTypeGeneral;
-  const [keywordLocationTypeState, setKeywordLocationTypeState] =
-    React.useState<IKeywordLocationTypeGeneral>(keywordLocationType);
+  const keywordEligibilityLocationHelper = KeywordEligibilityLocationHelper;
+  const [
+    keywordEligibilityLocationHelperState,
+    setKeywordEligibilityLocationHelperState,
+  ] = React.useState<IKeywordEligibilityLocationHelper>(
+    keywordEligibilityLocationHelper
+  );
 
-  const keywordNotificationInitial = KeywordNotificationInitial;
-  const [keywordNotificationInitialState, setKeywordNotificationInitialState] =
-    React.useState<IKeywordNotificationInitial[]>(keywordNotificationInitial);
+  const keywordNotificationEligibilityHelper =
+    KeywordNotificationEligibilityHelper;
+  const [
+    keywordNotificationEligibilityHelperState,
+    setKeywordNotificationEligibilityHelperState,
+  ] = React.useState<IKeywordNotificationEligibilityHelper[]>(
+    keywordNotificationEligibilityHelper
+  );
 
   const [stateTrigger, setStateTrigger] = React.useState<boolean>(false);
 
@@ -39,12 +48,14 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
   }, [keywordCreate]);
 
   React.useEffect(() => {
-    setKeywordLocationTypeState(keywordLocationType);
-  }, [keywordLocationType, stateTrigger]);
+    setKeywordEligibilityLocationHelperState(keywordEligibilityLocationHelper);
+  }, [keywordEligibilityLocationHelper, stateTrigger]);
 
   React.useEffect(() => {
-    setKeywordNotificationInitialState(keywordNotificationInitial);
-  }, [keywordNotificationInitial, stateTrigger]);
+    setKeywordNotificationEligibilityHelperState(
+      keywordNotificationEligibilityHelper
+    );
+  }, [keywordNotificationEligibilityHelper, stateTrigger]);
 
   React.useEffect(() => {
     console.log(keywordCreate);
@@ -71,8 +82,10 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
             keywordCreate={keywordCreate}
             stateTrigger={stateTrigger}
             setStateTrigger={setStateTrigger}
-            keywordLocationTypeState={keywordLocationTypeState}
-            keywordLocationType={keywordLocationType}
+            keywordEligibilityLocationHelperState={
+              keywordEligibilityLocationHelperState
+            }
+            keywordEligibilityLocationHelper={keywordEligibilityLocationHelper}
           />
           <Merchant
             keywordCreate={keywordCreate}
@@ -90,8 +103,12 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
             keywordCreate={keywordCreate}
             stateTrigger={stateTrigger}
             setStateTrigger={setStateTrigger}
-            keywordNotificationInitialState={keywordNotificationInitialState}
-            keywordNotificationInitial={keywordNotificationInitial}
+            keywordNotificationEligibilityHelperState={
+              keywordNotificationEligibilityHelperState
+            }
+            keywordNotificationEligibilityHelper={
+              keywordNotificationEligibilityHelper
+            }
           />
         </Stack>
       </Stack>
