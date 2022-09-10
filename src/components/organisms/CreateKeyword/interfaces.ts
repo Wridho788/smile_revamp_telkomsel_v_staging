@@ -93,6 +93,20 @@ export interface IKeywordNotificationEligibility {
   via: string;
 }
 
+export interface IKeywordNotificationLuckyDrawHelper {
+  notification_template: string;
+  follow_period: boolean;
+}
+
+export interface IKeywordNotificationLuckyDraw {
+  code_identifier: string;
+  notification_content: string;
+  start_period: Date;
+  end_period: Date;
+  notif_type: string;
+  via: string;
+}
+
 export interface ICreateKeyword {
   eligibility: IKeywordEligibility;
   bonus: any[];

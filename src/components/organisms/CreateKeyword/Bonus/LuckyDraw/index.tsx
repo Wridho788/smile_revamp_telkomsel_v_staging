@@ -10,7 +10,7 @@ import {
 import { FilterInitial } from "../../../../../redux/utils/initial-general";
 import {
   ICreateKeyword,
-  IKeywordNotificationEligibilityHelper,
+  IKeywordNotificationLuckyDrawHelper,
 } from "../../interfaces";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
@@ -24,21 +24,23 @@ import {
 import { useNotificationTemplateQuery } from "../../../../../redux/features/notification/notification-api-slice";
 
 interface ILuckyDrawProps {
+  bonusType: string;
   keywordCreateState: ICreateKeyword;
   keywordCreate: ICreateKeyword;
   stateTrigger: boolean;
   setStateTrigger: Dispatch<SetStateAction<boolean>>;
-  keywordNotificationEligibilityHelperState: IKeywordNotificationEligibilityHelper[];
-  keywordNotificationEligibilityHelper: IKeywordNotificationEligibilityHelper[];
+  keywordNotificationLuckyDrawHelperState: IKeywordNotificationLuckyDrawHelper[];
+  keywordNotificationLuckyDrawHelper: IKeywordNotificationLuckyDrawHelper[];
 }
 
 const LuckyDraw: React.FunctionComponent<ILuckyDrawProps> = ({
+  bonusType,
   keywordCreateState,
   keywordCreate,
   stateTrigger,
   setStateTrigger,
-  keywordNotificationEligibilityHelperState,
-  keywordNotificationEligibilityHelper,
+  keywordNotificationLuckyDrawHelperState,
+  keywordNotificationLuckyDrawHelper,
 }) => {
   const { data: viaOptions = { data: [] } } = useGetNotifViaQuery();
   const { data: templateOptions = { data: [] } } =
@@ -55,7 +57,7 @@ const LuckyDraw: React.FunctionComponent<ILuckyDrawProps> = ({
   ] = useLazyGetKeywordNotificationQuery();
 
   useEffect(() => {
-    getKeywordNotification("ELIGIBILITY_VERIFICATION");
+    getKeywordNotification("LUCKY_DRAW_NOTIFICATION");
   }, []);
 
   return (
@@ -65,9 +67,7 @@ const LuckyDraw: React.FunctionComponent<ILuckyDrawProps> = ({
         aria-controls="panel1a-content"
         id="panel1a-header"
       >
-        <Subtitle textTransform="uppercase">
-          notification redeem eligibility
-        </Subtitle>
+        <Subtitle textTransform="uppercase">{bonusType}</Subtitle>
       </AccordionSummary>
       <AccordionDetails>
         <Stack spacing="1vw" px="2vw" py="0.5vw">
@@ -112,11 +112,11 @@ const LuckyDraw: React.FunctionComponent<ILuckyDrawProps> = ({
                     options={templateOptions.data}
                     optionLabel={"notif_name"}
                     value={
-                      keywordNotificationEligibilityHelperState[idx]
+                      keywordNotificationLuckyDrawHelperState[idx]
                         .notification_template
                     }
                     handleChange={(value: string) => {
-                      keywordNotificationEligibilityHelper[
+                      keywordNotificationLuckyDrawHelper[
                         idx
                       ].notification_template = value;
                       keywordCreate.notification[idx].notification_content =
@@ -126,7 +126,7 @@ const LuckyDraw: React.FunctionComponent<ILuckyDrawProps> = ({
                       setStateTrigger(!stateTrigger);
                     }}
                   />
-                  {keywordNotificationEligibilityHelperState[idx]
+                  {keywordNotificationLuckyDrawHelperState[idx]
                     .notification_template !== "" && (
                     <OutlinedTextField
                       direction="column"
@@ -145,7 +145,7 @@ const LuckyDraw: React.FunctionComponent<ILuckyDrawProps> = ({
                       }}
                     />
                   )}
-                  {keywordNotificationEligibilityHelperState[idx]
+                  {keywordNotificationLuckyDrawHelperState[idx]
                     .notification_template !== "" && (
                     <Stack direction="row" spacing="1vw">
                       <Button
@@ -221,13 +221,12 @@ const LuckyDraw: React.FunctionComponent<ILuckyDrawProps> = ({
                   <Stack direction="row" spacing="0.5vw" alignItems="center">
                     <Switch
                       checked={
-                        keywordNotificationEligibilityHelperState[idx]
+                        keywordNotificationLuckyDrawHelperState[idx]
                           .follow_period
                       }
                       onChange={(e) => {
-                        keywordNotificationEligibilityHelper[
-                          idx
-                        ].follow_period = e.target.checked;
+                        keywordNotificationLuckyDrawHelper[idx].follow_period =
+                          e.target.checked;
                         if (e.target.checked) {
                           keywordCreate.notification[idx].start_period =
                             keywordCreateState.eligibility.start_period;
@@ -243,7 +242,7 @@ const LuckyDraw: React.FunctionComponent<ILuckyDrawProps> = ({
                   <Stack direction="row" spacing="2vw" alignItems="center">
                     <ResponsiveDateTimePicker
                       disabled={
-                        keywordNotificationEligibilityHelperState[idx]
+                        keywordNotificationLuckyDrawHelperState[idx]
                           .follow_period
                       }
                       direction="column"
@@ -264,7 +263,7 @@ const LuckyDraw: React.FunctionComponent<ILuckyDrawProps> = ({
                     />
                     <ResponsiveDateTimePicker
                       disabled={
-                        keywordNotificationEligibilityHelperState[idx]
+                        keywordNotificationLuckyDrawHelperState[idx]
                           .follow_period
                       }
                       direction="column"
