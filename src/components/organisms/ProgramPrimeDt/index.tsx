@@ -1,23 +1,18 @@
 import React, {FC, useEffect, useState} from 'react'
 import {BodyCopy, H2} from "../../atoms";
-import {Box, Grid, IconButton, Input, Paper, Stack} from "@mui/material";
+import {Alert, Box, Grid, IconButton, Paper, Stack, Typography} from "@mui/material";
 import {Add} from "@mui/icons-material";
-import ListButton from "../../atoms/ListButton";
-import CardButton from "../../atoms/CardButton";
 import DarkButton from "../../atoms/DarkButton";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import {DataTable} from "primereact/datatable";
 import {Column} from "primereact/column";
 import {ProgramInitial} from "../../../pages/ProgramManagement/initial";
-import {
-    useLazyProgramPrimeListQuery,
-} from "../../../redux/features/program-primedt/program-primedt-api-slice";
-import {CustomerBrandInitial} from "../../../pages/CustomerManagement/initial";
-import {useCustomerBadgeListQuery} from "../../../redux/features/customer/customer-api-slice";
+import {useLazyProgramPrimeListQuery,} from "../../../redux/features/program-primedt/program-primedt-api-slice";
 import {IProgram} from "../../../redux/features/program-primedt/interface";
 import moment from "moment";
-import {IData} from "../../../redux/features/program/interface";
-import ProgramDetailsModal from '../Programs/Detail/ProgramDetailsModal';
+import {useAppConfigQuery} from "../../../redux/features/app-config/app-config-api-slice";
+import {useAccountAuthenticateQuery} from "../../../redux/features/account/account-api-slice";
+import ProgramDetailsModal from "../Programs/Detail/ProgramDetailsModal";
 
 const ProgramPrimeDt: FC = () => {
     const [programs, setPrograms] = useState<any>([ProgramInitial])
@@ -27,12 +22,23 @@ const ProgramPrimeDt: FC = () => {
         first: 0,
         rows: 10,
         page: 1,
-        sortField: null,
-        sortOrder: null,
+        sortField: "created_at",
+        sortOrder: -1,
         filters: {
             name: { value: "", matchMode: "contains" },
         },
     });
+
+    // Role Access Authentication Check
+    const { data: appConfig } = useAppConfigQuery();
+    const defaultRoleManager =
+        appConfig !== undefined
+            ? appConfig.find((item) => item["param_key"] === "DEFAULT_ROLE_MANAGER")[
+                "param_value"
+                ]
+            : undefined;
+
+    const { data: accountAuth } = useAccountAuthenticateQuery();
 
     // Detail Program
     const [item, setItem] = useState([]);
@@ -82,11 +88,41 @@ const ProgramPrimeDt: FC = () => {
 
 
     // Customize Column Render Component
+    const NameRender = (rowData: IProgram) => {
+        return  rowData.name.length >= 7 ? rowData.name.substring(0, 7) + "..." : rowData.name
+    }
     const StartPeriodRender = (rowData: IProgram) => {
         return <span>{moment(rowData.start_period).format('MMMM DD, YYYY')}</span>
     }
     const EndPeriodRender = (rowData: IProgram) => {
         return <span>{moment(rowData.end_period).format('MMMM DD, YYYY')}</span>
+    }
+    const ThresholdAlarmExpiredRender = (rowData: IProgram) => {
+        return (
+            <Box sx={{textAlign:'center', width:'100%'}}>
+                <Typography variant="body1"> H-{rowData.threshold_alarm_expired} </Typography>
+            </Box>
+        )
+    }
+    const ThresholdAlarmVoucherRender = (rowData: IProgram) => {
+        return (
+            <Box sx={{textAlign:'center', width:'100%'}}>
+                <Typography variant="body1"> {rowData.threshold_alarm_voucher} Voucher </Typography>
+            </Box>
+        )
+    }
+    const StatusApprovalRender = (rowData: IProgram) => {
+        return (
+            <Box sx={{textAlign:'center', width:'100%', justifyContent:'center', alignItems:'center', alignContent:'center'}}>
+                {
+                    rowData.status &&
+                    rowData.status.set_value === 'Approved by Manager HQ' ?
+                        <Alert severity="success">HQ Manager</Alert>
+                        :
+                        <Alert severity="warning">Waiting Approval</Alert>
+                }
+            </Box>
+        )
     }
 
 
@@ -97,7 +133,10 @@ const ProgramPrimeDt: FC = () => {
                 open={open}
                 handleClose={() => {setOpen(false)}}
                 data={item}
-                roleAccess={false}
+                roleAccess={
+                    accountAuth && defaultRoleManager ?
+                    accountAuth.role === defaultRoleManager ? true : false : false
+                }
             />
 
             {/* Header Action */}
@@ -154,59 +193,53 @@ const ProgramPrimeDt: FC = () => {
                                     onRowSelect={onRowSelect}
                                 >
                                     <Column
-                                        footer="Program Name"
                                         style={{ flexGrow: 1, flexBasis: "250px" }}
                                         field="name"
                                         header="PROGRAM NAME"
                                         sortable
                                         filter
+                                        body={NameRender}
                                         filterPlaceholder="Search"
                                     />
                                     <Column
-                                        footer="Start Period"
                                         style={{ flexGrow: 1, flexBasis: "250px" }}
                                         field="start_period"
                                         header="START PERIOD"
                                         sortable
-                                        filter={false}
                                         body={StartPeriodRender}
                                         filterPlaceholder="Search"
                                     />
                                     <Column
-                                        footer="End Period"
                                         style={{ flexGrow: 1, flexBasis: "250px" }}
                                         field="end_period"
                                         header="END PERIOD"
                                         sortable
-                                        filter={false}
                                         body={EndPeriodRender}
                                         filterPlaceholder="Search"
                                     />
                                     <Column
-                                        footer="Time Zone"
-                                        style={{ flexGrow: 1, flexBasis: "250px", textAlign: "center", alignItems:'center' }}
-                                        field="program_time_zone"
-                                        header="TIME ZONE"
-                                        sortable
-                                        filter
-                                        filterPlaceholder="Search"
-                                    />
-                                    <Column
-                                        footer="Threshold Alarm Expired"
                                         style={{ flexGrow: 1, flexBasis: "250px" }}
                                         field="threshold_alarm_expired"
-                                        header="THRESHOLD ALARM EXPIRED"
+                                        header="THRESHOLD ALARM"
                                         sortable
-                                        filter
+                                        body={ThresholdAlarmExpiredRender}
                                         filterPlaceholder="Search"
                                     />
                                     <Column
-                                        footer="Threshold Alarm Voucher"
                                         style={{ flexGrow: 1, flexBasis: "250px" }}
                                         field="threshold_alarm_voucher"
-                                        header="THRESHOLD ALARM VOUCHER"
+                                        header="THRESHOLD VOUCHER"
                                         sortable
-                                        filter
+                                        body={ThresholdAlarmVoucherRender}
+                                        filterPlaceholder="Search"
+                                    />
+
+                                    <Column
+                                        style={{ flexGrow: 1, flexBasis: "250px", textAlign: "center", alignItems:'center' }}
+                                        field="program_time_zone"
+                                        header="STATUS"
+                                        sortable
+                                        body={StatusApprovalRender}
                                         filterPlaceholder="Search"
                                     />
                                 </DataTable>
