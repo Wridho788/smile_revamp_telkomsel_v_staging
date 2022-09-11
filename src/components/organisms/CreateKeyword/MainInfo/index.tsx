@@ -2,12 +2,10 @@ import * as React from "react";
 import { Box, Stack } from "@mui/material";
 import {
   CreateKeywordGeneral,
-  KeywordEligibilityLocationHelper,
   KeywordNotificationEligibilityHelper,
 } from "../initial";
 import {
   ICreateKeyword,
-  IKeywordEligibilityLocationHelper,
   IKeywordNotificationEligibilityHelper,
 } from "../interfaces";
 import Program from "./Program";
@@ -24,38 +22,11 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
   const [keywordCreateState, setKeywordCreateState] =
     React.useState<ICreateKeyword>(keywordCreate);
 
-  const keywordEligibilityLocationHelper = KeywordEligibilityLocationHelper;
-  const [
-    keywordEligibilityLocationHelperState,
-    setKeywordEligibilityLocationHelperState,
-  ] = React.useState<IKeywordEligibilityLocationHelper>(
-    keywordEligibilityLocationHelper
-  );
-
-  const keywordNotificationEligibilityHelper =
-    KeywordNotificationEligibilityHelper;
-  const [
-    keywordNotificationEligibilityHelperState,
-    setKeywordNotificationEligibilityHelperState,
-  ] = React.useState<IKeywordNotificationEligibilityHelper[]>(
-    keywordNotificationEligibilityHelper
-  );
-
   const [stateTrigger, setStateTrigger] = React.useState<boolean>(false);
 
   React.useEffect(() => {
     setKeywordCreateState(keywordCreate);
   }, [keywordCreate]);
-
-  React.useEffect(() => {
-    setKeywordEligibilityLocationHelperState(keywordEligibilityLocationHelper);
-  }, [keywordEligibilityLocationHelper, stateTrigger]);
-
-  React.useEffect(() => {
-    setKeywordNotificationEligibilityHelperState(
-      keywordNotificationEligibilityHelper
-    );
-  }, [keywordNotificationEligibilityHelper, stateTrigger]);
 
   React.useEffect(() => {
     console.log(keywordCreate);
@@ -82,10 +53,6 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
             keywordCreate={keywordCreate}
             stateTrigger={stateTrigger}
             setStateTrigger={setStateTrigger}
-            keywordEligibilityLocationHelperState={
-              keywordEligibilityLocationHelperState
-            }
-            keywordEligibilityLocationHelper={keywordEligibilityLocationHelper}
           />
           <Merchant
             keywordCreate={keywordCreate}
@@ -103,12 +70,6 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
             keywordCreate={keywordCreate}
             stateTrigger={stateTrigger}
             setStateTrigger={setStateTrigger}
-            keywordNotificationEligibilityHelperState={
-              keywordNotificationEligibilityHelperState
-            }
-            keywordNotificationEligibilityHelper={
-              keywordNotificationEligibilityHelper
-            }
           />
         </Stack>
       </Stack>

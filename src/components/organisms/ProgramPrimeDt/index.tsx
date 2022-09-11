@@ -17,7 +17,7 @@ import {useCustomerBadgeListQuery} from "../../../redux/features/customer/custom
 import {IProgram} from "../../../redux/features/program-primedt/interface";
 import moment from "moment";
 import {IData} from "../../../redux/features/program/interface";
-import ProgramDetailsModal from "../../../atomic/components/atoms/Modal/ProgramDetailsModal";
+import ProgramDetailsModal from '../Programs/Detail/ProgramDetailsModal';
 
 const ProgramPrimeDt: FC = () => {
     const [programs, setPrograms] = useState<any>([ProgramInitial])

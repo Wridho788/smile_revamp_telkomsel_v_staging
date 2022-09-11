@@ -60,7 +60,7 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
 
   return (
     <Box display="flex" justifyContent="center" px="5%" py="1vw">
-      <Stack spacing="1vw" width="100%" px="4vw">
+      <Stack spacing="2vw" width="100%" px="4vw">
         <Select
           multiple
           direction="column"
@@ -120,12 +120,6 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
                       keywordCreate={keywordCreate}
                       stateTrigger={stateTrigger}
                       setStateTrigger={setStateTrigger}
-                      keywordNotificationLuckyDrawHelperState={
-                        keywordNotificationLuckyDrawHelperState
-                      }
-                      keywordNotificationLuckyDrawHelper={
-                        keywordNotificationLuckyDrawHelper
-                      }
                     />
                   </Box>
                 );
