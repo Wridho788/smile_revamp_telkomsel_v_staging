@@ -1,17 +1,14 @@
 import * as React from "react";
-import { Box, Button, Chip, Stack } from "@mui/material";
+import { Box, Chip, Stack } from "@mui/material";
 import { Select } from "../../../atoms";
 import { useGetBonusTypeQuery } from "../../../../redux/features/lov/lov-api-slice";
 import {
   KeywordBonusHelper,
-  KeywordNotificationLuckyDrawHelper,
+  KeywordBonusLuckyDraw,
+  KeywordNotificationLuckyDraw,
 } from "../initial";
 import { CreateKeywordGeneral } from "../initial";
-import {
-  ICreateKeyword,
-  IKeywordBonusHelper,
-  IKeywordNotificationLuckyDrawHelper,
-} from "../interfaces";
+import { ICreateKeyword, IKeywordBonusHelper } from "../interfaces";
 import LuckyDraw from "./LuckyDraw";
 import CancelIcon from "@mui/icons-material/Cancel";
 import _without from "lodash/without";
@@ -29,14 +26,6 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
   const [keywordBonusHelperState, setKeywordBonusHelperState] =
     React.useState<IKeywordBonusHelper>(keywordBonusHelper);
 
-  const keywordNotificationLuckyDrawHelper = KeywordNotificationLuckyDrawHelper;
-  const [
-    keywordNotificationLuckyDrawHelperState,
-    setKeywordNotificationLuckyDrawHelperState,
-  ] = React.useState<IKeywordNotificationLuckyDrawHelper[]>(
-    keywordNotificationLuckyDrawHelper
-  );
-
   const [stateTrigger, setStateTrigger] = React.useState<boolean>(false);
 
   React.useEffect(() => {
@@ -48,10 +37,30 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
   }, [keywordBonusHelper, stateTrigger]);
 
   React.useEffect(() => {
-    setKeywordNotificationLuckyDrawHelperState(
-      keywordNotificationLuckyDrawHelper
-    );
-  }, [keywordNotificationLuckyDrawHelper, stateTrigger]);
+    if (
+      keywordBonusHelperState.bonus_type.find(
+        (e) => e === "Lucky Draw Coupon"
+      ) === undefined
+    ) {
+      keywordCreate.bonus = _without(
+        [...keywordCreateState.bonus],
+        KeywordBonusLuckyDraw
+      );
+      keywordCreate.notification = _without(
+        [...keywordCreateState.notification],
+        ...KeywordNotificationLuckyDraw
+      );
+    } else if (
+      keywordCreateState.bonus.find((e) => e === KeywordBonusLuckyDraw) ===
+        undefined &&
+      keywordCreateState.notification.find(
+        (e) => e === { ...KeywordNotificationLuckyDraw }
+      ) === undefined
+    ) {
+      keywordCreate.bonus.push(KeywordBonusLuckyDraw);
+      keywordCreate.notification.push(...KeywordNotificationLuckyDraw);
+    }
+  }, [keywordBonusHelperState.bonus_type]);
 
   React.useEffect(() => {
     console.log(keywordCreate);

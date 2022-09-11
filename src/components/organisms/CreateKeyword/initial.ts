@@ -207,11 +207,8 @@ export const KeywordNotificationLuckyDraw: IKeywordNotificationLuckyDraw[] = [
 
 export const CreateKeywordGeneral: ICreateKeyword = {
   eligibility: KeywordEligibility,
-  bonus: [KeywordBonusLuckyDraw],
-  notification: [
-    ...KeywordNotificationEligibility,
-    ...KeywordNotificationLuckyDraw,
-  ],
+  bonus: [],
+  notification: [...KeywordNotificationEligibility],
 };
 
 export const KeywordFirstStep: boolean = false;
