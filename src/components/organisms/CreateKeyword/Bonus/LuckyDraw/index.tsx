@@ -19,8 +19,9 @@ import {
 import { FilterInitial } from "../../../../../redux/utils/initial-general";
 import {
   ICreateKeyword,
-  IKeywordNotificationEligibility,
-  IKeywordNotificationEligibilityHelper,
+  IKeywordBonusLuckyDraw,
+  IKeywordNotificationLuckyDraw,
+  IKeywordNotificationLuckyDrawHelper,
 } from "../../interfaces";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
@@ -33,9 +34,11 @@ import {
 } from "../../../../../redux/features/lov/lov-api-slice";
 import { useNotificationTemplateQuery } from "../../../../../redux/features/notification/notification-api-slice";
 import {
-  KeywordNotificationEligibilityHelper,
-  KeywordNotificationEligibility,
+  KeywordNotificationLuckyDrawHelper,
+  KeywordNotificationLuckyDraw,
+  KeywordBonusLuckyDraw,
 } from "../../initial";
+import { useLocationTemplateQuery } from "../../../../../redux/features/location/location-api-slice";
 
 interface INotificationLuckyDrawProps {
   bonusType: string;
@@ -67,37 +70,54 @@ const NotificationLuckyDraw: React.FunctionComponent<
     },
   ] = useLazyGetKeywordNotificationQuery();
 
-  const keywordNotificationEligibilityHelper =
-    KeywordNotificationEligibilityHelper;
+  const keywordNotificationLuckyDrawHelper = KeywordNotificationLuckyDrawHelper;
   const [
-    keywordNotificationEligibilityHelperState,
-    setKeywordNotificationEligibilityHelperState,
-  ] = useState<IKeywordNotificationEligibilityHelper[]>(
-    keywordNotificationEligibilityHelper
+    keywordNotificationLuckyDrawHelperState,
+    setKeywordNotificationLuckyDrawHelperState,
+  ] = useState<IKeywordNotificationLuckyDrawHelper[]>(
+    keywordNotificationLuckyDrawHelper
   );
 
-  const keywordNotificationEligibility: IKeywordNotificationEligibility[] =
-    KeywordNotificationEligibility;
+  const keywordNotificationLuckyDraw: IKeywordNotificationLuckyDraw[] =
+    KeywordNotificationLuckyDraw;
   const [
-    keywordNotificationEligibilityState,
-    setKeywordNotificationEligibilityState,
-  ] = useState<IKeywordNotificationEligibility[]>(
-    keywordNotificationEligibility
-  );
+    keywordNotificationLuckyDrawState,
+    setKeywordNotificationLuckyDrawState,
+  ] = useState<IKeywordNotificationLuckyDraw[]>(keywordNotificationLuckyDraw);
+
+  const keywordBonusLuckyDraw: IKeywordBonusLuckyDraw = KeywordBonusLuckyDraw;
+  const [keywordBonusLuckyDrawState, setKeywordBonusLuckyDrawState] =
+    useState<IKeywordBonusLuckyDraw>(keywordBonusLuckyDraw);
+
+  const { data: locationOptions = { data: [] } } =
+    useLocationTemplateQuery(FilterInitial);
 
   useEffect(() => {
     getKeywordNotification("LUCKY_DRAW_NOTIFICATION");
+    keywordBonusLuckyDraw.bonus_type = bonusType;
+    if (keywordBonusLuckyDraw.locations.length === 0) {
+      keywordCreateState.eligibility.locations.map((location) =>
+        keywordBonusLuckyDraw.locations.push({
+          location_id: location,
+          stock: 0,
+        })
+      );
+    }
   }, []);
 
   useEffect(() => {
-    setKeywordNotificationEligibilityHelperState(
-      keywordNotificationEligibilityHelper
+    setKeywordNotificationLuckyDrawHelperState(
+      keywordNotificationLuckyDrawHelper
     );
-  }, [keywordNotificationEligibilityHelper, stateTrigger]);
+  }, [keywordNotificationLuckyDrawHelper, stateTrigger]);
 
   useEffect(() => {
-    setKeywordNotificationEligibilityState(keywordNotificationEligibility);
-  }, [keywordNotificationEligibility, stateTrigger]);
+    setKeywordNotificationLuckyDrawState(keywordNotificationLuckyDraw);
+  }, [keywordNotificationLuckyDraw, stateTrigger]);
+
+  useEffect(() => {
+    setKeywordBonusLuckyDrawState(keywordBonusLuckyDraw);
+  }, [keywordBonusLuckyDraw, stateTrigger]);
 
   return (
     <Accordion sx={{ p: "1vw" }}>
@@ -124,7 +144,7 @@ const NotificationLuckyDraw: React.FunctionComponent<
               </Box>
             ) : (
               keywordNotification.data.map((_: any, idx: any) => {
-                keywordNotificationEligibility[idx].code_identifier = _["_id"];
+                keywordNotificationLuckyDraw[idx].code_identifier = _["_id"];
                 return (
                   <Stack
                     key={idx}
@@ -152,22 +172,20 @@ const NotificationLuckyDraw: React.FunctionComponent<
                       options={templateOptions.data}
                       optionLabel={"notif_name"}
                       value={
-                        keywordNotificationEligibilityHelperState[idx]
+                        keywordNotificationLuckyDrawHelperState[idx]
                           .notification_template
                       }
                       handleChange={(value: string) => {
-                        keywordNotificationEligibilityHelper[
+                        keywordNotificationLuckyDrawHelper[
                           idx
                         ].notification_template = value;
-                        keywordNotificationEligibility[
-                          idx
-                        ].notification_content =
+                        keywordNotificationLuckyDraw[idx].notification_content =
                           templateOptions?.data?.find((e) => e["_id"] === value)
                             ?.notif_content ?? "";
                         setStateTrigger(!stateTrigger);
                       }}
                     />
-                    {keywordNotificationEligibilityHelperState[idx]
+                    {keywordNotificationLuckyDrawHelperState[idx]
                       .notification_template !== "" && (
                       <OutlinedTextField
                         direction="column"
@@ -176,23 +194,23 @@ const NotificationLuckyDraw: React.FunctionComponent<
                         multiline
                         rows={3}
                         value={
-                          keywordNotificationEligibilityState[idx]
+                          keywordNotificationLuckyDrawState[idx]
                             .notification_content
                         }
                         handleChange={(value: string) => {
-                          keywordNotificationEligibility[
+                          keywordNotificationLuckyDraw[
                             idx
                           ].notification_content = value;
                           setStateTrigger(!stateTrigger);
                         }}
                       />
                     )}
-                    {keywordNotificationEligibilityHelperState[idx]
+                    {keywordNotificationLuckyDrawHelperState[idx]
                       .notification_template !== "" && (
                       <Stack direction="row" spacing="1vw">
                         <Button
                           onClick={() => {
-                            keywordNotificationEligibility[
+                            keywordNotificationLuckyDraw[
                               idx
                             ].notification_content += `[KeywordName]`;
                             setStateTrigger(!stateTrigger);
@@ -211,7 +229,7 @@ const NotificationLuckyDraw: React.FunctionComponent<
                         </Button>
                         <Button
                           onClick={() => {
-                            keywordNotificationEligibility[
+                            keywordNotificationLuckyDraw[
                               idx
                             ].notification_content += `[StartPeriod]`;
                             setStateTrigger(!stateTrigger);
@@ -230,7 +248,7 @@ const NotificationLuckyDraw: React.FunctionComponent<
                         </Button>
                         <Button
                           onClick={() => {
-                            keywordNotificationEligibility[
+                            keywordNotificationLuckyDraw[
                               idx
                             ].notification_content += `[EndPeriod]`;
                             setStateTrigger(!stateTrigger);
@@ -254,26 +272,26 @@ const NotificationLuckyDraw: React.FunctionComponent<
                       label="Notification Via"
                       placeholder="Option"
                       options={viaOptions.data}
-                      value={keywordNotificationEligibilityState[idx].via}
+                      value={keywordNotificationLuckyDrawState[idx].via}
                       handleChange={(value: string) => {
-                        keywordNotificationEligibility[idx].via = value;
+                        keywordNotificationLuckyDraw[idx].via = value;
                         setStateTrigger(!stateTrigger);
                       }}
                     />
                     <Stack direction="row" spacing="0.5vw" alignItems="center">
                       <Switch
                         checked={
-                          keywordNotificationEligibilityHelperState[idx]
+                          keywordNotificationLuckyDrawHelperState[idx]
                             .follow_period
                         }
                         onChange={(e) => {
-                          keywordNotificationEligibilityHelper[
+                          keywordNotificationLuckyDrawHelper[
                             idx
                           ].follow_period = e.target.checked;
                           if (e.target.checked) {
-                            keywordNotificationEligibility[idx].start_period =
+                            keywordNotificationLuckyDraw[idx].start_period =
                               keywordCreateState.eligibility.start_period;
-                            keywordNotificationEligibility[idx].end_period =
+                            keywordNotificationLuckyDraw[idx].end_period =
                               keywordCreateState.eligibility.end_period;
                           }
                           setStateTrigger(!stateTrigger);
@@ -285,23 +303,23 @@ const NotificationLuckyDraw: React.FunctionComponent<
                     <Stack direction="row" spacing="2vw" alignItems="center">
                       <ResponsiveDateTimePicker
                         disabled={
-                          keywordNotificationEligibilityHelperState[idx]
+                          keywordNotificationLuckyDrawHelperState[idx]
                             .follow_period
                         }
                         direction="column"
                         label="From"
                         placeholder="From"
                         value={
-                          keywordNotificationEligibilityState[idx].start_period
+                          keywordNotificationLuckyDrawState[idx].start_period
                         }
                         handleChange={(value: Date) => {
-                          keywordNotificationEligibility[idx].start_period =
+                          keywordNotificationLuckyDraw[idx].start_period =
                             value;
                           if (
-                            keywordNotificationEligibilityState[idx]
-                              .end_period <= value
+                            keywordNotificationLuckyDrawState[idx].end_period <=
+                            value
                           ) {
-                            keywordNotificationEligibility[idx].end_period =
+                            keywordNotificationLuckyDraw[idx].end_period =
                               value;
                           }
                           setStateTrigger(!stateTrigger);
@@ -309,21 +327,20 @@ const NotificationLuckyDraw: React.FunctionComponent<
                       />
                       <ResponsiveDateTimePicker
                         disabled={
-                          keywordNotificationEligibilityHelperState[idx]
+                          keywordNotificationLuckyDrawHelperState[idx]
                             .follow_period
                         }
                         direction="column"
                         label="To"
                         placeholder="To"
                         minDateTime={
-                          keywordNotificationEligibilityState[idx].start_period
+                          keywordNotificationLuckyDrawState[idx].start_period
                         }
                         value={
-                          keywordNotificationEligibilityState[idx].end_period
+                          keywordNotificationLuckyDrawState[idx].end_period
                         }
                         handleChange={(value: Date) => {
-                          keywordNotificationEligibility[idx].end_period =
-                            value;
+                          keywordNotificationLuckyDraw[idx].end_period = value;
                           setStateTrigger(!stateTrigger);
                         }}
                       />
@@ -339,9 +356,9 @@ const NotificationLuckyDraw: React.FunctionComponent<
                 direction="column"
                 label="Prize"
                 variant="outlined"
-                value={keywordCreateState.eligibility.name}
+                value={keywordBonusLuckyDrawState.lucky_draw_prize}
                 handleChange={(value: string) => {
-                  keywordCreate.eligibility.name = value;
+                  keywordBonusLuckyDraw.lucky_draw_prize = value;
                   setStateTrigger(!stateTrigger);
                 }}
               />
@@ -353,20 +370,14 @@ const NotificationLuckyDraw: React.FunctionComponent<
                 alignItems="center"
               >
                 <Switch
-                  // checked={
-                  //   keywordNotificationEligibilityHelperState[idx].follow_period
-                  // }
-                  // onChange={(e) => {
-                  //   keywordNotificationEligibilityHelper[idx].follow_period =
-                  //     e.target.checked;
-                  //   if (e.target.checked) {
-                  //     keywordNotificationEligibility[idx].start_period =
-                  //       keywordCreateState.eligibility.start_period;
-                  //     keywordNotificationEligibility[idx].end_period =
-                  //       keywordCreateState.eligibility.end_period;
-                  //   }
-                  //   setStateTrigger(!stateTrigger);
-                  // }}
+                  checked={
+                    keywordBonusLuckyDrawState.lucky_draw_allow_inject_coupon
+                  }
+                  onChange={(e) => {
+                    keywordBonusLuckyDraw.lucky_draw_allow_inject_coupon =
+                      e.target.checked;
+                    setStateTrigger(!stateTrigger);
+                  }}
                   inputProps={{ "aria-label": "controlled" }}
                 />
                 <SmallCopy>Allow Inject Coupon</SmallCopy>
@@ -379,20 +390,12 @@ const NotificationLuckyDraw: React.FunctionComponent<
                 alignItems="center"
               >
                 <Switch
-                  // checked={
-                  //   keywordNotificationEligibilityHelperState[idx].follow_period
-                  // }
-                  // onChange={(e) => {
-                  //   keywordNotificationEligibilityHelper[idx].follow_period =
-                  //     e.target.checked;
-                  //   if (e.target.checked) {
-                  //     keywordNotificationEligibility[idx].start_period =
-                  //       keywordCreateState.eligibility.start_period;
-                  //     keywordNotificationEligibility[idx].end_period =
-                  //       keywordCreateState.eligibility.end_period;
-                  //   }
-                  //   setStateTrigger(!stateTrigger);
-                  // }}
+                  checked={keywordBonusLuckyDrawState.redeem_after_verification}
+                  onChange={(e) => {
+                    keywordBonusLuckyDraw.redeem_after_verification =
+                      e.target.checked;
+                    setStateTrigger(!stateTrigger);
+                  }}
                   inputProps={{ "aria-label": "controlled" }}
                 />
                 <SmallCopy>Redeem After Verification</SmallCopy>
@@ -406,7 +409,7 @@ const NotificationLuckyDraw: React.FunctionComponent<
           </Divider>
           <Stack>
             <Grid container>
-              <Grid item xs={6} border="0.1vw solid rgba(0,0,0,0.1)" p="0.8vw">
+              <Grid item xs={5} border="0.1vw solid rgba(0,0,0,0.1)" p="0.8vw">
                 <BodyCopy
                   align="center"
                   textTransform="uppercase"
@@ -415,7 +418,7 @@ const NotificationLuckyDraw: React.FunctionComponent<
                   Location
                 </BodyCopy>
               </Grid>
-              <Grid item xs={6} border="0.1vw solid rgba(0,0,0,0.1)" p="0.8vw">
+              <Grid item xs={7} border="0.1vw solid rgba(0,0,0,0.1)" p="0.8vw">
                 <BodyCopy
                   align="center"
                   textTransform="uppercase"
@@ -425,26 +428,48 @@ const NotificationLuckyDraw: React.FunctionComponent<
                 </BodyCopy>
               </Grid>
             </Grid>
-            {keywordCreateState.eligibility.locations.map((location, idx) => (
-              <Grid key={`location__${idx}`} container>
-                <Grid
-                  item
-                  xs={6}
-                  border="0.1vw solid rgba(0,0,0,0.1)"
-                  p="0.8vw"
-                >
-                  <BodyCopy textTransform="uppercase">Medan</BodyCopy>
+            {keywordBonusLuckyDraw.locations.map((location, idx) => {
+              const locationName = locationOptions.data.find(
+                (e) => e["_id"] === location.location_id
+              )?.name;
+              return (
+                <Grid key={`location__${idx}`} container>
+                  <Grid
+                    item
+                    xs={5}
+                    border="0.1vw solid rgba(0,0,0,0.1)"
+                    p="0.8vw"
+                  >
+                    <BodyCopy textTransform="uppercase">
+                      {locationName}
+                    </BodyCopy>
+                  </Grid>
+                  <Grid
+                    item
+                    xs={7}
+                    border="0.1vw solid rgba(0,0,0,0.1)"
+                    p="0.8vw"
+                  >
+                    <OutlinedTextField
+                      type="number"
+                      variant="outlined"
+                      InputProps={{ inputProps: { min: 0 } }}
+                      value={keywordBonusLuckyDrawState.locations[
+                        idx
+                      ].stock.toString()}
+                      handleChange={(value: number) => {
+                        keywordBonusLuckyDraw.locations[idx].stock =
+                          Number(value);
+                        setStateTrigger(!stateTrigger);
+                      }}
+                    />
+                  </Grid>
                 </Grid>
-                <Grid
-                  item
-                  xs={6}
-                  border="0.1vw solid rgba(0,0,0,0.1)"
-                  p="0.8vw"
-                >
-                  <BodyCopy textTransform="uppercase">1</BodyCopy>
-                </Grid>
-              </Grid>
-            ))}
+              );
+            })}
+            <SmallCopy color="primary" mt="1vw">
+              ** If you don't want set stock, please leave it blank
+            </SmallCopy>
           </Stack>
         </Stack>
       </AccordionDetails>

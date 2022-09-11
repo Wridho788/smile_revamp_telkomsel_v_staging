@@ -45,7 +45,6 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
 
   React.useEffect(() => {
     setKeywordBonusHelperState(keywordBonusHelper);
-    console.log(keywordBonusHelper);
   }, [keywordBonusHelper, stateTrigger]);
 
   React.useEffect(() => {
