@@ -1,14 +1,23 @@
 import {
-  IKeywordShift,
+  IKeywordEligibilityKeywordShift,
   IKeywordEligibility,
   ICreateKeyword,
-  IKeywordLocationTypeGeneral,
-  IKeywordBonus,
-  IKeywordNotificationInitial,
-  IBonusLuckyDrawInitial,
+  IKeywordEligibilityLocationHelper,
+  IKeywordBonusHelper,
+  IKeywordNotificationEligibilityHelper,
+  IKeywordNotificationLuckyDrawHelper,
+  IKeywordBonusLuckyDraw,
+  IKeywordNotificationEligibility,
+  IKeywordBonusLuckyDrawLocation,
+  IKeywordNotificationLuckyDraw,
 } from "./interfaces";
 
-const KeywordShift: IKeywordShift = {
+export const KeywordEligibilityLocationHelper: IKeywordEligibilityLocationHelper =
+  {
+    location_type: "",
+  };
+
+const KeywordEligibilityKeywordShift: IKeywordEligibilityKeywordShift = {
   from: new Date(),
   to: new Date(),
 };
@@ -64,84 +73,142 @@ const KeywordEligibility: IKeywordEligibility = {
   segmentation_customer_preferences_bcp: "",
   file: "",
   segmentation_employee_numbers: false,
-  keyword_shift: [KeywordShift],
+  keyword_shift: [KeywordEligibilityKeywordShift],
 };
 
-const bonusLuckyDrawInitial: IBonusLuckyDrawInitial = {
-  bonus_type: "lucky_draw",
+export const KeywordBonusHelper: IKeywordBonusHelper = {
+  bonus_type: [],
+};
+
+export const KeywordBonusLuckyDrawLocation: IKeywordBonusLuckyDrawLocation = {
+  location_id: "",
+  stock: 0,
+};
+
+export const KeywordBonusLuckyDraw: IKeywordBonusLuckyDraw = {
+  bonus_type: "",
   lucky_draw_reguler: true,
   lucky_draw_allow_inject_coupon: false,
   lucky_draw_prize: "",
-  stock_location: [],
   redeem_after_verification: false,
+  locations: [],
 };
 
-export const CreateKeywordGeneral: ICreateKeyword = {
-  eligibility: KeywordEligibility,
-  bonus: [bonusLuckyDrawInitial],
-  notification: [
+export const KeywordNotificationEligibilityHelper: IKeywordNotificationEligibilityHelper[] =
+  [
     {
-      code_identifier: "",
-      notification_content: "",
-      start_period: new Date(),
-      end_period: new Date(),
-      notif_type: "",
-      via: "",
+      notification_template: "",
+      follow_period: false,
     },
     {
-      code_identifier: "",
-      notification_content: "",
-      start_period: new Date(),
-      end_period: new Date(),
-      notif_type: "",
-      via: "",
+      notification_template: "",
+      follow_period: false,
     },
     {
-      code_identifier: "",
-      notification_content: "",
-      start_period: new Date(),
-      end_period: new Date(),
-      notif_type: "",
-      via: "",
+      notification_template: "",
+      follow_period: false,
     },
     {
-      code_identifier: "",
-      notification_content: "",
-      start_period: new Date(),
-      end_period: new Date(),
-      notif_type: "",
-      via: "",
+      notification_template: "",
+      follow_period: false,
     },
-  ],
-  // keyword_bonus: [KeywordBonus],
-  // keyword_notification: [KeywordNotification],
-};
+  ];
 
-export const KeywordLocationTypeGeneral: IKeywordLocationTypeGeneral = {
-  location_type: "",
-};
+export const KeywordNotificationEligibility: IKeywordNotificationEligibility[] =
+  [
+    {
+      code_identifier: "",
+      notification_content: "",
+      start_period: new Date(),
+      end_period: new Date(),
+      notif_type: "",
+      via: "",
+    },
+    {
+      code_identifier: "",
+      notification_content: "",
+      start_period: new Date(),
+      end_period: new Date(),
+      notif_type: "",
+      via: "",
+    },
+    {
+      code_identifier: "",
+      notification_content: "",
+      start_period: new Date(),
+      end_period: new Date(),
+      notif_type: "",
+      via: "",
+    },
+    {
+      code_identifier: "",
+      notification_content: "",
+      start_period: new Date(),
+      end_period: new Date(),
+      notif_type: "",
+      via: "",
+    },
+  ];
 
-export const KeywordNotificationInitial: IKeywordNotificationInitial[] = [
+export const KeywordNotificationLuckyDrawHelper: IKeywordNotificationLuckyDrawHelper[] =
+  [
+    {
+      notification_template: "",
+      follow_period: false,
+    },
+    {
+      notification_template: "",
+      follow_period: false,
+    },
+    {
+      notification_template: "",
+      follow_period: false,
+    },
+    {
+      notification_template: "",
+      follow_period: false,
+    },
+  ];
+
+export const KeywordNotificationLuckyDraw: IKeywordNotificationLuckyDraw[] = [
   {
-    notification_template: "",
-    follow_period: false,
+    code_identifier: "",
+    notification_content: "",
+    start_period: new Date(),
+    end_period: new Date(),
+    notif_type: "",
+    via: "",
   },
   {
-    notification_template: "",
-    follow_period: false,
+    code_identifier: "",
+    notification_content: "",
+    start_period: new Date(),
+    end_period: new Date(),
+    notif_type: "",
+    via: "",
   },
   {
-    notification_template: "",
-    follow_period: false,
+    code_identifier: "",
+    notification_content: "",
+    start_period: new Date(),
+    end_period: new Date(),
+    notif_type: "",
+    via: "",
   },
   {
-    notification_template: "",
-    follow_period: false,
+    code_identifier: "",
+    notification_content: "",
+    start_period: new Date(),
+    end_period: new Date(),
+    notif_type: "",
+    via: "",
   },
 ];
 
-export const KeywordBonus: IKeywordBonus = {
-  bonus_type: [],
+export const CreateKeywordGeneral: ICreateKeyword = {
+  eligibility: KeywordEligibility,
+  bonus: [],
+  notification: [...KeywordNotificationEligibility],
 };
 
 export const KeywordFirstStep: boolean = false;

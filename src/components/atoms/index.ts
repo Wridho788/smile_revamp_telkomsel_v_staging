@@ -27,6 +27,7 @@ import Gap from "./Gap";
 
 import KeywordSearch from "./KeywordSearch";
 import InputSearchable from "./InputSearchable";
+import InputFile from "./InputFile";
 
 export {
   Button,
@@ -55,4 +56,5 @@ export {
   KeywordSearch,
   Gap,
   InputSearchable,
+  InputFile,
 };

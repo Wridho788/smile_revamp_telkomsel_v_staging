@@ -14,6 +14,7 @@ import NotificationManagement from "./NotificationManagement";
 import LocationManagement from "./LocationManagement"
 import ProgramMainInfoUpdate from "./ProgramMainInfoUpdate";
 import ProgramNotificationUpdate from "./ProgramNotificationUpdate";
+import MerchantPartnerManagement from "./MerchantPartnerManagement";
 
 export {
   Option,
@@ -31,5 +32,6 @@ export {
   NotificationManagement,
   LocationManagement,
   ProgramMainInfoUpdate,
-  ProgramNotificationUpdate
+  ProgramNotificationUpdate,
+  MerchantPartnerManagement,
 };

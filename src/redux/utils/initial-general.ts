@@ -1,4 +1,5 @@
 import {IParams} from "./IGeneral";
+import {IPayload} from "../features/program/interface";
 
 export const FilterInitial: IParams = {
     limit: 100,
@@ -64,3 +65,10 @@ export const ThresholdAlarmExpiredOption = [
     {_id: "6", set_value: "H-6"},
     {_id: "7", set_value: "H-7"},
 ]
+
+export const PayloadInitial : IPayload = {
+   payload: {
+       data: [],
+       totalRecords: 0
+   }
+}
