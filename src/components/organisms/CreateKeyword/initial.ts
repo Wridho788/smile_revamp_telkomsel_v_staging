@@ -86,7 +86,7 @@ export const KeywordBonusLuckyDrawLocation: IKeywordBonusLuckyDrawLocation = {
 };
 
 export const KeywordBonusLuckyDraw: IKeywordBonusLuckyDraw = {
-  bonus_type: "lucky_draw",
+  bonus_type: "",
   lucky_draw_reguler: true,
   lucky_draw_allow_inject_coupon: false,
   lucky_draw_prize: "",
@@ -170,7 +170,7 @@ export const KeywordNotificationLuckyDrawHelper: IKeywordNotificationLuckyDrawHe
     },
   ];
 
-const KeywordNotificationLuckyDraw: IKeywordNotificationLuckyDraw[] = [
+export const KeywordNotificationLuckyDraw: IKeywordNotificationLuckyDraw[] = [
   {
     code_identifier: "",
     notification_content: "",
