@@ -10,10 +10,10 @@ import {ProgramInitial} from "../../../pages/ProgramManagement/initial";
 import {useLazyProgramPrimeListQuery,} from "../../../redux/features/program-primedt/program-primedt-api-slice";
 import {IProgram} from "../../../redux/features/program-primedt/interface";
 import moment from "moment";
-import ProgramDetailsModal from "../../../atomic/components/atoms/Modal/ProgramDetailsModal";
 import {useAppConfigQuery} from "../../../redux/features/app-config/app-config-api-slice";
 import {useAccountAuthenticateQuery} from "../../../redux/features/account/account-api-slice";
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import ProgramDetailsModal from "../Programs/Detail/ProgramDetailsModal";
 
 const ProgramPrimeDt: FC = () => {
     const [programs, setPrograms] = useState<any>([ProgramInitial])
