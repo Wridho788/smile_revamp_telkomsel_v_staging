@@ -13,6 +13,10 @@ export interface IParams {
   skip?: number;
   filter?: any;
   sort?: any;
+  lazyEvent?: any;
+  type?:string,
+  program?:string
+
 }
 export interface IParamsPrime {
   first?: number;

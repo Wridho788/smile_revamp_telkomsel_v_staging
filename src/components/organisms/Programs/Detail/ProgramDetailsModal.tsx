@@ -1,7 +1,6 @@
 import React, {FC, useEffect} from "react";
 import Box from "@mui/material/Box";
 import ModalCustom from "@mui/material/Modal";
-import { IProgramDetailsModalProps } from "./Modal.type";
 import {Button, Grid, IconButton, Stack, Card, Typography, Chip} from "@mui/material";
 import {
   useApproveProgramMutation,
@@ -16,6 +15,8 @@ import {
   useGetLocationTypeQuery
 } from "../../../../redux/features/lov/lov-api-slice";
 import Swal from "sweetalert2";
+import {IProgramDetailsModalProps} from "../../../../atomic/components/atoms/Modal/Modal.type";
+import Segmentation from "./Segmentation";
 
 const style = {
   position: "absolute" as "absolute",
@@ -300,6 +301,9 @@ const ProgramDetailsModal: FC<IProgramDetailsModalProps> = ({
                 ))}
               </Stack>
             </Grid>
+            <Box sx={{paddingTop: "3vw"}}>
+              <Segmentation programId={data._id}/>
+            </Box>
           </Grid>
         </Grid>
       </Box>
