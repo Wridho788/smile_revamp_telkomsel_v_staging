@@ -6,7 +6,7 @@ import {
     Notification,
     Segmentation,
 } from "../../components/organisms/CreateProgram";
-import {CreateProgramProvider} from "../../app/context/CreateProgram/Provider";
+import { CreateProgramProvider } from "../../app/context/CreateProgram/Provider";
 
 
 const CreateProgram = () => {

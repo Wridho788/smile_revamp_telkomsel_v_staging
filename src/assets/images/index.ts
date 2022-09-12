@@ -5,6 +5,7 @@ import TelkomselLabel from "./telkomsel-label.png"
 import BtnArrowRight from "./btn-Arrow-Right.png"
 import BtnArrowLeft from "./btn-Arrow-Left.png"
 import UserIcon from "./userIcon.png"
+import Upload from "./upload.png"
 
 export {
     SuccessAlert,
@@ -13,5 +14,6 @@ export {
     TelkomselLabel,
     BtnArrowRight,
     BtnArrowLeft,
-    UserIcon
+    UserIcon,
+    Upload
 };
