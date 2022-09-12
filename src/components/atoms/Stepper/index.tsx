@@ -156,28 +156,27 @@ export default function HorizontalLinearStepper({
                     })
                     : await updateProgram(CreateProgramInitial);
             } else if (type === "keyword") {
-                slug === "insert" ? console.log(CreateKeywordGeneral)
-                    // ? await createKeywordGeneral(CreateKeywordGeneral)
-                    //     .then((res: any) => {
-                    //         if (res.data) {
-                    //             Swal.fire("Success!", "Keyword has been created!", "success");
-                    //             console.log("data : ", res.data);
-                    //         }
-                    //         if (res.error) {
-                    //             Swal.fire(
-                    //                 "Failed!",
-                    //                 "Keyword has noot been created!",
-                    //                 "error"
-                    //             );
-                    //             console.log("error : ", res.error);
-                    //         }
-                    //     })
-                    //     .catch((err) => {
-                    //         console.error(err);
-                    //     })
-                    //     .finally(() => {
-                    //         nav("/keyword-management");
-                    //     })
+                slug === "insert" ? await createKeywordGeneral(CreateKeywordGeneral)
+                        .then((res: any) => {
+                            if (res.data) {
+                                Swal.fire("Success!", "Keyword has been created!", "success");
+                                console.log("data : ", res.data);
+                            }
+                            if (res.error) {
+                                Swal.fire(
+                                    "Failed!",
+                                    "Keyword has noot been created!",
+                                    "error"
+                                );
+                                console.log("error : ", res.error);
+                            }
+                        })
+                        .catch((err) => {
+                            console.error(err);
+                        })
+                        .finally(() => {
+                            nav("/keyword-management");
+                        })
                     : await updateProgram(CreateKeywordGeneral);
                 // window.location.href = "/keyword";
             }
