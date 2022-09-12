@@ -90,7 +90,7 @@ export const KeywordBonusLuckyDrawLocation: IKeywordBonusLuckyDrawLocation = {
 };
 
 export const KeywordBonusLuckyDraw: IKeywordBonusLuckyDraw = {
-  bonus_type: "",
+  bonus_type: "Lucky Draw Coupon",
   lucky_draw_reguler: true,
   lucky_draw_allow_inject_coupon: false,
   lucky_draw_prize: "",

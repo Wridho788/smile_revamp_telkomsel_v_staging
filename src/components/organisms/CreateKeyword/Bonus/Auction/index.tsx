@@ -117,7 +117,7 @@ const NotificationAuction: React.FunctionComponent<INotificationAuctionProps> = 
         getKeywordNotification("AUCTION_NOTIFICATION");
 
         // Initial Keyword Bonus Auction
-        const index = keywordCreate.bonus.findIndex(({ bonus_type }) => bonus_type === 'auction');
+        const index = keywordCreate.bonus.findIndex(({ bonus_type }) => bonus_type === 'Auction');
 
         if (index === -1) {
             keywordCreate.bonus.push(KeywordBonusAuction);
@@ -134,7 +134,7 @@ const NotificationAuction: React.FunctionComponent<INotificationAuctionProps> = 
 
     useEffect(() => {
         // Prevent duplicate data of "Auction"
-        if (!(_find(keywordCreate.notification, ({ bonus_type_id }) => bonus_type_id === bonus_type_id)).length) {
+        if (!_find(keywordCreate.notification, ({ bonus_type_id }) => bonus_type_id === bonusTypeId)) {
             keywordCreate.notification = keywordCreate.notification.concat(keywordNotificationAuction);
         }
 
@@ -457,7 +457,7 @@ const NotificationAuction: React.FunctionComponent<INotificationAuctionProps> = 
                                 </Stack>
                                 <Stack spacing={2}>
                                     <Subtitle color="warning.main">STOCK PER LOCATION MANAGEMENT</Subtitle>
-                                    {keywordCreate.bonus[index].locations.map((location: any, idx: any) => {
+                                    {keywordCreate.bonus[index].stock_location.map((location: any, idx: any) => {
                                         const locationName = locationOptions.data.find(
                                             (e) => e["_id"] === location.location_id
                                         )?.name;
@@ -483,11 +483,11 @@ const NotificationAuction: React.FunctionComponent<INotificationAuctionProps> = 
                                                         type="number"
                                                         variant="outlined"
                                                         InputProps={{ inputProps: { min: 0 } }}
-                                                        value={keywordCreate.bonus[index].locations[
+                                                        value={keywordCreate.bonus[index].stock_location[
                                                             idx
                                                             ].stock.toString()}
                                                         handleChange={(value: number) => {
-                                                            keywordCreate.bonus[index].locations[idx].stock =
+                                                            keywordCreate.bonus[index].stock_location[idx].stock =
                                                                 Number(value);
                                                             setStateTrigger(!stateTrigger);
                                                         }}
