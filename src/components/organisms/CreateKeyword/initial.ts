@@ -79,6 +79,7 @@ const KeywordEligibility: IKeywordEligibility = {
 
 export const KeywordBonusHelper: IKeywordBonusHelper = {
   bonus_type: [],
+  bonus_type_id: []
 };
 
 export const KeywordBonusLuckyDrawLocation: IKeywordBonusLuckyDrawLocation = {
@@ -96,7 +97,7 @@ export const KeywordBonusLuckyDraw: IKeywordBonusLuckyDraw = {
 };
 
 export const KeywordBonusAuction: IKeywordBonusAuction = {
-      bonus_type: "auction",
+      bonus_type: "Auction",
       auction_prize_desc_id: "",
       auction_prize_desc_en: "",
       auction_prize_image: "",
@@ -131,6 +132,7 @@ export const KeywordNotificationEligibilityHelper: IKeywordNotificationEligibili
 export const KeywordNotificationEligibility: IKeywordNotificationEligibility[] =
   [
     {
+      bonus_type_id: "",
       code_identifier: "",
       notification_content: "",
       start_period: new Date(),
@@ -139,6 +141,7 @@ export const KeywordNotificationEligibility: IKeywordNotificationEligibility[] =
       via: "",
     },
     {
+      bonus_type_id: "",
       code_identifier: "",
       notification_content: "",
       start_period: new Date(),
@@ -147,6 +150,7 @@ export const KeywordNotificationEligibility: IKeywordNotificationEligibility[] =
       via: "",
     },
     {
+      bonus_type_id: "",
       code_identifier: "",
       notification_content: "",
       start_period: new Date(),
@@ -155,6 +159,7 @@ export const KeywordNotificationEligibility: IKeywordNotificationEligibility[] =
       via: "",
     },
     {
+      bonus_type_id: "",
       code_identifier: "",
       notification_content: "",
       start_period: new Date(),

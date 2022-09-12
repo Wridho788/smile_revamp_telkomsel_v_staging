@@ -51,13 +51,8 @@
     "xlsx": "^0.18.5"
   },
   "scripts": {
-<<<<<<< HEAD
     "start": "SET PORT=8001 && react-dotenv &&  react-scripts start",
     "build": "PORT=8001 && react-dotenv && react-scripts build",
-=======
-    "start": "react-dotenv && PORT=8001  react-scripts start",
-    "build": "react-dotenv && PORT=8001 react-scripts build",
->>>>>>> a283257dbfceb78936ee09358403e220f867a65e
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

@@ -1,21 +1,18 @@
 import * as React from "react";
-import { Box, Button, Chip, Stack } from "@mui/material";
-import { Select } from "../../../atoms";
-import { useGetBonusTypeQuery } from "../../../../redux/features/lov/lov-api-slice";
+import {Box, Chip, Stack} from "@mui/material";
+import {Select} from "../../../atoms";
+import {useGetBonusTypeQuery} from "../../../../redux/features/lov/lov-api-slice";
 
-import {
-  KeywordBonusHelper,
-  KeywordNotificationLuckyDrawHelper,
-} from "../initial";
-import { CreateKeywordGeneral } from "../initial";
-import {
-  ICreateKeyword,
-  IKeywordBonusHelper,
-  IKeywordNotificationLuckyDrawHelper,
-} from "../interfaces";
+import {CreateKeywordGeneral, KeywordBonusHelper, KeywordNotificationLuckyDrawHelper,} from "../initial";
+import {ICreateKeyword, IKeywordBonusHelper, IKeywordNotificationLuckyDrawHelper,} from "../interfaces";
+
 import LuckyDraw from "./LuckyDraw";
+import Auction from "./Auction";
+
 import CancelIcon from "@mui/icons-material/Cancel";
+
 import _without from "lodash/without";
+import _find from "lodash/find";
 
 interface IBonusProps {}
 
@@ -45,6 +42,13 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
   }, [keywordCreate, stateTrigger]);
 
   React.useEffect(() => {
+    // Filter Condition for Bonus / Notification : (Auction, Lucky Draw)
+    keywordCreate.bonus = keywordCreate.bonus.filter((item) => {
+      if (keywordBonusHelper.bonus_type.includes(item.bonus_type)) {
+        return item;
+      }
+    });
+
     setKeywordBonusHelperState(keywordBonusHelper);
     console.log(keywordBonusHelper);
   }, [keywordBonusHelper, stateTrigger]);
@@ -125,7 +129,16 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
                   </Box>
                 );
               } else if (bonusType === "Auction") {
-                return <Button key={`kbt__${idx}`}>Auction is Choosen</Button>;
+                return (
+                    <Auction
+                        bonusType={bonusType}
+                        bonusTypeId={_find(bonusTypeOptions.data, ({ set_value }) => set_value === bonusType)?._id}
+                        keywordCreateState={keywordCreateState}
+                        keywordCreate={keywordCreate}
+                        stateTrigger={stateTrigger}
+                        setStateTrigger={setStateTrigger}
+                    />
+                );
               } else {
                 <Box key={`kbt__${idx}`}></Box>;
               }

@@ -63,6 +63,7 @@ export interface IKeywordEligibility {
 
 export interface IKeywordBonusHelper {
   bonus_type: any[];
+  bonus_type_id: any[]
 }
 
 export interface IKeywordBonusLuckyDrawLocation {
@@ -85,6 +86,7 @@ export interface IKeywordNotificationEligibilityHelper {
 }
 
 export interface IKeywordNotificationEligibility {
+  bonus_type_id: string;
   code_identifier: string;
   notification_content: string;
   start_period: Date;
