@@ -10,10 +10,12 @@ import {
   H2,
   InputFile,
   InputSearchable,
+  SmallCopy,
 } from "../../components";
 import {
   Button,
   Dialog,
+  DialogContent,
   DialogTitle,
   IconButton,
   Stack,
@@ -130,7 +132,7 @@ const MerchantOutletManagement = () => {
 
   const onRowSelect = (event: any) => {
     setOpen({ ...open, detail: true });
-    console.log(event);
+    setMerchantOutletDetail(event.data);
   };
 
   const onChange = (e: any) => {
@@ -340,6 +342,36 @@ const MerchantOutletManagement = () => {
           </Paper>
         </Box>
       </Box>
+
+      {/*======================= Dialog of Detail Merchant ========================== */}
+      {/*============================================================================ */}
+      <Dialog
+        fullWidth
+        open={open.detail}
+        onClose={() => setOpen({ ...open, detail: false })}
+      >
+        <DialogTitle variant="h5">
+          Outlet Name:{" "}
+          {merchantOutletDetail && merchantOutletDetail.outlet_name}
+        </DialogTitle>
+        <DialogContent>
+          <SmallCopy>
+            Outlet ID: {merchantOutletDetail && merchantOutletDetail.outlet_id}
+          </SmallCopy>
+          <SmallCopy>
+            Outlet Address:{" "}
+            {merchantOutletDetail && merchantOutletDetail.outlet_address}
+          </SmallCopy>
+          <SmallCopy>
+            Branch:{" "}
+            {merchantOutletDetail && merchantOutletDetail.branch_detail.name}
+          </SmallCopy>
+          <SmallCopy>
+            Regional:{" "}
+            {merchantOutletDetail && merchantOutletDetail.regional_detail.name}
+          </SmallCopy>
+        </DialogContent>
+      </Dialog>
 
       {/*======================= Dialog of Add Merchant Outlet ===================== */}
       {/*============================================================================ */}
