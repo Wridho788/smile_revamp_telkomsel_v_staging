@@ -9,7 +9,7 @@ import {
   ResponsiveTimePicker,
   ResponsiveDatePicker,
 } from "../../../../atoms";
-import { useCustomerBadgeListQuery } from "../../../../../redux/features/customer/customer-api-slice";
+// import { useCustomerBadgeListQuery } from "../../../../../redux/features/customer/customer-api-slice";
 import {
   useGetPointTypeQuery,
   useGetProgramExperienceQuery,

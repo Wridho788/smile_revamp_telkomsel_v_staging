@@ -12,7 +12,9 @@ import {
   IKeywordNotificationLuckyDraw,
   IKeywordBonusAuction,
   IKeywordNotificationAuction,
-  IKeywordNotificationAuctionHelper
+  IKeywordNotificationAuctionHelper,
+  IKeywordBonusDirectRedeem,
+  IKeywordBonusLoyaltyPoin,
 } from "./interfaces";
 
 export const KeywordEligibilityLocationHelper: IKeywordEligibilityLocationHelper =
@@ -81,7 +83,7 @@ const KeywordEligibility: IKeywordEligibility = {
 
 export const KeywordBonusHelper: IKeywordBonusHelper = {
   bonus_type: [],
-  bonus_type_id: []
+  bonus_type_id: [],
 };
 
 export const KeywordBonusLuckyDrawLocation: IKeywordBonusLuckyDrawLocation = {
@@ -98,6 +100,20 @@ export const KeywordBonusLuckyDraw: IKeywordBonusLuckyDraw = {
   locations: [],
 };
 
+export const KeywordBonusDirectRedeem: IKeywordBonusDirectRedeem = {
+  bonus_type: "Direct Redeem",
+  stock_type: "",
+  redeem_after_verification: false,
+  locations: [],
+};
+
+export const KeywordBonusLoyaltyPoin: IKeywordBonusLoyaltyPoin = {
+  bonus_type: "Loyalty Poin",
+  earning_poin: 0,
+  redeem_after_verification: false,
+  locations: [],
+};
+
 export const KeywordBonusAuction: IKeywordBonusAuction = {
   bonus_type: "Auction",
   auction_prize_desc_id: "",
@@ -108,68 +124,67 @@ export const KeywordBonusAuction: IKeywordBonusAuction = {
   auction_max_winner_inphase: 0,
   auction_prize_name: "",
   stock_location: [],
-  redeem_after_verification: false
-}
+  redeem_after_verification: false,
+};
 
 export const KeywordNotificationAuctionHelper: IKeywordNotificationAuctionHelper[] =
-    [
-      {
-        notification_template: "",
-        follow_period: false,
-      },
-      {
-        notification_template: "",
-        follow_period: false,
-      },
-      {
-        notification_template: "",
-        follow_period: false,
-      },
-      {
-        notification_template: "",
-        follow_period: false,
-      },
-    ];
+  [
+    {
+      notification_template: "",
+      follow_period: false,
+    },
+    {
+      notification_template: "",
+      follow_period: false,
+    },
+    {
+      notification_template: "",
+      follow_period: false,
+    },
+    {
+      notification_template: "",
+      follow_period: false,
+    },
+  ];
 
-export const KeywordNotificationAuction: IKeywordNotificationAuction[] =
-    [
-      {
-        bonus_type_id: "",
-        code_identifier: "",
-        notification_content: "",
-        start_period: new Date(),
-        end_period: new Date(),
-        notif_type: "",
-        via: "",
-      },
-      {
-        bonus_type_id: "",
-        code_identifier: "",
-        notification_content: "",
-        start_period: new Date(),
-        end_period: new Date(),
-        notif_type: "",
-        via: "",
-      },
-      {
-        bonus_type_id: "",
-        code_identifier: "",
-        notification_content: "",
-        start_period: new Date(),
-        end_period: new Date(),
-        notif_type: "",
-        via: "",
-      },
-      {
-        bonus_type_id: "",
-        code_identifier: "",
-        notification_content: "",
-        start_period: new Date(),
-        end_period: new Date(),
-        notif_type: "",
-        via: "",
-      },
-    ];
+export const KeywordNotificationAuction: IKeywordNotificationAuction[] = [
+  {
+    bonus_type_id: "",
+    code_identifier: "",
+    notification_content: "",
+    start_period: new Date(),
+    end_period: new Date(),
+    notif_type: "",
+    via: "",
+  },
+  {
+    bonus_type_id: "",
+    code_identifier: "",
+    notification_content: "",
+    start_period: new Date(),
+    end_period: new Date(),
+    notif_type: "",
+    via: "",
+  },
+  {
+    bonus_type_id: "",
+    code_identifier: "",
+    notification_content: "",
+    start_period: new Date(),
+    end_period: new Date(),
+    notif_type: "",
+    via: "",
+  },
+  {
+    bonus_type_id: "",
+    code_identifier: "",
+    notification_content: "",
+    start_period: new Date(),
+    end_period: new Date(),
+    notif_type: "",
+    via: "",
+  },
+];
 
 export const KeywordNotificationEligibilityHelper: IKeywordNotificationEligibilityHelper[] =
   [
