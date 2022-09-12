@@ -45,20 +45,17 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
   }, [keywordBonusHelper, stateTrigger]);
 
   React.useEffect(() => {
-    if (!keywordBonusHelper.bonus_type.includes("Auction") || !keywordBonusHelper.bonus_type.includes("Lucky Draw Coupon")) {
-      keywordCreate.notification = keywordCreate.notification.filter((item) => {
-        const bonusTypeAuction = _find(bonusTypeOptions.data, ({ set_value }) => set_value === "Auction")?._id;
-        const bonusTypeLuckyDraw = _find(bonusTypeOptions.data, ({ set_value }) => set_value === "Lucky Draw Coupon")?._id;
+    let list: any = [];
 
-        if (!(item._id !== bonusTypeAuction) || item.bonus_type_id === '') {
-          return item;
-        }
+    keywordBonusHelper.bonus_type.map((type :string) => {
+      list.push(_find(bonusTypeOptions.data, ({ set_value }) => set_value === type)?._id);
+    });
 
-        if (!(item._id !== bonusTypeLuckyDraw) || item.bonus_type_id === '') {
-          return item;
-        }
-      });
-    }
+    keywordCreate.notification = keywordCreate.notification.filter((item, i) => {
+      if (list.includes(keywordCreate.notification[i].bonus_type_id) || item.bonus_type_id === '') return item;
+    });
+
+    setKeywordCreateState(keywordCreate);
   }, [keywordBonusHelperState.bonus_type]);
 
   React.useEffect(() => {
