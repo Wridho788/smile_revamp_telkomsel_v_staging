@@ -90,6 +90,9 @@ const NotificationLuckyDraw: React.FunctionComponent<
   const { data: locationOptions = { data: [] } } =
     useLocationTemplateQuery(FilterInitial);
 
+  const [index, setIndex] = useState<number>(-1);
+
+  // TODO: Get Lucky Draw Notification
   useEffect(() => {
     getKeywordNotification("LUCKY_DRAW_NOTIFICATION");
 
@@ -98,6 +101,7 @@ const NotificationLuckyDraw: React.FunctionComponent<
 
     if (index === -1) {
       keywordCreate.bonus.push(KeywordBonusLuckyDraw);
+      setIndex(keywordCreate.bonus.findIndex(({ bonus_type }) => bonus_type === 'Auction'));
     }
   }, []);
 
@@ -349,15 +353,15 @@ const NotificationLuckyDraw: React.FunctionComponent<
               })
             )}
           </Stack>
-          {/*<Grid alignItems="center" container columns={3}>
+          <Grid alignItems="center" container columns={3}>
             <Grid item xs={1}>
               <OutlinedTextField
                 direction="column"
                 label="Prize"
                 variant="outlined"
-                value={keywordBonusLuckyDrawState.lucky_draw_prize}
+                value={keywordCreate.bonus[index].lucky_draw_prize}
                 handleChange={(value: string) => {
-                  keywordBonusLuckyDraw.lucky_draw_prize = value;
+                  keywordCreate.bonus[index].lucky_draw_prize = value;
                   setStateTrigger(!stateTrigger);
                 }}
               />
@@ -370,10 +374,10 @@ const NotificationLuckyDraw: React.FunctionComponent<
               >
                 <Switch
                   checked={
-                    keywordBonusLuckyDrawState.lucky_draw_allow_inject_coupon
+                    keywordCreate.bonus[index].lucky_draw_allow_inject_coupon
                   }
                   onChange={(e) => {
-                    keywordBonusLuckyDraw.lucky_draw_allow_inject_coupon =
+                    keywordCreate.bonus[index].lucky_draw_allow_inject_coupon =
                       e.target.checked;
                     setStateTrigger(!stateTrigger);
                   }}
@@ -389,9 +393,9 @@ const NotificationLuckyDraw: React.FunctionComponent<
                 alignItems="center"
               >
                 <Switch
-                  checked={keywordBonusLuckyDrawState.redeem_after_verification}
+                  checked={keywordCreate.bonus[index].redeem_after_verification}
                   onChange={(e) => {
-                    keywordBonusLuckyDraw.redeem_after_verification =
+                    keywordCreate.bonus[index].redeem_after_verification =
                       e.target.checked;
                     setStateTrigger(!stateTrigger);
                   }}
@@ -427,7 +431,7 @@ const NotificationLuckyDraw: React.FunctionComponent<
                 </BodyCopy>
               </Grid>
             </Grid>
-            {keywordBonusLuckyDraw.locations.map((location, idx) => {
+            {keywordCreate.bonus[index].locations.map((location: any, idx: any) => {
               const locationName = locationOptions.data.find(
                 (e) => e["_id"] === location.location_id
               )?.name;
@@ -453,11 +457,11 @@ const NotificationLuckyDraw: React.FunctionComponent<
                       type="number"
                       variant="outlined"
                       InputProps={{ inputProps: { min: 0 } }}
-                      value={keywordBonusLuckyDrawState.locations[
+                      value={keywordCreate.bonus[index].locations[
                         idx
                       ].stock.toString()}
                       handleChange={(value: number) => {
-                        keywordBonusLuckyDraw.locations[idx].stock =
+                        keywordCreate.bonus[index].locations[idx].stock =
                           Number(value);
                         setStateTrigger(!stateTrigger);
                       }}
@@ -469,7 +473,7 @@ const NotificationLuckyDraw: React.FunctionComponent<
             <SmallCopy color="primary" mt="1vw">
               ** If you don't want set stock, please leave it blank
             </SmallCopy>
-          </Stack>*/}
+          </Stack>
         </Stack>
       </AccordionDetails>
     </Accordion>
