@@ -59,6 +59,14 @@ export const keywordSlice = createApi({
         }),
         invalidatesTags: ["Keyword"],
       });
+    const postImgHandler = () =>
+        builder.mutation<{}, FormData>({
+          query: (formData) => ({
+            url: '/image-auction',
+            method: "POST",
+            body: formData
+          })
+        });
     return {
       // all function
       keywordList: responseHandler(baseUrl + "/v1/keyword"),
@@ -105,6 +113,7 @@ export const keywordSlice = createApi({
       keywordLuckyDrawDelete: deleteHandler("/lucky_draw"),
 
       // post : image/file
+      keywordUploadAuction: postImgHandler()
     };
   },
 });
@@ -121,4 +130,5 @@ export const {
   useLazyKeywordGeneralListQuery,
   useKeywordGeneralDeleteMutation,
   useKeywordGeneralCreateMutation,
+  useKeywordUploadAuctionMutation
 } = keywordSlice;
