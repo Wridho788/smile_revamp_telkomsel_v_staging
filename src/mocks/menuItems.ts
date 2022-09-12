@@ -9,7 +9,7 @@ import {
   BrightnessLow,
   StarsOutlined,
   ErrorOutlineOutlined,
-  ShareLocationOutlined
+  ShareLocationOutlined,
 } from "@mui/icons-material";
 
 export interface Menu {
@@ -63,8 +63,8 @@ export const menuItems: Menu[] = [
       },
       {
         label: "Outlet",
-        path: "/merchant",
-        alias: ["/merchant"],
+        path: "/merchant-outlet-management",
+        alias: ["/merchant-outlet-management"],
       },
     ],
   },
