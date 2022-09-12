@@ -134,7 +134,7 @@ const NotificationAuction: React.FunctionComponent<INotificationAuctionProps> = 
 
     useEffect(() => {
         // Prevent duplicate data of "Auction"
-        if (!_find(keywordCreate.notification, ({ bonus_type_id }) => bonus_type_id === bonusTypeId)) {
+        if (!_find(keywordCreate.notification, ({ bonus_type_id }) => bonus_type_id === bonusTypeId) && bonusType === "Auction") {
             keywordCreate.notification = keywordCreate.notification.concat(keywordNotificationAuction);
         }
 

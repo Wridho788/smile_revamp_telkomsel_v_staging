@@ -79,13 +79,13 @@ export const keywordSlice = createApi({
       keywordCoreProductUpdate: putHandler("/core_product"),
       keywordCoreProductDelete: deleteHandler("/core_product"),
 
-      //direct redeem
+      // direct redeem
       keywordCoreDirectRedeemList: responseHandler("/direct_redeem"),
       keywordRedeemCreate: postHandler("/redeem"),
       keywordRedeemUpdate: putHandler("/redeem"),
       keywordRedeemDelete: deleteHandler("/redeem"),
 
-      //donation
+      // donation
       keywordCoreDonationList: responseHandler("/donation"),
 
       keywordDonationCreate: postHandler("/donation"),
@@ -98,11 +98,13 @@ export const keywordSlice = createApi({
       keywordGeneralUpdate: putHandler("/general"),
       keywordGeneralDelete: deleteHandler("/general/"),
 
-      //lucky draw
+      // lucky draw
       keywordCoreLuckyDrawList: responseHandler("/lucky_draw"),
       keywordLuckyDrawCreate: postHandler("/lucky_draw"),
       keywordLuckyDrawUpdate: putHandler("/lucky_draw"),
       keywordLuckyDrawDelete: deleteHandler("/lucky_draw"),
+
+      // post : image/file
     };
   },
 });
