@@ -8,6 +8,7 @@ interface ModalProps {
 interface IProgramDetailsModalProps extends ModalProps {
   roleAccess: boolean;
   data: any;
+  isHqLogin: boolean;
 }
 
 interface IKeywordDetailsModalProps extends ModalProps {
