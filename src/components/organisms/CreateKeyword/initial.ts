@@ -10,7 +10,9 @@ import {
   IKeywordNotificationEligibility,
   IKeywordBonusLuckyDrawLocation,
   IKeywordNotificationLuckyDraw,
-  IKeywordBonusAuction
+  IKeywordBonusAuction,
+  IKeywordNotificationAuction,
+  IKeywordNotificationAuctionHelper
 } from "./interfaces";
 
 export const KeywordEligibilityLocationHelper: IKeywordEligibilityLocationHelper =
@@ -88,7 +90,7 @@ export const KeywordBonusLuckyDrawLocation: IKeywordBonusLuckyDrawLocation = {
 };
 
 export const KeywordBonusLuckyDraw: IKeywordBonusLuckyDraw = {
-  bonus_type: "lucky_draw",
+  bonus_type: "",
   lucky_draw_reguler: true,
   lucky_draw_allow_inject_coupon: false,
   lucky_draw_prize: "",
@@ -97,17 +99,77 @@ export const KeywordBonusLuckyDraw: IKeywordBonusLuckyDraw = {
 };
 
 export const KeywordBonusAuction: IKeywordBonusAuction = {
-      bonus_type: "Auction",
-      auction_prize_desc_id: "",
-      auction_prize_desc_en: "",
-      auction_prize_image: "",
-      auction_poin_min_bidding: 0,
-      auction_multiplier_poin: 0,
-      auction_max_winner_inphase: 0,
-      auction_prize_name: "",
-      stock_location: [],
-      redeem_after_verification: false
+  bonus_type: "Auction",
+  auction_prize_desc_id: "",
+  auction_prize_desc_en: "",
+  auction_prize_image: "",
+  auction_poin_min_bidding: 0,
+  auction_multiplier_poin: 0,
+  auction_max_winner_inphase: 0,
+  auction_prize_name: "",
+  stock_location: [],
+  redeem_after_verification: false
 }
+
+export const KeywordNotificationAuctionHelper: IKeywordNotificationAuctionHelper[] =
+    [
+      {
+        notification_template: "",
+        follow_period: false,
+      },
+      {
+        notification_template: "",
+        follow_period: false,
+      },
+      {
+        notification_template: "",
+        follow_period: false,
+      },
+      {
+        notification_template: "",
+        follow_period: false,
+      },
+    ];
+
+export const KeywordNotificationAuction: IKeywordNotificationAuction[] =
+    [
+      {
+        bonus_type_id: "",
+        code_identifier: "",
+        notification_content: "",
+        start_period: new Date(),
+        end_period: new Date(),
+        notif_type: "",
+        via: "",
+      },
+      {
+        bonus_type_id: "",
+        code_identifier: "",
+        notification_content: "",
+        start_period: new Date(),
+        end_period: new Date(),
+        notif_type: "",
+        via: "",
+      },
+      {
+        bonus_type_id: "",
+        code_identifier: "",
+        notification_content: "",
+        start_period: new Date(),
+        end_period: new Date(),
+        notif_type: "",
+        via: "",
+      },
+      {
+        bonus_type_id: "",
+        code_identifier: "",
+        notification_content: "",
+        start_period: new Date(),
+        end_period: new Date(),
+        notif_type: "",
+        via: "",
+      },
+    ];
 
 export const KeywordNotificationEligibilityHelper: IKeywordNotificationEligibilityHelper[] =
   [
@@ -189,8 +251,9 @@ export const KeywordNotificationLuckyDrawHelper: IKeywordNotificationLuckyDrawHe
     },
   ];
 
-const KeywordNotificationLuckyDraw: IKeywordNotificationLuckyDraw[] = [
+export const KeywordNotificationLuckyDraw: IKeywordNotificationLuckyDraw[] = [
   {
+    bonus_type_id: "",
     code_identifier: "",
     notification_content: "",
     start_period: new Date(),
@@ -199,6 +262,7 @@ const KeywordNotificationLuckyDraw: IKeywordNotificationLuckyDraw[] = [
     via: "",
   },
   {
+    bonus_type_id: "",
     code_identifier: "",
     notification_content: "",
     start_period: new Date(),
@@ -207,6 +271,7 @@ const KeywordNotificationLuckyDraw: IKeywordNotificationLuckyDraw[] = [
     via: "",
   },
   {
+    bonus_type_id: "",
     code_identifier: "",
     notification_content: "",
     start_period: new Date(),
@@ -215,6 +280,7 @@ const KeywordNotificationLuckyDraw: IKeywordNotificationLuckyDraw[] = [
     via: "",
   },
   {
+    bonus_type_id: "",
     code_identifier: "",
     notification_content: "",
     start_period: new Date(),

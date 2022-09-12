@@ -1,13 +1,7 @@
 import * as React from "react";
 import { Box, Stack } from "@mui/material";
-import {
-  CreateKeywordGeneral,
-  KeywordNotificationEligibilityHelper,
-} from "../initial";
-import {
-  ICreateKeyword,
-  IKeywordNotificationEligibilityHelper,
-} from "../interfaces";
+import { CreateKeywordGeneral } from "../initial";
+import { ICreateKeyword } from "../interfaces";
 import Program from "./Program";
 import General from "./General";
 import Location from "./Location";

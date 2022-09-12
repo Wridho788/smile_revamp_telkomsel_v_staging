@@ -13,8 +13,8 @@ import { Upload } from "../../../../../assets";
 
 import {
     ICreateKeyword,
-    IKeywordNotificationEligibility,
-    IKeywordNotificationEligibilityHelper
+    IKeywordNotificationAuction,
+    IKeywordNotificationAuctionHelper
 } from "../../interfaces";
 
 import { FilterInitial } from "../../../../../redux/utils/initial-general";
@@ -36,9 +36,10 @@ import {
 
 import {
     KeywordBonusAuction,
-    KeywordNotificationEligibility,
-    KeywordNotificationEligibilityHelper
+    KeywordNotificationAuction,
+    KeywordNotificationAuctionHelper
 } from "../../initial";
+import _find from "lodash/find";
 
 interface INotificationAuctionProps {
     bonusType: string;
@@ -57,9 +58,6 @@ const NotificationAuction: React.FunctionComponent<INotificationAuctionProps> = 
     stateTrigger,
     setStateTrigger
 }) => {
-    // Filter Notification Auction
-    const index: number = -1;
-
     // Preview Image Auction
     const [preview, setPreview] = React.useState(Upload);
     const [loading, setLoading] = React.useState(false);
@@ -89,23 +87,26 @@ const NotificationAuction: React.FunctionComponent<INotificationAuctionProps> = 
         },
     ] = useLazyGetKeywordNotificationQuery();
 
-    const keywordNotificationEligibilityHelper =
-        KeywordNotificationEligibilityHelper;
+    const keywordNotificationAuctionHelper =
+        KeywordNotificationAuctionHelper;
     const [
-        keywordNotificationEligibilityHelperState,
-        setKeywordNotificationEligibilityHelperState,
-    ] = useState<IKeywordNotificationEligibilityHelper[]>(
-        keywordNotificationEligibilityHelper
+        keywordNotificationAuctionHelperState,
+        setKeywordNotificationAuctionHelperState,
+    ] = useState<IKeywordNotificationAuctionHelper[]>(
+        keywordNotificationAuctionHelper
     );
 
-    const keywordNotificationEligibility: IKeywordNotificationEligibility[] =
-        KeywordNotificationEligibility;
+    const keywordNotificationAuction: IKeywordNotificationAuction[] =
+        KeywordNotificationAuction;
+
     const [
-        keywordNotificationEligibilityState,
-        setKeywordNotificationEligibilityState,
-    ] = useState<IKeywordNotificationEligibility[]>(
-        keywordNotificationEligibility
+        keywordNotificationAuctionState,
+        setKeywordNotificationAuctionState,
+    ] = useState<IKeywordNotificationAuction[]>(
+        keywordNotificationAuction
     );
+
+    const [index, setIndex] = useState<number>(-1);
 
     // TODO: Get Auction Notification
     useEffect(() => {
@@ -116,22 +117,25 @@ const NotificationAuction: React.FunctionComponent<INotificationAuctionProps> = 
 
         if (index === -1) {
             keywordCreate.bonus.push(KeywordBonusAuction);
+            setIndex(keywordCreate.bonus.findIndex(({ bonus_type }) => bonus_type === 'Auction'));
         }
     }, []);
 
 
     useEffect(() => {
-        setKeywordNotificationEligibilityHelperState(
-            keywordNotificationEligibilityHelper
+        setKeywordNotificationAuctionHelperState(
+            keywordNotificationAuctionHelper
         );
-    }, [keywordNotificationEligibilityHelper, stateTrigger]);
+    }, [keywordNotificationAuctionHelper, stateTrigger]);
 
     useEffect(() => {
-        console.log('Auction', keywordNotificationEligibility);
-        // keywordCreate.notification = keywordCreate.notification.concat(keywordNotificationEligibility);
+        // Prevent duplicate data of "Auction"
+        if (!(_find(keywordCreate.notification, ({ bonus_type_id }) => bonus_type_id === bonus_type_id)).length) {
+            keywordCreate.notification = keywordCreate.notification.concat(keywordNotificationAuction);
+        }
 
-        setKeywordNotificationEligibilityState(keywordNotificationEligibility);
-    }, [keywordNotificationEligibility, stateTrigger]);
+        setKeywordNotificationAuctionState(keywordNotificationAuction);
+    }, [keywordNotificationAuction, stateTrigger]);
 
     return(
         <Accordion sx={{ p: "1vw" }}>
@@ -158,8 +162,8 @@ const NotificationAuction: React.FunctionComponent<INotificationAuctionProps> = 
                     ) : (
                         <>
                             {keywordNotification.data.map((_: any, idx: any) => {
-                                keywordNotificationEligibility[idx].code_identifier = _["_id"];
-                                keywordNotificationEligibility[idx].bonus_type_id = bonusTypeId;
+                                keywordNotificationAuction[idx].code_identifier = _["_id"];
+                                keywordNotificationAuction[idx].bonus_type_id = bonusTypeId;
 
                                 return (
                                     <Stack
@@ -188,20 +192,20 @@ const NotificationAuction: React.FunctionComponent<INotificationAuctionProps> = 
                                             options={templateOptions.data}
                                             optionLabel={"notif_name"}
                                             value={
-                                                keywordNotificationEligibilityHelperState[idx]
+                                                keywordNotificationAuctionHelperState[idx]
                                                     .notification_template
                                             }
                                             handleChange={(value: string) => {
-                                                keywordNotificationEligibilityHelper[
+                                                keywordNotificationAuctionHelper[
                                                     idx
                                                     ].notification_template = value;
-                                                keywordNotificationEligibility[idx].notification_content =
+                                                keywordNotificationAuction[idx].notification_content =
                                                     templateOptions?.data?.find((e) => e["_id"] === value)
                                                         ?.notif_content ?? "";
                                                 setStateTrigger(!stateTrigger);
                                             }}
                                         />
-                                        {keywordNotificationEligibilityHelperState[idx]
+                                        {keywordNotificationAuctionHelperState[idx]
                                             .notification_template !== "" && (
                                             <OutlinedTextField
                                                 direction="column"
@@ -210,23 +214,23 @@ const NotificationAuction: React.FunctionComponent<INotificationAuctionProps> = 
                                                 multiline
                                                 rows={3}
                                                 value={
-                                                    keywordNotificationEligibilityState[idx]
+                                                    keywordNotificationAuctionState[idx]
                                                         .notification_content
                                                 }
                                                 handleChange={(value: string) => {
-                                                    keywordNotificationEligibility[
+                                                    keywordNotificationAuction[
                                                         idx
                                                         ].notification_content = value;
                                                     setStateTrigger(!stateTrigger);
                                                 }}
                                             />
                                         )}
-                                        {keywordNotificationEligibilityHelperState[idx]
+                                        {keywordNotificationAuctionHelperState[idx]
                                             .notification_template !== "" && (
                                             <Stack direction="row" spacing="1vw">
                                                 <Button
                                                     onClick={() => {
-                                                        keywordNotificationEligibility[
+                                                        keywordNotificationAuction[
                                                             idx
                                                             ].notification_content += `[KeywordName]`;
                                                         setStateTrigger(!stateTrigger);
@@ -245,7 +249,7 @@ const NotificationAuction: React.FunctionComponent<INotificationAuctionProps> = 
                                                 </Button>
                                                 <Button
                                                     onClick={() => {
-                                                        keywordNotificationEligibility[
+                                                        keywordNotificationAuction[
                                                             idx
                                                             ].notification_content += `[StartPeriod]`;
                                                         setStateTrigger(!stateTrigger);
@@ -264,7 +268,7 @@ const NotificationAuction: React.FunctionComponent<INotificationAuctionProps> = 
                                                 </Button>
                                                 <Button
                                                     onClick={() => {
-                                                        keywordNotificationEligibility[
+                                                        keywordNotificationAuction[
                                                             idx
                                                             ].notification_content += `[EndPeriod]`;
                                                         setStateTrigger(!stateTrigger);
@@ -288,26 +292,26 @@ const NotificationAuction: React.FunctionComponent<INotificationAuctionProps> = 
                                             label="Notification Via"
                                             placeholder="Option"
                                             options={viaOptions.data}
-                                            value={keywordNotificationEligibilityState[idx].via}
+                                            value={keywordNotificationAuctionState[idx].via}
                                             handleChange={(value: string) => {
-                                                keywordNotificationEligibility[idx].via = value;
+                                                keywordNotificationAuction[idx].via = value;
                                                 setStateTrigger(!stateTrigger);
                                             }}
                                         />
                                         <Stack direction="row" spacing="0.5vw" alignItems="center">
                                             <Switch
                                                 checked={
-                                                    keywordNotificationEligibilityHelperState[idx]
+                                                    keywordNotificationAuctionHelperState[idx]
                                                         .follow_period
                                                 }
                                                 onChange={(e) => {
-                                                    keywordNotificationEligibilityHelper[
+                                                    keywordNotificationAuctionHelper[
                                                         idx
                                                         ].follow_period = e.target.checked;
                                                     if (e.target.checked) {
-                                                        keywordNotificationEligibility[idx].start_period =
+                                                        keywordNotificationAuction[idx].start_period =
                                                             keywordCreateState.eligibility.start_period;
-                                                        keywordNotificationEligibility[idx].end_period =
+                                                        keywordNotificationAuction[idx].end_period =
                                                             keywordCreateState.eligibility.end_period;
                                                     }
                                                     setStateTrigger(!stateTrigger);
@@ -319,23 +323,23 @@ const NotificationAuction: React.FunctionComponent<INotificationAuctionProps> = 
                                         <Stack direction="row" spacing="2vw" alignItems="center">
                                             <ResponsiveDateTimePicker
                                                 disabled={
-                                                    keywordNotificationEligibilityHelperState[idx]
+                                                    keywordNotificationAuctionHelperState[idx]
                                                         .follow_period
                                                 }
                                                 direction="column"
                                                 label="From"
                                                 placeholder="From"
                                                 value={
-                                                    keywordNotificationEligibilityState[idx].start_period
+                                                    keywordNotificationAuctionState[idx].start_period
                                                 }
                                                 handleChange={(value: Date) => {
-                                                    keywordNotificationEligibility[idx].start_period =
+                                                    keywordNotificationAuction[idx].start_period =
                                                         value;
                                                     if (
-                                                        keywordNotificationEligibilityState[idx].end_period <=
+                                                        keywordNotificationAuctionState[idx].end_period <=
                                                         value
                                                     ) {
-                                                        keywordNotificationEligibility[idx].end_period =
+                                                        keywordNotificationAuction[idx].end_period =
                                                             value;
                                                     }
                                                     setStateTrigger(!stateTrigger);
@@ -343,20 +347,20 @@ const NotificationAuction: React.FunctionComponent<INotificationAuctionProps> = 
                                             />
                                             <ResponsiveDateTimePicker
                                                 disabled={
-                                                    keywordNotificationEligibilityHelperState[idx]
+                                                    keywordNotificationAuctionHelperState[idx]
                                                         .follow_period
                                                 }
                                                 direction="column"
                                                 label="To"
                                                 placeholder="To"
                                                 minDateTime={
-                                                    keywordNotificationEligibilityState[idx].start_period
+                                                    keywordNotificationAuctionState[idx].start_period
                                                 }
                                                 value={
-                                                    keywordNotificationEligibilityState[idx].end_period
+                                                    keywordNotificationAuctionState[idx].end_period
                                                 }
                                                 handleChange={(value: Date) => {
-                                                    keywordNotificationEligibility[idx].end_period = value;
+                                                    keywordNotificationAuction[idx].end_period = value;
                                                     setStateTrigger(!stateTrigger);
                                                 }}
                                             />
@@ -365,36 +369,33 @@ const NotificationAuction: React.FunctionComponent<INotificationAuctionProps> = 
                                 );
                             })}
 
-                            <Stack spacing={4}>
+                            {index !== -1 && (<Stack spacing={4}>
                                 <Stack spacing={2} direction="row">
                                     <OutlinedTextField
-                                        disabled={true}
                                         direction="column"
                                         label="Poin Min Bidding"
                                         variant="outlined"
-                                        value=""
+                                        value={keywordCreate.bonus[index]["auction_poin_min_bidding"]}
                                         handleChange={(value: string) => {
                                             keywordCreate.bonus[index]["auction_poin_min_bidding"] = Number(value);
                                             setStateTrigger(!stateTrigger);
                                         }}
                                     />
                                     <OutlinedTextField
-                                        disabled={true}
                                         direction="column"
                                         label="Poin Multiplier"
                                         variant="outlined"
-                                        value=""
+                                        value={keywordCreate.bonus[index]["auction_multiplier_poin"]}
                                         handleChange={(value: string) => {
                                             keywordCreate.bonus[index]["auction_multiplier_poin"] = Number(value);
                                             setStateTrigger(!stateTrigger);
                                         }}
                                     />
                                     <OutlinedTextField
-                                        disabled={true}
                                         direction="column"
                                         label="Max Winner in a Phase"
                                         variant="outlined"
-                                        value=""
+                                        value={keywordCreate.bonus[index]["auction_max_winner_inphase"]}
                                         handleChange={(value: string) => {
                                             keywordCreate.bonus[index]["auction_max_winner_inphase"] = Number(value);
                                             setStateTrigger(!stateTrigger);
@@ -404,11 +405,10 @@ const NotificationAuction: React.FunctionComponent<INotificationAuctionProps> = 
                                 <Stack spacing={2}>
                                     <Subtitle color="warning.main">PRIZE CONFIGURATION</Subtitle>
                                     <OutlinedTextField
-                                        disabled={true}
                                         direction="column"
                                         label="Prize Name"
                                         variant="outlined"
-                                        value=""
+                                        value={keywordCreate.bonus[index]["auction_prize_name"]}
                                         handleChange={(value: string) => {
                                             keywordCreate.bonus[index]["auction_prize_name"] = value;
                                             setStateTrigger(!stateTrigger);
@@ -416,22 +416,20 @@ const NotificationAuction: React.FunctionComponent<INotificationAuctionProps> = 
                                     />
                                     <Stack spacing={2} direction="row">
                                         <OutlinedTextField
-                                            disabled={true}
                                             direction="column"
                                             label="Prize Description"
                                             variant="outlined"
-                                            value=""
+                                            value={keywordCreate.bonus[index]["auction_prize_desc_id"]}
                                             handleChange={(value: string) => {
                                                 keywordCreate.bonus[index]["auction_prize_desc_id"] = value;
                                                 setStateTrigger(!stateTrigger);
                                             }}
                                         />
                                         <OutlinedTextField
-                                            disabled={true}
                                             direction="column"
                                             label="Prize Description English"
                                             variant="outlined"
-                                            value=""
+                                            value={keywordCreate.bonus[index]["auction_prize_desc_en"]}
                                             handleChange={(value: string) => {
                                                 keywordCreate.bonus[index]["auction_prize_desc_en"] = value;
                                                 setStateTrigger(!stateTrigger);
@@ -449,14 +447,14 @@ const NotificationAuction: React.FunctionComponent<INotificationAuctionProps> = 
                                         )}
                                         <Button variant="contained" component="label" onChange={onUpload}>
                                             Upload
-                                            <input hidden ref={uploadInputRef} accept="image/*" type="file" />
+                                            <input hidden ref={uploadInputRef} accept="image/*" type="file"/>
                                         </Button>
                                     </Stack>
                                 </Stack>
                                 <Stack>
                                     <Subtitle color="warning.main">STOCK PER LOCATION MANAGEMENT</Subtitle>
                                 </Stack>
-                            </Stack>
+                            </Stack>)}
                         </>
                     )}
                 </Stack>

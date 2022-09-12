@@ -101,6 +101,7 @@ export interface IKeywordNotificationLuckyDrawHelper {
 }
 
 export interface IKeywordNotificationLuckyDraw {
+  bonus_type_id: string;
   code_identifier: string;
   notification_content: string;
   start_period: Date;
@@ -121,6 +122,21 @@ export interface IKeywordBonusAuction {
   auction_prize_name: string,
   stock_location: any[],
   redeem_after_verification: boolean
+}
+
+export interface IKeywordNotificationAuctionHelper {
+  notification_template: string;
+  follow_period: boolean;
+}
+
+export interface IKeywordNotificationAuction {
+  bonus_type_id: string;
+  code_identifier: string;
+  notification_content: string;
+  start_period: Date;
+  end_period: Date;
+  notif_type: string;
+  via: string;
 }
 
 export interface ICreateKeyword {

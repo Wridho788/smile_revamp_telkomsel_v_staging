@@ -1,10 +1,10 @@
 import * as React from "react";
+
 import {Box, Chip, Stack} from "@mui/material";
 import {Select} from "../../../atoms";
 import {useGetBonusTypeQuery} from "../../../../redux/features/lov/lov-api-slice";
-
-import {CreateKeywordGeneral, KeywordBonusHelper, KeywordNotificationLuckyDrawHelper,} from "../initial";
-import {ICreateKeyword, IKeywordBonusHelper, IKeywordNotificationLuckyDrawHelper,} from "../interfaces";
+import {CreateKeywordGeneral, KeywordBonusHelper} from "../initial";
+import {ICreateKeyword, IKeywordBonusHelper} from "../interfaces";
 
 import LuckyDraw from "./LuckyDraw";
 import Auction from "./Auction";
@@ -27,14 +27,6 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
   const [keywordBonusHelperState, setKeywordBonusHelperState] =
     React.useState<IKeywordBonusHelper>(keywordBonusHelper);
 
-  const keywordNotificationLuckyDrawHelper = KeywordNotificationLuckyDrawHelper;
-  const [
-    keywordNotificationLuckyDrawHelperState,
-    setKeywordNotificationLuckyDrawHelperState,
-  ] = React.useState<IKeywordNotificationLuckyDrawHelper[]>(
-    keywordNotificationLuckyDrawHelper
-  );
-
   const [stateTrigger, setStateTrigger] = React.useState<boolean>(false);
 
   React.useEffect(() => {
@@ -50,14 +42,24 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
     });
 
     setKeywordBonusHelperState(keywordBonusHelper);
-    console.log(keywordBonusHelper);
   }, [keywordBonusHelper, stateTrigger]);
 
   React.useEffect(() => {
-    setKeywordNotificationLuckyDrawHelperState(
-      keywordNotificationLuckyDrawHelper
-    );
-  }, [keywordNotificationLuckyDrawHelper, stateTrigger]);
+    if (!keywordBonusHelper.bonus_type.includes("Auction") || !keywordBonusHelper.bonus_type.includes("Lucky Draw Coupon")) {
+      keywordCreate.notification = keywordCreate.notification.filter((item) => {
+        const bonusTypeAuction = _find(bonusTypeOptions.data, ({ set_value }) => set_value === "Auction")?._id;
+        const bonusTypeLuckyDraw = _find(bonusTypeOptions.data, ({ set_value }) => set_value === "Lucky Draw Coupon")?._id;
+
+        if (!(item._id !== bonusTypeAuction) || item.bonus_type_id === '') {
+          return item;
+        }
+
+        if (!(item._id !== bonusTypeLuckyDraw) || item.bonus_type_id === '') {
+          return item;
+        }
+      });
+    }
+  }, [keywordBonusHelperState.bonus_type]);
 
   React.useEffect(() => {
     console.log(keywordCreate);
@@ -112,35 +114,34 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
         />
         <>
           {keywordBonusHelperState.bonus_type.length > 0 &&
-            keywordBonusHelperState.bonus_type.map((_, idx) => {
-              const bonusType = bonusTypeOptions.data.find(
-                (e) => e["set_value"] === _
-              )?.set_value;
-              if (bonusType === "Lucky Draw Coupon") {
-                return (
-                  <Box key={`kbt__${idx}`}>
-                    <LuckyDraw
-                      bonusType={bonusType}
-                      keywordCreateState={keywordCreateState}
-                      keywordCreate={keywordCreate}
-                      stateTrigger={stateTrigger}
-                      setStateTrigger={setStateTrigger}
-                    />
-                  </Box>
-                );
-              } else if (bonusType === "Auction") {
-                return (
-                    <Auction
+            keywordBonusHelperState.bonus_type.map((bonusType, idx) => {
+              switch (bonusType) {
+                case "Lucky Draw Coupon":
+                  return (
+                    <Box key={`bonusType__${idx}`}>
+                      <LuckyDraw
                         bonusType={bonusType}
                         bonusTypeId={_find(bonusTypeOptions.data, ({ set_value }) => set_value === bonusType)?._id}
                         keywordCreateState={keywordCreateState}
                         keywordCreate={keywordCreate}
                         stateTrigger={stateTrigger}
                         setStateTrigger={setStateTrigger}
-                    />
-                );
-              } else {
-                <Box key={`kbt__${idx}`}></Box>;
+                      />
+                    </Box>
+                  );
+                case "Auction":
+                  return (
+                    <Box key={`bonusType__${idx}`}>
+                      <Auction
+                        bonusType={bonusType}
+                        bonusTypeId={_find(bonusTypeOptions.data, ({ set_value }) => set_value === bonusType)?._id}
+                        keywordCreateState={keywordCreateState}
+                        keywordCreate={keywordCreate}
+                        stateTrigger={stateTrigger}
+                        setStateTrigger={setStateTrigger}
+                      />
+                    </Box>
+                  );
               }
             })}
         </>

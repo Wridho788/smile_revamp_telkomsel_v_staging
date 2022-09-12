@@ -15,7 +15,8 @@ import {
     Auth,
     ProgramMainInfoUpdate,
     ProgramNotificationUpdate,
-    MerchantPartnerManagement
+    MerchantPartnerManagement,
+    MerchantOutletManagement
 } from "../../pages";
 
 import SpecificProgramTemplate from "../../atomic/containers/pages/GeneralProgramRegistration";
@@ -102,6 +103,11 @@ const Index = () => {
                 <Route path="/merchant-partner-management" element={
                     <Protected>
                         <MerchantPartnerManagement/>
+                    </Protected>
+                }/>
+                <Route path="/merchant-outlet-management" element={
+                    <Protected>
+                        <MerchantOutletManagement/>
                     </Protected>
                 }/>
 

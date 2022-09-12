@@ -2,7 +2,7 @@ image: node:16
 
 pipelines:
   branches:
-    develop:
+    staging:
       - step:
             name: Build and Test
             caches:
