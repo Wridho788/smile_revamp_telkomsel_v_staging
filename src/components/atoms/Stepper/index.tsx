@@ -156,8 +156,7 @@ export default function HorizontalLinearStepper({
                     })
                     : await updateProgram(CreateProgramInitial);
             } else if (type === "keyword") {
-                slug === "insert"
-                    ? await createKeywordGeneral(CreateKeywordGeneral)
+                slug === "insert" ? await createKeywordGeneral(CreateKeywordGeneral)
                         .then((res: any) => {
                             if (res.data) {
                                 Swal.fire("Success!", "Keyword has been created!", "success");
