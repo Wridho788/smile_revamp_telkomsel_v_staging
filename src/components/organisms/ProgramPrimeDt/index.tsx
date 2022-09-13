@@ -124,19 +124,6 @@ const ProgramPrimeDt: FC = () => {
                     alignContent: 'center'
                 }}>
                     {
-
-                        // rowData.isHQ ?
-                        //     rowData.status &&
-                        //     rowData.status.set_value === 'New' ? <Alert severity="warning">Waiting Approval HQ</Alert> :
-                        //         <Alert severity="success">HQ Manager</Alert>
-                        //     :
-                        //     rowData.status &&
-                        //     rowData.status.set_value === 'New' ? <Alert severity="warning">Waiting Manager HQ &
-                        //             Manager {rowData.created_by.account_location.location_detail.name}</Alert> :
-                        //         rowData.status.set_value === 'Approved by Manager HQ' ?
-                        //             <Alert severity="success">HQ Manager</Alert> :
-                        //             <Alert severity="warning">Waiting Approval HQ</Alert>
-
                         rowData.approval_log &&
                         rowData.approval_log.length > 0 ?
                             <Alert severity="success" icon={false}>{rowData.approval_log[rowData.approval_log.length - 1].status[0].set_value}</Alert> :
