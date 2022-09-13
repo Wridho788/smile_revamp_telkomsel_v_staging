@@ -30,7 +30,7 @@ export const MerchantOutletInitial = {
 };
 
 export interface IMerchantOutlet {
-  outlet_id: string;
+  outlet_code: string;
   regional: string;
   branch: string;
   outlet_name: string;
@@ -52,4 +52,13 @@ export const OutletInitial = {
   updated_at: "",
   deleted_at: null,
   __v: 0,
+};
+
+export const LocationInitial = {
+  _id: "",
+  code: "",
+  name: "",
+  type: "",
+  __v: 0,
+  bucket: [],
 };
