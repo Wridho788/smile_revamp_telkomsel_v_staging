@@ -1,3 +1,5 @@
+import { IKeywordEligibility } from "../../../components/organisms/CreateKeyword/interfaces";
+
 export interface IKeywordBonus {
   _id: string;
   keyword: string;
@@ -19,6 +21,19 @@ export interface IKeywordBonus {
   bonus_type_detail: any[];
   location_detail: any[];
   bucket_detail: any[];
+}
+
+export interface IkeywordPrime {
+  bonus: any[],
+  created_at: string,
+  created_by: any,
+  deleted_at: null,
+  eligibility: any,
+  keyword_approval: string,
+  notification: any[],
+  updated_at: string,
+  __v: number,
+  _id: string
 }
 export interface IDetail {
   name: string;

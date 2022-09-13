@@ -66,6 +66,7 @@ export const keywordSlice = createApi({
       keywordNotificationDelete: deleteHandler("/notification"),
       keywordApprove: approvalHandler("approve"),
       keywordReject: approvalHandler("reject"),
+      keywordListPrime: responseHandler(baseUrl + "/v2/keyword"),
 
       // action
       keywordActionList: responseHandler("/action"),
@@ -110,6 +111,7 @@ export const keywordSlice = createApi({
 export const {
   useKeywordListQuery,
   useLazyKeywordListQuery,
+  useLazyKeywordListPrimeQuery,
   useKeywordApproveMutation,
   useKeywordRejectMutation,
   useKeywordActionListQuery,
