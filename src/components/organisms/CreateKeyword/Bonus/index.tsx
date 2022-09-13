@@ -12,6 +12,7 @@ import { ICreateKeyword, IKeywordBonusHelper } from "../interfaces";
 import LuckyDraw from "./LuckyDraw";
 import CancelIcon from "@mui/icons-material/Cancel";
 import _without from "lodash/without";
+import LinkAja from "./LinkAja";
 
 interface IBonusProps {}
 
@@ -141,6 +142,18 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
                         setStateTrigger={setStateTrigger}
                       />
                     </Box>
+                  );
+                case "LinkAja Main & Bonus Balance":
+                  return (
+                      <Box key={`bonusType__${idx}`}>
+                        <LinkAja
+                            bonusType={bonusType}
+                            keywordCreateState={keywordCreateState}
+                            keywordCreate={keywordCreate}
+                            stateTrigger={stateTrigger}
+                            setStateTrigger={setStateTrigger}
+                        />
+                      </Box>
                   );
               }
             })}
