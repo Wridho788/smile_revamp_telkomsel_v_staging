@@ -32,6 +32,7 @@ import {
   MerchantOutletInitial,
   IMerchantOutlet,
   OutletInitial,
+  LocationInitial,
 } from "./initial";
 import {
   useLazyOutletListQuery,
@@ -40,6 +41,7 @@ import {
   useDeleteOutletMutation,
 } from "../../redux/features/outlet/outlet-api-slice";
 import { useGetLocationTypeQuery } from "../../redux/features/lov/lov-api-slice";
+import { useLocationTemplateQuery } from "../../redux/features/location/location-api-slice";
 
 const MerchantOutletManagement = () => {
   //================================ State =================================
@@ -71,7 +73,7 @@ const MerchantOutletManagement = () => {
   });
   const [initialMerchantOutlet, setInitialMerchantOutlet] =
     React.useState<IMerchantOutlet>({
-      outlet_id: "",
+      outlet_code: "",
       regional: "",
       branch: "",
       outlet_name: "",
@@ -95,6 +97,21 @@ const MerchantOutletManagement = () => {
 
   const { data: locationTypeList = { data: [OutletInitial] } } =
     useGetLocationTypeQuery();
+
+  const { data: locationList = { data: [LocationInitial] } } =
+    useLocationTemplateQuery({
+      skip: 0,
+      limit: 10,
+      filter: `{"type": "${locationType._id}"}`,
+      sort: "{}",
+    });
+  const { data: locationBranch = { data: [LocationInitial] } } =
+    useLocationTemplateQuery({
+      skip: 0,
+      limit: 10,
+      filter: `{"type": "62ffc0fc8a01008799e785bf"}`,
+      sort: "{}",
+    });
   //================================ Spread Data ===========================
   //========================================================================
   const dataLocationType = locationTypeList.data.map((item: any) => {
@@ -103,12 +120,24 @@ const MerchantOutletManagement = () => {
     newItem["name"] = item.set_value;
     return newItem;
   });
+  const dataLocation = locationList.data.map((item: any) => {
+    let newItem: any = {};
+    newItem["_id"] = item._id;
+    newItem["name"] = item.name;
+    return newItem;
+  });
+  const dataBranch = locationBranch.data.map((item: any) => {
+    let newItem: any = {};
+    newItem["_id"] = item._id;
+    newItem["name"] = item.name;
+    return newItem;
+  });
 
   //================================ Handler ===============================
   //========================================================================
   const onClearForm = () => {
     setInitialMerchantOutlet({
-      outlet_id: "",
+      outlet_code: "",
       regional: "",
       branch: "",
       outlet_name: "",
@@ -398,34 +427,12 @@ const MerchantOutletManagement = () => {
                 size="small"
                 fullWidth
                 label="Outlet Code"
-                value={initialMerchantOutlet.outlet_id}
+                value={initialMerchantOutlet.outlet_code}
                 name="outlet_code"
                 onChange={onChange}
                 required
               />
             </Box>
-            <Gap width={0} height={20} />
-            {/* <Box sx={{ display: "flex" }}>
-              <TextField
-                size="small"
-                fullWidth
-                label="Contact Person"
-                value={initialMerchantOutlet.contact_person}
-                name="contact_person"
-                onChange={onChange}
-                required
-              />
-              <Gap width={50} height={0} />
-              <TextField
-                size="small"
-                fullWidth
-                label="Phome"
-                value={initialMerchantOutlet.phone}
-                name="phone"
-                onChange={onChange}
-                required
-              />
-            </Box> */}
             <Gap width={0} height={20} />
             <Box sx={{ display: "flex" }}>
               <InputSearchable
@@ -438,7 +445,7 @@ const MerchantOutletManagement = () => {
               <InputSearchable
                 required
                 label="Location"
-                options={[{ name: "Active" }, { name: "Inactive" }]}
+                options={dataLocation}
                 onChange={(e: any, newValue: any) =>
                   setInitialMerchantOutlet({
                     ...initialMerchantOutlet,
@@ -452,7 +459,7 @@ const MerchantOutletManagement = () => {
               <InputSearchable
                 required
                 label="Telkomsel Branch"
-                options={[{ name: "Active" }, { name: "Inactive" }]}
+                options={dataBranch}
                 onChange={(e: any, newValue: any) =>
                   setInitialMerchantOutlet({
                     ...initialMerchantOutlet,
@@ -460,6 +467,7 @@ const MerchantOutletManagement = () => {
                   })
                 }
               />
+              <Gap width={50} height={0} />
               <Box sx={{ width: "100%" }}></Box>
             </Box>
             <Gap width={0} height={20} />
@@ -498,13 +506,6 @@ const MerchantOutletManagement = () => {
                 required
               />
             </Box>
-            <Switch
-              checked={checked}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setChecked(e.target.checked)
-              }
-              inputProps={{ "aria-label": "controlled" }}
-            />
             <Gap width={0} height={20} />
             <Box sx={{ display: "flex" }}>
               <Button variant="contained" sx={{ width: "100%" }} type="submit">
@@ -541,37 +542,16 @@ const MerchantOutletManagement = () => {
                 size="small"
                 fullWidth
                 label="Outlet Code"
-                value={initialMerchantOutlet.outlet_id}
+                value={initialMerchantOutlet.outlet_code}
                 name="outlet_code"
                 onChange={onChange}
                 required
               />
             </Box>
             <Gap width={0} height={20} />
-            {/* <Box sx={{ display: "flex" }}>
-              <TextField
-                size="small"
-                fullWidth
-                label="Contact Person"
-                value={initialMerchantOutlet.contact_person}
-                name="contact_person"
-                onChange={onChange}
-                required
-              />
-              <Gap width={50} height={0} />
-              <TextField
-                size="small"
-                fullWidth
-                label="Phome"
-                value={initialMerchantOutlet.phone}
-                name="phone"
-                onChange={onChange}
-                required
-              />
-            </Box> */}
-            <Gap width={0} height={20} />
             <Box sx={{ display: "flex" }}>
               <InputSearchable
+                value={locationType}
                 required
                 label="Location Type"
                 options={dataLocationType}
@@ -581,7 +561,7 @@ const MerchantOutletManagement = () => {
               <InputSearchable
                 required
                 label="Location"
-                options={[{ name: "Active" }, { name: "Inactive" }]}
+                options={dataLocation}
                 onChange={(e: any, newValue: any) =>
                   setInitialMerchantOutlet({
                     ...initialMerchantOutlet,
@@ -595,7 +575,7 @@ const MerchantOutletManagement = () => {
               <InputSearchable
                 required
                 label="Telkomsel Branch"
-                options={[{ name: "Active" }, { name: "Inactive" }]}
+                options={dataBranch}
                 onChange={(e: any, newValue: any) =>
                   setInitialMerchantOutlet({
                     ...initialMerchantOutlet,
@@ -603,6 +583,7 @@ const MerchantOutletManagement = () => {
                   })
                 }
               />
+              <Gap width={50} height={0} />
               <Box sx={{ width: "100%" }}></Box>
             </Box>
             <Gap width={0} height={20} />
@@ -641,13 +622,6 @@ const MerchantOutletManagement = () => {
                 required
               />
             </Box>
-            <Switch
-              checked={checked}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setChecked(e.target.checked)
-              }
-              inputProps={{ "aria-label": "controlled" }}
-            />
             <Gap width={0} height={20} />
             <Box sx={{ display: "flex" }}>
               <Button variant="contained" sx={{ width: "100%" }} type="submit">

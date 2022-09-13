@@ -63,7 +63,7 @@ export interface IKeywordEligibility {
 
 export interface IKeywordBonusHelper {
   bonus_type: any[];
-  bonus_type_id: any[]
+  bonus_type_id: any[];
 }
 
 export interface IKeywordBonusLuckyDrawLocation {
@@ -76,6 +76,20 @@ export interface IKeywordBonusLuckyDraw {
   lucky_draw_reguler: boolean;
   lucky_draw_allow_inject_coupon: boolean;
   lucky_draw_prize: string;
+  redeem_after_verification: boolean;
+  locations: any[];
+}
+
+export interface IKeywordBonusDirectRedeem {
+  bonus_type: string;
+  stock_type: string;
+  redeem_after_verification: boolean;
+  locations: any[];
+}
+
+export interface IKeywordBonusLoyaltyPoin {
+  bonus_type: string;
+  earning_poin: number;
   redeem_after_verification: boolean;
   locations: any[];
 }
@@ -112,16 +126,16 @@ export interface IKeywordNotificationLuckyDraw {
 
 // Bonus Type "Auction"
 export interface IKeywordBonusAuction {
-  bonus_type: string,
-  auction_prize_desc_id: string,
-  auction_prize_desc_en: string,
-  auction_prize_image: string,
-  auction_poin_min_bidding: number,
-  auction_multiplier_poin: number,
-  auction_max_winner_inphase: number,
-  auction_prize_name: string,
-  stock_location: any[],
-  redeem_after_verification: boolean
+  bonus_type: string;
+  auction_prize_desc_id: string;
+  auction_prize_desc_en: string;
+  auction_prize_image: string;
+  auction_poin_min_bidding: number;
+  auction_multiplier_poin: number;
+  auction_max_winner_inphase: number;
+  auction_prize_name: string;
+  stock_location: any[];
+  redeem_after_verification: boolean;
 }
 
 export interface IKeywordNotificationAuctionHelper {
