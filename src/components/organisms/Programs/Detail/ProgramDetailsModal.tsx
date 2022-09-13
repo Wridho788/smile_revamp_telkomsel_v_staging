@@ -1,4 +1,4 @@
-import React, {FC, useEffect} from "react";
+import React, {FC, useEffect, useState} from "react";
 import Box from "@mui/material/Box";
 import ModalCustom from "@mui/material/Modal";
 import {Button, Grid, IconButton, Stack, Card, Typography, Chip, Alert} from "@mui/material";
@@ -17,6 +17,7 @@ import {
 import Swal from "sweetalert2";
 import {IProgramDetailsModalProps} from "../../../../atomic/components/atoms/Modal/Modal.type";
 import Segmentation from "./Segmentation";
+import OutlinedTextField from "../../../atoms/OutlinedTextField";
 
 const style = {
     position: "absolute" as "absolute",
@@ -52,7 +53,7 @@ const ProgramDetailsModal: FC<IProgramDetailsModalProps> = ({
                                                                 roleAccess,
                                                                 isHqLogin,
                                                             }) => {
-    // const [rejectionIssue, setRejectionIssue] = useState("");
+    const [rejectionIssue, setRejectionIssue] = useState("");
 
     const [approveProgram, {isLoading: isLoadingApprove}] =
         useApproveProgramMutation();
@@ -143,16 +144,16 @@ const ProgramDetailsModal: FC<IProgramDetailsModalProps> = ({
                             </Button>
                         </Stack>
                     </Stack>
-                    {/*<OutlinedTextField*/}
-                    {/*  direction="column"*/}
-                    {/*  label="Rejection Issue"*/}
-                    {/*  placeholder="Description"*/}
-                    {/*  variant={"outlined"}*/}
-                    {/*  value={rejectionIssue}*/}
-                    {/*  handleChange={setRejectionIssue}*/}
-                    {/*  multiline*/}
-                    {/*  rows={3}*/}
-                    {/*/>*/}
+                    <OutlinedTextField
+                      direction="column"
+                      label="Rejection Issue"
+                      placeholder="Description"
+                      variant={"outlined"}
+                      value={rejectionIssue}
+                      handleChange={setRejectionIssue}
+                      multiline
+                      rows={3}
+                    />
                 </>
             </>
         )
