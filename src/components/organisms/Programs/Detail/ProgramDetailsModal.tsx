@@ -1,7 +1,7 @@
-import React, {FC, useEffect} from "react";
+import React, {FC, useEffect, useState} from "react";
 import Box from "@mui/material/Box";
 import ModalCustom from "@mui/material/Modal";
-import {Button, Grid, IconButton, Stack, Card, Typography, Chip, Alert} from "@mui/material";
+import {Button, Grid, IconButton, Stack, Card, Typography, Chip, Alert, Divider, Paper} from "@mui/material";
 import {
     useApproveProgramMutation,
     useRejectProgramMutation,
@@ -17,6 +17,17 @@ import {
 import Swal from "sweetalert2";
 import {IProgramDetailsModalProps} from "../../../../atomic/components/atoms/Modal/Modal.type";
 import Segmentation from "./Segmentation";
+import OutlinedTextField from "../../../atoms/OutlinedTextField";
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+import Avatar from '@mui/material/Avatar';
+import ImageIcon from '@mui/icons-material/Image';
+import WorkIcon from '@mui/icons-material/Work';
+import BeachAccessIcon from '@mui/icons-material/BeachAccess';
+import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
+import moment from "moment";
 
 const style = {
     position: "absolute" as "absolute",
@@ -25,6 +36,8 @@ const style = {
     transform: "translate(-50%, -50%)",
     width: 800,
     bgcolor: "background.paper",
+    height: '80vh',
+    overflowX: 'scroll',
     boxShadow: 24,
     p: 4,
 };
@@ -52,7 +65,7 @@ const ProgramDetailsModal: FC<IProgramDetailsModalProps> = ({
                                                                 roleAccess,
                                                                 isHqLogin,
                                                             }) => {
-    // const [rejectionIssue, setRejectionIssue] = useState("");
+    const [rejectionIssue, setRejectionIssue] = useState("");
 
     const [approveProgram, {isLoading: isLoadingApprove}] =
         useApproveProgramMutation();
@@ -76,6 +89,7 @@ const ProgramDetailsModal: FC<IProgramDetailsModalProps> = ({
                 if (res?.data.status === 200) {
                     handleClose();
                     Swal.fire(res?.data.message, "", "success");
+                    window.location.reload()
                 }
             }
         });
@@ -90,72 +104,77 @@ const ProgramDetailsModal: FC<IProgramDetailsModalProps> = ({
                 if (res?.data.status === 200) {
                     handleClose();
                     Swal.fire(res?.data.message, "", "success");
+                    window.location.reload()
                 }
             }
         });
     };
 
 
-    const renderApproveSection = () => {
+    const renderApproveSection = (text: string,) => {
         return (
             <>
-                <>
-                    <Stack
-                        direction="row"
-                        alignItems="center"
-                        justifyContent="space-between"
-                        spacing="2vw"
-                        mt="1vw"
-                        sx={{p: 2, backgroundColor: '#E5E5E5', borderRadius: 2}}
-                    >
-                        <Stack
-                            direction="row"
-                            spacing="1vw"
-                        >
-                            <WarningAmber sx={{color: '#EF6E11'}}></WarningAmber>
-                            <h3>
-                                Program {data.name} is not approved yet
-                            </h3>
-                        </Stack>
-                        <Stack
-                            direction="row"
-                            sx={{
-                                justifyContent: 'space-between'
-                            }}
-                            spacing="1vw"
-                        >
-                            <Button
-                                disabled={isLoadingApprove}
-                                onClick={approveHandler}
-                                variant={"contained"}
-                                color="success"
-                                sx={{color: "white"}}
+                {
+                    roleAccess ?
+                        <>
+                            <Stack
+                                direction="row"
+                                alignItems="center"
+                                justifyContent="space-between"
+                                spacing="2vw"
+                                mt="1vw"
+                                sx={{p: 2, backgroundColor: '#E5E5E5', borderRadius: 2}}
                             >
-                                Approve
-                            </Button>
-                            <Button
-                                disabled={isLoadingReject}
-                                onClick={rejectHandler}
-                                variant={"contained"}
-                                color="error"
-                            >
-                                Reject
-                            </Button>
-                        </Stack>
-                    </Stack>
-                    {/*<OutlinedTextField*/}
-                    {/*  direction="column"*/}
-                    {/*  label="Rejection Issue"*/}
-                    {/*  placeholder="Description"*/}
-                    {/*  variant={"outlined"}*/}
-                    {/*  value={rejectionIssue}*/}
-                    {/*  handleChange={setRejectionIssue}*/}
-                    {/*  multiline*/}
-                    {/*  rows={3}*/}
-                    {/*/>*/}
-                </>
+                                <Stack
+                                    direction="row"
+                                    spacing="1vw"
+                                >
+                                    <Alert sx={{margin:2}} severity="warning">{text}</Alert>
+                                </Stack>
+                                <Stack
+                                    direction="row"
+                                    sx={{
+                                        justifyContent: 'space-between'
+                                    }}
+                                    spacing="1vw"
+                                >
+                                    <Button
+                                        disabled={isLoadingApprove || isLoadingReject}
+                                        onClick={approveHandler}
+                                        variant={"contained"}
+                                        color="success"
+                                        sx={{color: "white"}}
+                                    >
+                                        Approve
+                                    </Button>
+                                    <Button
+                                        disabled={isLoadingApprove || isLoadingReject}
+                                        onClick={rejectHandler}
+                                        variant={"contained"}
+                                        color="error"
+                                    >
+                                        Reject
+                                    </Button>
+                                </Stack>
+                            </Stack>
+                            <OutlinedTextField
+                                direction="column"
+                                label=""
+                                placeholder="Leave comment of your approval action ..."
+                                variant={"outlined"}
+                                value={rejectionIssue}
+                                handleChange={setRejectionIssue}
+                                multiline
+                                rows={3}
+                            />
+                        </>
+                        :
+                        <Alert sx={{margin:2}} severity="info">{text}</Alert>
+                }
             </>
         )
+
+
     }
 
 
@@ -168,7 +187,7 @@ const ProgramDetailsModal: FC<IProgramDetailsModalProps> = ({
             aria-describedby="keep-mounted-modal-description"
             sx={{overflow: "scroll"}}
         >
-            <Box sx={style} minWidth={"45vw"}>
+            <Box sx={style}>
                 <Box px={2}>
                     <H2>{data.name ?? "Title"}</H2>
                     <BodyCopy>Program ID : {data["_id"] ?? "Description"}</BodyCopy>
@@ -178,24 +197,68 @@ const ProgramDetailsModal: FC<IProgramDetailsModalProps> = ({
                 {
                     data.approval_log && data.approval_log.length > 0
                         ?
-                            isHqLogin ?
+                        isHqLogin ?
                             !data.isHQ && data.approval_log[data.approval_log.length - 1].status[0].set_value === 'Approved by Manager HQ'
-                                ? <Alert severity="success">{data.approval_log[data.approval_log.length - 1].status[0].set_value}</Alert>
+                                ? <Alert sx={{margin:2}} severity="success">{data.approval_log[data.approval_log.length - 1].status[0].set_value}</Alert>
+                                :
+                                // Jika bukan approved by manager HQ, check apakah direject oleh manager HQ
+                                data.approval_log[data.approval_log.length - 1].status[0].set_value !== 'Approved by Manager Non HQ' ?
+                                    // Check apakah di reject oleh manager HQ
+                                    data.approval_log[data.approval_log.length - 1].status[0].set_value === 'Rejected by Manager HQ' ?
+                                        renderApproveSection("HQ Manager Approval Needed after rejection") :
+                                    <Alert sx={{margin:2}} severity="warning">Waiting for Non HQApproval</Alert> : renderApproveSection("HQ Manager Approval Needed")
+                            :
+                            !data.isHQ && data.approval_log[data.approval_log.length - 1].status[0].set_value === 'Approved by Manager HQ'
+                                ? <Alert sx={{margin:2}} severity="success">{data.approval_log[data.approval_log.length - 1].status[0].set_value}</Alert>
                                 : data.approval_log[data.approval_log.length - 1].status[0].set_value !== 'Approved by Manager Non HQ' ?
-                                    <Alert severity="warning">Waiting for Non HQ Approval</Alert> : renderApproveSection()
-                                :
-                                !data.isHQ && data.approval_log[data.approval_log.length - 1].status[0].set_value === 'Approved by Manager HQ'
-                                    ? <Alert severity="success">{data.approval_log[data.approval_log.length - 1].status[0].set_value}</Alert>
-                                    : data.approval_log[data.approval_log.length - 1].status[0].set_value !== 'Approved by Manager Non HQ' ? renderApproveSection() : <Alert severity="success">Your Management Level has approved this program</Alert>
+                                    // Check apakah status bukan Approved by Manager Non HQ dikarenakan direject oleh manager HQ
+                                    data.approval_log[data.approval_log.length - 1].status[0].set_value === 'Rejected by Manager HQ' ? <Alert sx={{margin:2}} severity="warning">Rejected By Manager HQ</Alert> :
+                                    renderApproveSection("Need approve by Area Manager") :
+                                    <Alert sx={{margin:2}} severity="success">Your Management Level has approved this program</Alert>
                         :
-                            isHqLogin ?
-                                data.isHQ
-                                    ?
-                                    renderApproveSection()
-                                    : <Alert severity="warning" onClick={() => {console.log(data)}}>Need approve by Area Manager first.</Alert>
-                                :
-                                renderApproveSection()
+                        isHqLogin ?
+                            data.isHQ
+                                ?
+                                renderApproveSection("Need approve by HQ Manager")
+                                : <Alert sx={{margin:2}} severity="warning">Need approve by Area Manager first.</Alert>
+                            :
+                            renderApproveSection("Need approve by Area Manager")
                 }
+
+                <Paper>
+                    <Grid container>
+                        <Box item component={Grid} xs={12}>
+                            <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+                                {
+                                    data.approval_log && data.approval_log.length > 0 ?
+                                        data.approval_log.map((item:any) => {
+                                            return (
+                                                <ListItem>
+                                                    <ListItemAvatar>
+                                                        <Avatar>
+                                                            <FiberManualRecordIcon />
+                                                        </Avatar>
+                                                    </ListItemAvatar>
+                                                    <ListItemText primary={item.status[0].set_value} secondary={moment(item.approved_at).format('MMMM d, YYYY')} />
+                                                </ListItem>
+                                            )
+                                        })
+                                        :
+                                        <ListItem>
+                                            <ListItemAvatar>
+                                                <Avatar>
+                                                    <ImageIcon />
+                                                </Avatar>
+                                            </ListItemAvatar>
+                                            <ListItemText primary="Belum Ada" secondary="Jan 9, 2014" />
+                                        </ListItem>
+                                }
+                            </List>
+                        </Box>
+                    </Grid>
+                </Paper>
+
+
 
 
                 <Grid sx={{flexGrow: 1}}>
@@ -323,7 +386,7 @@ const ProgramDetailsModal: FC<IProgramDetailsModalProps> = ({
                         <Box sx={{paddingTop: "3vw"}} onClick={() => {
                             console.log("data open", data)
                         }}>
-                            {/*<Segmentation programId={data._id}/>*/}
+                            <Segmentation programId={data._id}/>
                         </Box>
                     </Grid>
                 </Grid>

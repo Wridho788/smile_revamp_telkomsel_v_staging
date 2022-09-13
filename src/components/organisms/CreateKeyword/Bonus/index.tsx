@@ -1,10 +1,10 @@
 import * as React from "react";
 
-import {Box, Chip, Stack} from "@mui/material";
-import {Select} from "../../../atoms";
-import {useGetBonusTypeQuery} from "../../../../redux/features/lov/lov-api-slice";
-import {CreateKeywordGeneral, KeywordBonusHelper} from "../initial";
-import {ICreateKeyword, IKeywordBonusHelper} from "../interfaces";
+import { Box, Chip, Stack } from "@mui/material";
+import { Select } from "../../../atoms";
+import { useGetBonusTypeQuery } from "../../../../redux/features/lov/lov-api-slice";
+import { CreateKeywordGeneral, KeywordBonusHelper } from "../initial";
+import { ICreateKeyword, IKeywordBonusHelper } from "../interfaces";
 
 import LuckyDraw from "./LuckyDraw";
 import Auction from "./Auction";
@@ -13,6 +13,8 @@ import CancelIcon from "@mui/icons-material/Cancel";
 
 import _without from "lodash/without";
 import _find from "lodash/find";
+import DirectRedeem from "./DirectRedeem";
+import LoyaltyPoin from "./LoyaltyPoin";
 
 interface IBonusProps {}
 
@@ -47,8 +49,10 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
   React.useEffect(() => {
     let list: any = [];
 
-    keywordBonusHelper.bonus_type.map((type :string) => {
-      list.push(_find(bonusTypeOptions.data, ({ set_value }) => set_value === type)?._id);
+    keywordBonusHelper.bonus_type.map((type: string) => {
+      list.push(
+        _find(bonusTypeOptions.data, ({ set_value }) => set_value === type)?._id
+      );
     });
 
     keywordCreate.notification = keywordCreate.notification.filter(
@@ -117,7 +121,12 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
                     <Box key={`bonusType__${idx}`}>
                       <LuckyDraw
                         bonusType={bonusType}
-                        bonusTypeId={_find(bonusTypeOptions.data, ({ set_value }) => set_value === bonusType)?._id}
+                        bonusTypeId={
+                          _find(
+                            bonusTypeOptions.data,
+                            ({ set_value }) => set_value === bonusType
+                          )?._id
+                        }
                         keywordCreateState={keywordCreateState}
                         keywordCreate={keywordCreate}
                         stateTrigger={stateTrigger}
@@ -130,7 +139,48 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
                     <Box key={`bonusType__${idx}`}>
                       <Auction
                         bonusType={bonusType}
-                        bonusTypeId={_find(bonusTypeOptions.data, ({ set_value }) => set_value === bonusType)?._id}
+                        bonusTypeId={
+                          _find(
+                            bonusTypeOptions.data,
+                            ({ set_value }) => set_value === bonusType
+                          )?._id
+                        }
+                        keywordCreateState={keywordCreateState}
+                        keywordCreate={keywordCreate}
+                        stateTrigger={stateTrigger}
+                        setStateTrigger={setStateTrigger}
+                      />
+                    </Box>
+                  );
+                case "Direct Redeem":
+                  return (
+                    <Box key={`bonusType__${idx}`}>
+                      <DirectRedeem
+                        bonusType={bonusType}
+                        bonusTypeId={
+                          _find(
+                            bonusTypeOptions.data,
+                            ({ set_value }) => set_value === bonusType
+                          )?._id
+                        }
+                        keywordCreateState={keywordCreateState}
+                        keywordCreate={keywordCreate}
+                        stateTrigger={stateTrigger}
+                        setStateTrigger={setStateTrigger}
+                      />
+                    </Box>
+                  );
+                case "Loyalty Poin":
+                  return (
+                    <Box key={`bonusType__${idx}`}>
+                      <LoyaltyPoin
+                        bonusType={bonusType}
+                        bonusTypeId={
+                          _find(
+                            bonusTypeOptions.data,
+                            ({ set_value }) => set_value === bonusType
+                          )?._id
+                        }
                         keywordCreateState={keywordCreateState}
                         keywordCreate={keywordCreate}
                         stateTrigger={stateTrigger}
