@@ -56,14 +56,7 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
     });
 
     keywordCreate.notification = keywordCreate.notification.filter(
-      (item, i) => {
-        if (
-          list.includes(keywordCreate.notification[i].bonus_type_id) ||
-          item.bonus_type_id === ""
-        )
-          return item;
-      }
-    );
+        (item, i) => list.includes(keywordCreate.notification[i].bonus_type_id) || item.bonus_type_id === '');
 
     setKeywordCreateState(keywordCreate);
   }, [keywordBonusHelperState.bonus_type]);

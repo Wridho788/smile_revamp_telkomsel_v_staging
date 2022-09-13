@@ -124,15 +124,8 @@ const NotificationLuckyDraw: React.FunctionComponent<
 
   useEffect(() => {
     // Prevent duplicate data of "Lucky Draw"
-    if (
-      !_find(
-        keywordCreate.notification,
-        ({ bonus_type_id }) => bonus_type_id === bonusTypeId
-      )
-    ) {
-      keywordCreate.notification = keywordCreate.notification.concat(
-        keywordNotificationLuckyDraw
-      );
+    if (!_find(keywordCreate.notification, ({ bonus_type_id }) => bonus_type_id === bonusTypeId) && bonusType === "Lucky Draw Coupon") {
+      keywordCreate.notification = keywordCreate.notification.concat(keywordNotificationLuckyDraw);
     }
 
     setKeywordNotificationLuckyDrawState(keywordNotificationLuckyDraw);
