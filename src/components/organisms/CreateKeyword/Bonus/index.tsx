@@ -1,18 +1,21 @@
 import * as React from "react";
+
 import { Box, Chip, Stack } from "@mui/material";
 import { Select } from "../../../atoms";
 import { useGetBonusTypeQuery } from "../../../../redux/features/lov/lov-api-slice";
-import {
-  KeywordBonusHelper,
-  KeywordBonusLuckyDraw,
-  KeywordNotificationLuckyDraw,
-} from "../initial";
-import { CreateKeywordGeneral } from "../initial";
+import { CreateKeywordGeneral, KeywordBonusHelper } from "../initial";
 import { ICreateKeyword, IKeywordBonusHelper } from "../interfaces";
+
 import LuckyDraw from "./LuckyDraw";
+
 import CancelIcon from "@mui/icons-material/Cancel";
+
 import _without from "lodash/without";
 import LinkAja from "./LinkAja";
+import _find from "lodash/find";
+import DirectRedeem from "./DirectRedeem";
+import LoyaltyPoin from "./LoyaltyPoin";
+import Auction from "./Auction";
 
 interface IBonusProps {}
 
@@ -34,33 +37,36 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
   }, [keywordCreate, stateTrigger]);
 
   React.useEffect(() => {
+    // Filter Condition for Bonus / Notification : (Auction, Lucky Draw)
+    keywordCreate.bonus = keywordCreate.bonus.filter((item) => {
+      if (keywordBonusHelper.bonus_type.includes(item.bonus_type)) {
+        return item;
+      }
+    });
+
     setKeywordBonusHelperState(keywordBonusHelper);
   }, [keywordBonusHelper, stateTrigger]);
 
   React.useEffect(() => {
-    if (
-      keywordBonusHelperState.bonus_type.find(
-        (e) => e === "Lucky Draw Coupon"
-      ) === undefined
-    ) {
-      keywordCreate.bonus = _without(
-        [...keywordCreateState.bonus],
-        KeywordBonusLuckyDraw
+    let list: any = [];
+
+    keywordBonusHelper.bonus_type.map((type: string) => {
+      list.push(
+        _find(bonusTypeOptions.data, ({ set_value }) => set_value === type)?._id
       );
-      keywordCreate.notification = _without(
-        [...keywordCreateState.notification],
-        ...KeywordNotificationLuckyDraw
-      );
-    } else if (
-      keywordCreateState.bonus.find((e) => e === KeywordBonusLuckyDraw) ===
-        undefined &&
-      keywordCreateState.notification.find(
-        (e) => e === { ...KeywordNotificationLuckyDraw }
-      ) === undefined
-    ) {
-      keywordCreate.bonus.push(KeywordBonusLuckyDraw);
-      keywordCreate.notification.push(...KeywordNotificationLuckyDraw);
-    }
+    });
+
+    keywordCreate.notification = keywordCreate.notification.filter(
+      (item, i) => {
+        if (
+          list.includes(keywordCreate.notification[i].bonus_type_id) ||
+          item.bonus_type_id === ""
+        )
+          return item;
+      }
+    );
+
+    setKeywordCreateState(keywordCreate);
   }, [keywordBonusHelperState.bonus_type]);
 
   React.useEffect(() => {
@@ -116,7 +122,6 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
         />
         <>
           {keywordBonusHelperState.bonus_type.length > 0 &&
-            // eslint-disable-next-line array-callback-return
             keywordBonusHelperState.bonus_type.map((bonusType, idx) => {
               switch (bonusType) {
                 case "Lucky Draw Coupon":
@@ -124,6 +129,12 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
                     <Box key={`bonusType__${idx}`}>
                       <LuckyDraw
                         bonusType={bonusType}
+                        bonusTypeId={
+                          _find(
+                            bonusTypeOptions.data,
+                            ({ set_value }) => set_value === bonusType
+                          )?._id
+                        }
                         keywordCreateState={keywordCreateState}
                         keywordCreate={keywordCreate}
                         stateTrigger={stateTrigger}
@@ -134,8 +145,50 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
                 case "Auction":
                   return (
                     <Box key={`bonusType__${idx}`}>
-                      <LuckyDraw
+                      <Auction
                         bonusType={bonusType}
+                        bonusTypeId={
+                          _find(
+                            bonusTypeOptions.data,
+                            ({ set_value }) => set_value === bonusType
+                          )?._id
+                        }
+                        keywordCreateState={keywordCreateState}
+                        keywordCreate={keywordCreate}
+                        stateTrigger={stateTrigger}
+                        setStateTrigger={setStateTrigger}
+                      />
+                    </Box>
+                  );
+                case "Direct Redeem":
+                  return (
+                    <Box key={`bonusType__${idx}`}>
+                      <DirectRedeem
+                        bonusType={bonusType}
+                        bonusTypeId={
+                          _find(
+                            bonusTypeOptions.data,
+                            ({ set_value }) => set_value === bonusType
+                          )?._id
+                        }
+                        keywordCreateState={keywordCreateState}
+                        keywordCreate={keywordCreate}
+                        stateTrigger={stateTrigger}
+                        setStateTrigger={setStateTrigger}
+                      />
+                    </Box>
+                  );
+                case "Loyalty Poin":
+                  return (
+                    <Box key={`bonusType__${idx}`}>
+                      <LoyaltyPoin
+                        bonusType={bonusType}
+                        bonusTypeId={
+                          _find(
+                            bonusTypeOptions.data,
+                            ({ set_value }) => set_value === bonusType
+                          )?._id
+                        }
                         keywordCreateState={keywordCreateState}
                         keywordCreate={keywordCreate}
                         stateTrigger={stateTrigger}

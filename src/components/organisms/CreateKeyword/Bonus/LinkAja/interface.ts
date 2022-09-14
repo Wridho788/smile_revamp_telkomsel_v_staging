@@ -9,7 +9,6 @@ export interface IBonusTypeLinkAja {
 }
 
 export interface IStockLocation {
-    bucket: string,
     location_id: string,
     stock: number
 }

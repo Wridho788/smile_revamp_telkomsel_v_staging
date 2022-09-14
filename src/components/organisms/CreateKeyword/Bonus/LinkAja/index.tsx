@@ -13,31 +13,19 @@ import {
     OutlinedTextField,
     Subtitle,
     BodyCopy,
-    ResponsiveDateTimePicker,
     SmallCopy,
 } from "../../../../atoms";
 import {FilterInitial} from "../../../../../redux/utils/initial-general";
 import {
     ICreateKeyword,
-    IKeywordBonusLuckyDraw,
-    IKeywordNotificationLuckyDraw,
-    IKeywordNotificationLuckyDrawHelper,
 } from "../../interfaces";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import AddBoxIcon from "@mui/icons-material/AddBox";
 import {
     useGetNotifViaQuery,
-    useLazyGetKeywordNotificationQuery,
 } from "../../../../../redux/features/lov/lov-api-slice";
-import {useNotificationTemplateQuery} from "../../../../../redux/features/notification/notification-api-slice";
-import {
-    KeywordNotificationLuckyDrawHelper,
-    KeywordNotificationLuckyDraw,
-    KeywordBonusLuckyDraw, CreateKeywordGeneral,
-} from "../../initial";
 import {useLocationTemplateQuery} from "../../../../../redux/features/location/location-api-slice";
 import {BonusTypeLinkAjaInitial} from "./initial";
 
@@ -58,10 +46,38 @@ const LinkAja: React.FunctionComponent<INotificationLuckyDrawProps> = ({
                                                                        }) => {
     const {data: viaOptions = {data: []}} = useGetNotifViaQuery();
     const bonusTypeLinkAja = BonusTypeLinkAjaInitial
-    const location = CreateKeywordGeneral.eligibility.locations
-    useEffect(() => {
+    const locations = keywordCreate.eligibility.locations
+    const {data: locationOptions = {data: []}} =
+        useLocationTemplateQuery(FilterInitial);
 
-    }, [bonusTypeLinkAja]);
+    useEffect(() => {
+        // Initial Keyword Bonus Loyalty Poin
+        const index: number = keywordCreate.bonus.findIndex(
+            ({bonus_type}) => bonus_type === "LinkAja Main & Bonus Balance"
+        );
+        console.log(index)
+        if (index === -1) {
+            console.log(bonusTypeLinkAja)
+            keywordCreate.bonus.push(bonusTypeLinkAja);
+            locations.map((location) =>
+                bonusTypeLinkAja.stock_location.push({
+                    location_id: location,
+                    stock: 0,
+                }))
+        }
+    }, []);
+    useEffect(() => {
+        bonusTypeLinkAja.stock_location = []
+        locations.map((location) => {
+                bonusTypeLinkAja.stock_location.push({
+                    location_id: location,
+                    stock: 0,
+                })
+            }
+        )
+        setStateTrigger(!stateTrigger);
+    }, [locations]);
+
 
     return (
         <Accordion sx={{p: "1vw"}}>
@@ -74,17 +90,6 @@ const LinkAja: React.FunctionComponent<INotificationLuckyDrawProps> = ({
             </AccordionSummary>
             <AccordionDetails>
                 <Stack spacing="2vw" px="0.5vw">
-                    <Select
-                        direction="column"
-                        label="Bonus Type"
-                        placeholder="Option"
-                        options={viaOptions.data}
-                        value={bonusTypeLinkAja.bonus_type}
-                        handleChange={(value: string) => {
-                            bonusTypeLinkAja.bonus_type = value;
-                            setStateTrigger(!stateTrigger);
-                        }}
-                    />
                     <Grid alignItems="center" container columns={4.1}>
                         <Grid item xs={1.5}>
                             <OutlinedTextField
@@ -168,7 +173,10 @@ const LinkAja: React.FunctionComponent<INotificationLuckyDrawProps> = ({
                                 </BodyCopy>
                             </Grid>
                         </Grid>
-                        {location.map((currItem, idx) => {
+                        {bonusTypeLinkAja.stock_location.map((currItem, idx) => {
+                            const locationName = locationOptions.data.find(
+                                (e) => e["_id"] === currItem.location_id
+                            )?.name;
                             return (
                                 <Grid key={`location__${idx}`} container>
                                     <Grid
@@ -178,7 +186,7 @@ const LinkAja: React.FunctionComponent<INotificationLuckyDrawProps> = ({
                                         p="0.8vw"
                                     >
                                         <BodyCopy textTransform="uppercase">
-                                            {currItem}
+                                            {locationName}
                                         </BodyCopy>
                                     </Grid>
                                     <Grid
@@ -191,6 +199,11 @@ const LinkAja: React.FunctionComponent<INotificationLuckyDrawProps> = ({
                                             type="number"
                                             variant="outlined"
                                             InputProps={{inputProps: {min: 0}}}
+                                            value={String(bonusTypeLinkAja.stock_location[idx].stock)}
+                                            handleChange={(value: string) => {
+                                                bonusTypeLinkAja.stock_location[idx].stock = Number(value);
+                                                setStateTrigger(!stateTrigger);
+                                            }}
                                         />
                                     </Grid>
                                 </Grid>

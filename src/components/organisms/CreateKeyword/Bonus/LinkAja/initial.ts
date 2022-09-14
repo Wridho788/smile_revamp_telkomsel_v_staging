@@ -3,7 +3,7 @@ import {IBonusTypeLinkAja, IStockLocation} from "./interface";
 export const BonusTypeLinkAjaInitial : IBonusTypeLinkAja = {
     nominal:"",
     location:"",
-    bonus_type: "",
+    bonus_type: "LinkAja Main & Bonus Balance",
     external_api_config: "",
     bucket: "",
     stock_location: [],

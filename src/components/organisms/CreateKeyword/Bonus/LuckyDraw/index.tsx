@@ -19,7 +19,6 @@ import {
 import { FilterInitial } from "../../../../../redux/utils/initial-general";
 import {
   ICreateKeyword,
-  IKeywordBonusLuckyDraw,
   IKeywordNotificationLuckyDraw,
   IKeywordNotificationLuckyDrawHelper,
 } from "../../interfaces";
@@ -39,9 +38,11 @@ import {
   KeywordBonusLuckyDraw,
 } from "../../initial";
 import { useLocationTemplateQuery } from "../../../../../redux/features/location/location-api-slice";
+import _find from "lodash/find";
 
 interface INotificationLuckyDrawProps {
   bonusType: string;
+  bonusTypeId: any;
   keywordCreateState: ICreateKeyword;
   keywordCreate: ICreateKeyword;
   stateTrigger: boolean;
@@ -52,6 +53,7 @@ const NotificationLuckyDraw: React.FunctionComponent<
   INotificationLuckyDrawProps
 > = ({
   bonusType,
+  bonusTypeId,
   keywordCreateState,
   keywordCreate,
   stateTrigger,
@@ -85,19 +87,28 @@ const NotificationLuckyDraw: React.FunctionComponent<
     setKeywordNotificationLuckyDrawState,
   ] = useState<IKeywordNotificationLuckyDraw[]>(keywordNotificationLuckyDraw);
 
-  const keywordBonusLuckyDraw: IKeywordBonusLuckyDraw = KeywordBonusLuckyDraw;
-  const [keywordBonusLuckyDrawState, setKeywordBonusLuckyDrawState] =
-    useState<IKeywordBonusLuckyDraw>(keywordBonusLuckyDraw);
-
   const { data: locationOptions = { data: [] } } =
     useLocationTemplateQuery(FilterInitial);
 
+  const [index, setIndex] = useState<number>(-1);
+
+  // TODO: Get Lucky Draw Notification
   useEffect(() => {
     getKeywordNotification("LUCKY_DRAW_NOTIFICATION");
-    keywordBonusLuckyDraw.bonus_type = bonusType;
-    if (keywordBonusLuckyDraw.locations.length === 0) {
+
+    // Initial Keyword Bonus Lucky Draw
+    const index = keywordCreate.bonus.findIndex(
+      ({ bonus_type }) => bonus_type === "Lucky Draw Coupon"
+    );
+
+    if (index === -1) {
+      keywordCreate.bonus.push(KeywordBonusLuckyDraw);
+      const bonusIdx = keywordCreate.bonus.findIndex(
+        ({ bonus_type }) => bonus_type === "Lucky Draw Coupon"
+      );
+      setIndex(bonusIdx);
       keywordCreateState.eligibility.locations.map((location) =>
-        keywordBonusLuckyDraw.locations.push({
+        keywordCreate.bonus[bonusIdx].locations.push({
           location_id: location,
           stock: 0,
         })
@@ -112,12 +123,20 @@ const NotificationLuckyDraw: React.FunctionComponent<
   }, [keywordNotificationLuckyDrawHelper, stateTrigger]);
 
   useEffect(() => {
+    // Prevent duplicate data of "Lucky Draw"
+    if (
+      !_find(
+        keywordCreate.notification,
+        ({ bonus_type_id }) => bonus_type_id === bonusTypeId
+      )
+    ) {
+      keywordCreate.notification = keywordCreate.notification.concat(
+        keywordNotificationLuckyDraw
+      );
+    }
+
     setKeywordNotificationLuckyDrawState(keywordNotificationLuckyDraw);
   }, [keywordNotificationLuckyDraw, stateTrigger]);
-
-  useEffect(() => {
-    setKeywordBonusLuckyDrawState(keywordBonusLuckyDraw);
-  }, [keywordBonusLuckyDraw, stateTrigger]);
 
   return (
     <Accordion sx={{ p: "1vw" }}>
@@ -145,6 +164,8 @@ const NotificationLuckyDraw: React.FunctionComponent<
             ) : (
               keywordNotification.data.map((_: any, idx: any) => {
                 keywordNotificationLuckyDraw[idx].code_identifier = _["_id"];
+                keywordNotificationLuckyDraw[idx].bonus_type_id = bonusTypeId;
+
                 return (
                   <Stack
                     key={idx}
@@ -350,98 +371,84 @@ const NotificationLuckyDraw: React.FunctionComponent<
               })
             )}
           </Stack>
-          <Grid alignItems="center" container columns={3}>
-            <Grid item xs={1}>
-              <OutlinedTextField
-                direction="column"
-                label="Prize"
-                variant="outlined"
-                value={keywordBonusLuckyDrawState.lucky_draw_prize}
-                handleChange={(value: string) => {
-                  keywordBonusLuckyDraw.lucky_draw_prize = value;
-                  setStateTrigger(!stateTrigger);
-                }}
-              />
-            </Grid>
-            <Grid item xs={1}>
-              <Stack
-                direction="row"
-                justifyContent="center"
-                alignItems="center"
-              >
-                <Switch
-                  checked={
-                    keywordBonusLuckyDrawState.lucky_draw_allow_inject_coupon
-                  }
-                  onChange={(e) => {
-                    keywordBonusLuckyDraw.lucky_draw_allow_inject_coupon =
-                      e.target.checked;
-                    setStateTrigger(!stateTrigger);
-                  }}
-                  inputProps={{ "aria-label": "controlled" }}
-                />
-                <SmallCopy>Allow Inject Coupon</SmallCopy>
-              </Stack>
-            </Grid>
-            <Grid item xs={1}>
-              <Stack
-                direction="row"
-                justifyContent="center"
-                alignItems="center"
-              >
-                <Switch
-                  checked={keywordBonusLuckyDrawState.redeem_after_verification}
-                  onChange={(e) => {
-                    keywordBonusLuckyDraw.redeem_after_verification =
-                      e.target.checked;
-                    setStateTrigger(!stateTrigger);
-                  }}
-                  inputProps={{ "aria-label": "controlled" }}
-                />
-                <SmallCopy>Redeem After Verification</SmallCopy>
-              </Stack>
-            </Grid>
-          </Grid>
-          <Divider textAlign="left" sx={{ pt: "1vw" }}>
-            <Subtitle textTransform="uppercase">
-              stock per location management
-            </Subtitle>
-          </Divider>
-          <Stack>
-            <Grid container>
-              <Grid item xs={5} border="0.1vw solid rgba(0,0,0,0.1)" p="0.8vw">
-                <BodyCopy
-                  align="center"
-                  textTransform="uppercase"
-                  fontWeight="bold"
-                >
-                  Location
-                </BodyCopy>
+          {index !== -1 && (
+            <>
+              <Grid alignItems="center" container columns={3}>
+                <Grid item xs={1}>
+                  <OutlinedTextField
+                    direction="column"
+                    label="Prize"
+                    variant="outlined"
+                    value={keywordCreateState.bonus[index].lucky_draw_prize}
+                    handleChange={(value: string) => {
+                      keywordCreate.bonus[index].lucky_draw_prize = value;
+                      setStateTrigger(!stateTrigger);
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={1}>
+                  <Stack
+                    direction="row"
+                    justifyContent="center"
+                    alignItems="center"
+                  >
+                    <Switch
+                      checked={
+                        keywordCreateState.bonus[index]
+                          .lucky_draw_allow_inject_coupon
+                      }
+                      onChange={(e) => {
+                        keywordCreate.bonus[
+                          index
+                        ].lucky_draw_allow_inject_coupon = e.target.checked;
+                        setStateTrigger(!stateTrigger);
+                      }}
+                      inputProps={{ "aria-label": "controlled" }}
+                    />
+                    <SmallCopy>Allow Inject Coupon</SmallCopy>
+                  </Stack>
+                </Grid>
+                <Grid item xs={1}>
+                  <Stack
+                    direction="row"
+                    justifyContent="center"
+                    alignItems="center"
+                  >
+                    <Switch
+                      checked={
+                        keywordCreateState.bonus[index]
+                          .redeem_after_verification
+                      }
+                      onChange={(e) => {
+                        keywordCreate.bonus[index].redeem_after_verification =
+                          e.target.checked;
+                        setStateTrigger(!stateTrigger);
+                      }}
+                      inputProps={{ "aria-label": "controlled" }}
+                    />
+                    <SmallCopy>Redeem After Verification</SmallCopy>
+                  </Stack>
+                </Grid>
               </Grid>
-              <Grid item xs={7} border="0.1vw solid rgba(0,0,0,0.1)" p="0.8vw">
-                <BodyCopy
-                  align="center"
-                  textTransform="uppercase"
-                  fontWeight="bold"
-                >
-                  Stock Per Location
-                </BodyCopy>
-              </Grid>
-            </Grid>
-            {keywordBonusLuckyDraw.locations.map((location, idx) => {
-              const locationName = locationOptions.data.find(
-                (e) => e["_id"] === location.location_id
-              )?.name;
-              return (
-                <Grid key={`location__${idx}`} container>
+              <Divider textAlign="left" sx={{ pt: "1vw" }}>
+                <Subtitle textTransform="uppercase">
+                  stock per location management
+                </Subtitle>
+              </Divider>
+              <Stack>
+                <Grid container>
                   <Grid
                     item
                     xs={5}
                     border="0.1vw solid rgba(0,0,0,0.1)"
                     p="0.8vw"
                   >
-                    <BodyCopy textTransform="uppercase">
-                      {locationName}
+                    <BodyCopy
+                      align="center"
+                      textTransform="uppercase"
+                      fontWeight="bold"
+                    >
+                      Location
                     </BodyCopy>
                   </Grid>
                   <Grid
@@ -450,27 +457,62 @@ const NotificationLuckyDraw: React.FunctionComponent<
                     border="0.1vw solid rgba(0,0,0,0.1)"
                     p="0.8vw"
                   >
-                    <OutlinedTextField
-                      type="number"
-                      variant="outlined"
-                      InputProps={{ inputProps: { min: 0 } }}
-                      value={keywordBonusLuckyDrawState.locations[
-                        idx
-                      ].stock.toString()}
-                      handleChange={(value: number) => {
-                        keywordBonusLuckyDraw.locations[idx].stock =
-                          Number(value);
-                        setStateTrigger(!stateTrigger);
-                      }}
-                    />
+                    <BodyCopy
+                      align="center"
+                      textTransform="uppercase"
+                      fontWeight="bold"
+                    >
+                      Stock Per Location
+                    </BodyCopy>
                   </Grid>
                 </Grid>
-              );
-            })}
-            <SmallCopy color="primary" mt="1vw">
-              ** If you don't want set stock, please leave it blank
-            </SmallCopy>
-          </Stack>
+                {keywordCreateState.bonus[index].locations.map(
+                  (location: any, idx: any) => {
+                    const locationName = locationOptions.data.find(
+                      (e) => e["_id"] === location.location_id
+                    )?.name;
+                    return (
+                      <Grid key={`location__${idx}`} container>
+                        <Grid
+                          item
+                          xs={5}
+                          border="0.1vw solid rgba(0,0,0,0.1)"
+                          p="0.8vw"
+                        >
+                          <BodyCopy textTransform="uppercase">
+                            {locationName}
+                          </BodyCopy>
+                        </Grid>
+                        <Grid
+                          item
+                          xs={7}
+                          border="0.1vw solid rgba(0,0,0,0.1)"
+                          p="0.8vw"
+                        >
+                          <OutlinedTextField
+                            type="number"
+                            variant="outlined"
+                            InputProps={{ inputProps: { min: 0 } }}
+                            value={keywordCreateState.bonus[index].locations[
+                              idx
+                            ].stock.toString()}
+                            handleChange={(value: number) => {
+                              keywordCreate.bonus[index].locations[idx].stock =
+                                Number(value);
+                              setStateTrigger(!stateTrigger);
+                            }}
+                          />
+                        </Grid>
+                      </Grid>
+                    );
+                  }
+                )}
+                <SmallCopy color="primary" mt="1vw">
+                  ** If you don't want set stock, please leave it blank
+                </SmallCopy>
+              </Stack>
+            </>
+          )}
         </Stack>
       </AccordionDetails>
     </Accordion>

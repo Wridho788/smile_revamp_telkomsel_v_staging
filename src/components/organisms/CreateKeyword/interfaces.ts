@@ -63,6 +63,7 @@ export interface IKeywordEligibility {
 
 export interface IKeywordBonusHelper {
   bonus_type: any[];
+  bonus_type_id: any[];
 }
 
 export interface IKeywordBonusLuckyDrawLocation {
@@ -79,12 +80,27 @@ export interface IKeywordBonusLuckyDraw {
   locations: any[];
 }
 
+export interface IKeywordBonusDirectRedeem {
+  bonus_type: string;
+  stock_type: string;
+  redeem_after_verification: boolean;
+  locations: any[];
+}
+
+export interface IKeywordBonusLoyaltyPoin {
+  bonus_type: string;
+  earning_poin: number;
+  redeem_after_verification: boolean;
+  locations: any[];
+}
+
 export interface IKeywordNotificationEligibilityHelper {
   notification_template: string;
   follow_period: boolean;
 }
 
 export interface IKeywordNotificationEligibility {
+  bonus_type_id: string;
   code_identifier: string;
   notification_content: string;
   start_period: Date;
@@ -99,6 +115,36 @@ export interface IKeywordNotificationLuckyDrawHelper {
 }
 
 export interface IKeywordNotificationLuckyDraw {
+  bonus_type_id: string;
+  code_identifier: string;
+  notification_content: string;
+  start_period: Date;
+  end_period: Date;
+  notif_type: string;
+  via: string;
+}
+
+// Bonus Type "Auction"
+export interface IKeywordBonusAuction {
+  bonus_type: string;
+  auction_prize_desc_id: string;
+  auction_prize_desc_en: string;
+  auction_prize_image: string;
+  auction_poin_min_bidding: number;
+  auction_multiplier_poin: number;
+  auction_max_winner_inphase: number;
+  auction_prize_name: string;
+  stock_location: any[];
+  redeem_after_verification: boolean;
+}
+
+export interface IKeywordNotificationAuctionHelper {
+  notification_template: string;
+  follow_period: boolean;
+}
+
+export interface IKeywordNotificationAuction {
+  bonus_type_id: string;
   code_identifier: string;
   notification_content: string;
   start_period: Date;

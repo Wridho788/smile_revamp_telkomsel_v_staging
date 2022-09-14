@@ -25,23 +25,29 @@ const ProgramPrimeDt: FC = () => {
         sortField: "created_at",
         sortOrder: -1,
         filters: {
-            name: { value: "", matchMode: "contains" },
+            name: {value: "", matchMode: "contains"},
         },
     });
 
     // Role Access Authentication Check
-    const { data: appConfig } = useAppConfigQuery();
+    const {data: appConfig} = useAppConfigQuery();
     const defaultRoleManager =
         appConfig !== undefined
             ? appConfig.find((item) => item["param_key"] === "DEFAULT_ROLE_MANAGER")[
                 "param_value"
                 ]
             : undefined;
+    const defaultRoleManagerHQ =
+        appConfig !== undefined
+            ? appConfig.find((item) => item["param_key"] === "DEFAULT_LOCATION_HQ")[
+                "param_value"
+                ]
+            : undefined;
 
-    const { data: accountAuth } = useAccountAuthenticateQuery();
+    const {data: accountAuth} = useAccountAuthenticateQuery();
 
     // Detail Program
-    const [item, setItem] = useState([]);
+    const [item, setItem] = useState([ProgramInitial]);
     const [open, setOpen] = useState(false);
     const handleButtonDetail = async (item: any) => {
         setItem(item);
@@ -68,7 +74,7 @@ const ProgramPrimeDt: FC = () => {
     let loadLazyTimeout: any = null;
     const loadLazyData = () => {
         loadLazyTimeout = setTimeout(async () => {
-            const { data }: any = await getProgramList({
+            const {data}: any = await getProgramList({
                 lazyEvent: JSON.stringify(lazyParams),
             });
             console.log(data.payload);
@@ -84,12 +90,9 @@ const ProgramPrimeDt: FC = () => {
     }, [lazyParams])
 
 
-
-
-
     // Customize Column Render Component
     const NameRender = (rowData: IProgram) => {
-        return  rowData.name.length >= 7 ? rowData.name.substring(0, 7) + "..." : rowData.name
+        return rowData.name.length >= 7 ? rowData.name.substring(0, 7) + "..." : rowData.name
     }
     const StartPeriodRender = (rowData: IProgram) => {
         return <span>{moment(rowData.start_period).format('MMMM DD, YYYY')}</span>
@@ -99,31 +102,53 @@ const ProgramPrimeDt: FC = () => {
     }
     const ThresholdAlarmExpiredRender = (rowData: IProgram) => {
         return (
-            <Box sx={{textAlign:'center', width:'100%'}}>
+            <Box sx={{textAlign: 'center', width: '100%'}}>
                 <Typography variant="body1"> H-{rowData.threshold_alarm_expired} </Typography>
             </Box>
         )
     }
     const ThresholdAlarmVoucherRender = (rowData: IProgram) => {
         return (
-            <Box sx={{textAlign:'center', width:'100%'}}>
+            <Box sx={{textAlign: 'center', width: '100%'}}>
                 <Typography variant="body1"> {rowData.threshold_alarm_voucher} Voucher </Typography>
             </Box>
         )
     }
-    const StatusApprovalRender = (rowData: IProgram) => {
-        return (
-            <Box sx={{textAlign:'center', width:'100%', justifyContent:'center', alignItems:'center', alignContent:'center'}}>
-                {
-                    rowData.status &&
-                    rowData.status.set_value === 'Approved by Manager HQ' ?
-                        <Alert severity="success">HQ Manager</Alert>
-                        :
-                        <Alert severity="warning">Waiting Approval</Alert>
-                }
-            </Box>
-        )
+    const StatusApprovalRender = (rowData: any) => {
+            return (
+                <Box sx={{
+                    textAlign: 'center',
+                    width: '100%',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    alignContent: 'center'
+                }}>
+                    {
+
+                        // rowData.isHQ ?
+                        //     rowData.status &&
+                        //     rowData.status.set_value === 'New' ? <Alert severity="warning">Waiting Approval HQ</Alert> :
+                        //         <Alert severity="success">HQ Manager</Alert>
+                        //     :
+                        //     rowData.status &&
+                        //     rowData.status.set_value === 'New' ? <Alert severity="warning">Waiting Manager HQ &
+                        //             Manager {rowData.created_by.account_location.location_detail.name}</Alert> :
+                        //         rowData.status.set_value === 'Approved by Manager HQ' ?
+                        //             <Alert severity="success">HQ Manager</Alert> :
+                        //             <Alert severity="warning">Waiting Approval HQ</Alert>
+
+                        rowData.approval_log &&
+                        rowData.approval_log.length > 0 ?
+                            <Alert severity="success" icon={false}>{rowData.approval_log[rowData.approval_log.length - 1].status[0].set_value}</Alert> :
+                            rowData.isHQ ?
+                                <Alert severity="warning" icon={false}>Waiting Approval HQ Manager</Alert>:
+                                <Alert severity="warning" icon={false}>Waiting Approval Area Manager</Alert>
+
+                    }
+                </Box>
+            )
     }
+
 
 
     return (
@@ -131,17 +156,22 @@ const ProgramPrimeDt: FC = () => {
             {/* Modal Detail Program */}
             <ProgramDetailsModal
                 open={open}
-                handleClose={() => {setOpen(false)}}
+                handleClose={() => {
+                    setOpen(false)
+                }}
                 data={item}
                 roleAccess={
                     accountAuth && defaultRoleManager ?
-                    accountAuth.role === defaultRoleManager ? true : false : false
+                        accountAuth.role === defaultRoleManager ? true : false : false
+                }
+                isHqLogin={
+                    accountAuth && accountAuth.account_location.location_detail.type === defaultRoleManagerHQ ? true : false
                 }
             />
 
             {/* Header Action */}
             <Stack direction={"row"} justifyContent={"space-between"}>
-                <H2 color={"secondary.dark"}>Program</H2>
+                <H2 color={"secondary.dark"} onClick={() => {console.log(accountAuth)}}>Program</H2>
                 <Stack direction="row" alignItems="center" spacing={"1vw"}>
                     <IconButton
                         href="/create-program/"
@@ -193,7 +223,7 @@ const ProgramPrimeDt: FC = () => {
                                     onRowSelect={onRowSelect}
                                 >
                                     <Column
-                                        style={{ flexGrow: 1, flexBasis: "250px" }}
+                                        style={{flexGrow: 1, flexBasis: "250px"}}
                                         field="name"
                                         header="PROGRAM NAME"
                                         sortable
@@ -202,7 +232,7 @@ const ProgramPrimeDt: FC = () => {
                                         filterPlaceholder="Search"
                                     />
                                     <Column
-                                        style={{ flexGrow: 1, flexBasis: "250px" }}
+                                        style={{flexGrow: 1, flexBasis: "250px"}}
                                         field="start_period"
                                         header="START PERIOD"
                                         sortable
@@ -210,7 +240,7 @@ const ProgramPrimeDt: FC = () => {
                                         filterPlaceholder="Search"
                                     />
                                     <Column
-                                        style={{ flexGrow: 1, flexBasis: "250px" }}
+                                        style={{flexGrow: 1, flexBasis: "250px"}}
                                         field="end_period"
                                         header="END PERIOD"
                                         sortable
@@ -218,7 +248,7 @@ const ProgramPrimeDt: FC = () => {
                                         filterPlaceholder="Search"
                                     />
                                     <Column
-                                        style={{ flexGrow: 1, flexBasis: "250px" }}
+                                        style={{flexGrow: 1, flexBasis: "250px"}}
                                         field="threshold_alarm_expired"
                                         header="THRESHOLD ALARM"
                                         sortable
@@ -226,7 +256,7 @@ const ProgramPrimeDt: FC = () => {
                                         filterPlaceholder="Search"
                                     />
                                     <Column
-                                        style={{ flexGrow: 1, flexBasis: "250px" }}
+                                        style={{flexGrow: 1, flexBasis: "250px"}}
                                         field="threshold_alarm_voucher"
                                         header="THRESHOLD VOUCHER"
                                         sortable
@@ -235,7 +265,12 @@ const ProgramPrimeDt: FC = () => {
                                     />
 
                                     <Column
-                                        style={{ flexGrow: 1, flexBasis: "250px", textAlign: "center", alignItems:'center' }}
+                                        style={{
+                                            flexGrow: 1,
+                                            flexBasis: "250px",
+                                            textAlign: "center",
+                                            alignItems: 'center'
+                                        }}
                                         field="program_time_zone"
                                         header="STATUS"
                                         sortable
