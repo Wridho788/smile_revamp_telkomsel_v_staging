@@ -1,7 +1,6 @@
 import React from "react";
 import { Box, Grid } from "@mui/material";
-import Keywords from "../../components/organisms/Keywords";
-
+import Keywords from "../../components/organisms/KeywordPrime";
 
 const Keyword = () => {
   return (

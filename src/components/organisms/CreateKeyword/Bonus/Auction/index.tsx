@@ -40,7 +40,8 @@ import {
     KeywordNotificationAuctionHelper
 } from "../../initial";
 import _find from "lodash/find";
-import {useLocationTemplateQuery} from "../../../../../redux/features/location/location-api-slice";
+import { useLocationTemplateQuery } from "../../../../../redux/features/location/location-api-slice";
+import { useKeywordUploadAuctionMutation } from "../../../../../redux/features/keyword/keyword-api-slice";
 
 interface INotificationAuctionProps {
     bonusType: string;
@@ -65,13 +66,21 @@ const NotificationAuction: React.FunctionComponent<INotificationAuctionProps> = 
 
     const uploadInputRef: any = React.useRef<any>(null);
 
+    const [uploadImgAuction] = useKeywordUploadAuctionMutation();
+
    const onUpload = () => {
        setLoading(true);
        if (uploadInputRef.current?.files.length) {
            const temp = URL.createObjectURL(uploadInputRef.current?.files[0]);
            setPreview(temp);
 
-           setLoading(false);
+           const formData = new FormData();
+           formData.append('image', uploadInputRef.current?.files[0]);
+
+           uploadImgAuction(formData).then((res: any) => {
+               keywordCreate.bonus[index]["auction_prize_image"] = res?.data.payload;
+               setLoading(false);
+           })
        }
     }
 
@@ -134,7 +143,7 @@ const NotificationAuction: React.FunctionComponent<INotificationAuctionProps> = 
 
     useEffect(() => {
         // Prevent duplicate data of "Auction"
-        if (!_find(keywordCreate.notification, ({ bonus_type_id }) => bonus_type_id === bonusTypeId)) {
+        if (!_find(keywordCreate.notification, ({ bonus_type_id }) => bonus_type_id === bonusTypeId) && bonusType === "Auction") {
             keywordCreate.notification = keywordCreate.notification.concat(keywordNotificationAuction);
         }
 
