@@ -53,8 +53,8 @@ const SegmentationList: FC<ListProps> = ({...props}) => {
         }
     }
     const segmentationParams: IParams = {
-        // lazyEvent: `{"first" : ${page}, "rows" : ${rowsPerPage}, "filters": {"msisdn" : ${searchInput} }`,
-        lazyEvent: `{"first" : ${page}, "rows" : ${rowsPerPage} }`,
+        lazyEvent: JSON.stringify({"first": page, "rows": rowsPerPage, "filters": {"msisdn": {"value": searchInput}}}),
+        // lazyEvent: `{"first" : ${page}, "rows" : ${rowsPerPage} }`,
         type: props.type,
         program: props.programId,
     }
