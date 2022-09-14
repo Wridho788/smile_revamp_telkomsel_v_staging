@@ -7,6 +7,7 @@ import {
 import {
     OutlinedTextField,
     Subtitle,
+    ResponsiveDateTimePicker,
 } from "../../../../atoms";
 import {
     ICreateKeyword,
@@ -15,7 +16,8 @@ import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import {BonusTypeLinkAjaInitial} from "./initial";
+import {BonusTypeVoucherInitial} from "./initial";
+import SwitchCustom from "../../../../../atomic/components/atoms/Switch";
 import LocationManagement from "../LocationManagement";
 
 interface INotificationLuckyDrawProps {
@@ -25,32 +27,38 @@ interface INotificationLuckyDrawProps {
     setStateTrigger: Dispatch<SetStateAction<boolean>>;
 }
 
-const LinkAja: React.FunctionComponent<INotificationLuckyDrawProps> = ({
+const Voucher: React.FunctionComponent<INotificationLuckyDrawProps> = ({
                                                                            bonusType,
                                                                            keywordCreate,
                                                                            stateTrigger,
                                                                            setStateTrigger,
                                                                        }) => {
-    const bonusTypeLinkAja = BonusTypeLinkAjaInitial
+    const voucher = BonusTypeVoucherInitial
     const locations = keywordCreate.eligibility.locations
-
+    const [switchState, setSwitchState] = useState<boolean>(false);
+    const handleSwitch = () => {
+        setSwitchState(!switchState)
+        if (switchState) {
+            voucher.exp_voucher = ""
+        }
+    }
     useEffect(() => {
         const index: number = keywordCreate.bonus.findIndex(
-            ({bonus_type}) => bonus_type === "LinkAja Main & Bonus Balance"
+            ({bonus_type}) => bonus_type === "Voucher"
         );
         if (index === -1) {
-            keywordCreate.bonus.push(bonusTypeLinkAja);
+            keywordCreate.bonus.push(voucher);
             locations.map((location) =>
-                bonusTypeLinkAja.stock_location.push({
+                voucher.stock_location.push({
                     location_id: location,
                     stock: 0,
                 }))
         }
     }, []);
     useEffect(() => {
-        bonusTypeLinkAja.stock_location = []
+        voucher.stock_location = []
         locations.map((location) => {
-                bonusTypeLinkAja.stock_location.push({
+                voucher.stock_location.push({
                     location_id: location,
                     stock: 0,
                 })
@@ -58,7 +66,6 @@ const LinkAja: React.FunctionComponent<INotificationLuckyDrawProps> = ({
         )
         setStateTrigger(!stateTrigger);
     }, [locations]);
-
 
     return (
         <Accordion sx={{p: "1vw"}}>
@@ -71,29 +78,31 @@ const LinkAja: React.FunctionComponent<INotificationLuckyDrawProps> = ({
             </AccordionSummary>
             <AccordionDetails>
                 <Stack spacing="2vw" px="0.5vw">
+                    <SwitchCustom checked={switchState} handleChange={handleSwitch} label={"By Date"}/>
                     <Box>
                         <Grid container columns={4} spacing={2}>
                             <Grid item xs={2}>
                                 <OutlinedTextField
+                                    type={"number"}
+                                    disabled={switchState}
                                     direction="column"
-                                    label="Nominal"
+                                    label="Voucher Expired Days After Redeem"
                                     variant="outlined"
-                                    value={bonusTypeLinkAja.nominal}
+                                    value={switchState ? "0" : voucher.exp_voucher}
                                     handleChange={(value: string) => {
-                                        bonusTypeLinkAja.nominal = value;
+                                        voucher.exp_voucher = value;
                                         setStateTrigger(!stateTrigger);
                                     }}
                                 />
                             </Grid>
                             <Grid item xs={2}>
                                 <OutlinedTextField
-                                    type={"number"}
                                     direction="column"
-                                    label="External API Configuration"
+                                    label="Voucher Type"
                                     variant="outlined"
-                                    value={bonusTypeLinkAja.external_api_config}
+                                    value={voucher.voucher_type}
                                     handleChange={(value: string) => {
-                                        bonusTypeLinkAja.external_api_config = value;
+                                        voucher.voucher_type = value;
                                         setStateTrigger(!stateTrigger);
                                     }}
                                 />
@@ -104,34 +113,34 @@ const LinkAja: React.FunctionComponent<INotificationLuckyDrawProps> = ({
                         <Grid container columns={4} spacing={2}>
                             <Grid item xs={2}>
                                 <OutlinedTextField
-                                    type={"number"}
                                     direction="column"
-                                    label="Location"
+                                    label="Voucher Combination"
                                     variant="outlined"
-                                    value={bonusTypeLinkAja.location}
+                                    value={voucher.voucher_combination}
                                     handleChange={(value: string) => {
-                                        bonusTypeLinkAja.location = value;
+                                        voucher.voucher_combination = value;
                                         setStateTrigger(!stateTrigger);
                                     }}
                                 />
                             </Grid>
-                            <Grid item xs={2}>
-                                <OutlinedTextField
-                                    type={"number"}
-                                    direction="column"
-                                    label="Bucket"
-                                    variant="outlined"
-                                    value={bonusTypeLinkAja.bucket}
-                                    handleChange={(value: string) => {
-                                        bonusTypeLinkAja.bucket = value;
+                            <Grid item xs={2} sx={{visibility: switchState ? "visible" : "hidden"}}>
+                                <ResponsiveDateTimePicker
+                                    direction={"column"}
+                                    label="Start Period"
+                                    placeholder="Start Period"
+                                    value={voucher.exp_voucher}
+                                    minDateTime={new Date()}
+                                    handleChange={(value: any) => {
+                                        voucher.exp_voucher = value;
                                         setStateTrigger(!stateTrigger);
                                     }}
                                 />
                             </Grid>
+
                         </Grid>
                     </Box>
                     <LocationManagement
-                        initialName={bonusTypeLinkAja.stock_location}
+                        initialName={voucher.stock_location}
                         stateTrigger={stateTrigger}
                         setStateTrigger={setStateTrigger}
                     />
@@ -141,4 +150,4 @@ const LinkAja: React.FunctionComponent<INotificationLuckyDrawProps> = ({
     );
 };
 
-export default LinkAja;
+export default Voucher;

@@ -16,6 +16,7 @@ import _find from "lodash/find";
 import DirectRedeem from "./DirectRedeem";
 import LoyaltyPoin from "./LoyaltyPoin";
 import Auction from "./Auction";
+import Voucher from "./Voucher";
 
 interface IBonusProps {}
 
@@ -201,7 +202,17 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
                       <Box key={`bonusType__${idx}`}>
                         <LinkAja
                             bonusType={bonusType}
-                            keywordCreateState={keywordCreateState}
+                            keywordCreate={keywordCreate}
+                            stateTrigger={stateTrigger}
+                            setStateTrigger={setStateTrigger}
+                        />
+                      </Box>
+                  );
+                  case "Voucher":
+                  return (
+                      <Box key={`bonusType__${idx}`}>
+                        <Voucher
+                            bonusType={bonusType}
                             keywordCreate={keywordCreate}
                             stateTrigger={stateTrigger}
                             setStateTrigger={setStateTrigger}
