@@ -1,4 +1,4 @@
-import {ListProps, SegmentationProps} from "./types";
+import {ListProps} from "./types";
 import {FC, useEffect, useState} from "react";
 import TableContainer from "@mui/material/TableContainer";
 import Paper from "@mui/material/Paper";
@@ -8,21 +8,15 @@ import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import {
     Box,
-    Button,
-    Checkbox,
     CircularProgress,
-    FormControlLabel,
     Grid,
     IconButton,
     Input,
-    Typography
 } from "@mui/material";
-import CachedIcon from "@mui/icons-material/Cached";
 import TableBody from "@mui/material/TableBody";
 import TablePagination from "@mui/material/TablePagination";
 import * as React from "react";
 import {IParams} from "../../../../../redux/utils/IGeneral";
-import {useLazyAccountListQuery} from "../../../../../redux/features/account/account-api-slice";
 import {BodyCopy, H3} from "../../../../atoms";
 import {
     useDeleteProgramMutation,
@@ -30,7 +24,6 @@ import {
 } from "../../../../../redux/features/program/program-api-slice";
 import {PayloadInitial} from "../../../../../redux/utils/initial-general";
 import {Delete} from "@mui/icons-material";
-import Swal from "sweetalert2";
 
 const SegmentationList: FC<ListProps> = ({...props}) => {
 
