@@ -267,6 +267,7 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
                 />
 
                 <OutlinedTextField
+                    isRequired={false}
                     label="Keyword Registration"
                     placeholder="Keyword Registration"
                     variant={"outlined"}
@@ -278,6 +279,7 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
                 />
 
                 <OutlinedTextField
+                    isRequired={false}
                     label="Point Registration"
                     placeholder="Point Registration"
                     variant={"outlined"}
