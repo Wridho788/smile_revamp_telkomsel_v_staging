@@ -57,7 +57,7 @@ const MerchantOutletManagement = () => {
       outlet_id: { value: "", matchMode: "contains" },
       region: { value: "", matchMode: "contains" },
       branch: { value: "", matchMode: "contains" },
-      merchant: { value: "", matchMode: "contains" },
+      "merchant._id": { value: "", matchMode: "contains" },
     },
   });
   const [triger, setTriger] = React.useState<boolean>(false);
@@ -306,7 +306,7 @@ const MerchantOutletManagement = () => {
                 dataKey="id"
                 paginator
                 first={lazyParams.first}
-                rows={10}
+                rows={5}
                 totalRecords={totalRecords}
                 onPage={onPage}
                 onSort={onSort}
@@ -356,7 +356,7 @@ const MerchantOutletManagement = () => {
                 <Column
                   footer="Merchant"
                   header="Merchant"
-                  field="merchant"
+                  field="merchant._id"
                   style={{ flexGrow: 1, flexBasis: "250px" }}
                   filter
                   filterPlaceholder="Search"
