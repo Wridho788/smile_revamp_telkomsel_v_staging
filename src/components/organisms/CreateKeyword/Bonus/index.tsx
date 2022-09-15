@@ -8,6 +8,8 @@ import { ICreateKeyword, IKeywordBonusHelper } from "../interfaces";
 
 import LuckyDraw from "./LuckyDraw";
 import Auction from "./Auction";
+import Donation from "./Donation";
+import MobileBanking from "./MobileBanking";
 
 import CancelIcon from "@mui/icons-material/Cancel";
 
@@ -56,7 +58,10 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
     });
 
     keywordCreate.notification = keywordCreate.notification.filter(
-        (item, i) => list.includes(keywordCreate.notification[i].bonus_type_id) || item.bonus_type_id === '');
+      (item, i) =>
+        list.includes(keywordCreate.notification[i].bonus_type_id) ||
+        item.bonus_type_id === ""
+    );
 
     setKeywordCreateState(keywordCreate);
   }, [keywordBonusHelperState.bonus_type]);
@@ -174,6 +179,42 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
                   return (
                     <Box key={`bonusType__${idx}`}>
                       <LoyaltyPoin
+                        bonusType={bonusType}
+                        bonusTypeId={
+                          _find(
+                            bonusTypeOptions.data,
+                            ({ set_value }) => set_value === bonusType
+                          )?._id
+                        }
+                        keywordCreateState={keywordCreateState}
+                        keywordCreate={keywordCreate}
+                        stateTrigger={stateTrigger}
+                        setStateTrigger={setStateTrigger}
+                      />
+                    </Box>
+                  );
+                case "Donation":
+                  return (
+                    <Box key={`bonusType__${idx}`}>
+                      <Donation
+                        bonusType={bonusType}
+                        bonusTypeId={
+                          _find(
+                            bonusTypeOptions.data,
+                            ({ set_value }) => set_value === bonusType
+                          )?._id
+                        }
+                        keywordCreateState={keywordCreateState}
+                        keywordCreate={keywordCreate}
+                        stateTrigger={stateTrigger}
+                        setStateTrigger={setStateTrigger}
+                      />
+                    </Box>
+                  );
+                case "Other":
+                  return (
+                    <Box key={`bonusType__${idx}`}>
+                      <MobileBanking
                         bonusType={bonusType}
                         bonusTypeId={
                           _find(
