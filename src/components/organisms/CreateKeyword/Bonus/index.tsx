@@ -6,8 +6,6 @@ import { useGetBonusTypeQuery } from "../../../../redux/features/lov/lov-api-sli
 import { CreateKeywordGeneral, KeywordBonusHelper } from "../initial";
 import { ICreateKeyword, IKeywordBonusHelper } from "../interfaces";
 
-import LuckyDraw from "./LuckyDraw";
-import Auction from "./Auction";
 import Donation from "./Donation";
 import MobileBanking from "./MobileBanking";
 
@@ -15,8 +13,14 @@ import CancelIcon from "@mui/icons-material/Cancel";
 
 import _without from "lodash/without";
 import _find from "lodash/find";
+
+// Sub Component of Bonus
+import LuckyDraw from "./LuckyDraw";
+import Auction from "./Auction";
 import DirectRedeem from "./DirectRedeem";
 import LoyaltyPoin from "./LoyaltyPoin";
+import TelcoProductPostpaid from "./TelcoProductPostpaid";
+import TelcoProductPrepaid from "./TelcoProductPrepaid";
 
 interface IBonusProps {}
 
@@ -215,6 +219,42 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
                   return (
                     <Box key={`bonusType__${idx}`}>
                       <MobileBanking
+                        bonusType={bonusType}
+                        bonusTypeId={
+                          _find(
+                            bonusTypeOptions.data,
+                            ({ set_value }) => set_value === bonusType
+                          )?._id
+                        }
+                        keywordCreateState={keywordCreateState}
+                        keywordCreate={keywordCreate}
+                        stateTrigger={stateTrigger}
+                        setStateTrigger={setStateTrigger}
+                      />
+                    </Box>
+                  );
+                case "Telco Product Postpaid":
+                  return (
+                    <Box key={`bonusType__${idx}`}>
+                      <TelcoProductPostpaid
+                        bonusType={bonusType}
+                        bonusTypeId={
+                          _find(
+                            bonusTypeOptions.data,
+                            ({ set_value }) => set_value === bonusType
+                          )?._id
+                        }
+                        keywordCreateState={keywordCreateState}
+                        keywordCreate={keywordCreate}
+                        stateTrigger={stateTrigger}
+                        setStateTrigger={setStateTrigger}
+                      />
+                    </Box>
+                  );
+                case "Telco Product Prepaid":
+                  return (
+                    <Box key={`bonusType__${idx}`}>
+                      <TelcoProductPrepaid
                         bonusType={bonusType}
                         bonusTypeId={
                           _find(

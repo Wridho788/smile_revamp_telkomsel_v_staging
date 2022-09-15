@@ -124,6 +124,26 @@ export interface IKeywordNotificationLuckyDraw {
   via: string;
 }
 
+// Bonus Type "Telco Product Postpaid"
+export interface IKeywordBonusTelcoProductPostpaid {
+  bonus_type: string;
+  telco_post_product_name: string;
+  telco_post_bid: string;
+  telco_post_api_config: string;
+  stock_location: any[];
+  redeem_after_verification: boolean;
+}
+
+// Bonus Type "Telco Product Postpaid"
+export interface IKeywordBonusTelcoProductPrepaid {
+  bonus_type: string;
+  telco_post_product_name: string;
+  telco_post_bid: string;
+  telco_post_api_config: string;
+  stock_location: any[];
+  redeem_after_verification: boolean;
+}
+
 // Bonus Type "Auction"
 export interface IKeywordBonusAuction {
   bonus_type: string;

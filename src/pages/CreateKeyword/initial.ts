@@ -4,8 +4,6 @@ import {
     IKeywordNotification,
 } from "./interface";
 
-
-
 export const KeywordBonusInitial: IKeywordBonus = {
     bonus_type: "",
     location: "",
