@@ -160,7 +160,7 @@ export const KeyWordBonusDonation: IKeywordBonusDonation = {
   redeem_after_verification: false,
 };
 export const KeywordBonusMobileBanking: IKeywordBonusMobileBanking = {
-  bonus_type: "Mobile Banking",
+  bonus_type: "Void",
   bank: "",
   ip_address: "",
   digit_coupon: "",

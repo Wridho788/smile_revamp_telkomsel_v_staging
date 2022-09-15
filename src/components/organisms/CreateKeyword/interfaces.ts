@@ -199,7 +199,7 @@ export interface IKeywordBonusMobileBanking {
   digit_coupon: string;
   combination_coupon: string;
   stock_location: {
-    bucket?: null;
+    bucket?: any;
     location: string;
     stock: number;
   }[];

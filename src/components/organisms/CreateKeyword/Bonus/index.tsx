@@ -215,7 +215,7 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
                       />
                     </Box>
                   );
-                case "Other":
+                case "Void":
                   return (
                     <Box key={`bonusType__${idx}`}>
                       <MobileBanking

@@ -85,15 +85,16 @@ const MobileBanking: React.FunctionComponent<IMobileBankingProps> = ({
 
     // Initial Keyword Bonus Lucky Draw
     const indexI = keywordCreate.bonus.findIndex(
-      ({ bonus_type }) => bonus_type === "Other"
+      ({ bonus_type }) => bonus_type === "Void"
     );
 
     if (index === -1) {
       keywordCreate.bonus.push(KeywordBonusMobileBanking);
       const bonusIdx = keywordCreate.bonus.findIndex(
-        ({ bonus_type }) => bonus_type === "Other"
+        ({ bonus_type }) => bonus_type === "Void"
       );
 
+      console.log(bonusIdx);
       console.log("Keyword: ", keywordCreate);
       setIndex(bonusIdx);
       keywordCreateState.eligibility.locations.map((location) => {
@@ -104,7 +105,6 @@ const MobileBanking: React.FunctionComponent<IMobileBankingProps> = ({
       });
     }
   }, []);
-  console.log("Keyword Initial: ", KeywordBonusMobileBanking);
 
   useEffect(() => {
     setKeywordNotificationLuckyDrawHelperState(
@@ -119,7 +119,7 @@ const MobileBanking: React.FunctionComponent<IMobileBankingProps> = ({
         keywordCreate.notification,
         ({ bonus_type_id }) => bonus_type_id === bonusTypeId
       ) &&
-      bonusType === "Other"
+      bonusType === "Void"
     ) {
       keywordCreate.notification = keywordCreate.notification.concat(
         keywordNotificationLuckyDraw
