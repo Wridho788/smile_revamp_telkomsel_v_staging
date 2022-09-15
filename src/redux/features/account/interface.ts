@@ -29,6 +29,7 @@ export interface IResponseAuthenticate {
   role: string;
   role_id: string;
   __v: number;
+  account_location:any;
 }
 
 export interface IProgramImportFile {

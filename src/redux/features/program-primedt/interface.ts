@@ -12,4 +12,5 @@ export interface IProgram {
     threshold_alarm_expired: number;
     threshold_alarm_voucher: number;
     status: any;
+    approval_log: any;
 }

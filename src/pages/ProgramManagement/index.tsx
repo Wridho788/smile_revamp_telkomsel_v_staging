@@ -1,6 +1,5 @@
 import React from "react";
 import { Box, Grid } from "@mui/material";
-import { Programs } from "../../components";
 import ProgramPrimeDt from "../../components/organisms/ProgramPrimeDt";
 const ProgramManagement = () => {
   return (
@@ -12,7 +11,6 @@ const ProgramManagement = () => {
       }}
     >
         <Grid item xs={7}>
-          {/*<Programs  />*/}
             <ProgramPrimeDt />
         </Grid>
     </Box>

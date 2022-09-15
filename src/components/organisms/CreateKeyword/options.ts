@@ -34,3 +34,11 @@ export const CustomerTypeOptions = [
   { _id: "CorporateOnly", set_value: "Corporate Only" },
   { _id: "Both", set_value: "Both" },
 ];
+
+export const StockTypeOptions = [
+  { _id: "no_stock", set_value: "No Stock" },
+  { _id: "daily", set_value: "Daily" },
+  { _id: "daily_carry_over", set_value: "Daily Carry Over" },
+  { _id: "carry_over", set_value: "Carry Over" },
+  { _id: "shift", set_value: "Shift" },
+];
