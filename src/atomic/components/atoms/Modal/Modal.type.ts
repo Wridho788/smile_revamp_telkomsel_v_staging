@@ -11,7 +11,7 @@ interface IProgramDetailsModalProps extends ModalProps {
 }
 
 interface IKeywordDetailsModalProps extends ModalProps {
-  roleAccess: boolean;
+  roleAccess?: boolean;
   data: any;
 }
 
