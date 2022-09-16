@@ -11,9 +11,11 @@ import { Button } from 'primereact/button';
 import moment from "moment";
 import { IKeywordPrime } from "./initial";
 import { useLazyKeywordListPrimeQuery } from "../../../redux/features/keyword/keyword-api-slice";
-import {useGetProgramExperienceQuery} from "../../../redux/features/lov/lov-api-slice"
+import { useGetProgramExperienceQuery } from "../../../redux/features/lov/lov-api-slice";
+import { useAppConfigQuery } from "../../../redux/features/app-config/app-config-api-slice";
+import { useAccountAuthenticateQuery } from "../../../redux/features/account/account-api-slice";
 
-import KeywordDetailsModal from "../../../atomic/components/atoms/Modal/KeywordDetailsModal";
+import KeywordDetailsModal from "./KeywordDetail";
 
 const KeywordPrime = () => {
     const [keywords, setKeywords] = useState<any>([IKeywordPrime])
@@ -26,9 +28,27 @@ const KeywordPrime = () => {
         sortField: "created_at",
         sortOrder: -1,
         filters: {
-            "eligibility.name" : { value: "", matchMode: "contains" },
+            "eligibility.name": { value: "", matchMode: "contains" },
         },
     });
+
+    // Role Access Authentication Check
+    const { data: appConfig } = useAppConfigQuery();
+    const defaultRoleManager =
+        appConfig !== undefined
+            ? appConfig.find((item) => item["param_key"] === "DEFAULT_ROLE_MANAGER")[
+            "param_value"
+            ]
+            : undefined;
+
+    const { data: accountAuth } = useAccountAuthenticateQuery();
+
+    const [item, setItem] = useState([]);
+    const [open, setOpen] = useState(false);
+    const handleButtonDetail = async (item: any) => {
+        setItem(item);
+        setOpen(true);
+    };
 
     const onPage = (event: any) => {
         setLazyParams(event);
@@ -44,11 +64,11 @@ const KeywordPrime = () => {
     };
 
     const onRowSelect = (event: any) => {
-        // handleButtonDetail(event.data)
+        handleButtonDetail(event.data)
     };
 
-    const {data} = useGetProgramExperienceQuery()
-    const [getKeywordList, { data: keywordList = { data: [IKeywordPrime] }, isError, isLoading } ] = useLazyKeywordListPrimeQuery();
+    const { data } = useGetProgramExperienceQuery()
+    const [getKeywordList, { data: keywordList = { data: [IKeywordPrime] }, isError, isLoading }] = useLazyKeywordListPrimeQuery();
 
     let loadLazyTimeout: any = null;
     const loadLazyData = () => {
@@ -87,6 +107,16 @@ const KeywordPrime = () => {
 
     return (
         <Fragment>
+
+            <KeywordDetailsModal 
+                open={open} 
+                handleClose={() => { setOpen(false) }}
+                data={item}
+                // roleAccess={
+                //     accountAuth && defaultRoleManager ?
+                //     accountAuth.role === defaultRoleManager ? true : false : false
+                // } 
+            />
 
             <Stack direction={"row"} justifyContent={"space-between"}>
                 <H2 color={"secondary.dark"}>Keyword</H2>
