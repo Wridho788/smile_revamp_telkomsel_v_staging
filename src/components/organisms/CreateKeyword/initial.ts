@@ -31,7 +31,7 @@ const KeywordEligibilityKeywordShift: IKeywordEligibilityKeywordShift = {
   to: new Date(),
 };
 
-const KeywordEligibility: IKeywordEligibility = {
+export const KeywordEligibility: IKeywordEligibility = {
   name: "",
   start_period: new Date(),
   end_period: new Date(),

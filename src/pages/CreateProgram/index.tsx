@@ -4,9 +4,7 @@ import {DrawerNav, H2, Stepper, StepperPaper} from "../../components";
 import {
     MainInfo,
     Notification,
-    Segmentation,
 } from "../../components/organisms/CreateProgram";
-import { CreateProgramProvider } from "../../app/context/CreateProgram/Provider";
 
 
 const CreateProgram = () => {

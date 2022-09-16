@@ -1,26 +1,26 @@
 import * as React from "react";
 
+import Donation from "./Donation";
+import MobileBanking from "./MobileBanking";
+
 import { Box, Chip, Stack } from "@mui/material";
 import { Select } from "../../../atoms";
 import { useGetBonusTypeQuery } from "../../../../redux/features/lov/lov-api-slice";
 import { CreateKeywordGeneral, KeywordBonusHelper } from "../initial";
 import { ICreateKeyword, IKeywordBonusHelper } from "../interfaces";
-
-import Donation from "./Donation";
-import MobileBanking from "./MobileBanking";
-
+import LuckyDraw from "./LuckyDraw";
 import CancelIcon from "@mui/icons-material/Cancel";
-
 import _without from "lodash/without";
+import LinkAja from "./LinkAja";
 import _find from "lodash/find";
 
 // Sub Component of Bonus
-import LuckyDraw from "./LuckyDraw";
 import Auction from "./Auction";
 import DirectRedeem from "./DirectRedeem";
 import LoyaltyPoin from "./LoyaltyPoin";
-import TelcoProductPostpaid from "./TelcoProductPostpaid";
+import Voucher from "./Voucher";
 import TelcoProductPrepaid from "./TelcoProductPrepaid";
+import TelcoProductPostpaid from "./TelcoProductPostpaid";
 
 interface IBonusProps {}
 
@@ -191,6 +191,28 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
                           )?._id
                         }
                         keywordCreateState={keywordCreateState}
+                        keywordCreate={keywordCreate}
+                        stateTrigger={stateTrigger}
+                        setStateTrigger={setStateTrigger}
+                      />
+                    </Box>
+                  );
+                case "LinkAja Main & Bonus Balance":
+                  return (
+                    <Box key={`bonusType__${idx}`}>
+                      <LinkAja
+                        bonusType={bonusType}
+                        keywordCreate={keywordCreate}
+                        stateTrigger={stateTrigger}
+                        setStateTrigger={setStateTrigger}
+                      />
+                    </Box>
+                  );
+                case "Voucher":
+                  return (
+                    <Box key={`bonusType__${idx}`}>
+                      <Voucher
+                        bonusType={bonusType}
                         keywordCreate={keywordCreate}
                         stateTrigger={stateTrigger}
                         setStateTrigger={setStateTrigger}
