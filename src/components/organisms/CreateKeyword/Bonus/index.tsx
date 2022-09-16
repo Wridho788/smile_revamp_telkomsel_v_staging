@@ -228,7 +228,7 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
                         />
                       </Box>
                   );
-                  case "LinkAja Main & Bonus Balance":
+                  case "link_aja":
                       return (
                           <Box key={`bonusType__${idx}`}>
                               <LinkAja
@@ -239,7 +239,7 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
                               />
                           </Box>
                       );
-                  case "Voucher":
+                  case "discount_voucher":
                       return (
                           <Box key={`bonusType__${idx}`}>
                               <Voucher
