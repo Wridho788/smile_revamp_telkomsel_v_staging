@@ -2,7 +2,7 @@ import { FC, useState } from 'react'
 import ModalCustom from "@mui/material/Modal";
 import { Box } from "@mui/material";
 import LoadingButton from '@mui/lab/LoadingButton';
-import { ModalProps } from "../../../../atomic/components/atoms/Modal/Modal.type";
+import { IPicManagemenrModalProps } from "../../../../atomic/components/atoms/Modal/Modal.type";
 import { useCreatePicManagementMutation } from '../../../../redux/features/program/program-api-slice';
 import { H2 } from "../../../../components";
 import { OutlinedTextField } from "../../../atoms";
@@ -20,7 +20,7 @@ const style = {
     p: 4,
 };
 
-const ModalCreatePIC: FC<ModalProps> = ({ open, handleClose }) => {
+const ModalCreatePIC: FC<IPicManagemenrModalProps> = ({ open, handleClose, handleResfresh }) => {
     const [createPicManagement] = useCreatePicManagementMutation();
     const [massageError, setMassageError] = useState<any>([]);
     const [loading, setLoading] = useState<boolean>(false);
@@ -42,6 +42,7 @@ const ModalCreatePIC: FC<ModalProps> = ({ open, handleClose }) => {
                     if (res?.data?.statusCode === 201) {
                         Swal.fire("Success!", `${res?.data?.message}`, "success");
                         handleClose();
+                        handleResfresh();
                     } else {
                         handleClose();
                         Swal.fire('Error!', `${res?.data?.message[0]}`, 'error');

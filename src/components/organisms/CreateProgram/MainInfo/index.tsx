@@ -474,8 +474,6 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
                 {/*        setStateTrigger(!stateTrigger);*/}
                 {/*    }}*/}
                 {/*/>*/}
-
-
             </Stack>
         </Fragment >
     )
