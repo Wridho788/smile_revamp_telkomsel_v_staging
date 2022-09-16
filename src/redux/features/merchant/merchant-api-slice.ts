@@ -78,7 +78,7 @@ export const merchantSlice = createApi({
       updateMerchantManagement: putHandler("/"),
       updateMerchantPartner: putFileHandler(baseUrl + "/v1/merchant-patner"),
       // delete
-      deleteMerchantManagement: deleteHandler("/"),
+      deleteMerchantManagement: deleteHandler(""),
       deleteMerchantPartner: deleteHandler(baseUrl + "/v1/merchant-patner"),
     };
   },
