@@ -113,6 +113,7 @@ const MerchantParnerManagement = () => {
       longtitude: "",
       latitude: "",
     });
+    setPreview("");
   };
   const onPage = (event: any) => {
     setLazyParams(event);
@@ -169,11 +170,8 @@ const MerchantParnerManagement = () => {
     formdata.append("remark", initialMerchantPartner.remark);
     formdata.append("status", initialMerchantPartner.status);
     formdata.append("npwp", initialMerchantPartner.npwp);
-    formdata.append("partner_logo", initialMerchantPartner.partner_logo);
     formdata.append("latitude", initialMerchantPartner.latitude);
     formdata.append("longtitude", initialMerchantPartner.longtitude);
-    console.log("formdata: ", formdata);
-    console.log("initial: ", initialMerchantPartner);
     await addMerchantPartner(formdata);
     setTriger((prev) => !prev);
     onClearForm();
@@ -182,12 +180,15 @@ const MerchantParnerManagement = () => {
 
   const onShowUpdateForm = async (data: IMerchantPartner) => {
     setOpen({ ...open, edit: true });
+    console.log(data);
     setInitialMerchantPartner(data);
   };
   const onShowDeleteDialog = async (data: typeof MerchantPartnerInitial) => {
     setOpen({ ...open, delete: true });
   };
-  const onUpdateMerchant = async (e: React.FormEvent<HTMLFormElement>) => {
+  const onUpdateMerchantPartner = async (
+    e: React.FormEvent<HTMLFormElement>
+  ) => {
     e.preventDefault();
 
     const formdata = new FormData();
@@ -595,7 +596,7 @@ const MerchantParnerManagement = () => {
         onClose={() => setOpen({ ...open, edit: false })}
       >
         <DialogTitle variant="h5">ADD MERCHANT PARTNER</DialogTitle>
-        <form onSubmit={onAddMerchantPartner}>
+        <form onSubmit={onUpdateMerchantPartner}>
           <Stack sx={{ display: "flex" }} px="3vw">
             <Box sx={{ display: "flex" }}>
               <TextField

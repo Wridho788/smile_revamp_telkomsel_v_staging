@@ -93,6 +93,7 @@ export const programSlice = createApi({
             // post
             createProgram: postHandler(baseUrl + "/v2/program"),
             createProgramSegmentationAdd: postHandler("/segmentation/add"),
+            createPicManagement: postHandler(baseUrl + "/v1/pic"),
 
             // put
             updateProgram: putHandler(baseUrl + "/v2/program/"),
@@ -122,5 +123,6 @@ export const {
     useCreateProgramSegmentationAddMutation,
     useUpdateProgramMainInfoMutation,
     useUpdateProgramNotificationMutation,
-    useLazyProgramSegmentationListQuery
+    useLazyProgramSegmentationListQuery,
+    useCreatePicManagementMutation
 } = programSlice;

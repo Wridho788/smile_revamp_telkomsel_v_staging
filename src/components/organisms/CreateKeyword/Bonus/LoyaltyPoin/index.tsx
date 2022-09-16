@@ -41,13 +41,13 @@ const LoyaltyPoin: React.FunctionComponent<ILoyaltyPoinProps> = ({
   useEffect(() => {
     // Initial Keyword Bonus Loyalty Poin
     const index = keywordCreate.bonus.findIndex(
-      ({ bonus_type }) => bonus_type === "Loyalty Poin"
+      ({ bonus_type }) => bonus_type === "loyalty_poin"
     );
 
     if (index === -1) {
       keywordCreate.bonus.push(KeywordBonusLoyaltyPoin);
       const bonusIdx = keywordCreate.bonus.findIndex(
-        ({ bonus_type }) => bonus_type === "Loyalty Poin"
+        ({ bonus_type }) => bonus_type === "loyalty_poin"
       );
       setIndex(bonusIdx);
       keywordCreateState.eligibility.locations.map((location) =>

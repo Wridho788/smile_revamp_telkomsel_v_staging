@@ -57,7 +57,10 @@ const MerchantOutletManagement = () => {
       outlet_id: { value: "", matchMode: "contains" },
       region: { value: "", matchMode: "contains" },
       branch: { value: "", matchMode: "contains" },
-      merchant: { value: "", matchMode: "contains" },
+      "merchant-outlet[0].merchant_id.merchant_name": {
+        value: "",
+        matchMode: "contains",
+      },
     },
   });
   const [triger, setTriger] = React.useState<boolean>(false);
@@ -102,7 +105,7 @@ const MerchantOutletManagement = () => {
     useLocationTemplateQuery({
       skip: 0,
       limit: 10,
-      filter: `{"type": "${locationType._id}"}`,
+      filter: `{"type": "${locationType?._id}"}`,
       sort: "{}",
     });
   const { data: locationBranch = { data: [LocationInitial] } } =
@@ -306,7 +309,7 @@ const MerchantOutletManagement = () => {
                 dataKey="id"
                 paginator
                 first={lazyParams.first}
-                rows={10}
+                rows={5}
                 totalRecords={totalRecords}
                 onPage={onPage}
                 onSort={onSort}
@@ -356,7 +359,7 @@ const MerchantOutletManagement = () => {
                 <Column
                   footer="Merchant"
                   header="Merchant"
-                  field="merchant"
+                  field="merchant-outlet[0].merchant_id.merchant_name"
                   style={{ flexGrow: 1, flexBasis: "250px" }}
                   filter
                   filterPlaceholder="Search"
@@ -525,7 +528,7 @@ const MerchantOutletManagement = () => {
         onClose={() => setOpen({ ...open, edit: false })}
       >
         <DialogTitle variant="h5">ADD MERCHANT Outlet</DialogTitle>
-        <form onSubmit={onAddMerchantOutlet}>
+        <form onSubmit={onUpdateMerchantOutlet}>
           <Stack sx={{ display: "flex" }} px="3vw">
             <Box sx={{ display: "flex" }}>
               <TextField
