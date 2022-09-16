@@ -12,6 +12,7 @@ import _find from "lodash/find";
 
 // Sub Component of Bonus
 import Auction from "./Auction";
+import LuckyDraw from "./LuckyDraw";
 import DirectRedeem from "./DirectRedeem";
 import LoyaltyPoin from "./LoyaltyPoin";
 import Voucher from "./Voucher";
