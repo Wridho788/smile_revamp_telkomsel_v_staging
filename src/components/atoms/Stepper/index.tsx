@@ -11,7 +11,6 @@ import StepConnector, {
     stepConnectorClasses,
 } from "@mui/material/StepConnector";
 import {StepIconProps} from "@mui/material/StepIcon";
-import {} from "../../../app/redux/Utils/InitialState/ProgramInitial";
 import {
     useCreateProgramMutation,
     useUpdateProgramMutation,

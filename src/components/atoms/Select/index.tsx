@@ -23,7 +23,7 @@ const Index: React.FunctionComponent<ISelectProps> = ({
   leftColumn = 4,
   rightColumn = 6,
   direction = "row",
-  isRequired = false,
+  isRequired = true,
   ...props
 }) => {
   return (
