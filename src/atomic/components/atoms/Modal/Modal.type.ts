@@ -16,8 +16,13 @@ interface IKeywordDetailsModalProps extends ModalProps {
   data: any;
 }
 
+interface IPicManagemenrModalProps extends ModalProps {
+  handleResfresh? : any
+}
+
 export type {
   ModalProps,
   IProgramDetailsModalProps,
   IKeywordDetailsModalProps,
+  IPicManagemenrModalProps
 };
