@@ -6,7 +6,6 @@ import {
     Notification,
     Segmentation,
 } from "../../components/organisms/CreateProgram";
-import {CreateProgramProvider} from "../../app/context/CreateProgram/Provider";
 import {useParams} from "react-router-dom";
 import {useDetailProgramQuery} from "../../redux/features/program/program-api-slice";
 import { ProgramDetailInitial } from "./programInitial";
@@ -28,7 +27,6 @@ const EditProgram = () => {
     ];
 
     return (
-        <CreateProgramProvider>
             <Box
                 sx={{
                     paddingBlock: "3vw",
@@ -60,7 +58,6 @@ const EditProgram = () => {
                     </Stepper>
                 </StepperPaper>
             </Box>
-        </CreateProgramProvider>
     );
 };
 

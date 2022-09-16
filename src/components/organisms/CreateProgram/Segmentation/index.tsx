@@ -37,7 +37,7 @@ const Segmentation: React.FunctionComponent<ISegmentationProps> = () => {
                         <H2>Edit Segmentation Program <b>{programDetail.name}</b></H2>
                         <BodyCopy>Delete single data or reupload file for segmentation</BodyCopy>
                     </Box>
-                    <Stack spacing={"2vw"}>
+                    <Stack px="3vw" spacing={"2vw"}>
                         <SwitchCustom checked={bulkUpload} handleChange={setBulkUpload} label={"Bulk Upload"}/>
                         {
                             bulkUpload ? <BulkData/> : <SingleData/>

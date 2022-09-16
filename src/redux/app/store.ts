@@ -15,6 +15,7 @@ import {accountSlice} from "../features/account/account-api-slice";
 import {partnerSlice} from "../features/partner/partner-api-slice";
 import {outletSlice} from "../features/outlet/outlet-api-slice";
 import {programPrimedtSlice} from "../features/program-primedt/program-primedt-api-slice";
+import {uploadFIleSlice} from "../upload_file/upload-file-api-slice";
 
 export const listenerMiddleware = createListenerMiddleware();
 export const store = configureStore({
@@ -36,7 +37,8 @@ export const store = configureStore({
                 partnerSlice.middleware,
                 appConfigSlice.middleware,
                 outletSlice.middleware,
-                programPrimedtSlice.middleware
+                programPrimedtSlice.middleware,
+                uploadFIleSlice.middleware
             ),
 });
 

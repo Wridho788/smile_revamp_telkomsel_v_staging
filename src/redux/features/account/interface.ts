@@ -11,6 +11,7 @@ export interface IData {
 export interface IResponse {
   data: Array<IData>;
   total: number;
+  totalRecords?: number;
 }
 
 export interface IResponseAuthenticate {
@@ -30,6 +31,10 @@ export interface IResponseAuthenticate {
   role_id: string;
   __v: number;
   account_location:any;
+}
+
+export interface IPayload {
+  payload: IResponse
 }
 
 export interface IProgramImportFile {
