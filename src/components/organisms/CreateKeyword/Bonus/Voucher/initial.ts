@@ -1,7 +1,7 @@
 import {IBonusTypeVoucher, IStockLocation} from "./interface";
 
 export const BonusTypeVoucherInitial: IBonusTypeVoucher = {
-    bonus_type: "Voucher",
+    bonus_type: "discount_voucher",
     exp_voucher: "",
     voucher_type: "",
     voucher_combination: "",
