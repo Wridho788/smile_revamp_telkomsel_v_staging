@@ -46,7 +46,10 @@ import Swal from "sweetalert2";
 import { useGetLocationTypeQuery } from "../../redux/features/lov/lov-api-slice";
 import { useLocationTemplateQuery } from "../../redux/features/location/location-api-slice";
 import { useAccountRoleQuery } from "../../redux/features/account/account-api-slice";
-import { useOutletListQuery } from "../../redux/features/outlet/outlet-api-slice";
+import {
+  useLazyOutletListQuery,
+  useOutletListQuery,
+} from "../../redux/features/outlet/outlet-api-slice";
 import { LocationInitial } from "../CustomerManagement/initial";
 import { RoleInitial, OutletInitial } from "./initial";
 
@@ -56,6 +59,9 @@ const MerchantManagement = () => {
   const [loading, setLoading] = React.useState<boolean>(false);
   const [totalRecords, setTotalRecords] = React.useState<number>(0);
   const [merchants, setMerchants] = React.useState<IMerchant[]>([]);
+  const [outlets, setOutlets] = React.useState<typeof OutletInitial[]>([
+    OutletInitial,
+  ]);
   const [location, setLocation] = React.useState<any[]>([]);
   const [open, setOpen] = React.useState({
     detail: false,
@@ -158,16 +164,8 @@ const MerchantManagement = () => {
     filter: `{}`,
     sort: "{}",
   });
-  const { data: outletList = { payload: { data: [OutletInitial] } } }: any =
-    useOutletListQuery({
-      lazyEvent: JSON.stringify({
-        first: 0,
-        rows: 10,
-        sortField: null,
-        sortOrder: null,
-        filters: {},
-      }),
-    });
+  const [getOutletList, { data: outletList = { data: [OutletInitial] } }] =
+    useLazyOutletListQuery();
 
   const [linkMerchantOutlet, { isLoading: loadingLink }] =
     useMerchantOutletLinkMutation();
@@ -187,12 +185,14 @@ const MerchantManagement = () => {
     newItem["name"] = item.merchant_name;
     return newItem;
   });
-  const dataOutletList = outletList.payload.data.map((item: any) => {
-    let newItem: any = {};
-    newItem["_id"] = item._id;
-    newItem["name"] = item.outlet_name;
-    return newItem;
-  });
+  const dataOutletList = outlets
+    .filter((item: typeof OutletInitial) => item.merchant_outlet.length <= 0)
+    .map((item: typeof OutletInitial) => {
+      let newItem: any = {};
+      newItem["_id"] = item._id;
+      newItem["name"] = item.outlet_name;
+      return newItem;
+    });
   const dataPartner = partnerList.data.map((item: any) => {
     let newItem: any = {};
     newItem["_id"] = item._id;
@@ -251,6 +251,18 @@ const MerchantManagement = () => {
       });
       setMerchants(data.payload.data);
       setTotalRecords(data.payload.totalRecords);
+
+      const { data: dataOutlet }: any = await getOutletList({
+        lazyEvent: JSON.stringify({
+          first: 0,
+          rows: 10,
+          sortField: null,
+          sortOrder: null,
+          filters: {},
+        }),
+      });
+      setOutlets(dataOutlet.payload.data);
+
       setLoading(false);
     }, Math.random() * 1000 + 250);
   };
@@ -392,6 +404,7 @@ const MerchantManagement = () => {
       merchant: "",
       outlet: "",
     });
+    setTriger((prev) => !prev);
     setOpen({ ...open, link: false });
   };
 

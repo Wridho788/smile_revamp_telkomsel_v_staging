@@ -43,13 +43,13 @@ const DirectRedeem: React.FunctionComponent<IDirectRedeemProps> = ({
   useEffect(() => {
     // Initial Keyword Bonus Direct Redeem
     const index = keywordCreate.bonus.findIndex(
-      ({ bonus_type }) => bonus_type === "Direct Redeem"
+      ({ bonus_type }) => bonus_type === "direct_redeem"
     );
 
     if (index === -1) {
       keywordCreate.bonus.push(KeywordBonusDirectRedeem);
       const bonusIdx = keywordCreate.bonus.findIndex(
-        ({ bonus_type }) => bonus_type === "Direct Redeem"
+        ({ bonus_type }) => bonus_type === "direct_redeem"
       );
       setIndex(bonusIdx);
       keywordCreateState.eligibility.locations.map((location) =>

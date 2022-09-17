@@ -84,10 +84,6 @@ const MobileBanking: React.FunctionComponent<IMobileBankingProps> = ({
     getKeywordNotification("LUCKY_DRAW_NOTIFICATION");
 
     // Initial Keyword Bonus Lucky Draw
-    const indexI = keywordCreate.bonus.findIndex(
-      ({ bonus_type }) => bonus_type === "Mobile Banking"
-    );
-
     if (index === -1) {
       keywordCreate.bonus.push(KeywordBonusMobileBanking);
       const bonusIdx = keywordCreate.bonus.findIndex(

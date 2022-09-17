@@ -96,7 +96,7 @@ export const KeywordBonusLuckyDrawLocation: IKeywordBonusLuckyDrawLocation = {
 };
 
 export const KeywordBonusLuckyDraw: IKeywordBonusLuckyDraw = {
-  bonus_type: "Lucky Draw Coupon",
+  bonus_type: "lucky_draw",
   lucky_draw_reguler: true,
   lucky_draw_allow_inject_coupon: false,
   lucky_draw_prize: "",
@@ -105,41 +105,39 @@ export const KeywordBonusLuckyDraw: IKeywordBonusLuckyDraw = {
 };
 
 export const KeywordBonusDirectRedeem: IKeywordBonusDirectRedeem = {
-  bonus_type: "Direct Redeem",
+  bonus_type: "direct_redeem",
   stock_type: "",
   redeem_after_verification: false,
   locations: [],
 };
 
 export const KeywordBonusLoyaltyPoin: IKeywordBonusLoyaltyPoin = {
-  bonus_type: "Loyalty Poin",
+  bonus_type: "loyalty_poin",
   earning_poin: 0,
   redeem_after_verification: false,
   locations: [],
 };
 
-export const KeywordBonusTelcoProductPostpaid: IKeywordBonusTelcoProductPostpaid =
-  {
-    bonus_type: "Telco Product Postpaid",
-    telco_post_product_name: "",
-    telco_post_bid: "",
-    telco_post_api_config: "False",
-    stock_location: [],
-    redeem_after_verification: false,
-  };
+export const KeywordBonusTelcoProductPostpaid: IKeywordBonusTelcoProductPostpaid = {
+  bonus_type: "telco_postpaid",
+  telco_post_product_name: "",
+  telco_post_bid: "",
+  telco_post_api_config: "False",
+  stock_location: [],
+  redeem_after_verification: false
+}
 
-export const KeywordBonusTelcoProductPrepaid: IKeywordBonusTelcoProductPrepaid =
-  {
-    bonus_type: "Telco Product Prepaid",
-    telco_post_product_name: "",
-    telco_post_bid: "",
-    telco_post_api_config: "False",
-    stock_location: [],
-    redeem_after_verification: false,
-  };
+export const KeywordBonusTelcoProductPrepaid: IKeywordBonusTelcoProductPrepaid = {
+  bonus_type: "telco_prepaid",
+  telco_post_product_name: "",
+  telco_post_bid: "",
+  telco_post_api_config: "False",
+  stock_location: [],
+  redeem_after_verification: false
+}
 
 export const KeywordBonusAuction: IKeywordBonusAuction = {
-  bonus_type: "Auction",
+  bonus_type: "auction",
   auction_prize_desc_id: "",
   auction_prize_desc_en: "",
   auction_prize_image: "",
@@ -152,7 +150,7 @@ export const KeywordBonusAuction: IKeywordBonusAuction = {
 };
 
 export const KeyWordBonusDonation: IKeywordBonusDonation = {
-  bonus_type: "Donation",
+  bonus_type: "donation",
   donation_category: "",
   minimum_poin: 0,
   target_poin: 0,
@@ -160,7 +158,7 @@ export const KeyWordBonusDonation: IKeywordBonusDonation = {
   redeem_after_verification: false,
 };
 export const KeywordBonusMobileBanking: IKeywordBonusMobileBanking = {
-  bonus_type: "Mobile Banking",
+  bonus_type: "mobile_banking",
   bank: "",
   ip_address: "",
   digit_coupon: "",
