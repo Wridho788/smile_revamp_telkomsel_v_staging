@@ -38,10 +38,7 @@ export const programSlice = createApi({
                 query: (body) => ({
                     url: endpoint,
                     method: "POST",
-                    headers: {
-                        "Content-Type": "multipart/form-data;application/json",
-                    },
-                    body: body,
+                    body: body
                 }),
             });
         const postHandler = (endpoint: string) =>

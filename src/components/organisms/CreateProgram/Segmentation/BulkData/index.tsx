@@ -60,8 +60,6 @@ const BulkData: React.FunctionComponent<ISegmentationProps> = () => {
 
         const segmentationOption = segmentationOptionInitial
         const [triggerState, setTriggerState] = useState<boolean>(false)
-        useEffect(() => {
-        }, [segmentationOption, triggerState, whitelistPath, blacklistPath]);
 
 
         const handleProcess = async () => {
@@ -72,26 +70,35 @@ const BulkData: React.FunctionComponent<ISegmentationProps> = () => {
                 setSendBulkProcess(false)
                 return
             }
-            if (!segmentationOption[0].filename) {
-                await importFile({
-                    "file": new Blob(whitelistPath),
-                    "type": 'whitelist',
-                    'program': programId
-                })
+
+            if (segmentationOption[0].filename !== '') {
+                let formData = new FormData()
+                formData.append("file", whitelistPath)
+                formData.append("type", "whitelist")
+                formData.append("program", String(programId))
+                await importFile(formData)
+                segmentationOption[0].filename = ''
+                setTriggerState(!triggerState)
             }
-            if (!segmentationOption[1].filename) {
-                await importFile({
-                    "file": new Blob(blacklistPath),
-                    "type": 'blacklist',
-                    'program': programId
-                })
+
+            if (segmentationOption[1].filename !== '') {
+                let formData1 = new FormData()
+                formData1.append("file", blacklistPath)
+                formData1.append("type", "blacklist")
+                formData1.append("program", String(programId))
+                await importFile(formData1)
+                segmentationOption[1].filename = ''
+                setTriggerState(!triggerState)
             }
-            segmentationOption[0].filename = ''
-            segmentationOption[1].filename = ''
+
             setWarningShow(false)
             setSuccessShow(true)
             setSendBulkProcess(false)
+
         }
+        useEffect(() => {
+        }, [segmentationOption, triggerState, whitelistPath, blacklistPath, segmentationOption]);
+
         return (
             <Box px="3vw">
                 {
@@ -113,7 +120,7 @@ const BulkData: React.FunctionComponent<ISegmentationProps> = () => {
                         segmentationOption.map((item, idx) => (
                             <Grid xs={6}>
                                 <Box sx={{marginRight: idx === 0 ? 3 : 0, marginLeft: idx === 0 ? 0 : 3}}>
-                                <H2 sx={{textTransform: "capitalize"}}>{item.type}</H2>
+                                    <H2 sx={{textTransform: "capitalize"}}>{item.type}</H2>
                                     <ListItem disablePadding>
                                         <Warning color={"warning"} sx={{marginRight: "10px"}}/>
                                         <BodyCopy color={"red"}>{noticeUploadDataInitial.label}</BodyCopy>
