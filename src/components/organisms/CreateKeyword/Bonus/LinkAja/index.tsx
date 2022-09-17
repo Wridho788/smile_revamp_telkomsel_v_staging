@@ -36,7 +36,7 @@ const LinkAja: React.FunctionComponent<INotificationLuckyDrawProps> = ({
 
     useEffect(() => {
         const index: number = keywordCreate.bonus.findIndex(
-            ({bonus_type}) => bonus_type === "LinkAja Main & Bonus Balance"
+            ({bonus_type}) => bonus_type === "link_aja"
         );
         if (index === -1) {
             keywordCreate.bonus.push(bonusTypeLinkAja);

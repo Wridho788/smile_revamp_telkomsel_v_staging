@@ -44,7 +44,7 @@ const Voucher: React.FunctionComponent<INotificationLuckyDrawProps> = ({
     }
     useEffect(() => {
         const index: number = keywordCreate.bonus.findIndex(
-            ({bonus_type}) => bonus_type === "Voucher"
+            ({bonus_type}) => bonus_type === "discount_voucher"
         );
         if (index === -1) {
             keywordCreate.bonus.push(voucher);
