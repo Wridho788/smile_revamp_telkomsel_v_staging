@@ -12,6 +12,7 @@ import _without from "lodash/without";
 import _find from "lodash/find";
 
 // Sub Component of Bonus
+import Auction from "./Auction";
 import TelcoProductPostpaid from "./TelcoProductPostpaid";
 import TelcoProductPrepaid from "./TelcoProductPrepaid";
 
@@ -115,6 +116,24 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
                     {keywordBonusHelperState.bonus_type.length > 0 &&
                         keywordBonusHelperState.bonus_type.map((bonusType: any, idx: any) => {
                             switch (bonusType) {
+                                case "auction":
+                                    return (
+                                        <Box key={`bonusType__${idx}`}>
+                                            <Auction
+                                                bonusType={bonusType}
+                                                bonusTypeId={
+                                                    _find(
+                                                        bonusTypeOptions.data,
+                                                        ({ template }) => template === bonusType
+                                                    )?._id
+                                                }
+                                                keywordCreateState={keywordUpdateState}
+                                                keywordCreate={keywordUpdate}
+                                                stateTrigger={stateTrigger}
+                                                setStateTrigger={setStateTrigger}
+                                            />
+                                        </Box>
+                                    );
                                 case "telco_postpaid":
                                     return (
                                         <Box key={`bonusType__${idx}`}>
