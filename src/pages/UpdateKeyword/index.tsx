@@ -2,7 +2,7 @@
  * TODO: Update Keyword
  * **/
 
-import React from "react";
+import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 
 import { Box } from "@mui/material";
@@ -13,6 +13,7 @@ import {
 } from "../../components/organisms/UpdateKeyword";
 import { KeywordAuctionProvider } from "../../app/context/KeywordAuction/Provider";
 import {useKeywordGeneralDetailQuery} from "../../redux/features/keyword/keyword-api-slice";
+import {KeywordNotificationEligibility, UpdateKeywordGeneral} from "../../components/organisms/UpdateKeyword/initial";
 
 const UpdateKeyword = () => {
     const [activeStep, setActiveStep] = React.useState<number>(0);
@@ -21,9 +22,11 @@ const UpdateKeyword = () => {
 
     /* TODO: Get params url of _id */
     const { _id } = useParams();
-    const { data, isLoading } = useKeywordGeneralDetailQuery(_id ?? "");
+    const { data = {
+        data: UpdateKeywordGeneral
+    }, isLoading } = useKeywordGeneralDetailQuery(_id ?? "");
 
-    console.log('keyword', data);
+    console.log('keyword update', data);
 
     return (
         <KeywordAuctionProvider>
