@@ -1,11 +1,11 @@
 import * as React from "react";
 
+
 import { Box, Chip, Stack } from "@mui/material";
 import { Select } from "../../../atoms";
 import { useGetBonusTypeQuery } from "../../../../redux/features/lov/lov-api-slice";
 import { CreateKeywordGeneral, KeywordBonusHelper } from "../initial";
 import { ICreateKeyword, IKeywordBonusHelper } from "../interfaces";
-
 import CancelIcon from "@mui/icons-material/Cancel";
 import _without from "lodash/without";
 import _find from "lodash/find";
@@ -19,26 +19,27 @@ import Voucher from "./Voucher";
 import LinkAja from "./LinkAja"
 import TelcoProductPrepaid from "./TelcoProductPrepaid";
 import TelcoProductPostpaid from "./TelcoProductPostpaid";
+import Donation from "./Donation";
+import MobileBanking from "./MobileBanking";
 
-interface IBonusProps {
-}
+interface IBonusProps {}
 
 const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
-    const {data: bonusTypeOptions = {data: []}} = useGetBonusTypeQuery();
+  const { data: bonusTypeOptions = { data: [] } } = useGetBonusTypeQuery();
 
-    const keywordCreate = CreateKeywordGeneral;
-    const [keywordCreateState, setKeywordCreateState] =
-        React.useState<ICreateKeyword>(keywordCreate);
+  const keywordCreate = CreateKeywordGeneral;
+  const [keywordCreateState, setKeywordCreateState] =
+    React.useState<ICreateKeyword>(keywordCreate);
 
-    let keywordBonusHelper = KeywordBonusHelper;
-    const [keywordBonusHelperState, setKeywordBonusHelperState] =
-        React.useState<IKeywordBonusHelper>(keywordBonusHelper);
+  let keywordBonusHelper = KeywordBonusHelper;
+  const [keywordBonusHelperState, setKeywordBonusHelperState] =
+    React.useState<IKeywordBonusHelper>(keywordBonusHelper);
 
-    const [stateTrigger, setStateTrigger] = React.useState<boolean>(false);
+  const [stateTrigger, setStateTrigger] = React.useState<boolean>(false);
 
-    React.useEffect(() => {
-        setKeywordCreateState(keywordCreate);
-    }, [keywordCreate, stateTrigger]);
+  React.useEffect(() => {
+    setKeywordCreateState(keywordCreate);
+  }, [keywordCreate, stateTrigger]);
 
   React.useEffect(() => {
     // Filter Condition for Bonus / Notification
@@ -48,11 +49,11 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
       }
     });
 
-        setKeywordBonusHelperState(keywordBonusHelper);
-    }, [keywordBonusHelper, stateTrigger]);
+    setKeywordBonusHelperState(keywordBonusHelper);
+  }, [keywordBonusHelper, stateTrigger]);
 
-    React.useEffect(() => {
-        let list: any = [];
+  React.useEffect(() => {
+    let list: any = [];
 
     keywordBonusHelper.bonus_type.map((type: string) => {
       list.push(
@@ -60,15 +61,18 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
       );
     });
 
-        keywordCreate.notification = keywordCreate.notification.filter(
-            (item, i) => list.includes(keywordCreate.notification[i].bonus_type_id) || item.bonus_type_id === '');
+    keywordCreate.notification = keywordCreate.notification.filter(
+      (item, i) =>
+        list.includes(keywordCreate.notification[i].bonus_type_id) ||
+        item.bonus_type_id === ""
+    );
 
-        setKeywordCreateState(keywordCreate);
-    }, [keywordBonusHelperState.bonus_type]);
+    setKeywordCreateState(keywordCreate);
+  }, [keywordBonusHelperState.bonus_type]);
 
-    React.useEffect(() => {
-        console.log(keywordCreate);
-    }, [keywordCreate, stateTrigger]);
+  React.useEffect(() => {
+    console.log(keywordCreate);
+  }, [keywordCreate, stateTrigger]);
 
   return (
     <Box display="flex" justifyContent="center" px="5%" py="1vw">
@@ -251,6 +255,42 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
                               />
                           </Box>
                       );
+                      case "Donation":
+                  return (
+                    <Box key={`bonusType__${idx}`}>
+                      <Donation
+                        bonusType={bonusType}
+                        bonusTypeId={
+                          _find(
+                            bonusTypeOptions.data,
+                            ({ set_value }) => set_value === bonusType
+                          )?._id
+                        }
+                        keywordCreateState={keywordCreateState}
+                        keywordCreate={keywordCreate}
+                        stateTrigger={stateTrigger}
+                        setStateTrigger={setStateTrigger}
+                      />
+                    </Box>
+                  );
+                case "Mobile Banking":
+                  return (
+                    <Box key={`bonusType__${idx}`}>
+                      <MobileBanking
+                        bonusType={bonusType}
+                        bonusTypeId={
+                          _find(
+                            bonusTypeOptions.data,
+                            ({ set_value }) => set_value === bonusType
+                          )?._id
+                        }
+                        keywordCreateState={keywordCreateState}
+                        keywordCreate={keywordCreate}
+                        stateTrigger={stateTrigger}
+                        setStateTrigger={setStateTrigger}
+                      />
+                    </Box>
+                  );
               }
             })}
         </>

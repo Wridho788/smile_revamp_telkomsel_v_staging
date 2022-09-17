@@ -14,7 +14,11 @@ import {
   IKeywordNotificationAuction,
   IKeywordNotificationAuctionHelper,
   IKeywordBonusDirectRedeem,
-  IKeywordBonusLoyaltyPoin, IKeywordBonusTelcoProductPostpaid, IKeywordBonusTelcoProductPrepaid,
+  IKeywordBonusDonation,
+  IKeywordBonusMobileBanking,
+  IKeywordBonusLoyaltyPoin,
+  IKeywordBonusTelcoProductPostpaid,
+  IKeywordBonusTelcoProductPrepaid,
 } from "./interfaces";
 
 export const KeywordEligibilityLocationHelper: IKeywordEligibilityLocationHelper =
@@ -145,6 +149,23 @@ export const KeywordBonusAuction: IKeywordBonusAuction = {
   redeem_after_verification: false,
 };
 
+export const KeyWordBonusDonation: IKeywordBonusDonation = {
+  bonus_type: "donation",
+  donation_category: "",
+  minimum_poin: 0,
+  target_poin: 0,
+  stock_location: [],
+  redeem_after_verification: false,
+};
+export const KeywordBonusMobileBanking: IKeywordBonusMobileBanking = {
+  bonus_type: "mobile_banking",
+  bank: "",
+  ip_address: "",
+  digit_coupon: "",
+  combination_coupon: "",
+  stock_location: [],
+  redeem_after_verification: false,
+};
 export const KeywordNotificationAuctionHelper: IKeywordNotificationAuctionHelper[] =
   [
     {
