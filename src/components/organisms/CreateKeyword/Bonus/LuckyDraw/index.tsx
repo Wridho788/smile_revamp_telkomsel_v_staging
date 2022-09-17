@@ -98,13 +98,13 @@ const NotificationLuckyDraw: React.FunctionComponent<
 
     // Initial Keyword Bonus Lucky Draw
     const index = keywordCreate.bonus.findIndex(
-      ({ bonus_type }) => bonus_type === "Lucky Draw Coupon"
+      ({ bonus_type }) => bonus_type === "lucky_draw"
     );
 
     if (index === -1) {
       keywordCreate.bonus.push(KeywordBonusLuckyDraw);
       const bonusIdx = keywordCreate.bonus.findIndex(
-        ({ bonus_type }) => bonus_type === "Lucky Draw Coupon"
+        ({ bonus_type }) => bonus_type === "lucky_draw"
       );
       setIndex(bonusIdx);
       keywordCreateState.eligibility.locations.map((location) =>

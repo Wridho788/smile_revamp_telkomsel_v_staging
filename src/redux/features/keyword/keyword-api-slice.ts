@@ -18,6 +18,12 @@ export const keywordSlice = createApi({
         }),
         providesTags: ["Keyword"],
       });
+    const detailHandler = (endpoint: string) =>
+        builder.query<any, any>({
+          query: (_id: string) => ({
+            url: endpoint + _id + "/detail"
+          })
+        });
     const approvalHandler = (endpoint: string) =>
       builder.mutation<any, string>({
         query: (_id: string) => ({
@@ -37,10 +43,10 @@ export const keywordSlice = createApi({
           body: body,
         }),
       });
-    const putHandler = (endpoint: string) =>
+    const putHandler = (endpoint: string, step: string = "", isId: boolean = false) =>
       builder.mutation<{ success: boolean; body: any }, any>({
         query: (body) => ({
-          url: endpoint,
+          url: isId ? (endpoint + body["_id"] + step || "/edit") : endpoint,
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
@@ -103,9 +109,10 @@ export const keywordSlice = createApi({
 
       // general
       keywordGeneralList: responseHandler("/general"),
-      keywordGeneralCreate: postHandler(baseUrl + "/v1/keyword"),
-      keywordGeneralUpdate: putHandler("/general"),
       keywordGeneralDelete: deleteHandler("/general/"),
+      keywordGeneralCreate: postHandler(baseUrl + "/v1/keyword"),
+      keywordGeneralUpdate: putHandler(baseUrl + "/v1/keyword/", "/edit"),
+      keywordGeneralDetail: detailHandler(baseUrl + "/v1/keyword/"),
 
       // lucky draw
       keywordCoreLuckyDrawList: responseHandler("/lucky_draw"),
@@ -132,5 +139,7 @@ export const {
   useLazyKeywordGeneralListQuery,
   useKeywordGeneralDeleteMutation,
   useKeywordGeneralCreateMutation,
-  useKeywordUploadAuctionMutation
+  useKeywordGeneralUpdateMutation,
+  useKeywordUploadAuctionMutation,
+  useKeywordGeneralDetailQuery
 } = keywordSlice;

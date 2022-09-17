@@ -179,6 +179,33 @@ export interface ICreateKeyword {
   notification: any[];
 }
 
+export interface IKeywordBonusDonation {
+  bonus_type: string;
+  donation_category: string;
+  minimum_poin: number;
+  target_poin: number;
+  stock_location: {
+    bucket?: any;
+    location: string;
+    stock: number;
+  }[];
+  redeem_after_verification: boolean;
+}
+
+export interface IKeywordBonusMobileBanking {
+  bonus_type: string;
+  bank: string;
+  ip_address: string;
+  digit_coupon: string;
+  combination_coupon: string;
+  stock_location: {
+    bucket?: any;
+    location: string;
+    stock: number;
+  }[];
+  redeem_after_verification: boolean;
+}
+
 // export interface IKeywordBonus {
 //   bonus_type: string;
 //   location: string;

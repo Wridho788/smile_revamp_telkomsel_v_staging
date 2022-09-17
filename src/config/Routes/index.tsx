@@ -16,7 +16,7 @@ import {
     ProgramMainInfoUpdate,
     ProgramNotificationUpdate,
     MerchantPartnerManagement,
-    MerchantOutletManagement
+    MerchantOutletManagement, UpdateKeyword
 } from "../../pages";
 
 import NotificationManagement from "../../pages/NotificationManagement";
@@ -88,9 +88,17 @@ const Index = () => {
                     </Protected>
                 }/>
 
+                {/* TODO: Create Keyword */}
                 <Route path="/create-keyword" element={
                     <Protected>
                         <CreateKeyword/>
+                    </Protected>
+                }/>
+
+                {/* TODO: Update Keyword */}
+                <Route path="/update-keyword/:_id" element={
+                    <Protected>
+                        <UpdateKeyword />
                     </Protected>
                 }/>
 

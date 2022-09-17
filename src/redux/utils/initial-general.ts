@@ -8,7 +8,6 @@ export const FilterInitial: IParams = {
     sort: '{}'
 }
 
-
 export const BooleanOption = [
     {_id: true, set_value: "True"},
     {_id: false, set_value: "False"},
