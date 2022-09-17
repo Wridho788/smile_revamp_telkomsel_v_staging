@@ -87,7 +87,7 @@ const MobileBanking: React.FunctionComponent<IMobileBankingProps> = ({
     if (index === -1) {
       keywordCreate.bonus.push(KeywordBonusMobileBanking);
       const bonusIdx = keywordCreate.bonus.findIndex(
-        ({ bonus_type }) => bonus_type === "Mobile Banking"
+        ({ bonus_type }) => bonus_type === "mobile_banking"
       );
 
       setIndex(bonusIdx);
@@ -113,7 +113,7 @@ const MobileBanking: React.FunctionComponent<IMobileBankingProps> = ({
         keywordCreate.notification,
         ({ bonus_type_id }) => bonus_type_id === bonusTypeId
       ) &&
-      bonusType === "Mobile Banking"
+      bonusType === "mobile_banking"
     ) {
       keywordCreate.notification = keywordCreate.notification.concat(
         keywordNotificationLuckyDraw
