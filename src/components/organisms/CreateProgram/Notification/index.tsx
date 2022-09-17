@@ -65,6 +65,7 @@ const Notification: React.FunctionComponent<INotificationProps> = ({}: INotifica
                                         <H3 color={"primary"}> {item.set_value}</H3>
                                     </Grid>
                                     <Select
+                                        isRequired={false}
                                         variant={"outlined"}
                                         label="Via"
                                         placeholder="Option"

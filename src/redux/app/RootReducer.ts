@@ -13,6 +13,7 @@ import { appConfigSlice } from "../features/app-config/app-config-api-slice";
 import { partnerSlice } from "../features/partner/partner-api-slice";
 import { outletSlice } from "../features/outlet/outlet-api-slice";
 import {programPrimedtSlice} from "../features/program-primedt/program-primedt-api-slice";
+import {uploadFIleSlice} from "../upload_file/upload-file-api-slice";
 
 export const rootReducer = combineReducers({
   [lovSlice.reducerPath]: lovSlice.reducer,
@@ -29,4 +30,5 @@ export const rootReducer = combineReducers({
   [partnerSlice.reducerPath]: partnerSlice.reducer,
   [outletSlice.reducerPath]: outletSlice.reducer,
   [programPrimedtSlice.reducerPath]: programPrimedtSlice.reducer,
+  [uploadFIleSlice.reducerPath]: uploadFIleSlice.reducer,
 });

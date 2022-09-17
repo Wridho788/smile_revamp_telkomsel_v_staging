@@ -19,7 +19,6 @@ import {
     MerchantOutletManagement, UpdateKeyword
 } from "../../pages";
 
-import SpecificProgramTemplate from "../../atomic/containers/pages/GeneralProgramRegistration";
 import NotificationManagement from "../../pages/NotificationManagement";
 import {Segmentation} from "../../components/organisms/CreateProgram";
 
@@ -136,14 +135,6 @@ const Index = () => {
                     }/>
                 
                 <Route path="/location-management" element={<LocationManagement/>}/>
-
-                <Route
-                    path={"general-program-registration"}
-                    element={
-                        <Protected>
-                            <SpecificProgramTemplate/>
-                        </Protected>
-                    }/>
 
                 <Route
                     path={"/edit-program/segmentation/:programId"}

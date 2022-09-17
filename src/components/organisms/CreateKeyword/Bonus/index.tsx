@@ -6,68 +6,69 @@ import { useGetBonusTypeQuery } from "../../../../redux/features/lov/lov-api-sli
 import { CreateKeywordGeneral, KeywordBonusHelper } from "../initial";
 import { ICreateKeyword, IKeywordBonusHelper } from "../interfaces";
 
-
 import CancelIcon from "@mui/icons-material/Cancel";
-
 import _without from "lodash/without";
 import _find from "lodash/find";
 
 // Sub Component of Bonus
-import LuckyDraw from "./LuckyDraw";
 import Auction from "./Auction";
+import LuckyDraw from "./LuckyDraw";
 import DirectRedeem from "./DirectRedeem";
 import LoyaltyPoin from "./LoyaltyPoin";
-import TelcoProductPostpaid from "./TelcoProductPostpaid";
+import Voucher from "./Voucher";
+import LinkAja from "./LinkAja"
 import TelcoProductPrepaid from "./TelcoProductPrepaid";
+import TelcoProductPostpaid from "./TelcoProductPostpaid";
 
-interface IBonusProps {}
+interface IBonusProps {
+}
 
 const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
-  const { data: bonusTypeOptions = { data: [] } } = useGetBonusTypeQuery();
+    const {data: bonusTypeOptions = {data: []}} = useGetBonusTypeQuery();
 
-  const keywordCreate = CreateKeywordGeneral;
-  const [keywordCreateState, setKeywordCreateState] =
-    React.useState<ICreateKeyword>(keywordCreate);
+    const keywordCreate = CreateKeywordGeneral;
+    const [keywordCreateState, setKeywordCreateState] =
+        React.useState<ICreateKeyword>(keywordCreate);
 
-  let keywordBonusHelper = KeywordBonusHelper;
-  const [keywordBonusHelperState, setKeywordBonusHelperState] =
-    React.useState<IKeywordBonusHelper>(keywordBonusHelper);
+    let keywordBonusHelper = KeywordBonusHelper;
+    const [keywordBonusHelperState, setKeywordBonusHelperState] =
+        React.useState<IKeywordBonusHelper>(keywordBonusHelper);
 
-  const [stateTrigger, setStateTrigger] = React.useState<boolean>(false);
+    const [stateTrigger, setStateTrigger] = React.useState<boolean>(false);
+
+    React.useEffect(() => {
+        setKeywordCreateState(keywordCreate);
+    }, [keywordCreate, stateTrigger]);
 
   React.useEffect(() => {
-    setKeywordCreateState(keywordCreate);
-  }, [keywordCreate, stateTrigger]);
-
-  React.useEffect(() => {
-    // Filter Condition for Bonus / Notification : (Auction, Lucky Draw)
+    // Filter Condition for Bonus / Notification
     keywordCreate.bonus = keywordCreate.bonus.filter((item) => {
       if (keywordBonusHelper.bonus_type.includes(item.bonus_type)) {
         return item;
       }
     });
 
-    setKeywordBonusHelperState(keywordBonusHelper);
-  }, [keywordBonusHelper, stateTrigger]);
+        setKeywordBonusHelperState(keywordBonusHelper);
+    }, [keywordBonusHelper, stateTrigger]);
 
-  React.useEffect(() => {
-    let list: any = [];
+    React.useEffect(() => {
+        let list: any = [];
 
     keywordBonusHelper.bonus_type.map((type: string) => {
       list.push(
-        _find(bonusTypeOptions.data, ({ set_value }) => set_value === type)?._id
+        _find(bonusTypeOptions.data, ({ template }) => template === type)?._id
       );
     });
 
-    keywordCreate.notification = keywordCreate.notification.filter(
-        (item, i) => list.includes(keywordCreate.notification[i].bonus_type_id) || item.bonus_type_id === '');
+        keywordCreate.notification = keywordCreate.notification.filter(
+            (item, i) => list.includes(keywordCreate.notification[i].bonus_type_id) || item.bonus_type_id === '');
 
-    setKeywordCreateState(keywordCreate);
-  }, [keywordBonusHelperState.bonus_type]);
+        setKeywordCreateState(keywordCreate);
+    }, [keywordBonusHelperState.bonus_type]);
 
-  React.useEffect(() => {
-    console.log(keywordCreate);
-  }, [keywordCreate, stateTrigger]);
+    React.useEffect(() => {
+        console.log(keywordCreate);
+    }, [keywordCreate, stateTrigger]);
 
   return (
     <Box display="flex" justifyContent="center" px="5%" py="1vw">
@@ -78,7 +79,7 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
           label="Bonus Type"
           placeholder="Option"
           options={bonusTypeOptions.data}
-          optionValue="set_value"
+          optionValue="template"
           renderValue={(selected: any) => (
             <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
               {selected.map((value: any) => {
@@ -87,8 +88,8 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
                     key={value}
                     label={
                       bonusTypeOptions.data.find(
-                        (e) => e["set_value"] === value
-                      )?.set_value
+                        (e) => e["template"] === value
+                      )?.template
                     }
                     clickable
                     deleteIcon={
@@ -120,7 +121,7 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
           {keywordBonusHelperState.bonus_type.length > 0 &&
             keywordBonusHelperState.bonus_type.map((bonusType, idx) => {
               switch (bonusType) {
-                case "Lucky Draw Coupon":
+                case "lucky_draw":
                   return (
                     <Box key={`bonusType__${idx}`}>
                       <LuckyDraw
@@ -128,7 +129,7 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
                         bonusTypeId={
                           _find(
                             bonusTypeOptions.data,
-                            ({ set_value }) => set_value === bonusType
+                            ({ template }) => template === bonusType
                           )?._id
                         }
                         keywordCreateState={keywordCreateState}
@@ -138,7 +139,7 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
                       />
                     </Box>
                   );
-                case "Auction":
+                case "auction":
                   return (
                     <Box key={`bonusType__${idx}`}>
                       <Auction
@@ -146,7 +147,7 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
                         bonusTypeId={
                           _find(
                             bonusTypeOptions.data,
-                            ({ set_value }) => set_value === bonusType
+                            ({ template }) => template === bonusType
                           )?._id
                         }
                         keywordCreateState={keywordCreateState}
@@ -156,7 +157,7 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
                       />
                     </Box>
                   );
-                case "Direct Redeem":
+                case "direct_redeem":
                   return (
                     <Box key={`bonusType__${idx}`}>
                       <DirectRedeem
@@ -164,7 +165,7 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
                         bonusTypeId={
                           _find(
                             bonusTypeOptions.data,
-                            ({ set_value }) => set_value === bonusType
+                            ({ template }) => template === bonusType
                           )?._id
                         }
                         keywordCreateState={keywordCreateState}
@@ -174,7 +175,7 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
                       />
                     </Box>
                   );
-                case "Loyalty Poin":
+                case "loyalty_poin":
                   return (
                     <Box key={`bonusType__${idx}`}>
                       <LoyaltyPoin
@@ -182,7 +183,7 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
                         bonusTypeId={
                           _find(
                             bonusTypeOptions.data,
-                            ({ set_value }) => set_value === bonusType
+                            ({ template }) => template === bonusType
                           )?._id
                         }
                         keywordCreateState={keywordCreateState}
@@ -192,7 +193,7 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
                       />
                     </Box>
                   );
-                case "Telco Product Postpaid":
+                case "telco_postpaid":
                   return (
                       <Box key={`bonusType__${idx}`}>
                         <TelcoProductPostpaid
@@ -200,7 +201,7 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
                             bonusTypeId={
                               _find(
                                   bonusTypeOptions.data,
-                                  ({ set_value }) => set_value === bonusType
+                                  ({ template }) => template === bonusType
                               )?._id
                             }
                             keywordCreateState={keywordCreateState}
@@ -210,7 +211,7 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
                         />
                       </Box>
                   );
-                case "Telco Product Prepaid":
+                case "telco_prepaid":
                   return (
                       <Box key={`bonusType__${idx}`}>
                         <TelcoProductPrepaid
@@ -218,7 +219,7 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
                             bonusTypeId={
                               _find(
                                   bonusTypeOptions.data,
-                                  ({ set_value }) => set_value === bonusType
+                                  ({ template }) => template === bonusType
                               )?._id
                             }
                             keywordCreateState={keywordCreateState}
@@ -228,6 +229,28 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
                         />
                       </Box>
                   );
+                  case "link_aja":
+                      return (
+                          <Box key={`bonusType__${idx}`}>
+                              <LinkAja
+                                  bonusType={bonusType}
+                                  keywordCreate={keywordCreate}
+                                  stateTrigger={stateTrigger}
+                                  setStateTrigger={setStateTrigger}
+                              />
+                          </Box>
+                      );
+                  case "discount_voucher":
+                      return (
+                          <Box key={`bonusType__${idx}`}>
+                              <Voucher
+                                  bonusType={bonusType}
+                                  keywordCreate={keywordCreate}
+                                  stateTrigger={stateTrigger}
+                                  setStateTrigger={setStateTrigger}
+                              />
+                          </Box>
+                      );
               }
             })}
         </>

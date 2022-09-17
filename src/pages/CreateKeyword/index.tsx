@@ -9,7 +9,6 @@ import {
   MainInfo,
   Bonus,
 } from "../../components/organisms/CreateKeyword";
-import { KeywordAuctionProvider } from "../../app/context/KeywordAuction/Provider";
 
 const CreateKeyword = () => {
   const [activeStep, setActiveStep] = React.useState<number>(0);
@@ -17,7 +16,6 @@ const CreateKeyword = () => {
   const stepsItem = [<MainInfo />, <Bonus />];
 
   return (
-    <KeywordAuctionProvider>
       <Box
         sx={{
           paddingBlock: "3vw",
@@ -39,7 +37,6 @@ const CreateKeyword = () => {
           </Stepper>
         </StepperPaper>
       </Box>
-    </KeywordAuctionProvider>
   );
 };
 

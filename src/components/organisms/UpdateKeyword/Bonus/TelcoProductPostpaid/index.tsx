@@ -53,11 +53,11 @@ const NotificationTelcoProductPostpaid: React.FunctionComponent<INotificationTel
     // TODO: Get Auction Notification
     useEffect(() => {
         // Initial Keyword Telco Product Postpaid
-        const index = keywordCreate.bonus.findIndex(({ bonus_type }) => bonus_type === 'Telco Product Postpaid');
+        const index = keywordCreate.bonus.findIndex(({ bonus_type }) => bonus_type === 'telco_postpaid');
 
         if (index === -1) {
             keywordCreate.bonus.push(KeywordBonusTelcoProductPostpaid);
-            setIndex(keywordCreate.bonus.findIndex(({ bonus_type }) => bonus_type === 'Telco Product Postpaid'));
+            setIndex(keywordCreate.bonus.findIndex(({ bonus_type }) => bonus_type === 'telco_postpaid'));
         }
     }, []);
 

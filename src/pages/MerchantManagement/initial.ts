@@ -59,6 +59,7 @@ export const OutletInitial = {
   outlet_address: "",
   longtitude: "",
   latitude: "",
+  merchant_outlet: [],
   created_at: "",
   updated_at: "",
   deleted_at: null,

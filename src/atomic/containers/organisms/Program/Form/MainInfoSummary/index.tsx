@@ -6,7 +6,6 @@ import DatePicker from "../../../../../components/atoms/Datepicker";
 import TextFieldApp from "../../../../../components/atoms/TextFieldApp";
 import ButtonApp from "../../../../../components/atoms/ButtonApp";
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import useGeneralProgramRegistration from "../../../../pages/GeneralProgramRegistration/useGeneralProgramRegistration";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import {MainInfoSummaryProps} from "./MainInfoSummary.type";
 

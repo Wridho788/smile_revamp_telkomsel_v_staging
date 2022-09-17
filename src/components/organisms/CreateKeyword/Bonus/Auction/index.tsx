@@ -126,11 +126,11 @@ const NotificationAuction: React.FunctionComponent<INotificationAuctionProps> = 
         getKeywordNotification("AUCTION_NOTIFICATION");
 
         // Initial Keyword Bonus Auction
-        const index = keywordCreate.bonus.findIndex(({ bonus_type }) => bonus_type === 'Auction');
+        const index = keywordCreate.bonus.findIndex(({ bonus_type }) => bonus_type === 'auction');
 
         if (index === -1) {
             keywordCreate.bonus.push(KeywordBonusAuction);
-            setIndex(keywordCreate.bonus.findIndex(({ bonus_type }) => bonus_type === 'Auction'));
+            setIndex(keywordCreate.bonus.findIndex(({ bonus_type }) => bonus_type === 'auction'));
         }
     }, []);
 
