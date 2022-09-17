@@ -1,6 +1,6 @@
-import React, {useState,} from "react";
-import {Box, Button} from "@mui/material";
-import {keywordStep} from "../../../mocks/keywordStep";
+import { useState } from "react";
+import { Box, Button } from "@mui/material";
+import { keywordStep } from "../../../mocks/keywordStep";
 
 const Index = () => {
     const [intervalValue, setInterval] = useState(0);

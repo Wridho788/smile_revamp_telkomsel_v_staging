@@ -11,9 +11,8 @@ import {
     MainInfo,
     Bonus
 } from "../../components/organisms/UpdateKeyword";
-import {KeywordAuctionProvider} from "../../app/context/KeywordAuction/Provider";
-import {useKeywordGeneralDetailQuery} from "../../redux/features/keyword/keyword-api-slice";
-import {KeywordNotificationEligibility, UpdateKeywordGeneral} from "../../components/organisms/UpdateKeyword/initial";
+import { useKeywordGeneralDetailQuery } from "../../redux/features/keyword/keyword-api-slice";
+import { UpdateKeywordGeneral } from "../../components/organisms/UpdateKeyword/initial";
 
 import { cloneDeep } from "lodash";
 
@@ -36,43 +35,41 @@ const UpdateKeyword = () => {
 
 
     return (
-        <KeywordAuctionProvider>
-            <Box
-                sx={{
-                    paddingBlock: "3vw",
-                    paddingInline: "20vw",
-                }}
-            >
-                <StepperPaper sx={{paddingTop: "4vw"}}>
-                    <H2 textAlign="center" mb="2vw">
-                        Update Keyword
-                    </H2>
-                    {
-                        isFetching ?
-                            <Box
-                                sx={{
-                                    display: "flex",
-                                    justifyContent: "center",
-                                    alignItems: "center",
-                                    minHeight: "100vh",
-                                }}
-                            >
-                                <CircularProgress/>
-                            </Box>
-                            :
-                            <Stepper
-                                steps={steps}
-                                activeStep={activeStep}
-                                setActiveStep={setActiveStep}
-                                slug={"update"}
-                                type={"keyword"}
-                            >
-                                {stepsItem[activeStep]}
-                            </Stepper>
-                    }
-                </StepperPaper>
-            </Box>
-        </KeywordAuctionProvider>
+        <Box
+            sx={{
+                paddingBlock: "3vw",
+                paddingInline: "20vw",
+            }}
+        >
+            <StepperPaper sx={{paddingTop: "4vw"}}>
+                <H2 textAlign="center" mb="2vw">
+                    Update Keyword
+                </H2>
+                {
+                    isFetching ?
+                        <Box
+                            sx={{
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
+                                minHeight: "100vh",
+                            }}
+                        >
+                            <CircularProgress/>
+                        </Box>
+                        :
+                        <Stepper
+                            steps={steps}
+                            activeStep={activeStep}
+                            setActiveStep={setActiveStep}
+                            slug={"update"}
+                            type={"keyword"}
+                        >
+                            {stepsItem[activeStep]}
+                        </Stepper>
+                }
+            </StepperPaper>
+        </Box>
     );
 };
 
