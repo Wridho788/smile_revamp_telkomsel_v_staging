@@ -32,6 +32,11 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
     const [stateTrigger, setStateTrigger] = React.useState<boolean>(false);
 
     React.useEffect(() => {
+        // Initial existing bonus
+        keywordUpdate.bonus.map(({ bonus_type }) => {
+            keywordBonusHelper.bonus_type.push(bonus_type);
+        });
+
         setKeywordUpdateState(keywordUpdate);
     }, [keywordUpdate, stateTrigger]);
 
