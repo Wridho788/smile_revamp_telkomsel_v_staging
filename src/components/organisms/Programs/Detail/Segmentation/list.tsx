@@ -11,7 +11,7 @@ import TableBody from "@mui/material/TableBody";
 import TablePagination from "@mui/material/TablePagination";
 import * as React from "react";
 import { IParams } from "../../../../../redux/utils/IGeneral";
-import { BodyCopy, H3 } from "../../../../atoms";
+import {BodyCopy, H3, SmallCopy} from "../../../../atoms";
 import {
   useDeleteProgramMutation,
   useLazyProgramSegmentationListQuery,
@@ -51,6 +51,8 @@ const SegmentationList: FC<ListProps> = ({ ...props }) => {
     lazyEvent: JSON.stringify({
       first: page,
       rows: rowsPerPage,
+      sortField:"created_at",
+      sortOrder:1,
       filters: { msisdn: { value: searchInput } },
     }),
     // lazyEvent: `{"first" : ${page}, "rows" : ${rowsPerPage} }`,
@@ -129,7 +131,7 @@ const SegmentationList: FC<ListProps> = ({ ...props }) => {
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
                   <TableCell component="th" scope="row">
-                    {row.msisdn}
+                    <SmallCopy color={!row.match ?  "primary" : ""}>{row.msisdn}</SmallCopy>
                   </TableCell>
                   <TableCell component="th" scope="row">
                     <IconButton
