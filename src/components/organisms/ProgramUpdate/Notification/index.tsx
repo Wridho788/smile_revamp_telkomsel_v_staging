@@ -80,9 +80,18 @@ const Notification: React.FunctionComponent = () => {
             confirmButtonText: `Yes`,
             denyButtonText: 'No'
         }).then((res) => {
+            let payload = [];
+
+            programNotification.map((item) => {
+                payload.push({
+                    _id,
+                    ...item
+                });
+            });
+
             // Confirmed
             if (res.isConfirmed) {
-                updateProgramNotification({ data: programNotification }).then((res: any) => {
+                updateProgramNotification({ data: payload }).then((res: any) => {
                     if (res?.error) {
                         Swal.fire(res.error.data.message, "", "warning");
                     } else {
