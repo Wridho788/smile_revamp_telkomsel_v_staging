@@ -2,78 +2,74 @@
  * Form Program Main Info Update : ./src/components/organisms/ProgramUpdate/Notification/index.tsx
  * **/
 
-import React, {useEffect, useState} from "react";
-import {useParams, useNavigate} from "react-router-dom";
+import React, { useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 
-import {H2, OutlinedTextField, Select} from "../../../../components";
-import {Box, Button, ButtonGroup, CircularProgress, Divider, Grid, ListItem, Paper, Stack} from "@mui/material";
+import { H2, OutlinedTextField, Select } from "../../../../components";
+import {
+    Box,
+    Button,
+    ButtonGroup,
+    CircularProgress,
+    Divider,
+    Grid,
+    ListItem,
+    Paper,
+    Stack,
+    Typography
+} from "@mui/material";
 
 import IconButton from "@mui/material/IconButton";
 import {AddBox, Close} from "@mui/icons-material";
 
-// import { KeywordAuctionProvider } from "../../../../app/context/KeywordAuction/Provider";
-import {useDetailProgramQuery, useUpdateProgramNotificationMutation} from "../../../../redux/features/program/program-api-slice";
-
-import {FilterInitial} from "../../../../redux/utils/initial-general";
-import {useGetNotifViaQuery} from "../../../../redux/features/lov/lov-api-slice";
-import {ProgramDetailInitial} from "../../../../pages/CreateProgram/programInitial";
+import { useDetailProgramQuery, useUpdateProgramNotificationMutation } from "../../../../redux/features/program/program-api-slice";
+import { useGetNotifViaQuery, useGetProgramNotificationQuery } from "../../../../redux/features/lov/lov-api-slice";
+import {
+    CreateProgramInitial,
+    variableInitial
+} from "../../../../pages/CreateProgram/programInitial";
 
 import Swal from "sweetalert2";
 import H3 from "../../../atoms/Typography/H3";
 import BodyCopy from "../../../atoms/Typography/BodyCopy";
 import SmallCopy from "../../../atoms/Typography/SmallCopy";
 import ListItemButton from "@mui/material/ListItemButton";
-import {useNotificationTemplateQuery} from "../../../../redux/features/notification/notification-api-slice";
-import Moment from "moment/moment";
-import {cloneDeep} from "lodash";
+import { IProgramNotification } from "../../../../pages/CreateProgram/interface";
 
 const Notification: React.FunctionComponent = () => {
     const { _id } = useParams();
 
     const navigate = useNavigate();
 
-    const {data: viaOption = {data: []}} = useGetNotifViaQuery();
-    const {data: notificationTemplateList = {data: []}} = useNotificationTemplateQuery(FilterInitial);
-
-    const [poinTypeSuggestion, setPoinTypeSuggestion] = useState('');
-    const [stateTrigger, setStateTrigger] = React.useState<boolean>(false);
-
-    const changeListNotification = (list: any, i: number, field: string, value: any) => {
-        let temp: any = cloneDeep(list);
-        let clone: any = cloneDeep(programDetail?.program_notification);
-
-        if (typeof temp[`${field}`] === 'string') {
-            temp[`${field}`] = value;
-        } else {
-            temp[`${field}`][0]._id = value;
-        }
-
-        clone[i] = temp;
-        programDetail.program_notification = clone;
-        setStateTrigger(!stateTrigger);
-    }
-
     // TODO: Get Detail Program
     const { data: fetchDetail, isLoading } = useDetailProgramQuery(_id ?? '');
-    let initial: any = fetchDetail, programDetail: any = ProgramDetailInitial.data;
 
+    const programNotification = CreateProgramInitial.program_notification
+    const {data: viaOption = {data: []}} = useGetNotifViaQuery()
+    const {data: programNotificationOption = {data: []}} = useGetProgramNotificationQuery()
+    const [stateTrigger, setStateTrigger] = React.useState<boolean>(false);
+    let list = programNotificationOption.data
     useEffect(() => {
-        if (initial) {
-            programDetail._id = initial?._id;
-            programDetail.name = initial?.name;
-            programDetail.start_period = initial?.start_period;
-            if (initial?.program_notification.length) {
-                programDetail.program_notification = initial?.program_notification;
-                setStateTrigger(!stateTrigger);
+        if (list.length > 0) {
+            if (list.length !== programNotification.length) {
+                for (let i = 0; i < list.length; i++) {
+                    const obj: IProgramNotification = {
+                        template: "63008b6c746163c934b99aa2",
+                        template_content: "",
+                        via: "",
+                        notif_type: list[i]._id
+                    }
+                    programNotification.push(obj)
+                    setStateTrigger(!stateTrigger)
+                }
             }
-            setStateTrigger(!stateTrigger);
         }
-    }, [initial]);
+    }, [programNotificationOption.data]);
 
     useEffect(() => {
-    }, [stateTrigger]);
+        console.log(programNotification)
+    }, [programNotification, stateTrigger]);
 
-    const variableList = [programDetail.name, Moment(programDetail.start_period).format("d-m-Y"), poinTypeSuggestion]
     const [updateProgramNotification] = useUpdateProgramNotificationMutation();
 
     const onSave = async () => {
@@ -84,33 +80,17 @@ const Notification: React.FunctionComponent = () => {
             confirmButtonText: `Yes`,
             denyButtonText: 'No'
         }).then((res) => {
-            const payload: any = { data: [] };
-            programDetail.program_notification.map((item: any) => {
-               payload.data.push({
-                   _id: item._id,
-                   via: item.via_detail.length ? item.via_detail[0]._id : '',
-                   template: item.template,
-                   template_content: item.template_content
-               })
-            });
-
             // Confirmed
             if (res.isConfirmed) {
-                if (programDetail.program_notification.length) {
-                    updateProgramNotification(payload).then((res: any) => {
-                        if (res?.error) {
-                            Swal.fire(res.error.data.message, "", "warning");
-                        } else {
-                            Swal.fire("Updated Program Data!", "", "success").then(() => {
-                                navigate('/program-management');
-                            });
-                        }
-                    });
-                } else {
-                    Swal.fire("Updated Program Data!", "", "success").then(() => {
-                        navigate('/program-management');
-                    });
-                }
+                updateProgramNotification({ data: programNotification }).then((res: any) => {
+                    if (res?.error) {
+                        Swal.fire(res.error.data.message, "", "warning");
+                    } else {
+                        Swal.fire("Updated Program Data!", "", "success").then(() => {
+                            navigate('/program-management');
+                        });
+                    }
+                });
             }
 
             // Denied
@@ -144,7 +124,7 @@ const Notification: React.FunctionComponent = () => {
                                 <Box>
                                     <Box display="flex" justifyContent="space-between">
                                         <Box>
-                                            <H2>Edit Notification Program {programDetail.name}</H2>
+                                            <H2>Edit Notification Program {fetchDetail?.name}</H2>
                                             <small>Make sure you input correct data before store it</small>
                                         </Box>
 
@@ -160,94 +140,93 @@ const Notification: React.FunctionComponent = () => {
                                 display="block"
                                 marginBottom={4}
                             >
-                                {/* For while set "any" */}
-                                {programDetail.program_notification.length ? (
-                                    programDetail.program_notification.map((item: any, i: any) => (
-                                        <Box display="flex" px="10%" py="1vw">
-                                            <Grid
-                                                key={`rowItem__${i}`}
-                                                container
-                                                border="0.1vw solid rgba(0, 0, 0, 0.1)"
-                                                borderRadius="0.3vw"
-                                                p="3vw"
-                                            >
-                                                <Stack spacing={"1vw"} width={"100%"}>
-                                                    <Grid container>
-                                                        <H3 color={"primary"}>{item.set_value}</H3>
-                                                    </Grid>
-                                                    <Select
-                                                        variant={"outlined"}
-                                                        label="Via"
-                                                        placeholder="Option"
-                                                        options={viaOption.data}
-                                                        value={item.via_detail.length ? item.via_detail[0]._id : ''}
-                                                        handleChange={(value: string) => {
-                                                            changeListNotification(item, i, "via_detail", value);
-                                                            // setStateTrigger(!stateTrigger);
-                                                        }}
-                                                    />
-                                                    <Select
-                                                        variant={"outlined"}
-                                                        label="Template"
-                                                        placeholder="Option"
-                                                        optionLabel={"notif_name"}
-                                                        options={notificationTemplateList.data}
-                                                        value={item.template}
-                                                        disabled
-                                                    />
-                                                    <Grid container>
-                                                        <OutlinedTextField
+                                {programNotification.length > 0 ? programNotificationOption.data.map((item, i) => (
+                                            <Box display="flex" px="10%" py="1vw">
+                                                <Grid
+                                                    key={`rowItem__${i}`}
+                                                    container
+                                                    border="0.1vw solid rgba(0, 0, 0, 0.1)"
+                                                    borderRadius="0.3vw"
+                                                    p="3vw"
+                                                >
+
+                                                    <Stack spacing={"1vw"} width={"100%"}>
+                                                        <Grid container>
+                                                            <H3 color={"primary"}> {item.set_value}</H3>
+                                                        </Grid>
+                                                        <Select
                                                             isRequired={false}
-                                                            multiline
-                                                            rows={4}
-                                                            label="Template Content"
-                                                            placeholder="Template Content"
                                                             variant={"outlined"}
-                                                            value={item.template_content}
-                                                            handleChange={(value: string) => {
-                                                                changeListNotification(item, i, "template_content", value);
-                                                                // setStateTrigger(!stateTrigger);
+                                                            label="Via"
+                                                            placeholder="Option"
+                                                            options={viaOption.data}
+                                                            value={programNotification[i].via}
+                                                            handleChange={(value: any) => {
+                                                                programNotification[i].via = value
+                                                                setStateTrigger(!stateTrigger);
                                                             }}
                                                         />
-                                                    </Grid>
-                                                    <Grid container columns={11}>
-                                                        <Grid item xs={4}>
-                                                            <BodyCopy>Variable</BodyCopy>
-                                                            <SmallCopy fontSize={10} color={"orange"}>You can add this
-                                                                variable when
-                                                                editing template content</SmallCopy>
+                                                        <Grid container>
+                                                            <OutlinedTextField
+                                                                isRequired={false}
+                                                                multiline
+                                                                rows={4}
+                                                                label="Template Content"
+                                                                placeholder="Template Content"
+                                                                variant={"outlined"}
+                                                                value={programNotification[i].template_content}
+                                                                handleChange={(value: any) => {
+                                                                    programNotification[i].template_content = value
+                                                                    setStateTrigger(!stateTrigger);
+                                                                }}
+                                                            />
                                                         </Grid>
-                                                        <Grid item xs={7}>
-                                                            <Grid container columns={12}>
-                                                                {
-                                                                    variableList.map((item) => (
-                                                                        <Grid>
-                                                                            <ListItem disablePadding>
-                                                                                <ListItemButton>
-                                                                                    <AddBox color={"primary"}/>
-                                                                                    <BodyCopy>{item}</BodyCopy>
-                                                                                </ListItemButton>
-                                                                            </ListItem>
-                                                                        </Grid>
-                                                                    ))
-                                                                }
+                                                        <Grid container columns={11}>
+                                                            <Grid item xs={4}>
+                                                                <BodyCopy>Variable</BodyCopy>
+                                                                <SmallCopy fontSize={10} color={"orange"}>You can add this variable when
+                                                                    editing template content</SmallCopy>
+                                                            </Grid>
+                                                            <Grid item xs={7}>
+                                                                <Grid container columns={12}>
+                                                                    {
+                                                                        variableInitial.map((item) => (
+                                                                            <Grid>
+                                                                                <ListItem disablePadding>
+                                                                                    <ListItemButton
+                                                                                        onClick={() => {
+                                                                                            programNotification[i].template_content = `${programNotification[i].template_content} ${item}`
+                                                                                            setStateTrigger(!stateTrigger);
+                                                                                        }}
+                                                                                    >
+                                                                                        <AddBox color={"primary"}/>
+                                                                                        <BodyCopy>{item}</BodyCopy>
+                                                                                    </ListItemButton>
+                                                                                </ListItem>
+                                                                            </Grid>
+                                                                        ))
+                                                                    }
+                                                                </Grid>
                                                             </Grid>
                                                         </Grid>
-                                                    </Grid>
-                                                </Stack>
-                                            </Grid>
-                                        </Box>
+                                                    </Stack>
+                                                </Grid>
+                                            </Box>
+                                        )
                                     )
-                                )) : (<Box
-                                    sx={{
-                                        display: "flex",
-                                        justifyContent: "center",
-                                        alignItems: "center",
-                                        minHeight: "100vh",
-                                    }}
-                                >
-                                    <CircularProgress />
-                                </Box>)}
+                                    :
+                                    <>
+                                        <Box sx={{display: 'flex', justifyContent: 'center', alignItems: 'center', alignContent: 'center'}}>
+                                            <CircularProgress/>
+                                        </Box>
+                                        <Box sx={{display: 'flex', justifyContent: 'center', alignItems: 'center', alignContent: 'center'}}
+                                             mt={5}>
+                                            <Typography variant={"h3"}>
+                                                Generating notification, please wait...
+                                            </Typography>
+                                        </Box>
+                                    </>
+                                }
                             </Box>
 
                             {/* TODO: Action "Cancel" | "Save" */}
