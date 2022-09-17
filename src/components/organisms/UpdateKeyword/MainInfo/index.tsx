@@ -14,8 +14,6 @@ interface IMainInfoProps {}
 const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
   const keywordUpdate = UpdateKeywordGeneral;
 
-  console.log('from main info', keywordUpdate);
-
   const [keywordUpdateState, setKeywordUpdateState] =
     React.useState<IUpdateKeyword>(keywordUpdate);
 

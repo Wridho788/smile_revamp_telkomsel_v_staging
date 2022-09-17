@@ -15,18 +15,23 @@ import {KeywordAuctionProvider} from "../../app/context/KeywordAuction/Provider"
 import {useKeywordGeneralDetailQuery} from "../../redux/features/keyword/keyword-api-slice";
 import {KeywordNotificationEligibility, UpdateKeywordGeneral} from "../../components/organisms/UpdateKeyword/initial";
 
+import { cloneDeep } from "lodash";
+
 const UpdateKeyword = () => {
     const [activeStep, setActiveStep] = React.useState<number>(0);
     const steps = ["Main Info", "Bonus"];
     const stepsItem = [<MainInfo/>, <Bonus/>];
 
     /* TODO: Get params url of _id */
-    const {_id} = useParams();
-    const {data = UpdateKeywordGeneral, isFetching} = useKeywordGeneralDetailQuery(_id ?? "");
+    const { _id } = useParams();
+    const { data, isFetching} = useKeywordGeneralDetailQuery(_id ?? "");
+
     useEffect(() => {
-        UpdateKeywordGeneral.bonus = data.bonus
-        UpdateKeywordGeneral.eligibility = data.eligibility
-        UpdateKeywordGeneral.notification = data.notification
+        if (data) {
+            UpdateKeywordGeneral.bonus = cloneDeep(data.bonus)
+            UpdateKeywordGeneral.eligibility = cloneDeep(data.eligibility)
+            UpdateKeywordGeneral.notification = cloneDeep(data.notification)
+        }
     }, [isFetching]);
 
 
