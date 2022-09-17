@@ -30,11 +30,11 @@ export interface IResponseAuthenticate {
   role: string;
   role_id: string;
   __v: number;
-  account_location:any;
+  account_location: any;
 }
 
 export interface IPayload {
-  payload: IResponse
+  payload: IResponse;
 }
 
 export interface IProgramImportFile {

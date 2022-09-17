@@ -10,9 +10,9 @@ const ProgramManagement = () => {
         paddingRight: "50px",
       }}
     >
-        <Grid item xs={7}>
-            <ProgramPrimeDt />
-        </Grid>
+      <Grid item xs={7}>
+        <ProgramPrimeDt />
+      </Grid>
     </Box>
   );
 };
