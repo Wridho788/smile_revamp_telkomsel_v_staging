@@ -6,6 +6,7 @@ import ProgramPage from "./ProgramPage/index";
 import CreateProgram from "./CreateProgram";
 import EditProgram from "./CreateProgram/edit";
 import CreateKeyword from "./CreateKeyword";
+import UpdateKeyword from "./UpdateKeyword";
 import Keyword from "./Keyword";
 import Auth from "./Auth";
 import MerchantManagement from "./MerchantManagement";
@@ -26,6 +27,7 @@ export {
   CreateProgram,
   EditProgram,
   CreateKeyword,
+  UpdateKeyword,
   Keyword,
   Auth,
   MerchantManagement,

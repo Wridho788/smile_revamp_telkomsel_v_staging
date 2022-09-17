@@ -18,7 +18,10 @@ import {
 import {CircularProgress, Snackbar} from "@mui/material";
 import {CreateKeywordInitial} from "../../../pages/CreateKeyword/initial";
 import {CreateKeywordGeneral} from "../../organisms/CreateKeyword/initial";
-import {useKeywordGeneralCreateMutation} from "../../../redux/features/keyword/keyword-api-slice";
+import {
+    useKeywordGeneralCreateMutation,
+    useKeywordGeneralUpdateMutation
+} from "../../../redux/features/keyword/keyword-api-slice";
 import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import Swal from "sweetalert2";
@@ -125,7 +128,8 @@ export default function HorizontalLinearStepper({
     const [isLoading, setIsLoading] = useState(false);
     const [createProgram] = useCreateProgramMutation();
     const [updateProgram] = useUpdateProgramMutation();
-    const [createKeywordGeneral, response] = useKeywordGeneralCreateMutation();
+    const [createKeywordGeneral] = useKeywordGeneralCreateMutation();
+    const [updateKeywordGeneral] = useKeywordGeneralUpdateMutation();
     const [skipped, setSkipped] = React.useState<Set<number>>(new Set<number>());
     useEffect(() => {
     }, [isLoading]);
@@ -155,28 +159,54 @@ export default function HorizontalLinearStepper({
                     })
                     : await updateProgram(CreateProgramInitial);
             } else if (type === "keyword") {
-                slug === "insert" ? await createKeywordGeneral(CreateKeywordGeneral)
-                        .then((res: any) => {
+                switch (slug) {
+                    case "insert":
+                        await createKeywordGeneral(CreateKeywordGeneral)
+                            .then((res: any) => {
+                                if (res.data) {
+                                    Swal.fire("Success!", "Keyword has been created!", "success");
+                                    console.log("data : ", res.data);
+                                }
+                                if (res.error) {
+                                    Swal.fire(
+                                        "Failed!",
+                                        "Keyword hasn't been created!",
+                                        "error"
+                                    );
+                                    console.log("error : ", res.error);
+                                }
+                            })
+                            .catch((err) => {
+                                console.error(err);
+                            })
+                            .finally(() => {
+                                nav("/keyword-management");
+                            })
+                        break;
+                    case "update":
+                        // Change the initial or "CreateKeywordGeneral"
+                        await updateKeywordGeneral(CreateKeywordGeneral).then((res: any) => {
                             if (res.data) {
-                                Swal.fire("Success!", "Keyword has been created!", "success");
+                                Swal.fire("Success!", "Keyword has been updated!", "success");
                                 console.log("data : ", res.data);
                             }
                             if (res.error) {
                                 Swal.fire(
                                     "Failed!",
-                                    "Keyword has noot been created!",
+                                    "Keyword hasn't been updated!",
                                     "error"
                                 );
                                 console.log("error : ", res.error);
                             }
                         })
-                        .catch((err) => {
-                            console.error(err);
-                        })
-                        .finally(() => {
-                            nav("/keyword-management");
-                        })
-                    : await updateProgram(CreateKeywordGeneral);
+                            .catch((err) => {
+                                console.error(err);
+                            })
+                            .finally(() => {
+                                nav("/keyword-management");
+                            });
+                        break;
+                }
                 // window.location.href = "/keyword";
             }
             setIsLoading(false);
