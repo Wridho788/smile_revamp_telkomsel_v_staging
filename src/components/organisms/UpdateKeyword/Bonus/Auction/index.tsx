@@ -453,7 +453,7 @@ const NotificationAuction: React.FunctionComponent<INotificationAuctionProps> = 
                                         {!loading ? (<Box
                                             component="img"
                                             alt="Telkomsel Upload"
-                                            src={preview}
+                                            src={keywordCreate.bonus[index]["auction_prize_image"]}
                                         >
                                         </Box>) : (
                                             <CircularProgress></CircularProgress>
