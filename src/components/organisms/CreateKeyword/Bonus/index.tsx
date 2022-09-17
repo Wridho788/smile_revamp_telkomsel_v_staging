@@ -255,7 +255,7 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
                               />
                           </Box>
                       );
-                      case "donation":
+                      case "Donation":
                   return (
                     <Box key={`bonusType__${idx}`}>
                       <Donation
@@ -263,7 +263,7 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
                         bonusTypeId={
                           _find(
                             bonusTypeOptions.data,
-                            ({ template }) => template === bonusType
+                            ({ set_value }) => set_value === bonusType
                           )?._id
                         }
                         keywordCreateState={keywordCreateState}
@@ -273,7 +273,7 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
                       />
                     </Box>
                   );
-                case "mobile_banking":
+                case "Mobile Banking":
                   return (
                     <Box key={`bonusType__${idx}`}>
                       <MobileBanking
@@ -281,7 +281,7 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
                         bonusTypeId={
                           _find(
                             bonusTypeOptions.data,
-                            ({ template }) => template === bonusType
+                            ({ set_value }) => set_value === bonusType
                           )?._id
                         }
                         keywordCreateState={keywordCreateState}

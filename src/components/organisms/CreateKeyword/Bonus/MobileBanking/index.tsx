@@ -113,7 +113,7 @@ const MobileBanking: React.FunctionComponent<IMobileBankingProps> = ({
         keywordCreate.notification,
         ({ bonus_type_id }) => bonus_type_id === bonusTypeId
       ) &&
-      bonusType === "mobile_banking"
+      bonusType === "Mobile Banking"
     ) {
       keywordCreate.notification = keywordCreate.notification.concat(
         keywordNotificationLuckyDraw
