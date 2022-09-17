@@ -80,7 +80,7 @@ const Notification: React.FunctionComponent = () => {
             confirmButtonText: `Yes`,
             denyButtonText: 'No'
         }).then((res) => {
-            let payload = [];
+            let payload: any = [];
 
             programNotification.map((item) => {
                 payload.push({
