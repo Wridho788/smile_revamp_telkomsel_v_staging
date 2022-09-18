@@ -94,9 +94,11 @@ const MerchantOutletManagement = () => {
   //================================ Fetching Data =========================
   //========================================================================
   const [getOutletList] = useLazyOutletListQuery();
-  const [addOutlet] = useAddOutletMutation();
-  const [updateOutlet] = useUpdateOutletMutation();
-  const [deleteOutlet] = useDeleteOutletMutation();
+  const [addOutlet, { isLoading: loadingAddOutlet }] = useAddOutletMutation();
+  const [updateOutlet, { isLoading: loadingUpdateOutlet }] =
+    useUpdateOutletMutation();
+  const [deleteOutlet, { isLoading: loadingDeleteOutlet }] =
+    useDeleteOutletMutation();
 
   const { data: locationTypeList = { data: [OutletInitial] } } =
     useGetLocationTypeQuery();
@@ -176,8 +178,22 @@ const MerchantOutletManagement = () => {
 
   const onAddMerchantOutlet = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    try {
+      await addOutlet(initialMerchantOutlet);
 
-    await addOutlet(initialMerchantOutlet);
+      Swal.fire({
+        icon: "success",
+        title: "Success...",
+        text: "Outlet success created.",
+      });
+    } catch {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Created Outlet is failed",
+      });
+    }
+
     setTriger((prev) => !prev);
     onClearForm();
     setOpen({ ...open, add: false });
@@ -195,7 +211,22 @@ const MerchantOutletManagement = () => {
   ) => {
     e.preventDefault();
 
-    await updateOutlet(initialMerchantOutlet);
+    try {
+      await updateOutlet(initialMerchantOutlet);
+
+      Swal.fire({
+        icon: "success",
+        title: "Success...",
+        text: "Outlet success created.",
+      });
+    } catch {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Created Outlet is failed",
+      });
+    }
+
     setTriger((prev) => !prev);
     onClearForm();
     setOpen({ ...open, edit: false });
@@ -511,8 +542,13 @@ const MerchantOutletManagement = () => {
             </Box>
             <Gap width={0} height={20} />
             <Box sx={{ display: "flex" }}>
-              <Button variant="contained" sx={{ width: "100%" }} type="submit">
-                SAVE
+              <Button
+                disabled={loadingAddOutlet}
+                variant="contained"
+                sx={{ width: "100%" }}
+                type="submit"
+              >
+                {loadingAddOutlet ? "Loading" : "SAVE"}
               </Button>
             </Box>
             <Gap width={0} height={20} />
@@ -527,7 +563,7 @@ const MerchantOutletManagement = () => {
         open={open.edit}
         onClose={() => setOpen({ ...open, edit: false })}
       >
-        <DialogTitle variant="h5">ADD MERCHANT Outlet</DialogTitle>
+        <DialogTitle variant="h5">Update MERCHANT Outlet</DialogTitle>
         <form onSubmit={onUpdateMerchantOutlet}>
           <Stack sx={{ display: "flex" }} px="3vw">
             <Box sx={{ display: "flex" }}>
@@ -627,8 +663,13 @@ const MerchantOutletManagement = () => {
             </Box>
             <Gap width={0} height={20} />
             <Box sx={{ display: "flex" }}>
-              <Button variant="contained" sx={{ width: "100%" }} type="submit">
-                SAVE
+              <Button
+                disabled={loadingUpdateOutlet}
+                variant="contained"
+                sx={{ width: "100%" }}
+                type="submit"
+              >
+                {loadingUpdateOutlet ? "Loading" : "SAVE"}
               </Button>
             </Box>
             <Gap width={0} height={20} />

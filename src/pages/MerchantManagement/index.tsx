@@ -167,11 +167,11 @@ const MerchantManagement = () => {
   const [getOutletList, { data: outletList = { data: [OutletInitial] } }] =
     useLazyOutletListQuery();
 
-  const [linkMerchantOutlet, { isLoading: loadingLink }] =
+  const [linkMerchantOutlet, { isLoading: loadingLinkMerchant }] =
     useMerchantOutletLinkMutation();
-  const [addMerchant, { isLoading: loadingAdd }] =
+  const [addMerchant, { isLoading: loadingAddMerchant }] =
     useAddMerchantManagementMutation();
-  const [updateMerchant, { isLoading: loadingUpdate }] =
+  const [updateMerchant, { isLoading: loadingUpdateMerchant }] =
     useUpdateMerchantManagementMutation();
   const [deleteMerchant, { isLoading: loadingDelete }] =
     useDeleteMerchantManagementMutation();
@@ -333,7 +333,20 @@ const MerchantManagement = () => {
 
   const onAddMerchant = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    await addMerchant(initialMerchant);
+    try {
+      await addMerchant(initialMerchant);
+      Swal.fire({
+        icon: "success",
+        title: "Success...",
+        text: "Merchant success created.",
+      });
+    } catch {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Created merchant is failed",
+      });
+    }
     setTriger((prev) => !prev);
     onClearForm();
     setOpen({ ...open, add: false });
@@ -350,56 +363,90 @@ const MerchantManagement = () => {
   };
   const onUpdateMerchant = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const data = {
-      _id: merchantDetail?._id,
-      partner_id: initialMerchant.partner_id,
-      merchant_name: initialMerchant.merchant_name,
-      merchant_short_code: initialMerchant.merchant_short_code,
-      siup_number: initialMerchant.siup_number,
-      location_id: initialMerchant.location_id,
-      zip_code: initialMerchant.zip_code,
-      address: initialMerchant.address,
-      file_compro: initialMerchant.file_compro,
-      pic_name: initialMerchant.pic_name,
-      pic_phone: initialMerchant.pic_phone,
-      pic_email: initialMerchant.pic_email,
-      password: initialMerchant.password,
-      npwp: initialMerchant.npwp,
-      pic_ktp: initialMerchant.pic_ktp,
-      bank_name: initialMerchant.bank_name,
-      bank_account_name: initialMerchant.bank_account_name,
-      bank_account_number: initialMerchant.bank_account_number,
-    };
-    await updateMerchant(data);
+    try {
+      const data = {
+        _id: merchantDetail?._id,
+        partner_id: initialMerchant.partner_id,
+        merchant_name: initialMerchant.merchant_name,
+        merchant_short_code: initialMerchant.merchant_short_code,
+        siup_number: initialMerchant.siup_number,
+        location_id: initialMerchant.location_id,
+        zip_code: initialMerchant.zip_code,
+        address: initialMerchant.address,
+        file_compro: initialMerchant.file_compro,
+        pic_name: initialMerchant.pic_name,
+        pic_phone: initialMerchant.pic_phone,
+        pic_email: initialMerchant.pic_email,
+        password: initialMerchant.password,
+        npwp: initialMerchant.npwp,
+        pic_ktp: initialMerchant.pic_ktp,
+        bank_name: initialMerchant.bank_name,
+        bank_account_name: initialMerchant.bank_account_name,
+        bank_account_number: initialMerchant.bank_account_number,
+      };
+      await updateMerchant(data);
+      Swal.fire({
+        icon: "success",
+        title: "Success...",
+        text: "Merchant success updated.",
+      });
+    } catch {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Update merchant is failed",
+      });
+    }
+
     setTriger((prev) => !prev);
     onClearForm();
-    console.log(data);
     setOpen({ ...open, edit: false });
   };
 
   const onDeleteMerchant = async (data: typeof merchantDetail) => {
-    Swal.fire({
-      title: "Do you want to delete data?",
-      showDenyButton: true,
-      confirmButtonText: `Delete`,
-      denyButtonText: `Don't Delete`,
-    }).then(async (result) => {
-      /* Read more about isConfirmed, isDenied below */
-      if (result.isConfirmed) {
-        deleteMerchant(data ? data._id : "");
-        await Swal.fire("Deleted!", "", "success");
-        setTriger((prev) => !prev);
-      } else if (result.isDenied) {
-        Swal.fire("Data are not deleted", "", "info");
-      }
-    });
+    if (data && data.outlets_list.length > 0) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "You can't delete this merchant!",
+      });
+    } else {
+      Swal.fire({
+        title: "Do you want to delete data?",
+        showDenyButton: true,
+        confirmButtonText: `Delete`,
+        denyButtonText: `Don't Delete`,
+      }).then(async (result) => {
+        /* Read more about isConfirmed, isDenied below */
+        if (result.isConfirmed) {
+          deleteMerchant(data ? data._id : "");
+          await Swal.fire("Deleted!", "", "success");
+          setTriger((prev) => !prev);
+        } else if (result.isDenied) {
+          Swal.fire("Data are not deleted", "", "info");
+        }
+      });
+    }
   };
 
   const onLinkedMerchantOutlet = async (
     e: React.FormEvent<HTMLFormElement>
   ) => {
     e.preventDefault();
-    await linkMerchantOutlet(initialLink);
+    const response: any = await linkMerchantOutlet(initialLink);
+    if (response.status === 200) {
+      Swal.fire({
+        icon: "success",
+        title: "Success...",
+        text: "Merchant success linked to outlet.",
+      });
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Link merchant to outlet is failed",
+      });
+    }
     setInitialLink({
       merchant: "",
       outlet: "",
@@ -547,19 +594,75 @@ const MerchantManagement = () => {
         onClose={() => setOpen({ ...open, detail: false })}
       >
         <DialogTitle variant="h5">
-          Company: {merchantDetail && merchantDetail.company_name}
+          Merchant Name: {merchantDetail && merchantDetail.merchant_name}
         </DialogTitle>
         <DialogContent>
           <SmallCopy>
-            Merchant Name: {merchantDetail && merchantDetail.merchant_name}
+            Merchant Partner: {merchantDetail && merchantDetail.partner_id}
           </SmallCopy>
           <SmallCopy>
             SIUP Number: {merchantDetail && merchantDetail.siup_number}
           </SmallCopy>
           <SmallCopy>
-            Province: {merchantDetail && merchantDetail.province}
+            Merchant Sort Code:{" "}
+            {merchantDetail && merchantDetail.merchant_short_code}
           </SmallCopy>
-          <SmallCopy>City: {merchantDetail && merchantDetail.city}</SmallCopy>
+          <SmallCopy>
+            Location: {merchantDetail && merchantDetail.location_detail.name}
+          </SmallCopy>
+          <SmallCopy>
+            Address: {merchantDetail && merchantDetail.address}
+          </SmallCopy>
+          <SmallCopy>
+            ZIP Code: {merchantDetail && merchantDetail.zip_code}
+          </SmallCopy>
+          <SmallCopy>
+            Website: {merchantDetail && merchantDetail.file_compro}
+          </SmallCopy>
+          <SmallCopy>NPWP: {merchantDetail && merchantDetail.npwp}</SmallCopy>
+          <Gap width={0} height={10} />
+          <Title title="PIC" />
+          <Gap width={0} height={10} />
+          <SmallCopy>
+            PIC Name: {merchantDetail && merchantDetail.pic_name}
+          </SmallCopy>
+          <SmallCopy>
+            PIC Email: {merchantDetail && merchantDetail.pic_email}
+          </SmallCopy>
+          <SmallCopy>
+            PIC Phone: {merchantDetail && merchantDetail.pic_phone}
+          </SmallCopy>
+          <SmallCopy>
+            PIC KTP: {merchantDetail && merchantDetail.pic_ktp}
+          </SmallCopy>
+          <Gap width={0} height={10} />
+          <Title title="Bank" />
+          <Gap width={0} height={10} />
+          <SmallCopy>
+            Bank Name: {merchantDetail && merchantDetail.bank_name}
+          </SmallCopy>
+          <SmallCopy>
+            Bank Account Name:{" "}
+            {merchantDetail && merchantDetail.bank_account_name}
+          </SmallCopy>
+          <SmallCopy>
+            Bank Account Number:{" "}
+            {merchantDetail && merchantDetail.bank_account_number}
+          </SmallCopy>
+          <Gap width={0} height={10} />
+          <Title title="Outlet" />
+          <Gap width={0} height={10} />
+          {merchantDetail &&
+            merchantDetail.outlets_list.map((item) => (
+              <Box sx={{ padding: "5px 0" }} key={item._id}>
+                <SmallCopy>
+                  Outlet Name: {item.outlet[0]?.outlet_name}
+                </SmallCopy>
+                <SmallCopy>
+                  Outlet Address: {item.outlet[0]?.outlet_address}
+                </SmallCopy>
+              </Box>
+            ))}
         </DialogContent>
       </Dialog>
 
@@ -621,6 +724,7 @@ const MerchantManagement = () => {
               />
               <Gap width={50} height={0} />
               <TextField
+                type="password"
                 size="small"
                 fullWidth
                 label="Password"
@@ -790,8 +894,13 @@ const MerchantManagement = () => {
             </Box>
             <Gap width={0} height={20} />
             <Box sx={{ display: "flex" }}>
-              <Button variant="contained" sx={{ width: "100%" }} type="submit">
-                SAVE
+              <Button
+                disabled={loadingAddMerchant}
+                variant="contained"
+                sx={{ width: "100%" }}
+                type="submit"
+              >
+                {loadingAddMerchant ? "LOADING.." : "SAVE"}
               </Button>
             </Box>
             <Gap width={0} height={20} />
@@ -858,6 +967,7 @@ const MerchantManagement = () => {
               />
               <Gap width={50} height={0} />
               <TextField
+                type="password"
                 size="small"
                 fullWidth
                 label="Password"
@@ -1027,8 +1137,13 @@ const MerchantManagement = () => {
             </Box>
             <Gap width={0} height={20} />
             <Box sx={{ display: "flex" }}>
-              <Button variant="contained" sx={{ width: "100%" }} type="submit">
-                SAVE
+              <Button
+                disabled={loadingUpdateMerchant}
+                variant="contained"
+                sx={{ width: "100%" }}
+                type="submit"
+              >
+                {loadingUpdateMerchant ? "LOADING" : "SAVE"}
               </Button>
             </Box>
             <Gap width={0} height={20} />
@@ -1073,6 +1188,7 @@ const MerchantManagement = () => {
             <Gap width={0} height={20} />
             <Box sx={{ display: "flex" }}>
               <Button
+                disabled={loadingLinkMerchant}
                 variant="contained"
                 sx={{
                   width: "100%",
@@ -1081,7 +1197,7 @@ const MerchantManagement = () => {
                 }}
                 type="submit"
               >
-                Link
+                {loadingLinkMerchant ? "LOADING" : "LINK"}
               </Button>
             </Box>
             <Gap width={0} height={20} />
