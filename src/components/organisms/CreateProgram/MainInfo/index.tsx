@@ -261,7 +261,7 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
                                                             value={row._id}
                                                         />
                                                     }
-                                                    label={row.msisdn}
+                                                    label={`${row.msisdn} | ${row.name} | ${row.email}`}
                                                 />
                                             </TableCell>
                                         </TableRow>
