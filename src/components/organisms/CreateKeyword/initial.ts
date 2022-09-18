@@ -310,6 +310,7 @@ export const KeywordNotificationLuckyDrawHelper: IKeywordNotificationLuckyDrawHe
 export const KeywordNotificationLuckyDraw: IKeywordNotificationLuckyDraw[] = [
   {
     bonus_type_id: "",
+    keyword_name: "",
     code_identifier: "",
     notification_content: "",
     start_period: new Date(),
@@ -319,6 +320,7 @@ export const KeywordNotificationLuckyDraw: IKeywordNotificationLuckyDraw[] = [
   },
   {
     bonus_type_id: "",
+    keyword_name: "",
     code_identifier: "",
     notification_content: "",
     start_period: new Date(),
@@ -328,6 +330,7 @@ export const KeywordNotificationLuckyDraw: IKeywordNotificationLuckyDraw[] = [
   },
   {
     bonus_type_id: "",
+    keyword_name: "",
     code_identifier: "",
     notification_content: "",
     start_period: new Date(),
@@ -337,6 +340,7 @@ export const KeywordNotificationLuckyDraw: IKeywordNotificationLuckyDraw[] = [
   },
   {
     bonus_type_id: "",
+    keyword_name: "",
     code_identifier: "",
     notification_content: "",
     start_period: new Date(),
