@@ -17,6 +17,19 @@ import { useAccountAuthenticateQuery } from "../../../redux/features/account/acc
 
 import KeywordDetailsModal from "./KeywordDetail";
 
+interface IkeywordPrime {
+    bonus: any[],
+    created_at: string,
+    created_by: any,
+    deleted_at: null,
+    eligibility: any,
+    keyword_approval: string,
+    notification: any[],
+    updated_at: string,
+    __v: number,
+    _id: string
+  }
+
 const KeywordPrime = () => {
     const [keywords, setKeywords] = useState<any>([IKeywordPrime])
     const [loading, setLoading] = useState<boolean>(false);
@@ -99,23 +112,26 @@ const KeywordPrime = () => {
         return <span>{moment(rowData?.eligibility?.end_period).format('MMMM DD, YYYY')}</span>
     }
 
-    const ProgramExperienceRender = () => {
-        return <span>{data?.data[0]?.set_value}</span>
+    const ProgramExperienceRender = (rowData: IkeywordPrime) => {
+        let program = "";
+        let program_exp : string[] = rowData?.eligibility?.program_experience;
+        data?.data?.forEach((value:any) => {
+            if(value?._id === program_exp?.[0]) program = value?.set_value;
+        });
+        return <span>{program}</span>
     }
-
-    console.log(data)
 
     return (
         <Fragment>
 
-            <KeywordDetailsModal 
-                open={open} 
+            <KeywordDetailsModal
+                open={open}
                 handleClose={() => { setOpen(false) }}
                 data={item}
-                // roleAccess={
-                //     accountAuth && defaultRoleManager ?
-                //     accountAuth.role === defaultRoleManager ? true : false : false
-                // } 
+            // roleAccess={
+            //     accountAuth && defaultRoleManager ?
+            //     accountAuth.role === defaultRoleManager ? true : false : false
+            // } 
             />
 
             <Stack direction={"row"} justifyContent={"space-between"}>

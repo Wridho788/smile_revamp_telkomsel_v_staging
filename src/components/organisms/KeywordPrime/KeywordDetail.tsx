@@ -49,7 +49,7 @@ const KeywordDetail: FC<IKeywordDetailsModalProps> = ({
 }) => {
   const { eligibility, notification } = data;
 
-  console.log(`data`, data);
+  // console.log(`data`, data);
 
   return (
     <ModalCustom
