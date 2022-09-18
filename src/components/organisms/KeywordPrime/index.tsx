@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment } from 'react';
+import React, { useState, useEffect, Fragment } from "react";
 import { Box, Grid, IconButton, Paper, Stack, Typography } from "@mui/material";
 import { DrawerNav, Gap, H2 } from "../../../components";
 import DarkButton from "../../atoms/DarkButton";
@@ -6,8 +6,8 @@ import FilterListIcon from "@mui/icons-material/FilterList";
 import { Add } from "@mui/icons-material";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
-import { InputText } from 'primereact/inputtext';
-import { Button } from 'primereact/button';
+import { InputText } from "primereact/inputtext";
+import { Button } from "primereact/button";
 import moment from "moment";
 import { IKeywordPrime } from "./initial";
 import { useLazyKeywordListPrimeQuery } from "../../../redux/features/keyword/keyword-api-slice";

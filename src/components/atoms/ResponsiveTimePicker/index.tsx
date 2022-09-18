@@ -16,7 +16,7 @@ const Index: React.FunctionComponent<IResponsiveTimePickerProps> = ({
   leftColumn = 4,
   rightColumn = 6,
   direction = "row",
-  isRequired = false,
+  isRequired = true,
   minTime,
 }) => {
   const onKeyDown = (e: { preventDefault: () => void }) => {

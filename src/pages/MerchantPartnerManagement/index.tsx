@@ -321,7 +321,7 @@ const MerchantParnerManagement = () => {
           paddingRight: "50px",
         }}
       >
-        <H2>MERCHANT</H2>
+        <H2>PARTNER</H2>
         <Gap width={0} height={20} />
         <Box>
           <Paper>

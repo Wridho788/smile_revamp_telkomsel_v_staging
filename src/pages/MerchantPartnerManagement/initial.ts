@@ -35,3 +35,13 @@ export interface IMerchantPartner {
   longtitude: string;
   latitude: string;
 }
+
+export const PartnerInitial = {
+  _id: "",
+  partner_code: "",
+  partner_name: "",
+  partner_status: "",
+  created_by: "",
+  created_at: "",
+  updated_at: "",
+};

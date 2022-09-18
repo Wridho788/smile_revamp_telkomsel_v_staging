@@ -16,9 +16,10 @@ const Index: React.FunctionComponent<IResponsiveDateTimePickerProps> = ({
   leftColumn = 4,
   rightColumn = 6,
   direction = "row",
-  isRequired = false,
-  minDateTime,
+  isRequired = true,
   disabled = false,
+  minDateTime,
+  maxDateTime,
 }) => {
   const onKeyDown = (e: { preventDefault: () => void }) => {
     e.preventDefault();
@@ -54,6 +55,7 @@ const Index: React.FunctionComponent<IResponsiveDateTimePickerProps> = ({
               handleChange(newValue);
             }}
             minDateTime={minDateTime}
+            maxDateTime={maxDateTime}
             disabled={disabled}
             renderInput={({ error, ...params }) => (
               <TextField
