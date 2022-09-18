@@ -33,7 +33,11 @@ const Program: React.FunctionComponent<IProgramProps> = ({
           label="Choose Program"
           placeholder="Option"
           options={programListOptions.data.filter(
-            (e) => e.program_approval !== ""
+            (e) =>
+              e.approval_log?.length > 0 &&
+              e.approval_log[e.approval_log.length - 1].status?.length > 0 &&
+              e.approval_log[e.approval_log.length - 1].status[0].set_value ===
+                "Approved by Manager HQ"
           )}
           optionLabel="name"
           value={keywordCreateState.eligibility.program_id}
