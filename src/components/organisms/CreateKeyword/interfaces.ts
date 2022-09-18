@@ -116,6 +116,7 @@ export interface IKeywordNotificationLuckyDrawHelper {
 
 export interface IKeywordNotificationLuckyDraw {
   bonus_type_id: string;
+  keyword_name: string;
   code_identifier: string;
   notification_content: string;
   start_period: Date;

@@ -14,13 +14,15 @@ import { Warning } from "@mui/icons-material";
 import { useImportListMutation } from "../../../../../redux/features/program/program-api-slice";
 import { noticeUploadDataInitial, segmentationOptionInitial } from "../inital";
 import ListItemText from "@mui/material/ListItemText";
-import { useParams } from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
+import Swal from "sweetalert2";
 
 interface ISegmentationProps {}
 
 const EXTENSIONS = ["txt", "csv"];
 
 const BulkData: React.FunctionComponent<ISegmentationProps> = () => {
+  const nav = useNavigate();
   let { programId } = useParams();
   const [importFile, { isLoading: isUpdate, isSuccess }] =
     useImportListMutation();
@@ -89,6 +91,8 @@ const BulkData: React.FunctionComponent<ISegmentationProps> = () => {
       setTriggerState(!triggerState);
     }
 
+    Swal.fire("Success!", "Data has been created!", "success").then(()=>
+        nav('/program-management'));
     setWarningShow(false);
     setSuccessShow(true);
     setSendBulkProcess(false);

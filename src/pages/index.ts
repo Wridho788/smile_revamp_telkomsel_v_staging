@@ -15,7 +15,7 @@ import NotificationManagement from "./NotificationManagement";
 import LocationManagement from "./LocationManagement";
 import ProgramMainInfoUpdate from "./ProgramMainInfoUpdate";
 import ProgramNotificationUpdate from "./ProgramNotificationUpdate";
-import MerchantPartnerManagement from "./MerchantPartnerManagement";
+import MerchantPartnerManagement from "./MerchantPartnerManagement/partner";
 import MerchantOutletManagement from "./MerchantOutletManagement";
 
 export {

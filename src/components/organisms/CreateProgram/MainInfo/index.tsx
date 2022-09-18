@@ -37,7 +37,7 @@ import {
 import {ProgramDetailInitial} from "../../../../pages/CreateProgram/programInitial";
 import {useLocationTemplateQuery} from "../../../../redux/features/location/location-api-slice";
 import {IParams} from "../../../../redux/utils/IGeneral";
-import {useLazyPicPrimeQuery} from "../../../../redux/features/account/account-api-slice";
+import {useAccountAuthenticateQuery, useLazyPicPrimeQuery} from "../../../../redux/features/account/account-api-slice";
 import TableContainer from "@mui/material/TableContainer";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
@@ -88,7 +88,8 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
     const [page, setPage] = React.useState(0);
     const [dense, setDense] = React.useState(false);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
-
+    const [showModalCreatePIC, setShowModalCreatePIC] = useState(false);
+    const [isHQ, setIsHQ] = useState<boolean>(false);
     const ownerFilterInitial: IParams = {
         limit: 100,
         skip: 0,
@@ -98,8 +99,19 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
 
     const {data: ownerDetailOption = {data: []}} =
         useLocationTemplateQuery(ownerFilterInitial);
-    const [getAlarmPicList, {data: alarmPicList = {data: []}}] =
-        useLazyPicPrimeQuery();
+
+    const {data: accountAuth, isFetching} = useAccountAuthenticateQuery();
+    useEffect(() => {
+        if(!isFetching){
+            const currItem : any = accountAuth
+            if(currItem.account_location.location_detail.type === '62ffc0fc8a01008799e785bc'){
+                programData.program_owner = '62ffc0fc8a01008799e785bc'
+                programData.program_owner_detail = currItem.account_location.location
+                setIsHQ(true)
+            } // TODO id HQ ref => lov/location_type
+            console.log(programData)
+        }
+    }, [isFetching]);
 
     const picLazyParam: IParams = {
         lazyEvent: JSON.stringify({
@@ -109,7 +121,6 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
         }),
         // lazyEvent: `{"first" : ${page}, "rows" : ${rowsPerPage} }`,
     };
-    console.log(picLazyParam);
     const [
         getPicLazy,
         {data: picLazy = PayloadInitial, isLoading: picLazyLoading},
@@ -251,7 +262,7 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
                                                             value={row._id}
                                                         />
                                                     }
-                                                    label={row.msisdn}
+                                                    label={`${row.msisdn} | ${row.name} | ${row.email}`}
                                                 />
                                             </TableCell>
                                         </TableRow>
@@ -300,7 +311,6 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
                     optionLabel="group_name"
                     value={programData.program_group}
                     handleChange={(value: any) => {
-                        console.log(value);
                         programData.program_group = value;
                         setStateTrigger(!stateTrigger);
                     }}
@@ -393,19 +403,22 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
                         setStateTrigger(!stateTrigger);
                     }}
                 />
-                <Select
-                    label="Owner"
-                    placeholder="Option"
-                    options={ownerOption.data}
-                    optionLabel="set_value"
-                    value={programData.program_owner}
-                    handleChange={(value: any) => {
-                        programData.program_owner = value;
-                        setStateTrigger(!stateTrigger);
-                    }}
-                />
                 {
-                    (programData.program_owner) &&
+                    !isHQ &&
+                    <Select
+                        label="Owner"
+                        placeholder="Option"
+                        options={ownerOption.data}
+                        optionLabel="set_value"
+                        value={programData.program_owner}
+                        handleChange={(value: any) => {
+                            programData.program_owner = value;
+                            setStateTrigger(!stateTrigger);
+                        }}
+                    />
+                }
+                {
+                    (programData.program_owner && !isHQ) &&
                     <Select
                         label="Owner Detail"
                         placeholder="Option"

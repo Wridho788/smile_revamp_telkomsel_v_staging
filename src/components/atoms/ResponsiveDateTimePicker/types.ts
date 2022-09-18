@@ -8,6 +8,7 @@ export interface IResponsiveDateTimePickerProps {
   rightColumn?: number;
   direction?: "row" | "column";
   isRequired?: boolean;
-  minDateTime?: any;
   disabled?: boolean;
+  minDateTime?: any;
+  maxDateTime?: any;
 }

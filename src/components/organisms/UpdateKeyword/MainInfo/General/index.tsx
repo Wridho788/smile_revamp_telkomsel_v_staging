@@ -31,6 +31,7 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import InputAdornment from "@mui/material/InputAdornment";
+import { strToInt, thousandSeparator } from "../../../../../utils";
 
 interface IGeneralProps {
   keywordCreateState: IUpdateKeyword;
@@ -590,7 +591,6 @@ const General: React.FunctionComponent<IGeneralProps> = ({
             }}
           />
           <OutlinedTextField
-            type="number"
             label="Total Budget"
             variant="outlined"
             InputProps={{
@@ -599,9 +599,12 @@ const General: React.FunctionComponent<IGeneralProps> = ({
                 <InputAdornment position="start">Rp</InputAdornment>
               ),
             }}
-            value={keywordCreateState.eligibility.total_budget.toString()}
-            handleChange={(value: number) => {
-              keywordCreate.eligibility.total_budget = Number(value);
+            value={thousandSeparator(
+              keywordCreateState.eligibility.total_budget
+            )}
+            handleChange={(value: string) => {
+              const res = strToInt(value);
+              keywordCreate.eligibility.total_budget = Number(res);
               setStateTrigger(!stateTrigger);
             }}
           />

@@ -17,6 +17,7 @@ import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { strToInt, thousandSeparator } from "../../../../../utils";
 
 interface ISegmentationProps {
   keywordCreateState: ICreateKeyword;
@@ -111,6 +112,12 @@ const Segmentation: React.FunctionComponent<ISegmentationProps> = ({
             handleChange={(value: string) => {
               keywordCreate.eligibility.segmentation_customer_los_operator =
                 value;
+              if (value === "Ranged") {
+                keywordCreate.eligibility.segmentation_customer_los = 0;
+              } else {
+                keywordCreate.eligibility.segmentation_customer_los_min = 0;
+                keywordCreate.eligibility.segmentation_customer_los_max = 0;
+              }
               setStateTrigger(!stateTrigger);
             }}
           />
@@ -242,6 +249,12 @@ const Segmentation: React.FunctionComponent<ISegmentationProps> = ({
             handleChange={(value: string) => {
               keywordCreate.eligibility.segmentation_customer_arpu_operator =
                 value;
+              if (value === "Ranged") {
+                keywordCreate.eligibility.segmentation_customer_arpu = 0;
+              } else {
+                keywordCreate.eligibility.segmentation_customer_arpu_min = 0;
+                keywordCreate.eligibility.segmentation_customer_arpu_max = 0;
+              }
               setStateTrigger(!stateTrigger);
             }}
           />
@@ -250,7 +263,6 @@ const Segmentation: React.FunctionComponent<ISegmentationProps> = ({
             keywordCreateState.eligibility
               .segmentation_customer_arpu_operator !== "Ranged" && (
               <OutlinedTextField
-                type="number"
                 label="Customer ARPU"
                 variant="outlined"
                 InputProps={{
@@ -259,10 +271,13 @@ const Segmentation: React.FunctionComponent<ISegmentationProps> = ({
                     <InputAdornment position="start">Rp</InputAdornment>
                   ),
                 }}
-                value={keywordCreateState.eligibility.segmentation_customer_arpu.toString()}
-                handleChange={(value: number) => {
+                value={thousandSeparator(
+                  keywordCreateState.eligibility.segmentation_customer_arpu
+                )}
+                handleChange={(value: string) => {
+                  const res = strToInt(value);
                   keywordCreate.eligibility.segmentation_customer_arpu =
-                    Number(value);
+                    Number(res);
                   setStateTrigger(!stateTrigger);
                 }}
               />
@@ -270,7 +285,6 @@ const Segmentation: React.FunctionComponent<ISegmentationProps> = ({
           {keywordCreateState.eligibility
             .segmentation_customer_arpu_operator === "Ranged" && (
             <OutlinedTextField
-              type="number"
               label="Customer ARPU MIN"
               variant="outlined"
               InputProps={{
@@ -279,16 +293,19 @@ const Segmentation: React.FunctionComponent<ISegmentationProps> = ({
                   <InputAdornment position="start">Rp</InputAdornment>
                 ),
               }}
-              value={keywordCreateState.eligibility.segmentation_customer_arpu_min.toString()}
-              handleChange={(value: number) => {
+              value={thousandSeparator(
+                keywordCreateState.eligibility.segmentation_customer_arpu_min
+              )}
+              handleChange={(value: string) => {
+                const res = strToInt(value);
                 keywordCreate.eligibility.segmentation_customer_arpu_min =
-                  Number(value);
+                  Number(res);
                 if (
                   keywordCreateState.eligibility
-                    .segmentation_customer_arpu_max < value
+                    .segmentation_customer_arpu_max < Number(res)
                 ) {
                   keywordCreate.eligibility.segmentation_customer_arpu_max =
-                    Number(value);
+                    Number(res);
                 }
                 setStateTrigger(!stateTrigger);
               }}
@@ -297,7 +314,6 @@ const Segmentation: React.FunctionComponent<ISegmentationProps> = ({
           {keywordCreateState.eligibility
             .segmentation_customer_arpu_operator === "Ranged" && (
             <OutlinedTextField
-              type="number"
               label="Customer ARPU MAX"
               variant="outlined"
               error={
@@ -332,10 +348,13 @@ const Segmentation: React.FunctionComponent<ISegmentationProps> = ({
                   <InputAdornment position="start">Rp</InputAdornment>
                 ),
               }}
-              value={keywordCreateState.eligibility.segmentation_customer_arpu_max.toString()}
-              handleChange={(value: number) => {
+              value={thousandSeparator(
+                keywordCreateState.eligibility.segmentation_customer_arpu_max
+              )}
+              handleChange={(value: string) => {
+                const res = strToInt(value);
                 keywordCreate.eligibility.segmentation_customer_arpu_max =
-                  Number(value);
+                  Number(res);
                 setStateTrigger(!stateTrigger);
               }}
             />
@@ -362,6 +381,12 @@ const Segmentation: React.FunctionComponent<ISegmentationProps> = ({
             handleChange={(value: string) => {
               keywordCreate.eligibility.segmentation_customer_poin_balance_operator =
                 value;
+              if (value === "Ranged") {
+                keywordCreate.eligibility.segmentation_customer_poin_balance = 0;
+              } else {
+                keywordCreate.eligibility.segmentation_customer_poin_balance_min = 0;
+                keywordCreate.eligibility.segmentation_customer_poin_balance_max = 0;
+              }
               setStateTrigger(!stateTrigger);
             }}
           />
@@ -370,7 +395,6 @@ const Segmentation: React.FunctionComponent<ISegmentationProps> = ({
             keywordCreateState.eligibility
               .segmentation_customer_poin_balance_operator !== "Ranged" && (
               <OutlinedTextField
-                type="number"
                 label="Customer POIN Balance"
                 variant="outlined"
                 InputProps={{
@@ -379,10 +403,14 @@ const Segmentation: React.FunctionComponent<ISegmentationProps> = ({
                     <InputAdornment position="start">Rp</InputAdornment>
                   ),
                 }}
-                value={keywordCreateState.eligibility.segmentation_customer_poin_balance.toString()}
-                handleChange={(value: number) => {
+                value={thousandSeparator(
+                  keywordCreateState.eligibility
+                    .segmentation_customer_poin_balance
+                )}
+                handleChange={(value: string) => {
+                  const res = strToInt(value);
                   keywordCreate.eligibility.segmentation_customer_poin_balance =
-                    Number(value);
+                    Number(res);
                   setStateTrigger(!stateTrigger);
                 }}
               />
@@ -390,7 +418,6 @@ const Segmentation: React.FunctionComponent<ISegmentationProps> = ({
           {keywordCreateState.eligibility
             .segmentation_customer_poin_balance_operator === "Ranged" && (
             <OutlinedTextField
-              type="number"
               label="Customer POIN Balance MIN"
               variant="outlined"
               InputProps={{
@@ -399,16 +426,20 @@ const Segmentation: React.FunctionComponent<ISegmentationProps> = ({
                   <InputAdornment position="start">Rp</InputAdornment>
                 ),
               }}
-              value={keywordCreateState.eligibility.segmentation_customer_poin_balance_min.toString()}
-              handleChange={(value: number) => {
+              value={thousandSeparator(
+                keywordCreateState.eligibility
+                  .segmentation_customer_poin_balance_min
+              )}
+              handleChange={(value: string) => {
+                const res = strToInt(value);
                 keywordCreate.eligibility.segmentation_customer_poin_balance_min =
-                  Number(value);
+                  Number(res);
                 if (
                   keywordCreateState.eligibility
-                    .segmentation_customer_poin_balance_max < value
+                    .segmentation_customer_poin_balance_max < Number(res)
                 ) {
                   keywordCreate.eligibility.segmentation_customer_poin_balance_max =
-                    Number(value);
+                    Number(res);
                 }
                 setStateTrigger(!stateTrigger);
               }}
@@ -417,7 +448,6 @@ const Segmentation: React.FunctionComponent<ISegmentationProps> = ({
           {keywordCreateState.eligibility
             .segmentation_customer_poin_balance_operator === "Ranged" && (
             <OutlinedTextField
-              type="number"
               label="Customer POIN Balance MAX"
               variant="outlined"
               error={
@@ -457,10 +487,14 @@ const Segmentation: React.FunctionComponent<ISegmentationProps> = ({
                   <InputAdornment position="start">Rp</InputAdornment>
                 ),
               }}
-              value={keywordCreateState.eligibility.segmentation_customer_poin_balance_max.toString()}
-              handleChange={(value: number) => {
+              value={thousandSeparator(
+                keywordCreateState.eligibility
+                  .segmentation_customer_poin_balance_max
+              )}
+              handleChange={(value: string) => {
+                const res = strToInt(value);
                 keywordCreate.eligibility.segmentation_customer_poin_balance_max =
-                  Number(value);
+                  Number(res);
                 setStateTrigger(!stateTrigger);
               }}
             />

@@ -33,8 +33,8 @@ const KeywordEligibilityKeywordShift: IKeywordEligibilityKeywordShift = {
 
 export const KeywordEligibility: IKeywordEligibility = {
   name: "",
-  start_period: new Date(),
-  end_period: new Date(),
+  start_period: "",
+  end_period: "",
   keyword_type: "",
   point_type: "",
   poin_value: "",
@@ -118,23 +118,25 @@ export const KeywordBonusLoyaltyPoin: IKeywordBonusLoyaltyPoin = {
   locations: [],
 };
 
-export const KeywordBonusTelcoProductPostpaid: IKeywordBonusTelcoProductPostpaid = {
-  bonus_type: "telco_postpaid",
-  telco_post_product_name: "",
-  telco_post_bid: "",
-  telco_post_api_config: "False",
-  stock_location: [],
-  redeem_after_verification: false
-}
+export const KeywordBonusTelcoProductPostpaid: IKeywordBonusTelcoProductPostpaid =
+  {
+    bonus_type: "telco_postpaid",
+    telco_post_product_name: "",
+    telco_post_bid: "",
+    telco_post_api_config: "False",
+    stock_location: [],
+    redeem_after_verification: false,
+  };
 
-export const KeywordBonusTelcoProductPrepaid: IKeywordBonusTelcoProductPrepaid = {
-  bonus_type: "telco_prepaid",
-  telco_post_product_name: "",
-  telco_post_bid: "",
-  telco_post_api_config: "False",
-  stock_location: [],
-  redeem_after_verification: false
-}
+export const KeywordBonusTelcoProductPrepaid: IKeywordBonusTelcoProductPrepaid =
+  {
+    bonus_type: "telco_prepaid",
+    telco_post_product_name: "",
+    telco_post_bid: "",
+    telco_post_api_config: "False",
+    stock_location: [],
+    redeem_after_verification: false,
+  };
 
 export const KeywordBonusAuction: IKeywordBonusAuction = {
   bonus_type: "auction",
@@ -308,6 +310,7 @@ export const KeywordNotificationLuckyDrawHelper: IKeywordNotificationLuckyDrawHe
 export const KeywordNotificationLuckyDraw: IKeywordNotificationLuckyDraw[] = [
   {
     bonus_type_id: "",
+    keyword_name: "",
     code_identifier: "",
     notification_content: "",
     start_period: new Date(),
@@ -317,6 +320,7 @@ export const KeywordNotificationLuckyDraw: IKeywordNotificationLuckyDraw[] = [
   },
   {
     bonus_type_id: "",
+    keyword_name: "",
     code_identifier: "",
     notification_content: "",
     start_period: new Date(),
@@ -326,6 +330,7 @@ export const KeywordNotificationLuckyDraw: IKeywordNotificationLuckyDraw[] = [
   },
   {
     bonus_type_id: "",
+    keyword_name: "",
     code_identifier: "",
     notification_content: "",
     start_period: new Date(),
@@ -335,6 +340,7 @@ export const KeywordNotificationLuckyDraw: IKeywordNotificationLuckyDraw[] = [
   },
   {
     bonus_type_id: "",
+    keyword_name: "",
     code_identifier: "",
     notification_content: "",
     start_period: new Date(),
