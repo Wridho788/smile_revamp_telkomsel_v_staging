@@ -31,6 +31,7 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import InputAdornment from "@mui/material/InputAdornment";
+import { parseISO } from "date-fns";
 
 interface IGeneralProps {
   keywordCreateState: ICreateKeyword;
@@ -112,6 +113,11 @@ const General: React.FunctionComponent<IGeneralProps> = ({
           <ResponsiveDateTimePicker
             label="Start Period"
             placeholder="Start Period"
+            minDateTime={parseISO(
+              programListOptions.data.find(
+                (e) => e["_id"] === keywordCreateState.eligibility.program_id
+              )?.start_period
+            )}
             value={keywordCreateState.eligibility.start_period}
             handleChange={(value: string) => {
               keywordCreate.eligibility.start_period = value;
@@ -128,13 +134,18 @@ const General: React.FunctionComponent<IGeneralProps> = ({
             label="End Period"
             placeholder="End Period"
             minDateTime={keywordCreateState.eligibility.start_period}
+            maxDateTime={parseISO(
+              programListOptions.data.find(
+                (e) => e["_id"] === keywordCreateState.eligibility.program_id
+              )?.end_period
+            )}
             value={keywordCreateState.eligibility.end_period}
             handleChange={(value: string) => {
               keywordCreate.eligibility.end_period = value;
               setStateTrigger(!stateTrigger);
             }}
           />
-          <Select
+          {/* <Select
             label="POIN Type"
             placeholder="Option"
             options={pointTypeOptions.data}
@@ -143,7 +154,7 @@ const General: React.FunctionComponent<IGeneralProps> = ({
               keywordCreate.eligibility.point_type = value;
               setStateTrigger(!stateTrigger);
             }}
-          />
+          /> */}
           <Select
             label="POIN Value"
             placeholder="Option"
