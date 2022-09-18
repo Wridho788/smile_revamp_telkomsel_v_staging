@@ -124,12 +124,28 @@ const NotificationLuckyDraw: React.FunctionComponent<
 
   useEffect(() => {
     // Prevent duplicate data of "Lucky Draw"
-    if (!_find(keywordCreate.notification, ({ bonus_type_id }) => bonus_type_id === bonusTypeId) && bonusType === "Lucky Draw Coupon") {
-      keywordCreate.notification = keywordCreate.notification.concat(keywordNotificationLuckyDraw);
+    if (
+      !_find(
+        keywordCreate.notification,
+        ({ bonus_type_id }) => bonus_type_id === bonusTypeId
+      ) &&
+      bonusType === "lucky_draw"
+    ) {
+      keywordCreate.notification = keywordCreateState.notification.concat(
+        keywordNotificationLuckyDrawState
+      );
     }
 
     setKeywordNotificationLuckyDrawState(keywordNotificationLuckyDraw);
-  }, [keywordNotificationLuckyDraw, stateTrigger]);
+  }, [
+    bonusType,
+    bonusTypeId,
+    keywordCreate,
+    keywordCreateState.notification,
+    keywordNotificationLuckyDraw,
+    keywordNotificationLuckyDrawState,
+    stateTrigger,
+  ]);
 
   return (
     <Accordion sx={{ p: "1vw" }}>
@@ -138,7 +154,7 @@ const NotificationLuckyDraw: React.FunctionComponent<
         aria-controls="panel1a-content"
         id="panel1a-header"
       >
-        <Subtitle textTransform="uppercase">{bonusType}</Subtitle>
+        <Subtitle textTransform="uppercase">lucky draw coupon</Subtitle>
       </AccordionSummary>
       <AccordionDetails>
         <Stack spacing="2vw" px="0.5vw">
@@ -169,15 +185,20 @@ const NotificationLuckyDraw: React.FunctionComponent<
                   >
                     <Subtitle color="warning.main">{_.set_value}</Subtitle>
                     <OutlinedTextField
-                      disabled={true}
                       direction="column"
                       label="Keyword Name"
                       variant="outlined"
-                      value={keywordCreateState.eligibility.name}
+                      value={
+                        keywordNotificationLuckyDrawState[idx].keyword_name
+                      }
                       handleChange={(value: string) => {
-                        keywordCreate.eligibility.name = value;
+                        keywordNotificationLuckyDraw[idx].keyword_name = value;
+                        if (idx === 1) {
+                          keywordNotificationLuckyDraw[2].keyword_name = value;
+                        }
                         setStateTrigger(!stateTrigger);
                       }}
+                      disabled={idx === 2 ? true : false}
                     />
                     <Select
                       direction="column"
