@@ -13,6 +13,7 @@ export interface TableMerchantDataRows<T> {
 export const MerchantInitial: IMerchant = {
   _id: "",
   merchant_name: "",
+  merchant_short_code: "",
   partner_code: "",
   partner_id: "",
   pic_name: "",
@@ -21,6 +22,40 @@ export const MerchantInitial: IMerchant = {
   siup_number: "",
   province: "",
   city: "",
+  location_id: "",
+  zip_code: "",
+  address: "",
+  file_compro: "",
+  pic_phone: "",
+  pic_role_id: "",
+  pic_email: "",
+  npwp: "",
+  poin_created_by: "",
+  ktp: "",
+  pic_ktp: "",
+  bank_name: "",
+  bank_account_name: "",
+  bank_account_number: "",
+  outlets_list: [
+    {
+      _id: "",
+      outlet: [
+        {
+          _id: "",
+          outlet_name: "",
+          outlet_address: "",
+        },
+      ],
+    },
+  ],
+  location_detail: {
+    _id: "",
+    name: "",
+  },
+  role_detail: {
+    _id: "",
+    name: "",
+  },
 };
 
 export const PartnerInitial = {

@@ -23,6 +23,7 @@ const InputSearchable = <T extends Pick<InitialOptions, "name">>({
 }: IProps<T>) => {
   return (
     <Autocomplete
+      autoComplete={false}
       value={value}
       size={size}
       fullWidth
