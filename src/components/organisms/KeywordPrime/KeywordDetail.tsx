@@ -14,6 +14,7 @@ import { BodyCopy, H2 } from "../../../components";
 import { Edit, WarningAmber } from "@mui/icons-material";
 import ModalCustom from "@mui/material/Modal";
 import { IKeywordDetailsModalProps } from "../../../atomic/components/atoms/Modal/Modal.type";
+import { useGetNotifViaQuery } from "redux/features/lov/lov-api-slice";
 
 const style = {
   position: "absolute" as "absolute",
@@ -42,14 +43,9 @@ const fontContent = {
   overflowWrap: "break-word",
 };
 
-const KeywordDetail: FC<IKeywordDetailsModalProps> = ({
-  open,
-  handleClose,
-  data,
-}) => {
+const KeywordDetail: FC<IKeywordDetailsModalProps> = ({ open, handleClose, data }) => {
   const { eligibility, notification } = data;
-
-  // console.log(`data`, data);
+  const { data: notifVia } = useGetNotifViaQuery();
 
   return (
     <ModalCustom
@@ -179,27 +175,33 @@ const KeywordDetail: FC<IKeywordDetailsModalProps> = ({
 
               <Stack spacing={2}>
                 {notification &&
-                  notification.map((_item: any, _index: number) => (
-                    <Card
-                      sx={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                        padding: 1,
-                      }}
-                      key={_index}
-                    >
-                      <Box sx={{ display: "flex", flexDirection: "column" }}>
-                        <Typography sx={fontContent}>
-                          <b>{_item?.code_identifier}</b>
-                        </Typography>
-                        <Typography sx={fontContent}>
-                          {_item?.notification_content}
-                        </Typography>
-                      </Box>
-                      <Chip label={_item?.via} size="small" />
-                    </Card>
-                  ))}
+                  notification.map((_item: any, _index: number) => {
+                    let via = "";
+                    notifVia?.data?.forEach((item: any) => {
+                      if (item?._id === _item?.via) via = item?.set_value
+                    })
+                    return (
+                      <Card
+                        sx={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                          padding: 1,
+                        }}
+                        key={_index}
+                      >
+                        <Box sx={{ display: "flex", flexDirection: "column" }}>
+                          <Typography sx={fontContent}>
+                            <b>{_item?.notification_content}</b>
+                          </Typography>
+                          {/* <Typography sx={fontContent}>
+                            {_item?.notification_content}
+                          </Typography> */}
+                        </Box>
+                        <Chip label={via} size="small" />
+                      </Card>
+                    )
+                  })}
               </Stack>
             </Grid>
           </Grid>
