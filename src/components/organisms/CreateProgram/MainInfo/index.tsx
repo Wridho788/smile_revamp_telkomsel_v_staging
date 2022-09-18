@@ -54,14 +54,14 @@ import {
 } from "../../../../redux/features/program/program-api-slice";
 import {ICreateProgram} from "../../../../pages/CreateProgram/interface";
 import CachedIcon from "@mui/icons-material/Cached";
-import ModalCreatePIC from "./ModalCreatePIC";
-
 interface IMainInfoProps {
     slug: string;
+    handleShowModalPic?: any;
+    isRefetchPic? : boolean;
 }
 
 const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
-                                                               slug,
+                                                               slug, handleShowModalPic, isRefetchPic
                                                            }: IMainInfoProps) => {
     let programData = ProgramDetailInitial.data;
     let {_id} = useParams();
@@ -88,7 +88,6 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
     const [page, setPage] = React.useState(0);
     const [dense, setDense] = React.useState(false);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
-    const [showModalCreatePIC, setShowModalCreatePIC] = useState(false);
 
     const ownerFilterInitial: IParams = {
         limit: 100,
@@ -118,7 +117,7 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
 
     useEffect(() => {
         getPicLazy(picLazyParam);
-    }, [page, rowsPerPage, searchInput]);
+    }, [page, rowsPerPage, searchInput, isRefetchPic]);
 
     const handleChangeCheckbox = (event: any) => {
         let isChecked = event.target.checked;
@@ -143,15 +142,6 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
 
     return (
         <Fragment>
-            {showModalCreatePIC && (
-                <ModalCreatePIC
-                    open={showModalCreatePIC}
-                    handleClose={() => setShowModalCreatePIC(false)}
-                    handleResfresh={() => {
-                        getPicLazy(picLazyParam);
-                    }}
-                />
-            )}
 
             <Box pt={5} mx={2}>
                 <Box>
@@ -164,7 +154,7 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
                                     arrow
                                 >
                                     <Button
-                                        onClick={() => setShowModalCreatePIC(true)}
+                                        onClick={handleShowModalPic}
                                         color="inherit"
                                         size="small"
                                     >
