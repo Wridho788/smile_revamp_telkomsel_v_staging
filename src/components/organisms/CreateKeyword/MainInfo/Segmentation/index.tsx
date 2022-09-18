@@ -111,6 +111,12 @@ const Segmentation: React.FunctionComponent<ISegmentationProps> = ({
             handleChange={(value: string) => {
               keywordCreate.eligibility.segmentation_customer_los_operator =
                 value;
+              if (value === "Ranged") {
+                keywordCreate.eligibility.segmentation_customer_los = 0;
+              } else {
+                keywordCreate.eligibility.segmentation_customer_los_min = 0;
+                keywordCreate.eligibility.segmentation_customer_los_max = 0;
+              }
               setStateTrigger(!stateTrigger);
             }}
           />
@@ -242,6 +248,12 @@ const Segmentation: React.FunctionComponent<ISegmentationProps> = ({
             handleChange={(value: string) => {
               keywordCreate.eligibility.segmentation_customer_arpu_operator =
                 value;
+              if (value === "Ranged") {
+                keywordCreate.eligibility.segmentation_customer_arpu = 0;
+              } else {
+                keywordCreate.eligibility.segmentation_customer_arpu_min = 0;
+                keywordCreate.eligibility.segmentation_customer_arpu_max = 0;
+              }
               setStateTrigger(!stateTrigger);
             }}
           />
@@ -362,6 +374,12 @@ const Segmentation: React.FunctionComponent<ISegmentationProps> = ({
             handleChange={(value: string) => {
               keywordCreate.eligibility.segmentation_customer_poin_balance_operator =
                 value;
+              if (value === "Ranged") {
+                keywordCreate.eligibility.segmentation_customer_poin_balance = 0;
+              } else {
+                keywordCreate.eligibility.segmentation_customer_poin_balance_min = 0;
+                keywordCreate.eligibility.segmentation_customer_poin_balance_max = 0;
+              }
               setStateTrigger(!stateTrigger);
             }}
           />
