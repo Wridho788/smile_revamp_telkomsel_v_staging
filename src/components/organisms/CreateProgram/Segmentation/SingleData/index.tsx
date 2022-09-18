@@ -42,8 +42,8 @@ const style = {
     p: 4,
 };
 
-const whitelistArray: any = [];
-const blacklistArray: any = [];
+let whitelistArray: any = [];
+let blacklistArray: any = [];
 const SingleData: React.FunctionComponent<ISegmentationProps> = () => {
     let {programId} = useParams();
     const {handleSubmit} = useForm();
@@ -101,7 +101,7 @@ const SingleData: React.FunctionComponent<ISegmentationProps> = () => {
                 setOpen(true);
                 setMessageError(res.error.data.message);
             } else {
-                whitelistArray.clear()
+                whitelistArray =[]
                 Swal.fire("Success!", "Data has been created!", "success");
             }
         });
@@ -118,7 +118,7 @@ const SingleData: React.FunctionComponent<ISegmentationProps> = () => {
                 setOpen(true);
                 setMessageError(res.error.data.message);
             } else {
-                blacklistArray.clear()
+                blacklistArray = []
                 Swal.fire("Success!", "Data has been created!", "success");
             }
         });
