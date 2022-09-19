@@ -30,6 +30,7 @@ import {
   useKeywordApproveMutation,
   useKeywordRejectMutation,
 } from "redux/features/keyword/keyword-api-slice";
+import { useGetNotifViaQuery } from "redux/features/lov/lov-api-slice";
 
 const style = {
   position: "absolute" as "absolute",
@@ -65,14 +66,14 @@ const KeywordDetail: FC<IKeywordDetailsModalProps> = ({
   roleAccess,
   isHqLogin,
 }) => {
+  const { eligibility, notification } = data;
+  const { data: notifVia } = useGetNotifViaQuery();
   const [rejectionIssue, setRejectionIssue] = useState("");
 
   const [approveProgram, { isLoading: isLoadingApprove }] =
     useKeywordApproveMutation();
   const [rejectProgram, { isLoading: isLoadingReject }] =
     useKeywordRejectMutation();
-
-  const { eligibility, notification } = data;
 
   const approveHandler = async () => {
     approveProgram(data["_id"] ?? "").then((res: any) => {
@@ -405,27 +406,33 @@ const KeywordDetail: FC<IKeywordDetailsModalProps> = ({
 
               <Stack spacing={2}>
                 {notification &&
-                  notification.map((_item: any, _index: number) => (
-                    <Card
-                      sx={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                        padding: 1,
-                      }}
-                      key={_index}
-                    >
-                      <Box sx={{ display: "flex", flexDirection: "column" }}>
-                        <Typography sx={fontContent}>
-                          <b>{_item?.code_identifier}</b>
-                        </Typography>
-                        <Typography sx={fontContent}>
-                          {_item?.notification_content}
-                        </Typography>
-                      </Box>
-                      <Chip label={_item?.via} size="small" />
-                    </Card>
-                  ))}
+                  notification.map((_item: any, _index: number) => {
+                    let via = "";
+                    notifVia?.data?.forEach((item: any) => {
+                      if (item?._id === _item?.via) via = item?.set_value;
+                    });
+                    return (
+                      <Card
+                        sx={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                          padding: 1,
+                        }}
+                        key={_index}
+                      >
+                        <Box sx={{ display: "flex", flexDirection: "column" }}>
+                          <Typography sx={fontContent}>
+                            <b>{_item?.notification_content}</b>
+                          </Typography>
+                          {/* <Typography sx={fontContent}>
+                            {_item?.notification_content}
+                          </Typography> */}
+                        </Box>
+                        <Chip label={via} size="small" />
+                      </Card>
+                    );
+                  })}
               </Stack>
             </Grid>
           </Grid>
