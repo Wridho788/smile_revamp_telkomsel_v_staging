@@ -1,5 +1,13 @@
 import React, { useState, useEffect, Fragment } from "react";
-import { Box, Grid, IconButton, Paper, Stack, Typography } from "@mui/material";
+import {
+  Alert,
+  Box,
+  Grid,
+  IconButton,
+  Paper,
+  Stack,
+  Typography,
+} from "@mui/material";
 import { DrawerNav, Gap, H2 } from "../../../components";
 import DarkButton from "../../atoms/DarkButton";
 import FilterListIcon from "@mui/icons-material/FilterList";
@@ -40,9 +48,16 @@ const KeywordPrime = () => {
           "param_value"
         ]
       : undefined;
+  const defaultRoleManagerHQ =
+    appConfig !== undefined
+      ? appConfig.find((item) => item["param_key"] === "DEFAULT_LOCATION_HQ")[
+          "param_value"
+        ]
+      : undefined;
 
   const { data: accountAuth } = useAccountAuthenticateQuery();
 
+  // Detail Keyword
   const [item, setItem] = useState([]);
   const [open, setOpen] = useState(false);
   const handleButtonDetail = async (item: any) => {
@@ -114,7 +129,37 @@ const KeywordPrime = () => {
     return <span>{data?.data[0]?.set_value}</span>;
   };
 
-  console.log(data);
+  const StatusApprovalRender = (rowData: any) => {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          textAlign: "center",
+          width: "100%",
+          justifyContent: "left",
+          alignItems: "center",
+          alignContent: "center",
+        }}
+      >
+        {rowData.approval_log && rowData.approval_log.length > 0 ? (
+          <Alert severity="success" icon={false}>
+            {
+              rowData.approval_log[rowData.approval_log.length - 1].status[0]
+                .set_value
+            }
+          </Alert>
+        ) : rowData.isHQ ? (
+          <Alert severity="warning" icon={false}>
+            Waiting Approval HQ Manager
+          </Alert>
+        ) : (
+          <Alert severity="warning" icon={false}>
+            Waiting Approval Area Manager
+          </Alert>
+        )}
+      </Box>
+    );
+  };
 
   return (
     <Fragment>
@@ -124,10 +169,20 @@ const KeywordPrime = () => {
           setOpen(false);
         }}
         data={item}
-        // roleAccess={
-        //     accountAuth && defaultRoleManager ?
-        //     accountAuth.role === defaultRoleManager ? true : false : false
-        // }
+        roleAccess={
+          accountAuth && defaultRoleManager
+            ? accountAuth.role === defaultRoleManager
+              ? true
+              : false
+            : false
+        }
+        isHqLogin={
+          accountAuth &&
+          accountAuth.account_location.location_detail.type ===
+            defaultRoleManagerHQ
+            ? true
+            : false
+        }
       />
 
       <Stack direction={"row"} justifyContent={"space-between"}>
@@ -205,6 +260,18 @@ const KeywordPrime = () => {
                       field="set_value"
                       header="PROGRAM EXPERIENCE"
                       body={ProgramExperienceRender}
+                    />
+                    <Column
+                      style={{
+                        flexGrow: 1,
+                        flexBasis: "250px",
+                        alignItems: "center",
+                      }}
+                      field="program_time_zone"
+                      header="STATUS"
+                      sortable
+                      body={StatusApprovalRender}
+                      filterPlaceholder="Search"
                     />
                   </DataTable>
                 </div>
