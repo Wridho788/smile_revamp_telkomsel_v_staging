@@ -7,7 +7,7 @@ const baseUrl = process.env.REACT_APP_BASE_URL;
 
 export const keywordSlice = createApi({
   reducerPath: "keywordApi",
-  baseQuery: API_HEADER(baseUrl + "/v1/keyword"),
+  baseQuery: API_HEADER(baseUrl + "/v2/keyword"),
   tagTypes: ["Keyword"],
   endpoints(builder) {
     const responseHandler = (endpoint: string) =>
@@ -19,16 +19,25 @@ export const keywordSlice = createApi({
         providesTags: ["Keyword"],
       });
     const detailHandler = (endpoint: string) =>
-        builder.query<any, any>({
-          query: (_id: string) => ({
-            url: endpoint + _id + "/detail"
-          })
-        });
+      builder.query<any, any>({
+        query: (_id: string) => ({
+          url: endpoint + _id + "/detail",
+        }),
+      });
     const approvalHandler = (endpoint: string) =>
       builder.mutation<any, string>({
         query: (_id: string) => ({
           url: `/${_id}/${endpoint}`,
           method: "PATCH",
+        }),
+        invalidatesTags: ["Keyword"],
+      });
+    const rejectionHandler = (endpoint: string) =>
+      builder.mutation<{ success: boolean; body: any }, any>({
+        query: (body) => ({
+          url: `/${body._id}/${endpoint}`,
+          method: "PATCH",
+          body: { reason_reject: body.reason_reject },
         }),
         invalidatesTags: ["Keyword"],
       });
@@ -43,10 +52,14 @@ export const keywordSlice = createApi({
           body: body,
         }),
       });
-    const putHandler = (endpoint: string, step: string = "", isId: boolean = false) =>
+    const putHandler = (
+      endpoint: string,
+      step: string = "",
+      isId: boolean = false
+    ) =>
       builder.mutation<{ success: boolean; body: any }, any>({
         query: (body) => ({
-          url: isId ? (endpoint + body["_id"] + step || "/edit") : endpoint,
+          url: isId ? endpoint + body["_id"] + step || "/edit" : endpoint,
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
@@ -66,20 +79,20 @@ export const keywordSlice = createApi({
         invalidatesTags: ["Keyword"],
       });
     const postImgHandler = () =>
-        builder.mutation<{}, FormData>({
-          query: (formData) => ({
-            url: '/image-auction',
-            method: "POST",
-            body: formData
-          })
-        });
+      builder.mutation<{}, FormData>({
+        query: (formData) => ({
+          url: "/image-auction",
+          method: "POST",
+          body: formData,
+        }),
+      });
     return {
       // all function
       keywordList: responseHandler(baseUrl + "/v1/keyword"),
       keywordDelete: deleteHandler(baseUrl + "/v1/keyword"),
       keywordNotificationDelete: deleteHandler("/notification"),
       keywordApprove: approvalHandler("approve"),
-      keywordReject: approvalHandler("reject"),
+      keywordReject: rejectionHandler("reject"),
       keywordListPrime: responseHandler(baseUrl + "/v2/keyword"),
 
       // action
@@ -121,7 +134,7 @@ export const keywordSlice = createApi({
       keywordLuckyDrawDelete: deleteHandler("/lucky_draw"),
 
       // post : image/file
-      keywordUploadAuction: postImgHandler()
+      keywordUploadAuction: postImgHandler(),
     };
   },
 });
@@ -141,5 +154,5 @@ export const {
   useKeywordGeneralCreateMutation,
   useKeywordGeneralUpdateMutation,
   useKeywordUploadAuctionMutation,
-  useKeywordGeneralDetailQuery
+  useKeywordGeneralDetailQuery,
 } = keywordSlice;

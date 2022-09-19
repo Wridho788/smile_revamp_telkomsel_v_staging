@@ -12,17 +12,18 @@ interface IProgramDetailsModalProps extends ModalProps {
 }
 
 interface IKeywordDetailsModalProps extends ModalProps {
-  roleAccess?: boolean;
+  roleAccess: boolean;
   data: any;
+  isHqLogin?: boolean;
 }
 
 interface IPicManagemenrModalProps extends ModalProps {
-  handleResfresh? : any
+  handleResfresh?: any;
 }
 
 export type {
   ModalProps,
   IProgramDetailsModalProps,
   IKeywordDetailsModalProps,
-  IPicManagemenrModalProps
+  IPicManagemenrModalProps,
 };
