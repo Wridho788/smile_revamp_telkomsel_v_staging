@@ -24,6 +24,7 @@ import { useAppConfigQuery } from "../../../redux/features/app-config/app-config
 import { useAccountAuthenticateQuery } from "../../../redux/features/account/account-api-slice";
 
 import KeywordDetailsModal from "./KeywordDetail";
+import { keywordProgramDetailHelper } from "../Programs/Detail/KeywordLink/initial";
 
 interface IkeywordPrime {
   bonus: any[];
@@ -178,6 +179,16 @@ const KeywordPrime = () => {
       </Box>
     );
   };
+
+  useEffect(() => {
+    if (
+      keywordProgramDetailHelper.data !== undefined &&
+      keywordProgramDetailHelper.opened === false
+    ) {
+      handleButtonDetail(keywordProgramDetailHelper.data);
+    }
+    return;
+  }, []);
 
   return (
     <Fragment>
