@@ -101,11 +101,11 @@ const ProgramDetailsModal: FC<IProgramDetailsModalProps> = ({
     approveProgram(data["_id"] ?? "").then((res: any) => {
       if (res?.error) {
         handleClose();
-        Swal.fire(res.error.data.message, "", "warning");
+        Swal.fire(res.error.data.message, "Failed!", "warning");
       } else {
         if (res?.data.status === 200) {
           handleClose();
-          Swal.fire(res?.data.message, "", "success");
+          Swal.fire(res?.data.message, "Approved", "success");
           window.location.reload();
         }
       }
@@ -113,14 +113,17 @@ const ProgramDetailsModal: FC<IProgramDetailsModalProps> = ({
   };
 
   const rejectHandler = async () => {
-    rejectProgram(data["_id"] ?? "").then((res: any) => {
+    rejectProgram({
+      _id: data["_id"] ?? "",
+      reason_reject: rejectionIssue,
+    }).then((res: any) => {
       if (res?.error) {
         handleClose();
-        Swal.fire(res.error.data.message, "", "warning");
+        Swal.fire(res.error.data.message, "Failed!", "warning");
       } else {
         if (res?.data.status === 200) {
           handleClose();
-          Swal.fire(res?.data.message, "", "success");
+          Swal.fire(res?.data.message, "Rejected!", "success");
           window.location.reload();
         }
       }

@@ -1,7 +1,8 @@
 import React, { useState, useEffect, Fragment } from "react";
 import {
-  Box,
   Chip,
+  Alert,
+  Box,
   Grid,
   IconButton,
   Paper,
@@ -31,6 +32,19 @@ import { useAccountAuthenticateQuery } from "../../../redux/features/account/acc
 import KeywordDetailsModal from "./KeywordDetail";
 import FilterKeyword from "./filter";
 import { BodyCopy } from "components/atoms";
+
+interface IkeywordPrime {
+  bonus: any[];
+  created_at: string;
+  created_by: any;
+  deleted_at: null;
+  eligibility: any;
+  keyword_approval: string;
+  notification: any[];
+  updated_at: string;
+  __v: number;
+  _id: string;
+}
 
 const KeywordPrime = () => {
   const [keywords, setKeywords] = useState<any>([IKeywordPrime]);
@@ -66,9 +80,16 @@ const KeywordPrime = () => {
           "param_value"
         ]
       : undefined;
+  const defaultRoleManagerHQ =
+    appConfig !== undefined
+      ? appConfig.find((item) => item["param_key"] === "DEFAULT_LOCATION_HQ")[
+          "param_value"
+        ]
+      : undefined;
 
   const { data: accountAuth } = useAccountAuthenticateQuery();
 
+  // Detail Keyword
   const [item, setItem] = useState([]);
   const [open, setOpen] = useState({
     detail: false,
@@ -161,8 +182,45 @@ const KeywordPrime = () => {
     );
   };
 
-  const ProgramExperienceRender = () => {
-    return <span>{programExperienceList?.data[0]?.set_value}</span>;
+  const ProgramExperienceRender = (rowData: IkeywordPrime) => {
+    let program = "";
+    let program_exp: string[] = rowData?.eligibility?.program_experience;
+    programExperienceList?.data?.forEach((value: any) => {
+      if (value?._id === program_exp?.[0]) program = value?.set_value;
+    });
+    return <span>{program}</span>;
+  };
+
+  const StatusApprovalRender = (rowData: any) => {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          textAlign: "center",
+          width: "100%",
+          justifyContent: "left",
+          alignItems: "center",
+          alignContent: "center",
+        }}
+      >
+        {rowData.approval_log && rowData.approval_log.length > 0 ? (
+          <Alert severity="success" icon={false}>
+            {
+              rowData.approval_log[rowData.approval_log.length - 1].status[0]
+                .set_value
+            }
+          </Alert>
+        ) : rowData.isHQ ? (
+          <Alert severity="warning" icon={false}>
+            Waiting Approval HQ Manager
+          </Alert>
+        ) : (
+          <Alert severity="warning" icon={false}>
+            Waiting Approval Area Manager
+          </Alert>
+        )}
+      </Box>
+    );
   };
 
   return (
@@ -181,10 +239,20 @@ const KeywordPrime = () => {
           setOpen({ ...open, detail: false });
         }}
         data={item}
-        // roleAccess={
-        //     accountAuth && defaultRoleManager ?
-        //     accountAuth.role === defaultRoleManager ? true : false : false
-        // }
+        roleAccess={
+          accountAuth && defaultRoleManager
+            ? accountAuth.role === defaultRoleManager
+              ? true
+              : false
+            : false
+        }
+        isHqLogin={
+          accountAuth &&
+          accountAuth.account_location.location_detail.type ===
+            defaultRoleManagerHQ
+            ? true
+            : false
+        }
       />
 
       <Stack direction={"row"} justifyContent={"space-between"}>
@@ -307,6 +375,18 @@ const KeywordPrime = () => {
                       field="set_value"
                       header="PROGRAM EXPERIENCE"
                       body={ProgramExperienceRender}
+                    />
+                    <Column
+                      style={{
+                        flexGrow: 1,
+                        flexBasis: "250px",
+                        alignItems: "center",
+                      }}
+                      field="program_time_zone"
+                      header="STATUS"
+                      sortable
+                      body={StatusApprovalRender}
+                      filterPlaceholder="Search"
                     />
                   </DataTable>
                 </div>
