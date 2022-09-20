@@ -1,5 +1,13 @@
 import React, { useState, useEffect, Fragment } from "react";
-import { Box, Grid, IconButton, Paper, Stack, Typography } from "@mui/material";
+import {
+  Box,
+  Chip,
+  Grid,
+  IconButton,
+  Paper,
+  Stack,
+  Typography,
+} from "@mui/material";
 import { DrawerNav, Gap, H2 } from "../../../components";
 import DarkButton from "../../atoms/DarkButton";
 import FilterListIcon from "@mui/icons-material/FilterList";
@@ -8,18 +16,26 @@ import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
+import { FilterMatchMode } from "primereact/api";
 import moment from "moment";
-import { IKeywordPrime } from "./initial";
+import {
+  IKeywordPrime,
+  InitialFilter,
+  InitialKeywordApproval as InitialProgramExperience,
+} from "./initial";
 import { useLazyKeywordListPrimeQuery } from "../../../redux/features/keyword/keyword-api-slice";
 import { useGetProgramExperienceQuery } from "../../../redux/features/lov/lov-api-slice";
 import { useAppConfigQuery } from "../../../redux/features/app-config/app-config-api-slice";
 import { useAccountAuthenticateQuery } from "../../../redux/features/account/account-api-slice";
 
 import KeywordDetailsModal from "./KeywordDetail";
+import FilterKeyword from "./filter";
+import { BodyCopy } from "components/atoms";
 
 const KeywordPrime = () => {
   const [keywords, setKeywords] = useState<any>([IKeywordPrime]);
   const [loading, setLoading] = useState<boolean>(false);
+  const [triger, setTriger] = useState<boolean>(false);
   const [totalRecords, setTotalRecords] = useState<number>(0);
   const [lazyParams, setLazyParams] = useState<any>({
     first: 0,
@@ -28,7 +44,17 @@ const KeywordPrime = () => {
     sortField: "created_at",
     sortOrder: -1,
     filters: {
-      "eligibility.name": { value: "", matchMode: "contains" },
+      "eligibility.name": { value: "", matchMode: FilterMatchMode.CONTAINS },
+
+      // Filter field
+      "eligibility.program_experience": {
+        value: InitialFilter.program_experience._id,
+        matchMode: FilterMatchMode.CONTAINS,
+      },
+      keyword_approval: {
+        value: InitialFilter.keyword_approval._id,
+        matchMode: FilterMatchMode.EQUALS,
+      },
     },
   });
 
@@ -44,10 +70,13 @@ const KeywordPrime = () => {
   const { data: accountAuth } = useAccountAuthenticateQuery();
 
   const [item, setItem] = useState([]);
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState({
+    detail: false,
+    filter: false,
+  });
   const handleButtonDetail = async (item: any) => {
     setItem(item);
-    setOpen(true);
+    setOpen({ ...open, detail: true });
   };
 
   const onPage = (event: any) => {
@@ -67,7 +96,8 @@ const KeywordPrime = () => {
     handleButtonDetail(event.data);
   };
 
-  const { data } = useGetProgramExperienceQuery();
+  const { data: programExperienceList = { data: [InitialProgramExperience] } } =
+    useGetProgramExperienceQuery();
   const [
     getKeywordList,
     { data: keywordList = { data: [IKeywordPrime] }, isError, isLoading },
@@ -76,10 +106,29 @@ const KeywordPrime = () => {
   let loadLazyTimeout: any = null;
   const loadLazyData = () => {
     setLoading(true);
+
     if (loadLazyTimeout) clearTimeout(loadLazyTimeout);
     loadLazyTimeout = setTimeout(async () => {
       const { data }: any = await getKeywordList({
-        lazyEvent: JSON.stringify(lazyParams),
+        lazyEvent: JSON.stringify({
+          ...lazyParams,
+          filters: {
+            "eligibility.name": {
+              value: "",
+              matchMode: FilterMatchMode.CONTAINS,
+            },
+
+            // Filter field
+            "eligibility.program_experience": {
+              value: InitialFilter.program_experience._id,
+              matchMode: FilterMatchMode.CONTAINS,
+            },
+            keyword_approval: {
+              value: InitialFilter.keyword_approval._id,
+              matchMode: FilterMatchMode.EQUALS,
+            },
+          },
+        }),
       });
       setKeywords(data.payload.data);
       setTotalRecords(data.payload.totalRecords);
@@ -87,9 +136,11 @@ const KeywordPrime = () => {
     }, Math.random() * 1000 + 250);
   };
 
+  // ====================== Effect =========================
+  // =======================================================
   useEffect(() => {
     loadLazyData();
-  }, [lazyParams]);
+  }, [lazyParams, triger]);
 
   // Customize Column Render Component
   const NameRender = (rowData: any) => {
@@ -111,17 +162,23 @@ const KeywordPrime = () => {
   };
 
   const ProgramExperienceRender = () => {
-    return <span>{data?.data[0]?.set_value}</span>;
+    return <span>{programExperienceList?.data[0]?.set_value}</span>;
   };
-
-  console.log(data);
 
   return (
     <Fragment>
+      <FilterKeyword
+        loading={loading}
+        open={open.filter}
+        onClose={() => setOpen({ ...open, filter: false })}
+        filters={InitialFilter}
+        triger={triger}
+        setTriger={setTriger}
+      />
       <KeywordDetailsModal
-        open={open}
+        open={open.detail}
         handleClose={() => {
-          setOpen(false);
+          setOpen({ ...open, detail: false });
         }}
         data={item}
         // roleAccess={
@@ -133,26 +190,71 @@ const KeywordPrime = () => {
       <Stack direction={"row"} justifyContent={"space-between"}>
         <H2 color={"secondary.dark"}>Keyword</H2>
         <Stack direction="row" alignItems="center" spacing={"1vw"}>
-          <IconButton
+          <DarkButton
             href="/create-keyword/"
-            size="small"
+            size="medium"
             sx={{
-              bgcolor: "primary",
-              borderRadius: "0.4vw",
+              bgcolor: "#188a42",
+              "&:hover": {
+                bgcolor: "#001A41",
+              },
+              // borderRadius: "0.4vw",
               opacity: 0.8,
-              width: "2.1vw",
-              height: "2.1vw",
             }}
           >
-            <Add fontSize="inherit" />
-          </IconButton>
+            <Add
+              sx={{ color: "#FFF", "&:hover": { color: "#001A41" } }}
+              fontSize="inherit"
+            />
+          </DarkButton>
+          <DarkButton
+            variant="contained"
+            size="medium"
+            startIcon={<FilterListIcon />}
+            onClick={() => setOpen({ ...open, filter: true })}
+          >
+            <BodyCopy>Filter</BodyCopy>
+          </DarkButton>
         </Stack>
       </Stack>
 
-      <Grid container mt={3}>
+      <Grid container>
         <Grid item xs={12}>
           <DrawerNav>
             <Box>
+              <Stack direction="row" spacing="1vw" mb={1}>
+                {Object.values(InitialFilter).map(
+                  (item) =>
+                    item.name && (
+                      <Chip
+                        sx={{
+                          backgroundColor: "rgb(25, 118, 210)",
+                          color: "#FFF",
+                          "& .MuiChip-deleteIcon": {
+                            color: "#FFF",
+                          },
+                        }}
+                        label={item.name}
+                        onDelete={() => {
+                          if (InitialFilter.keyword_approval === item) {
+                            InitialFilter.keyword_approval = {
+                              _id: "",
+                              name: "",
+                            };
+                          } else if (
+                            InitialFilter.program_experience === item
+                          ) {
+                            InitialFilter.program_experience = {
+                              _id: "",
+                              name: "",
+                            };
+                          }
+                          setTriger(!triger);
+                        }}
+                      />
+                    )
+                )}
+              </Stack>
               <Paper>
                 <div className="card">
                   <DataTable
