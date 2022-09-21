@@ -34,17 +34,11 @@ const Location: React.FunctionComponent<ILocationProps> = ({
 }) => {
   const { data: locationTypeOptions = { data: [] } } =
     useGetLocationTypeQuery();
-  // const { data: locationOptions = { data: [] } } =
-  //   useLocationTemplateQuery(FilterInitial);
 
-  const [getOwnerDetail, {data: locationOptions}] =
+  const [getOwnerDetail, { data: locationOptions }] =
       useLocationRebaseMutation();
 
-  const { data: accountAuth, isFetching } = useAccountAuthenticateQuery();
-  useEffect(() => {
-    keywordEligibilityLocationHelperState.location_type = accountAuth?.account_location.location_detail.type;
-    setStateTrigger(!stateTrigger);
-  }, [isFetching]);
+  const { data: accountAuth } = useAccountAuthenticateQuery();
 
   const keywordEligibilityLocationHelper = KeywordEligibilityLocationHelper;
   const [
@@ -57,6 +51,13 @@ const Location: React.FunctionComponent<ILocationProps> = ({
   useEffect(() => {
     setKeywordEligibilityLocationHelperState(keywordEligibilityLocationHelper);
   }, [keywordEligibilityLocationHelper, stateTrigger]);
+
+  useEffect(() => {
+    if (accountAuth?.account_location.location_detail.type) {
+      keywordEligibilityLocationHelperState.location_type = accountAuth?.account_location.location_detail.type
+    }
+  }, [keywordCreateState.eligibility?.eligibility_locations]);
+
 
   return (
     <Accordion sx={{ p: "1vw" }}>
@@ -78,14 +79,14 @@ const Location: React.FunctionComponent<ILocationProps> = ({
             value={keywordCreateState.eligibility.eligibility_locations}
             handleChange={(value: boolean) => {
               keywordCreate.eligibility.eligibility_locations = value;
+              getOwnerDetail({ type: accountAuth?.account_location.location_detail.type });
               setStateTrigger(!stateTrigger);
             }}
           />
-          {keywordCreateState.eligibility.eligibility_locations !== false && (
+          {keywordCreateState.eligibility.eligibility_locations && (
             <Select
               label="Location Type"
               placeholder="Option"
-              optionLabel="set_value"
               options={locationTypeOptions.data}
               value={keywordEligibilityLocationHelperState.location_type}
               handleChange={(value: string) => {
@@ -96,22 +97,13 @@ const Location: React.FunctionComponent<ILocationProps> = ({
               }}
             />
           )}
-          {keywordEligibilityLocationHelperState.location_type.length > 0 &&
-            locationOptions.data.find(
-              (e: any) =>
-                e["type"] ===
-                keywordEligibilityLocationHelperState.location_type
-            ) !== undefined && (
+          {keywordCreateState.eligibility.eligibility_locations && (
               <Grid item xs={3}>
                 <Select
                   multiple
                   label="Location"
                   placeholder="Option"
-                  options={locationOptions.data.filter(
-                    (e: any) =>
-                      e["type"] ===
-                      keywordEligibilityLocationHelperState.location_type
-                  )}
+                  options={locationOptions}
                   optionLabel={"name"}
                   value={keywordCreateState.eligibility.locations}
                   handleChange={(value: any) => {
