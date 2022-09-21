@@ -24,6 +24,7 @@ export const locationSlice = createApi({
 
             locationTemplateForPrime: responseHandler('/prime'),
 
+            locationLocRebase: responseHandler('/loc_rebase')
         };
     },
 });
@@ -32,5 +33,6 @@ export const {
     useLocationTemplateQuery,
     useLocationTemplateForPrimeQuery,
     useLazyLocationTemplateForPrimeQuery,
-    useLocationBucketQuery
+    useLocationBucketQuery,
+    useLocationLocRebaseQuery
 } = locationSlice;

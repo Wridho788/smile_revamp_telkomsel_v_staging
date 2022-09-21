@@ -35,7 +35,10 @@ import {
     ThresholdAlarmExpiredOption,
 } from "../../../../redux/utils/initial-general";
 import {ProgramDetailInitial} from "../../../../pages/CreateProgram/programInitial";
-import {useLocationTemplateQuery} from "../../../../redux/features/location/location-api-slice";
+import {
+    useLocationLocRebaseQuery,
+    useLocationTemplateQuery
+} from "../../../../redux/features/location/location-api-slice";
 import {IParams} from "../../../../redux/utils/IGeneral";
 import {useAccountAuthenticateQuery, useLazyPicPrimeQuery} from "../../../../redux/features/account/account-api-slice";
 import TableContainer from "@mui/material/TableContainer";
@@ -64,17 +67,16 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
                                                                slug, handleShowModalPic, isRefetchPic
                                                            }: IMainInfoProps) => {
     let programData = ProgramDetailInitial.data;
-    let {_id} = useParams();
-    const {data: fetchDetail = programData, isLoading} = useDetailProgramQuery(
-        _id ?? ""
-    );
-    useEffect(() => {
-        programData._id = fetchDetail._id;
-    }, [fetchDetail]);
+    // let {_id} = useParams();
+    // const {data: fetchDetail = programData, isLoading} = useDetailProgramQuery(
+    //     _id ?? ""
+    // );
+    // useEffect(() => {
+    //     programData._id = fetchDetail._id;
+    // }, [fetchDetail]);
 
     const {data: pointTypeOption = {data: []}} = useGetPointTypeQuery();
     const {data: mechanismOption = {data: []}} = useGetMechanismQuery();
-    const {data: ownerOption = {data: []}} = useGetLocationTypeQuery();
     const {data: groupOption = {data: []}} = useGetProgramGroupQuery();
 
     const [searchInput, setSearchInput] = useState<string>("");
@@ -97,21 +99,22 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
         sort: "{}",
     };
 
-    const {data: ownerDetailOption = {data: []}} =
-        useLocationTemplateQuery(ownerFilterInitial);
+    // const { data: ownerDetailOption = {data: []} } =
+    //     useLocationTemplateQuery(ownerFilterInitial);
 
-    const {data: accountAuth, isFetching} = useAccountAuthenticateQuery();
+    // @ts-ignore
+    const { data: accountAuth, isFetching } = useAccountAuthenticateQuery();
+    const { data: ownerDetailOption = {data: []}, isFetching: isFetchingLocRebase } = useLocationLocRebaseQuery(
+        { type: accountAuth?.account_location.location_detail.type },
+        { skip: isFetching });
+
+    const { data: ownerOption = {data: []} } = useGetLocationTypeQuery();
+
     useEffect(() => {
-        if(!isFetching){
-            const currItem : any = accountAuth
-            if(currItem.account_location.location_detail.type === '62ffc0fc8a01008799e785bc'){
-                programData.program_owner = '62ffc0fc8a01008799e785bc'
-                programData.program_owner_detail = currItem.account_location.location
-                setIsHQ(true)
-            } // TODO id HQ ref => lov/location_type
-            console.log(programData)
-        }
-    }, [isFetching]);
+        programData.program_owner = accountAuth?.account_location.location_detail.type;
+    }, [isFetchingLocRebase]);
+
+    useEffect(() => {}, [isFetching]);
 
     const picLazyParam: IParams = {
         lazyEvent: JSON.stringify({
@@ -404,7 +407,7 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
                     }}
                 />
                 {
-                    !isHQ &&
+                    // !isHQ &&
                     <Select
                         label="Owner"
                         placeholder="Option"
@@ -418,7 +421,7 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
                     />
                 }
                 {
-                    (programData.program_owner && !isHQ) &&
+                    // (programData.program_owner && !isHQ) &&
                     <Select
                         label="Owner Detail"
                         placeholder="Option"
