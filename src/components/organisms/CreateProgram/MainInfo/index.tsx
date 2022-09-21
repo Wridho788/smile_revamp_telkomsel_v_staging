@@ -16,10 +16,9 @@ import {
     Select,
     OutlinedTextField,
     ResponsiveDateTimePicker,
-    H2,
     BodyCopy,
 } from "../../../atoms";
-import {useEffect, useRef, useState, Fragment} from "react";
+import { useEffect, useState, Fragment } from "react";
 import {
     useGetLocationTypeQuery,
     useGetMechanismQuery,
@@ -37,7 +36,8 @@ import {
 import {ProgramDetailInitial} from "../../../../pages/CreateProgram/programInitial";
 import {
     useLocationLocRebaseQuery,
-    useLocationTemplateQuery
+    useLocationTemplateQuery,
+    useLocationRebaseMutation
 } from "../../../../redux/features/location/location-api-slice";
 import {IParams} from "../../../../redux/utils/IGeneral";
 import {useAccountAuthenticateQuery, useLazyPicPrimeQuery} from "../../../../redux/features/account/account-api-slice";
@@ -93,21 +93,23 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
     const [showModalCreatePIC, setShowModalCreatePIC] = useState(false);
     const [isHQ, setIsHQ] = useState<boolean>(false);
+    const [getOwnerDetail, {data: ownerDetailOption}] =
+        useLocationRebaseMutation();
 
     // const { data: ownerDetailOption = {data: []} } =
     //     useLocationTemplateQuery(ownerFilterInitial);
 
     // @ts-ignore
     const { data: accountAuth, isFetching } = useAccountAuthenticateQuery();
-    const { data: ownerDetailOption = {data: []}, isFetching: isFetchingLocRebase } = useLocationLocRebaseQuery(
-        { type: accountAuth?.account_location.location_detail.type },
-        { skip: isFetching });
+    // const { data: ownerDetailOptionInitial = {data: []}, isFetching: isFetchingLocRebase } = useLocationLocRebaseQuery(
+    //     { type: accountAuth?.account_location.location_detail.type },
+    //     { skip: isFetching });
 
     const { data: ownerOption = {data: []} } = useGetLocationTypeQuery();
 
     useEffect(() => {
         programData.program_owner = accountAuth?.account_location.location_detail.type;
-    }, [isFetchingLocRebase]);
+    }, [isFetching]);
 
     useEffect(() => {}, [isFetching]);
 
@@ -401,26 +403,25 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
                         setStateTrigger(!stateTrigger);
                     }}
                 />
-                {
-                    // !isHQ &&
-                    <Select
-                        label="Owner"
-                        placeholder="Option"
-                        options={ownerOption.data}
-                        optionLabel="set_value"
-                        value={programData.program_owner}
-                        handleChange={(value: any) => {
-                            programData.program_owner = value;
-                            setStateTrigger(!stateTrigger);
-                        }}
-                    />
-                }
+                <Select
+                    label="Owner"
+                    placeholder="Option"
+                    options={ownerOption.data}
+                    optionLabel="set_value"
+                    value={programData.program_owner}
+                    handleChange={(value: any) => {
+                        programData.program_owner = value;
+                        programData.program_owner_detail = ""
+                        getOwnerDetail({ type: value })
+                        setStateTrigger(!stateTrigger);
+                    }}
+                />
                 {
                     // (programData.program_owner && !isHQ) &&
                     <Select
                         label="Owner Detail"
                         placeholder="Option"
-                        options={ownerDetailOption.data}
+                        options={ownerDetailOption}
                         optionLabel="name"
                         value={programData.program_owner_detail}
                         handleChange={(value: any) => {
