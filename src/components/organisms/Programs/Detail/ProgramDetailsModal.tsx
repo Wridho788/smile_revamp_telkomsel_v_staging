@@ -39,6 +39,7 @@ import WorkIcon from "@mui/icons-material/Work";
 import BeachAccessIcon from "@mui/icons-material/BeachAccess";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 import moment from "moment";
+import KeywordLink from "./KeywordLink";
 
 const style = {
   position: "absolute" as "absolute",
@@ -471,6 +472,9 @@ const ProgramDetailsModal: FC<IProgramDetailsModalProps> = ({
                   )}
               </Stack>
             </Grid>
+            <Box sx={{ paddingTop: "3vw" }} width="100%">
+              <KeywordLink data={data} />
+            </Box>
             <Box
               sx={{ paddingTop: "3vw" }}
               onClick={() => {
