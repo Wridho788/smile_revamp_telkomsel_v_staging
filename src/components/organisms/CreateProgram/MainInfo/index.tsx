@@ -431,7 +431,7 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
                     <Select
                         label="Owner Detail"
                         placeholder="Option"
-                        options={ownerDetailOption}
+                        options={ownerDetailOption.data}
                         optionLabel="name"
                         value={programData.program_owner_detail}
                         handleChange={(value: any) => {
