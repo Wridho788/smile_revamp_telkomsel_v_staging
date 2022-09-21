@@ -33,6 +33,8 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import InputAdornment from "@mui/material/InputAdornment";
 import { strToInt, thousandSeparator } from "../../../../../utils";
 
+import { parseISO } from "date-fns";
+
 interface IGeneralProps {
   keywordCreateState: IUpdateKeyword;
   keywordCreate: IUpdateKeyword;
@@ -113,7 +115,7 @@ const General: React.FunctionComponent<IGeneralProps> = ({
           <ResponsiveDateTimePicker
             label="Start Period"
             placeholder="Start Period"
-            value={keywordCreateState.eligibility.start_period}
+            value={parseISO(keywordCreateState.eligibility.start_period)}
             handleChange={(value: string) => {
               keywordCreate.eligibility.start_period = value;
               if (
@@ -128,20 +130,10 @@ const General: React.FunctionComponent<IGeneralProps> = ({
           <ResponsiveDateTimePicker
             label="End Period"
             placeholder="End Period"
-            minDateTime={keywordCreateState.eligibility.start_period}
+            minDateTime={parseISO(keywordCreateState.eligibility.start_period)}
             value={keywordCreateState.eligibility.end_period}
             handleChange={(value: string) => {
               keywordCreate.eligibility.end_period = value;
-              setStateTrigger(!stateTrigger);
-            }}
-          />
-          <Select
-            label="POIN Type"
-            placeholder="Option"
-            options={pointTypeOptions.data}
-            value={keywordCreateState.eligibility.point_type}
-            handleChange={(value: string) => {
-              keywordCreate.eligibility.point_type = value;
               setStateTrigger(!stateTrigger);
             }}
           />
@@ -278,8 +270,8 @@ const General: React.FunctionComponent<IGeneralProps> = ({
                           label="From"
                           placeholder="From"
                           value={
-                            keywordCreateState.eligibility.keyword_shift[idx]
-                              .from
+                            parseISO(keywordCreateState.eligibility.keyword_shift[idx]
+                              .from)
                           }
                           handleChange={(value: any) => {
                             keywordCreate.eligibility.keyword_shift[idx].from =
@@ -304,11 +296,11 @@ const General: React.FunctionComponent<IGeneralProps> = ({
                           label="To"
                           placeholder="To"
                           minTime={
-                            keywordCreateState.eligibility.keyword_shift[idx]
-                              .from
+                            parseISO(keywordCreateState.eligibility.keyword_shift[idx]
+                              .from)
                           }
                           value={
-                            keywordCreateState.eligibility.keyword_shift[idx].to
+                            parseISO(keywordCreateState.eligibility.keyword_shift[idx].to)
                           }
                           handleChange={(value: any) => {
                             keywordCreate.eligibility.keyword_shift[idx].to =
@@ -385,8 +377,8 @@ const General: React.FunctionComponent<IGeneralProps> = ({
                           label="From"
                           placeholder="From"
                           value={
-                            keywordCreateState.eligibility.keyword_shift[idx]
-                              .from
+                            parseISO(keywordCreateState.eligibility.keyword_shift[idx]
+                              .from)
                           }
                           handleChange={(value: any) => {
                             keywordCreate.eligibility.keyword_shift[idx].from =
@@ -411,11 +403,11 @@ const General: React.FunctionComponent<IGeneralProps> = ({
                           label="To"
                           placeholder="To"
                           minDate={
-                            keywordCreateState.eligibility.keyword_shift[idx]
-                              .from
+                            parseISO(keywordCreateState.eligibility.keyword_shift[idx]
+                              .from)
                           }
                           value={
-                            keywordCreateState.eligibility.keyword_shift[idx].to
+                            parseISO(keywordCreateState.eligibility.keyword_shift[idx].to)
                           }
                           handleChange={(value: any) => {
                             keywordCreate.eligibility.keyword_shift[idx].to =
@@ -493,8 +485,8 @@ const General: React.FunctionComponent<IGeneralProps> = ({
                           label="From"
                           placeholder="From"
                           value={
-                            keywordCreateState.eligibility.keyword_shift[idx]
-                              .from
+                            parseISO(keywordCreateState.eligibility.keyword_shift[idx]
+                              .from)
                           }
                           handleChange={(value: any) => {
                             keywordCreate.eligibility.keyword_shift[idx].from =
@@ -519,8 +511,8 @@ const General: React.FunctionComponent<IGeneralProps> = ({
                           label="To"
                           placeholder="To"
                           minTime={
-                            keywordCreateState.eligibility.keyword_shift[idx]
-                              .from
+                            parseISO(keywordCreateState.eligibility.keyword_shift[idx]
+                              .from)
                           }
                           value={
                             keywordCreateState.eligibility.keyword_shift[idx].to
