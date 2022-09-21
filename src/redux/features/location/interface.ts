@@ -12,10 +12,10 @@ export interface ILocation {
   name: string;
   type: string;
   __v: number;
-  bucket: IBucket[];
+  bucket?: IBucket[];
 }
 
 export interface IResponse {
-  data: ILocation[];
+  data: any[];
   total: number;
 }
