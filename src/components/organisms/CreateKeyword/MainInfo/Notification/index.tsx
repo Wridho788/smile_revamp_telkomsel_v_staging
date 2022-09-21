@@ -123,7 +123,6 @@ const Notification: React.FunctionComponent<INotificationProps> = ({
                 >
                   <Subtitle color="warning.main">{_.set_value}</Subtitle>
                   <OutlinedTextField
-                    disabled={true}
                     direction="column"
                     label="Keyword Name"
                     variant="outlined"
