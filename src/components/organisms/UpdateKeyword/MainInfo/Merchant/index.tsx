@@ -8,6 +8,13 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Subtitle } from "../../../../atoms";
+import {
+  merchantsData,
+  totalRecordsData,
+  selectedMerchantData,
+  lazyParamsData,
+} from "./initial";
+import { Alert } from "@mui/material";
 
 interface IMerchantProps {
   keywordCreate: IUpdateKeyword;
@@ -21,28 +28,43 @@ const Merchant: React.FunctionComponent<IMerchantProps> = ({
   setStateTrigger,
 }) => {
   const [getMerchantsList] = useLazyMerchantManagementListQuery();
+
+  const merchants = merchantsData;
+  const totalRecords = totalRecordsData;
+  const selectedMerchant = selectedMerchantData;
+  const lazyParams = lazyParamsData;
+  // const loading = loadingData;
+
+  const [merchantsState, setMerchantsState] = useState(merchants);
+  const [totalRecordsState, setTotalRecordsState] = useState(totalRecords);
+  const [selectedMerchantState, setSelectedMerchantState] =
+    useState<any>(selectedMerchant);
+  const [lazyParamsState, setLazyParamsState] = useState<any>(lazyParams);
+  const [merchantTrigger, setMerchantTrigger] = useState(false);
+  const [lazyParamsTrigger, setLazyParamsTrigger] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [totalRecords, setTotalRecords] = useState(0);
-  const [merchants, setMerchants] = useState<any[]>([]);
-  const [selectedMerchant, setSelectedMerchant] = useState("");
-  const [lazyParams, setLazyParams] = useState<any>({
-    first: 0,
-    rows: 3,
-    page: 1,
-    sortField: "",
-    sortOrder: null,
-    filters: {
-      merchant_name: { value: "", matchMode: "contains" },
-      address: { value: "", matchMode: "contains" },
-      npwp: { value: "", matchMode: "contains" },
-    },
-  });
+
+  useEffect(() => {
+    setMerchantsState(merchants);
+  }, [merchantTrigger, merchants]);
+
+  useEffect(() => {
+    setTotalRecordsState(totalRecords);
+  }, [merchantTrigger, totalRecords]);
+
+  useEffect(() => {
+    setSelectedMerchantState(selectedMerchant);
+  }, [merchantTrigger, selectedMerchant]);
+
+  useEffect(() => {
+    setLazyParamsState(lazyParams);
+  }, [lazyParams, lazyParamsTrigger]);
 
   let loadLazyTimeout: any = null;
 
   useEffect(() => {
     loadLazyData();
-  }, [lazyParams]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [lazyParamsTrigger]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const loadLazyData = () => {
     setLoading(true);
@@ -54,30 +76,36 @@ const Merchant: React.FunctionComponent<IMerchantProps> = ({
     //imitate delay of a backend call
     loadLazyTimeout = setTimeout(async () => {
       const { data }: any = await getMerchantsList({
-        lazyEvent: JSON.stringify(lazyParams),
+        lazyEvent: JSON.stringify(lazyParamsState.data),
       });
-      // console.log(data.payload);
-      setMerchants(data.payload.data);
-      setTotalRecords(data.payload.totalRecords);
+      merchants.data = data.payload.data;
+      totalRecords.data = data.payload.totalRecords;
+      setMerchantTrigger(!merchantTrigger);
       setLoading(false);
     }, Math.random() * 1000 + 250);
   };
 
   const onPage = (event: any) => {
-    setLazyParams(event);
+    lazyParams.data = event;
+    setLazyParamsTrigger(!lazyParamsTrigger);
   };
   const onSort = (event: any) => {
-    setLazyParams(event);
+    lazyParams.data = event;
+    setLazyParamsTrigger(!lazyParamsTrigger);
   };
   const onFilter = (event: any) => {
     event["first"] = 0;
-    setLazyParams(event);
+    lazyParams.data = event;
+    setLazyParamsTrigger(!lazyParamsTrigger);
   };
   const onSelectionChange = (event: any) => {
     const value = event.value;
-    keywordCreate.eligibility.merchant = value["_id"];
+    value === null
+      ? (keywordCreate.eligibility.merchant = "")
+      : (keywordCreate.eligibility.merchant = value["_id"]);
+    selectedMerchant.data = value;
     setStateTrigger(!stateTrigger);
-    setSelectedMerchant(value);
+    setMerchantTrigger(!merchantTrigger);
   };
 
   return (
@@ -93,24 +121,24 @@ const Merchant: React.FunctionComponent<IMerchantProps> = ({
       </AccordionSummary>
       <AccordionDetails>
         <DataTable
-          value={merchants}
+          value={merchantsState.data}
           lazy
           filterDisplay="row"
           responsiveLayout="scroll"
           dataKey="_id"
           paginator
-          first={lazyParams.first}
+          first={lazyParamsState.data.first}
           rows={3}
-          totalRecords={totalRecords}
+          totalRecords={totalRecordsState.data}
           onPage={onPage}
           onSort={onSort}
-          sortField={lazyParams.sortField}
-          sortOrder={lazyParams.sortOrder}
+          sortField={lazyParamsState.data.sortField}
+          sortOrder={lazyParamsState.data.sortOrder}
           onFilter={onFilter}
           loading={loading}
-          selection={selectedMerchant}
+          selection={selectedMerchantState.data}
           onSelectionChange={onSelectionChange}
-          filters={lazyParams.filters}
+          filters={lazyParamsState.data.filters}
         >
           <Column
             selectionMode="single"
@@ -138,6 +166,11 @@ const Merchant: React.FunctionComponent<IMerchantProps> = ({
             filterPlaceholder="Search by NPWP"
           />
         </DataTable>
+        {selectedMerchantState.data !== null && (
+          <Alert severity="success" sx={{ mt: "1vw" }}>
+            Selected Merchant : "{selectedMerchantState.data.merchant_name}"
+          </Alert>
+        )}
       </AccordionDetails>
     </Accordion>
   );
