@@ -87,7 +87,16 @@ const Location: React.FunctionComponent<ILocationProps> = ({
             <Select
               label="Location Type"
               placeholder="Option"
-              options={locationTypeOptions.data}
+              options={locationTypeOptions.data.filter((item) => {
+                if (accountAuth?.account_location.location_detail.type === '62ffc0fc8a01008799e785be') {
+                  const scope: any = ['62ffc0fc8a01008799e785bc', '62ffc0fc8a01008799e785bd'];
+                  if (!scope.includes(item._id)) {
+                    return item;
+                  }
+                } else {
+                  return item;
+                }
+              })}
               value={keywordEligibilityLocationHelperState.location_type}
               handleChange={(value: string) => {
                 keywordEligibilityLocationHelper.location_type = value;
