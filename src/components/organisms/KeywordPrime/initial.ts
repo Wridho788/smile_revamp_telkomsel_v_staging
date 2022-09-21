@@ -1,10 +1,14 @@
 // import { IKeywordEligibility } from './../CreateKeyword/interfaces';
 import {
+  IFilter,
+  IKeywordApproval,
+} from "components/organisms/KeywordPrime/interface";
+import {
   IData,
   IDetail,
   IGetKeywordData,
   IKeywordBonus,
-  IkeywordPrime
+  IkeywordPrime,
 } from "../../../redux/features/keyword/interface";
 
 // import { IKeywordEligibility } from "../CreateKeyword/interfaces";
@@ -104,7 +108,7 @@ export const GetKeywordDataInitial: IGetKeywordData = {
   _id: "",
 };
 
-export const IKeywordPrime : IkeywordPrime = {
+export const IKeywordPrime: IkeywordPrime = {
   bonus: [],
   created_at: "",
   created_by: {},
@@ -114,5 +118,27 @@ export const IKeywordPrime : IkeywordPrime = {
   notification: [],
   updated_at: "",
   __v: 0,
-  _id: ""
-}
+  _id: "",
+};
+
+export const InitialFilter: IFilter = {
+  keyword_approval: {
+    _id: "",
+    name: "",
+  },
+  program_experience: {
+    _id: "",
+    name: "",
+  },
+};
+
+export const InitialKeywordApproval: IKeywordApproval = {
+  _id: "",
+  group_name: "",
+  set_value: "",
+  created_by: "",
+  created_at: "",
+  updated_at: "",
+  deleted_at: null,
+  __v: 0,
+};
