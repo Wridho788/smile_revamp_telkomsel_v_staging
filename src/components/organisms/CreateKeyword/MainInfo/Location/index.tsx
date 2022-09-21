@@ -12,8 +12,12 @@ import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { useLocationTemplateQuery } from "../../../../../redux/features/location/location-api-slice";
+import {
+  useLocationRebaseMutation,
+  useLocationTemplateQuery
+} from "../../../../../redux/features/location/location-api-slice";
 import { KeywordEligibilityLocationHelper } from "../../initial";
+import {useAccountAuthenticateQuery} from "../../../../../redux/features/account/account-api-slice";
 
 interface ILocationProps {
   keywordCreateState: ICreateKeyword;
@@ -30,8 +34,17 @@ const Location: React.FunctionComponent<ILocationProps> = ({
 }) => {
   const { data: locationTypeOptions = { data: [] } } =
     useGetLocationTypeQuery();
-  const { data: locationOptions = { data: [] } } =
-    useLocationTemplateQuery(FilterInitial);
+  // const { data: locationOptions = { data: [] } } =
+  //   useLocationTemplateQuery(FilterInitial);
+
+  const [getOwnerDetail, {data: locationOptions}] =
+      useLocationRebaseMutation();
+
+  const { data: accountAuth, isFetching } = useAccountAuthenticateQuery();
+  useEffect(() => {
+    keywordEligibilityLocationHelperState.location_type = accountAuth?.account_location.location_detail.type;
+    setStateTrigger(!stateTrigger);
+  }, [isFetching]);
 
   const keywordEligibilityLocationHelper = KeywordEligibilityLocationHelper;
   const [
@@ -72,18 +85,20 @@ const Location: React.FunctionComponent<ILocationProps> = ({
             <Select
               label="Location Type"
               placeholder="Option"
+              optionLabel="set_value"
               options={locationTypeOptions.data}
               value={keywordEligibilityLocationHelperState.location_type}
               handleChange={(value: string) => {
                 keywordEligibilityLocationHelper.location_type = value;
                 keywordCreate.eligibility.locations = [];
+                getOwnerDetail({ type: value });
                 setStateTrigger(!stateTrigger);
               }}
             />
           )}
           {keywordEligibilityLocationHelperState.location_type.length > 0 &&
             locationOptions.data.find(
-              (e) =>
+              (e: any) =>
                 e["type"] ===
                 keywordEligibilityLocationHelperState.location_type
             ) !== undefined && (
@@ -93,7 +108,7 @@ const Location: React.FunctionComponent<ILocationProps> = ({
                   label="Location"
                   placeholder="Option"
                   options={locationOptions.data.filter(
-                    (e) =>
+                    (e: any) =>
                       e["type"] ===
                       keywordEligibilityLocationHelperState.location_type
                   )}
