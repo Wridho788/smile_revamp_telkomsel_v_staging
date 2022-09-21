@@ -233,7 +233,7 @@ const ProgramDetailsModal: FC<IProgramDetailsModalProps> = ({
                 )
               ) : (
                 <Alert sx={{ margin: 2 }} severity="warning">
-                  Waiting for Non HQApproval
+                  Waiting For approval 1
                 </Alert>
               )
             ) : (

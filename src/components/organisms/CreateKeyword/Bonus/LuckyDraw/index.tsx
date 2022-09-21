@@ -504,6 +504,7 @@ const NotificationLuckyDraw: React.FunctionComponent<
                           p="0.8vw"
                         >
                           <OutlinedTextField
+                            isRequired={false}
                             type="number"
                             variant="outlined"
                             InputProps={{ inputProps: { min: 0 } }}

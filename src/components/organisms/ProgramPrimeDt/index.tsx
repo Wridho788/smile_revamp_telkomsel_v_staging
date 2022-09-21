@@ -152,11 +152,11 @@ const ProgramPrimeDt: FC = () => {
           </Alert>
         ) : rowData.isHQ ? (
           <Alert severity="warning" icon={false}>
-            Waiting Approval HQ Manager
+            Waiting For approval 2
           </Alert>
         ) : (
           <Alert severity="warning" icon={false}>
-            Waiting Approval Area Manager
+            Waiting For approval 1
           </Alert>
         )}
       </Box>
