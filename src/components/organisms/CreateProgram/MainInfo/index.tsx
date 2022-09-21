@@ -401,17 +401,6 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
                         setStateTrigger(!stateTrigger);
                     }}
                 />
-                <Select
-                    label="Owner"
-                    placeholder="Option"
-                    options={ownerOption.data}
-                    optionLabel="set_value"
-                    value={programData.program_owner}
-                    handleChange={(value: any) => {
-                        programData.program_owner = value;
-                        setStateTrigger(!stateTrigger);
-                    }}
-                />
                 {
                     // !isHQ &&
                     <Select
