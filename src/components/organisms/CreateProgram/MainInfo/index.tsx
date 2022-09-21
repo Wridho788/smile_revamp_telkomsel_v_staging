@@ -57,10 +57,11 @@ import {
 } from "../../../../redux/features/program/program-api-slice";
 import {ICreateProgram} from "../../../../pages/CreateProgram/interface";
 import CachedIcon from "@mui/icons-material/Cached";
+
 interface IMainInfoProps {
     slug: string;
     handleShowModalPic?: any;
-    isRefetchPic? : boolean;
+    isRefetchPic?: boolean;
 }
 
 const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
@@ -92,12 +93,6 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
     const [showModalCreatePIC, setShowModalCreatePIC] = useState(false);
     const [isHQ, setIsHQ] = useState<boolean>(false);
-    const ownerFilterInitial: IParams = {
-        limit: 100,
-        skip: 0,
-        filter: `{"type":"${programData.program_owner}"}`,
-        sort: "{}",
-    };
 
     // const { data: ownerDetailOption = {data: []} } =
     //     useLocationTemplateQuery(ownerFilterInitial);
@@ -406,6 +401,17 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
                         setStateTrigger(!stateTrigger);
                     }}
                 />
+                <Select
+                    label="Owner"
+                    placeholder="Option"
+                    options={ownerOption.data}
+                    optionLabel="set_value"
+                    value={programData.program_owner}
+                    handleChange={(value: any) => {
+                        programData.program_owner = value;
+                        setStateTrigger(!stateTrigger);
+                    }}
+                />
                 {
                     // !isHQ &&
                     <Select
@@ -425,7 +431,7 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
                     <Select
                         label="Owner Detail"
                         placeholder="Option"
-                        options={ownerDetailOption.data}
+                        options={ownerDetailOption}
                         optionLabel="name"
                         value={programData.program_owner_detail}
                         handleChange={(value: any) => {

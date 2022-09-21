@@ -18,8 +18,18 @@ export const locationSlice = createApi({
                     params: params,
                 }),
             });
+
+        const mutationHandler = (endpoint: string) =>
+            builder.mutation<any, IParams>({
+                query: (params: any) => ({
+                    url: endpoint,
+                    method: "GET",
+                    params : params
+                }),
+            });
         return {
-            locationTemplate: responseHandler(baseUrl + '/location'),
+            locationTemplate: responseHandler('/loc_rebase'),
+            locationRebase: mutationHandler('/loc_rebase'),
             locationBucket: responseHandler('/bucket'),
 
             locationTemplateForPrime: responseHandler('/prime'),
@@ -30,6 +40,7 @@ export const locationSlice = createApi({
 });
 
 export const {
+    useLocationRebaseMutation,
     useLocationTemplateQuery,
     useLocationTemplateForPrimeQuery,
     useLazyLocationTemplateForPrimeQuery,

@@ -60,6 +60,7 @@ export const lovSlice = createApi({
       getKeywordNotification: detailKeywordNotificationHandler(
         "/keyword_notification/"
       ),
+      getKeywordApproval: responseHandler("/keyword/approval"),
     };
   },
 });
@@ -86,4 +87,5 @@ export const {
   useGetProgramGroupQuery,
   useGetKeywordNotificationQuery,
   useLazyGetKeywordNotificationQuery,
+  useGetKeywordApprovalQuery,
 } = lovSlice;
