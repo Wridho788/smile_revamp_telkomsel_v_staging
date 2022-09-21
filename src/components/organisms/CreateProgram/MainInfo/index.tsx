@@ -18,7 +18,7 @@ import {
     ResponsiveDateTimePicker,
     BodyCopy,
 } from "../../../atoms";
-import { useEffect, useState, Fragment } from "react";
+import {useEffect, useState, Fragment} from "react";
 import {
     useGetLocationTypeQuery,
     useGetMechanismQuery,
@@ -57,6 +57,9 @@ import {
 } from "../../../../redux/features/program/program-api-slice";
 import {ICreateProgram} from "../../../../pages/CreateProgram/interface";
 import CachedIcon from "@mui/icons-material/Cached";
+import SwitchCustom from "../../../../atomic/components/atoms/Switch";
+import BulkData from "../Segmentation/BulkData";
+import SingleData from "../Segmentation/SingleData";
 
 interface IMainInfoProps {
     slug: string;
@@ -93,6 +96,7 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
     const [showModalCreatePIC, setShowModalCreatePIC] = useState(false);
     const [isHQ, setIsHQ] = useState<boolean>(false);
+    const [customizeOwner, setCustomizeOwner] = useState(false);
     const [getOwnerDetail, {data: ownerDetailOption}] =
         useLocationRebaseMutation();
 
@@ -100,18 +104,37 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
     //     useLocationTemplateQuery(ownerFilterInitial);
 
     // @ts-ignore
-    const { data: accountAuth, isFetching } = useAccountAuthenticateQuery();
+    const {data: accountAuth, isFetching} = useAccountAuthenticateQuery();
     // const { data: ownerDetailOptionInitial = {data: []}, isFetching: isFetchingLocRebase } = useLocationLocRebaseQuery(
     //     { type: accountAuth?.account_location.location_detail.type },
     //     { skip: isFetching });
 
-    const { data: ownerOption = {data: []} } = useGetLocationTypeQuery();
+    const {data: ownerOption = {data: []}, isSuccess} = useGetLocationTypeQuery();
 
     useEffect(() => {
-        programData.program_owner = accountAuth?.account_location.location_detail.type;
+        if (!isFetching) {
+            const programOwner:string = accountAuth?.account_location.location_detail.type
+            programData.program_owner = programOwner
+            programData.program_owner_detail = accountAuth?.account_location.location
+            getOwnerDetail({type: programOwner})
+            const index: number = ownerOption.data.findIndex(
+                ({_id}) => _id === programOwner)
+            if (isSuccess) {
+                if (index !== 0) {
+                    ownerOption.data.splice(index - 1, 1);
+                }
+            }
+
+        }
+        // let tes = ownerOption.data.splice(ownerOption.data.indexOf(accountAuth.account_location.location_detail.type, 1))
+        // for (let i =0; i< ownerOption.data.length; i++){
+        //     ownerOption.data[i] ==
+        // }
+
     }, [isFetching]);
 
-    useEffect(() => {}, [isFetching]);
+    useEffect(() => {
+    }, [isFetching]);
 
     const picLazyParam: IParams = {
         lazyEvent: JSON.stringify({
@@ -403,21 +426,29 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
                         setStateTrigger(!stateTrigger);
                     }}
                 />
-                <Select
-                    label="Owner"
-                    placeholder="Option"
-                    options={ownerOption.data}
-                    optionLabel="set_value"
-                    value={programData.program_owner}
-                    handleChange={(value: any) => {
-                        programData.program_owner = value;
-                        programData.program_owner_detail = ""
-                        getOwnerDetail({ type: value })
-                        setStateTrigger(!stateTrigger);
-                    }}
-                />
+                <Tooltip placement="top-start" title="Please wait until the owner data finished">
+                    <Box>
+                        <SwitchCustom color={"success"} checked={customizeOwner} handleChange={setCustomizeOwner}
+                                      label={"Customize Owner Area"}/>
+                    </Box>
+                </Tooltip>
+                {customizeOwner &&
+                    <Select
+                        label="Owner"
+                        placeholder="Option"
+                        options={ownerOption.data}
+                        optionLabel="set_value"
+                        value={programData.program_owner}
+                        handleChange={(value: any) => {
+                            programData.program_owner = value;
+                            programData.program_owner_detail = ""
+                            getOwnerDetail({type: value})
+                            setStateTrigger(!stateTrigger);
+                        }}
+                    />
+                }
                 {
-                    // (programData.program_owner && !isHQ) &&
+                    (programData.program_owner && customizeOwner) &&
                     <Select
                         label="Owner Detail"
                         placeholder="Option"
