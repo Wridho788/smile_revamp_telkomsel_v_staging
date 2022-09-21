@@ -92,45 +92,30 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
     // TODO LOGIC DATATABLE
     const [selected, setSelected] = React.useState<readonly string[]>([]);
     const [page, setPage] = React.useState(0);
-    const [dense, setDense] = React.useState(false);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
-    const [showModalCreatePIC, setShowModalCreatePIC] = useState(false);
-    const [isHQ, setIsHQ] = useState<boolean>(false);
     const [customizeOwner, setCustomizeOwner] = useState(false);
     const [getOwnerDetail, {data: ownerDetailOption}] =
         useLocationRebaseMutation();
 
-    // const { data: ownerDetailOption = {data: []} } =
-    //     useLocationTemplateQuery(ownerFilterInitial);
-
-    // @ts-ignore
     const {data: accountAuth, isFetching} = useAccountAuthenticateQuery();
-    // const { data: ownerDetailOptionInitial = {data: []}, isFetching: isFetchingLocRebase } = useLocationLocRebaseQuery(
-    //     { type: accountAuth?.account_location.location_detail.type },
-    //     { skip: isFetching });
-
     const {data: ownerOption = {data: []}, isSuccess} = useGetLocationTypeQuery();
-
     useEffect(() => {
         if (!isFetching) {
             const programOwner:string = accountAuth?.account_location.location_detail.type
             programData.program_owner = programOwner
             programData.program_owner_detail = accountAuth?.account_location.location
             getOwnerDetail({type: programOwner})
-            const index: number = ownerOption.data.findIndex(
-                ({_id}) => _id === programOwner)
-            if (isSuccess) {
-                if (index !== 0) {
-                    ownerOption.data.splice(index - 1, 1);
-                }
-            }
+
+            // TODO still continue
+            // const index: number = ownerOption.data.findIndex(
+            //     ({_id}) => _id === programOwner)
+            // if (isSuccess) {
+            //     if (index !== 0) {
+            //         ownerOption.data.splice(index - 1, index);
+            //     }
+            // }
 
         }
-        // let tes = ownerOption.data.splice(ownerOption.data.indexOf(accountAuth.account_location.location_detail.type, 1))
-        // for (let i =0; i< ownerOption.data.length; i++){
-        //     ownerOption.data[i] ==
-        // }
-
     }, [isFetching]);
 
     useEffect(() => {
