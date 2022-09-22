@@ -160,7 +160,7 @@ const NotificationLuckyDraw: React.FunctionComponent<
         aria-controls="panel1a-content"
         id="panel1a-header"
       >
-        <Subtitle textTransform="uppercase">lucky draw coupon</Subtitle>
+        <Subtitle textTransform="uppercase">Lucky Draw Coupon</Subtitle>
       </AccordionSummary>
       <AccordionDetails>
         <Stack spacing="2vw" px="0.5vw">

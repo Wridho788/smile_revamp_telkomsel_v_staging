@@ -238,6 +238,7 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
                           <Box key={`bonusType__${idx}`}>
                               <LinkAja
                                   bonusType={bonusType}
+                                  keywordCreateState={keywordCreateState}
                                   keywordCreate={keywordCreate}
                                   stateTrigger={stateTrigger}
                                   setStateTrigger={setStateTrigger}
@@ -249,6 +250,7 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
                       <Box key={`bonusType__${idx}`}>
                               <Voucher
                                   bonusType={bonusType}
+                                  keywordCreateState={keywordCreateState}
                                   keywordCreate={keywordCreate}
                                   stateTrigger={stateTrigger}
                                   setStateTrigger={setStateTrigger}

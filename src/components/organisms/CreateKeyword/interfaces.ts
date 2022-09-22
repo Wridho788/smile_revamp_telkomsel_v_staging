@@ -181,6 +181,26 @@ export interface ICreateKeyword {
   notification: any[];
 }
 
+export interface IKeywordBonusLinkAja {
+  nominal: string;
+  location: string;
+  bonus_type: string;
+  external_api_config: string;
+  bucket: string;
+  stock_location: any[];
+  redeem_after_verification: boolean;
+}
+
+export interface IKeywordBonusVoucher {
+  bonus_type: string;
+  exp_voucher: string;
+  voucher_type: string;
+  voucher_combination: string;
+  jumlah_total_voucher: number;
+  stock_location: any[];
+  redeem_after_verification: boolean;
+}
+
 export interface IKeywordBonusDonation {
   bonus_type: string;
   donation_category: string;

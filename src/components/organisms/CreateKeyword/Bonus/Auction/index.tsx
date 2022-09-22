@@ -5,7 +5,6 @@ import {
   Switch,
   Box,
   CircularProgress,
-  Grid,
 } from "@mui/material";
 
 import {
@@ -13,7 +12,6 @@ import {
   OutlinedTextField,
   ResponsiveDateTimePicker,
   Select,
-  SmallCopy,
   Subtitle,
 } from "../../../../atoms";
 
@@ -48,6 +46,7 @@ import {
 import _find from "lodash/find";
 import { useLocationTemplateQuery } from "../../../../../redux/features/location/location-api-slice";
 import { useKeywordUploadAuctionMutation } from "../../../../../redux/features/keyword/keyword-api-slice";
+import LocationManagement from "../LocationManagement";
 
 interface INotificationAuctionProps {
   bonusType: string;
@@ -119,8 +118,8 @@ const NotificationAuction: React.FunctionComponent<
   const [keywordNotificationAuctionState, setKeywordNotificationAuctionState] =
     useState<IKeywordNotificationAuction[]>(keywordNotificationAuction);
 
-  const { data: locationOptions = { data: [] } } =
-    useLocationTemplateQuery(FilterInitial);
+  const { data: locationOptions, isFetching } =
+      useLocationTemplateQuery({ type: keywordCreate.eligibility.location_type });
 
   const [index, setIndex] = useState<number>(-1);
 
@@ -135,13 +134,24 @@ const NotificationAuction: React.FunctionComponent<
 
     if (index === -1) {
       keywordCreate.bonus.push(KeywordBonusAuction);
-      setIndex(
-        keywordCreate.bonus.findIndex(
+      const bonusIdx = keywordCreate.bonus.findIndex(
           ({ bonus_type }) => bonus_type === "auction"
-        )
       );
+      setIndex(bonusIdx);
+
+      if (locationOptions) {
+        keywordCreateState.eligibility.locations.map((location) =>
+            keywordCreateState.bonus[bonusIdx].stock_location.push({
+              name: locationOptions.find((e: any) => e["_id"] === location).name,
+              location_id: location,
+              stock: 0,
+            })
+        );
+
+        setStateTrigger(!stateTrigger);
+      }
     }
-  }, []);
+  }, [isFetching]);
 
   useEffect(() => {
     setKeywordNotificationAuctionHelperState(keywordNotificationAuctionHelper);
@@ -154,7 +164,7 @@ const NotificationAuction: React.FunctionComponent<
         keywordCreate.notification,
         ({ bonus_type_id }) => bonus_type_id === bonusTypeId
       ) &&
-      bonusType === "Auction"
+      bonusType === "auction"
     ) {
       keywordCreate.notification = keywordCreate.notification.concat(
         keywordNotificationAuction
@@ -171,7 +181,7 @@ const NotificationAuction: React.FunctionComponent<
         aria-controls="panel1a-content"
         id="panel1a-header"
       >
-        <Subtitle textTransform="uppercase">{bonusType}</Subtitle>
+        <Subtitle textTransform="uppercase">Auction</Subtitle>
       </AccordionSummary>
       <AccordionDetails>
         <Stack spacing="1vw" px="2vw" py="0.5vw">
@@ -502,56 +512,15 @@ const NotificationAuction: React.FunctionComponent<
                       </Button>
                     </Stack>
                   </Stack>
-                  <Stack spacing={2}>
-                    <Subtitle color="warning.main">
-                      STOCK PER LOCATION MANAGEMENT
-                    </Subtitle>
-                    {/*{keywordCreate.bonus[index].stock_location.map(*/}
-                    {/*  (location: any, idx: any) => {*/}
-                    {/*    const locationName = locationOptions.data.find(*/}
-                    {/*      (e) => e["_id"] === location.location_id*/}
-                    {/*    )?.name;*/}
-                    {/*    return (*/}
-                    {/*      <Grid key={`location__${idx}`} container>*/}
-                    {/*        <Grid*/}
-                    {/*          item*/}
-                    {/*          xs={5}*/}
-                    {/*          border="0.1vw solid rgba(0,0,0,0.1)"*/}
-                    {/*          p="0.8vw"*/}
-                    {/*        >*/}
-                    {/*          <BodyCopy textTransform="uppercase">*/}
-                    {/*            {locationName}*/}
-                    {/*          </BodyCopy>*/}
-                    {/*        </Grid>*/}
-                    {/*        <Grid*/}
-                    {/*          item*/}
-                    {/*          xs={7}*/}
-                    {/*          border="0.1vw solid rgba(0,0,0,0.1)"*/}
-                    {/*          p="0.8vw"*/}
-                    {/*        >*/}
-                    {/*          <OutlinedTextField*/}
-                    {/*            isRequired={false}*/}
-                    {/*            type="number"*/}
-                    {/*            variant="outlined"*/}
-                    {/*            InputProps={{ inputProps: { min: 0 } }}*/}
-                    {/*            value={keywordCreate.bonus[*/}
-                    {/*              index*/}
-                    {/*            ].stock_location[idx].stock.toString()}*/}
-                    {/*            handleChange={(value: number) => {*/}
-                    {/*              keywordCreate.bonus[index].stock_location[*/}
-                    {/*                idx*/}
-                    {/*              ].stock = Number(value);*/}
-                    {/*              setStateTrigger(!stateTrigger);*/}
-                    {/*            }}*/}
-                    {/*          />*/}
-                    {/*        </Grid>*/}
-                    {/*      </Grid>*/}
-                    {/*    );*/}
-                    {/*  }*/}
-                    {/*)}*/}
-                    <SmallCopy color="primary" mt="1vw">
-                      ** If you don't want set stock, please leave it blank
-                    </SmallCopy>
+
+                  {/* Stock Location Management */}
+                  <Stack>
+                    {locationOptions && <LocationManagement
+                        keywordCreateState={keywordCreateState}
+                        keywordCreate={keywordCreate}
+                        stateTrigger={stateTrigger}
+                        setStateTrigger={setStateTrigger}
+                    />}
                   </Stack>
                 </Stack>
               )}

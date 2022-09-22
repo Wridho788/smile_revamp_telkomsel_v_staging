@@ -8,5 +8,4 @@ export const BonusTypeVoucherInitial: IBonusTypeVoucher = {
     jumlah_total_voucher: 0,
     stock_location: [],
     redeem_after_verification: false
-
 }
