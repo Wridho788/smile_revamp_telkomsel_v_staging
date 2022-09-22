@@ -139,11 +139,11 @@ const Voucher: React.FunctionComponent<INotificationLuckyDrawProps> = ({
 
                         </Grid>
                     </Box>
-                    <LocationManagement
-                        initialName={voucher.stock_location}
-                        stateTrigger={stateTrigger}
-                        setStateTrigger={setStateTrigger}
-                    />
+                    {/*<LocationManagement*/}
+                    {/*    initialName={voucher.stock_location}*/}
+                    {/*    stateTrigger={stateTrigger}*/}
+                    {/*    setStateTrigger={setStateTrigger}*/}
+                    {/*/>*/}
                 </Stack>
             </AccordionDetails>
         </Accordion>
