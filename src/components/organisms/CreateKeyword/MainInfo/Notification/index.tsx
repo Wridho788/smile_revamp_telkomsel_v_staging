@@ -126,7 +126,6 @@ const Notification: React.FunctionComponent<INotificationProps> = ({
                     isRequired={
                       _.set_value === "Keyword Verification" ? false : true
                     }
-                    disabled={true}
                     direction="column"
                     label="Keyword Name"
                     variant="outlined"
