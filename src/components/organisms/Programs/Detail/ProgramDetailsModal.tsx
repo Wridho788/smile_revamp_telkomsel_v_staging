@@ -15,6 +15,7 @@ import {
 } from "@mui/material";
 import {
   useApproveProgramMutation,
+  useDetailProgramQuery,
   useRejectProgramMutation,
 } from "../../../../redux/features/program/program-api-slice";
 import { BodyCopy, H2 } from "../../../../components";
@@ -40,6 +41,10 @@ import BeachAccessIcon from "@mui/icons-material/BeachAccess";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 import moment from "moment";
 import KeywordLink from "./KeywordLink";
+import {
+  useLocationLocRebaseQuery,
+  useLocationRebaseMutation
+} from "../../../../redux/features/location/location-api-slice";
 
 const style = {
   position: "absolute" as "absolute",
@@ -87,16 +92,27 @@ const ProgramDetailsModal: FC<IProgramDetailsModalProps> = ({
   const { data: pointTypeOptions } = useGetPointTypeQuery();
   const { data: mechanismOptions } = useGetMechanismQuery();
   const { data: ownerOption } = useGetLocationTypeQuery();
+  const [getOwnerDetail, {data: ownerDetailOption}] =
+      useLocationRebaseMutation();
 
   const pointType = pointTypeOptions?.data.find(
     ({ _id }: any) => _id === data.point_type
   );
+
   const mechanism = mechanismOptions?.data.find(
     ({ _id }: any) => _id === data.program_mechanism
   );
+
   const owner = ownerOption?.data.find(
     ({ _id }: any) => _id === data.program_owner
   );
+
+  useEffect(() => {
+    if (data?.program_owner) {
+      getOwnerDetail({ type: data.program_owner });
+    }
+  }, [data.program_owner]);
+
 
   const approveHandler = async () => {
     approveProgram(data["_id"] ?? "").then((res: any) => {
@@ -388,7 +404,11 @@ const ProgramDetailsModal: FC<IProgramDetailsModalProps> = ({
                     <Typography sx={fontContent}>
                       <b>Owner Detail</b>
                     </Typography>
-                    <Typography sx={fontContent}>-</Typography>
+                    <Typography sx={fontContent}>{
+                      (ownerDetailOption) ? ownerDetailOption.filter((item: any) =>
+                        item["_id"] === data.program_owner_detail).length ?
+                          ownerDetailOption.filter((item: any) =>
+                              item["_id"] === data.program_owner_detail)[0].name : '-' : '-'}</Typography>
                   </Grid>
                   <Grid item xs={4}>
                     <Typography sx={fontContent}>

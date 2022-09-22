@@ -4,7 +4,6 @@
 
 import React, { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { cloneDeep } from "lodash";
 
 import {
     H2,
@@ -36,7 +35,10 @@ import {
     programTimeZoneOption,
     ThresholdAlarmExpiredOption
 } from "../../../../redux/utils/initial-general";
-import { useLocationTemplateQuery } from "../../../../redux/features/location/location-api-slice";
+import {
+    useLocationRebaseMutation,
+    useLocationTemplateQuery
+} from "../../../../redux/features/location/location-api-slice";
 import {
     useGetLocationTypeQuery,
     useGetMechanismQuery,
@@ -45,6 +47,7 @@ import {
 import { ProgramDetailInitial } from "../../../../pages/CreateProgram/programInitial";
 
 import Swal from "sweetalert2";
+import {useAccountAuthenticateQuery} from "../../../../redux/features/account/account-api-slice";
 
 const MainInfo: React.FunctionComponent = () => {
     const { _id } = useParams();
@@ -78,12 +81,14 @@ const MainInfo: React.FunctionComponent = () => {
     const {data: mechanismOption = {data: []}} = useGetMechanismQuery();
     const {data: ownerOption = {data: []}} = useGetLocationTypeQuery();
 
-    const { data: ownerDetailOption } = useLocationTemplateQuery({
-        limit: 100,
-        skip: 0,
-        filter: `{"type":"${programDetail?.program_owner}"}`,
-        sort: "{}",
-    });
+    const [getOwnerDetail, {data: ownerDetailOption}] =
+        useLocationRebaseMutation();
+
+    useEffect(() => {
+        if (programDetail.program_owner_detail !== '') {
+            getOwnerDetail({ type: programDetail.program_owner })
+        }
+    }, [programDetail.program_owner_detail]);
 
     const [stateTrigger, setStateTrigger] = React.useState<boolean>(false);
     const [updateProgramMainInfo] = useUpdateProgramMainInfoMutation();
@@ -242,6 +247,7 @@ const MainInfo: React.FunctionComponent = () => {
                                         value={programDetail.program_owner}
                                         handleChange={(value: any) => {
                                             programDetail.program_owner = value;
+                                            getOwnerDetail({ type: value });
                                             setStateTrigger(!stateTrigger);
                                         }}
                                         options={ownerOption?.data}
@@ -255,7 +261,7 @@ const MainInfo: React.FunctionComponent = () => {
                                             programDetail.program_owner_detail = value;
                                             setStateTrigger(!stateTrigger);
                                         }}
-                                        options={ownerDetailOption?.data}
+                                        options={ownerDetailOption}
                                     />
                                     {/*}*/}
                                     <Select
