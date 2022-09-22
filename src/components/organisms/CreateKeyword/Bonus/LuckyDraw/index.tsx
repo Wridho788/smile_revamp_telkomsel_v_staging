@@ -87,8 +87,8 @@ const NotificationLuckyDraw: React.FunctionComponent<
     setKeywordNotificationLuckyDrawState,
   ] = useState<IKeywordNotificationLuckyDraw[]>(keywordNotificationLuckyDraw);
 
-  const { data: locationOptions = { data: [] } } =
-    useLocationTemplateQuery(FilterInitial);
+  const { data: locationOptions, isFetching } =
+    useLocationTemplateQuery({ type: keywordCreate.eligibility.location_type });
 
   const [index, setIndex] = useState<number>(-1);
 
@@ -107,14 +107,20 @@ const NotificationLuckyDraw: React.FunctionComponent<
         ({ bonus_type }) => bonus_type === "lucky_draw"
       );
       setIndex(bonusIdx);
-      keywordCreateState.eligibility.locations.map((location) =>
-        keywordCreate.bonus[bonusIdx].locations.push({
-          location_id: location,
-          stock: 0,
-        })
-      );
+
+      if (locationOptions) {
+        keywordCreateState.eligibility.locations.map((location) =>
+            keywordCreateState.bonus[bonusIdx].locations.push({
+              name: locationOptions.find((e: any) => e["_id"] === location).name,
+              location_id: location,
+              stock: 0,
+            })
+        );
+
+        setStateTrigger(!stateTrigger);
+      }
     }
-  }, []);
+  }, [isFetching]);
 
   useEffect(() => {
     setKeywordNotificationLuckyDrawHelperState(
@@ -480,46 +486,44 @@ const NotificationLuckyDraw: React.FunctionComponent<
                     </BodyCopy>
                   </Grid>
                 </Grid>
-                {keywordCreateState.bonus[index].locations.map(
-                  (location: any, idx: any) => {
-                    const locationName = locationOptions.data.find(
-                      (e) => e["_id"] === location.location_id
-                    )?.name;
-                    return (
-                      <Grid key={`location__${idx}`} container>
-                        <Grid
-                          item
-                          xs={5}
-                          border="0.1vw solid rgba(0,0,0,0.1)"
-                          p="0.8vw"
-                        >
-                          <BodyCopy textTransform="uppercase">
-                            {locationName}
-                          </BodyCopy>
+                {locationOptions && (
+                    keywordCreateState.bonus[index].locations.map((location: any, idx: any) => {
+                      return (
+                        <Grid key={`location__${idx}`} container>
+                          <Grid
+                            item
+                            xs={5}
+                            border="0.1vw solid rgba(0,0,0,0.1)"
+                            p="0.8vw"
+                          >
+                            <BodyCopy textTransform="uppercase">
+                              {location.name}
+                            </BodyCopy>
+                          </Grid>
+                          <Grid
+                            item
+                            xs={7}
+                            border="0.1vw solid rgba(0,0,0,0.1)"
+                            p="0.8vw"
+                          >
+                            <OutlinedTextField
+                              isRequired={false}
+                              type="number"
+                              variant="outlined"
+                              InputProps={{ inputProps: { min: 0 } }}
+                              value={keywordCreateState.bonus[index].locations[
+                                idx
+                              ].stock.toString()}
+                              handleChange={(value: number) => {
+                                keywordCreate.bonus[index].locations[idx].stock =
+                                  Number(value);
+                                setStateTrigger(!stateTrigger);
+                              }}
+                            />
+                          </Grid>
                         </Grid>
-                        <Grid
-                          item
-                          xs={7}
-                          border="0.1vw solid rgba(0,0,0,0.1)"
-                          p="0.8vw"
-                        >
-                          <OutlinedTextField
-                            type="number"
-                            variant="outlined"
-                            InputProps={{ inputProps: { min: 0 } }}
-                            value={keywordCreateState.bonus[index].locations[
-                              idx
-                            ].stock.toString()}
-                            handleChange={(value: number) => {
-                              keywordCreate.bonus[index].locations[idx].stock =
-                                Number(value);
-                              setStateTrigger(!stateTrigger);
-                            }}
-                          />
-                        </Grid>
-                      </Grid>
-                    );
-                  }
+                      );
+                    })
                 )}
                 <SmallCopy color="primary" mt="1vw">
                   ** If you don't want set stock, please leave it blank

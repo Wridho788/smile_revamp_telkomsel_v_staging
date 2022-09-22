@@ -123,7 +123,9 @@ const Notification: React.FunctionComponent<INotificationProps> = ({
                 >
                   <Subtitle color="warning.main">{_.set_value}</Subtitle>
                   <OutlinedTextField
-                    disabled={true}
+                    isRequired={
+                      _.set_value === "Keyword Verification" ? false : true
+                    }
                     direction="column"
                     label="Keyword Name"
                     variant="outlined"
@@ -134,6 +136,9 @@ const Notification: React.FunctionComponent<INotificationProps> = ({
                     }}
                   />
                   <Select
+                    isRequired={
+                      _.set_value === "Keyword Verification" ? false : true
+                    }
                     direction="column"
                     label="Notification Template"
                     placeholder="Option"
@@ -156,6 +161,9 @@ const Notification: React.FunctionComponent<INotificationProps> = ({
                   {keywordNotificationEligibilityHelperState[idx]
                     .notification_template !== "" && (
                     <OutlinedTextField
+                      isRequired={
+                        _.set_value === "Keyword Verification" ? false : true
+                      }
                       direction="column"
                       label="Notification Content"
                       variant="outlined"
@@ -236,6 +244,9 @@ const Notification: React.FunctionComponent<INotificationProps> = ({
                     </Stack>
                   )}
                   <Select
+                    isRequired={
+                      _.set_value === "Keyword Verification" ? false : true
+                    }
                     direction="column"
                     label="Notification Via"
                     placeholder="Option"

@@ -130,11 +130,11 @@ const LinkAja: React.FunctionComponent<INotificationLuckyDrawProps> = ({
                             </Grid>
                         </Grid>
                     </Box>
-                    <LocationManagement
-                        initialName={bonusTypeLinkAja.stock_location}
-                        stateTrigger={stateTrigger}
-                        setStateTrigger={setStateTrigger}
-                    />
+                    {/*<LocationManagement*/}
+                    {/*    initialName={bonusTypeLinkAja.stock_location}*/}
+                    {/*    stateTrigger={stateTrigger}*/}
+                    {/*    setStateTrigger={setStateTrigger}*/}
+                    {/*/>*/}
                 </Stack>
             </AccordionDetails>
         </Accordion>

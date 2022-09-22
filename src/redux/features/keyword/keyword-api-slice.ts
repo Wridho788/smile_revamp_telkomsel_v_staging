@@ -86,6 +86,13 @@ export const keywordSlice = createApi({
           body: formData,
         }),
       });
+    const programHandler = () =>
+      builder.query<any[], string>({
+        query: (programId) => ({
+          url: programId,
+        }),
+        providesTags: ["Keyword"],
+      });
     return {
       // all function
       keywordList: responseHandler(baseUrl + "/v1/keyword"),
@@ -135,6 +142,9 @@ export const keywordSlice = createApi({
 
       // post : image/file
       keywordUploadAuction: postImgHandler(),
+
+      // program detail
+      keywordProgramDetail: programHandler(),
     };
   },
 });
@@ -155,4 +165,5 @@ export const {
   useKeywordGeneralUpdateMutation,
   useKeywordUploadAuctionMutation,
   useKeywordGeneralDetailQuery,
+  useKeywordProgramDetailQuery,
 } = keywordSlice;

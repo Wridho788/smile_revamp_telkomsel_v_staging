@@ -102,6 +102,7 @@ const KeywordDetailsModal: FC<IKeywordDetailsModalProps> = ({
           </Grid>
           <Grid item xs={4}>
             <OutlinedTextField
+              isRequired={false}
               label="Max Mode"
               value={data.detail.max_mode ?? ""}
               variant={"outlined"}
@@ -120,6 +121,7 @@ const KeywordDetailsModal: FC<IKeywordDetailsModalProps> = ({
           </Grid>
           <Grid item xs={4}>
             <OutlinedTextField
+              isRequired={false}
               label="Max Redeem Per MSISDN"
               value={data.detail.max_redeem_per_msisdn ?? ""}
               variant={"outlined"}

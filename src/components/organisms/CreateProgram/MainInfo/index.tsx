@@ -16,10 +16,9 @@ import {
     Select,
     OutlinedTextField,
     ResponsiveDateTimePicker,
-    H2,
     BodyCopy,
 } from "../../../atoms";
-import {useEffect, useRef, useState, Fragment} from "react";
+import {useEffect, useState, Fragment} from "react";
 import {
     useGetLocationTypeQuery,
     useGetMechanismQuery,
@@ -35,7 +34,11 @@ import {
     ThresholdAlarmExpiredOption,
 } from "../../../../redux/utils/initial-general";
 import {ProgramDetailInitial} from "../../../../pages/CreateProgram/programInitial";
-import {useLocationTemplateQuery} from "../../../../redux/features/location/location-api-slice";
+import {
+    useLocationLocRebaseQuery,
+    useLocationTemplateQuery,
+    useLocationRebaseMutation
+} from "../../../../redux/features/location/location-api-slice";
 import {IParams} from "../../../../redux/utils/IGeneral";
 import {useAccountAuthenticateQuery, useLazyPicPrimeQuery} from "../../../../redux/features/account/account-api-slice";
 import TableContainer from "@mui/material/TableContainer";
@@ -54,27 +57,30 @@ import {
 } from "../../../../redux/features/program/program-api-slice";
 import {ICreateProgram} from "../../../../pages/CreateProgram/interface";
 import CachedIcon from "@mui/icons-material/Cached";
+import SwitchCustom from "../../../../atomic/components/atoms/Switch";
+import BulkData from "../Segmentation/BulkData";
+import SingleData from "../Segmentation/SingleData";
+
 interface IMainInfoProps {
     slug: string;
     handleShowModalPic?: any;
-    isRefetchPic? : boolean;
+    isRefetchPic?: boolean;
 }
 
 const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
                                                                slug, handleShowModalPic, isRefetchPic
                                                            }: IMainInfoProps) => {
     let programData = ProgramDetailInitial.data;
-    let {_id} = useParams();
-    const {data: fetchDetail = programData, isLoading} = useDetailProgramQuery(
-        _id ?? ""
-    );
-    useEffect(() => {
-        programData._id = fetchDetail._id;
-    }, [fetchDetail]);
+    // let {_id} = useParams();
+    // const {data: fetchDetail = programData, isLoading} = useDetailProgramQuery(
+    //     _id ?? ""
+    // );
+    // useEffect(() => {
+    //     programData._id = fetchDetail._id;
+    // }, [fetchDetail]);
 
     const {data: pointTypeOption = {data: []}} = useGetPointTypeQuery();
     const {data: mechanismOption = {data: []}} = useGetMechanismQuery();
-    const {data: ownerOption = {data: []}} = useGetLocationTypeQuery();
     const {data: groupOption = {data: []}} = useGetProgramGroupQuery();
 
     const [searchInput, setSearchInput] = useState<string>("");
@@ -86,31 +92,33 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
     // TODO LOGIC DATATABLE
     const [selected, setSelected] = React.useState<readonly string[]>([]);
     const [page, setPage] = React.useState(0);
-    const [dense, setDense] = React.useState(false);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
-    const [showModalCreatePIC, setShowModalCreatePIC] = useState(false);
-    const [isHQ, setIsHQ] = useState<boolean>(false);
-    const ownerFilterInitial: IParams = {
-        limit: 100,
-        skip: 0,
-        filter: `{"type":"${programData.program_owner}"}`,
-        sort: "{}",
-    };
-
-    const {data: ownerDetailOption = {data: []}} =
-        useLocationTemplateQuery(ownerFilterInitial);
+    const [customizeOwner, setCustomizeOwner] = useState(false);
+    const [getOwnerDetail, {data: ownerDetailOption}] =
+        useLocationRebaseMutation();
 
     const {data: accountAuth, isFetching} = useAccountAuthenticateQuery();
+    const {data: ownerOption = {data: []}, isSuccess} = useGetLocationTypeQuery();
     useEffect(() => {
-        if(!isFetching){
-            const currItem : any = accountAuth
-            if(currItem.account_location.location_detail.type === '62ffc0fc8a01008799e785bc'){
-                programData.program_owner = '62ffc0fc8a01008799e785bc'
-                programData.program_owner_detail = currItem.account_location.location
-                setIsHQ(true)
-            } // TODO id HQ ref => lov/location_type
-            console.log(programData)
+        if (!isFetching) {
+            const programOwner:string = accountAuth?.account_location.location_detail.type
+            programData.program_owner = programOwner
+            programData.program_owner_detail = accountAuth?.account_location.location
+            getOwnerDetail({type: programOwner})
+
+            // TODO still continue
+            // const index: number = ownerOption.data.findIndex(
+            //     ({_id}) => _id === programOwner)
+            // if (isSuccess) {
+            //     if (index !== 0) {
+            //         ownerOption.data.splice(index - 1, index);
+            //     }
+            // }
+
         }
+    }, [isFetching]);
+
+    useEffect(() => {
     }, [isFetching]);
 
     const picLazyParam: IParams = {
@@ -403,8 +411,13 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
                         setStateTrigger(!stateTrigger);
                     }}
                 />
-                {
-                    !isHQ &&
+                <Tooltip placement="top-start" title="Please wait until the owner data finished">
+                    <Box>
+                        <SwitchCustom color={"success"} checked={customizeOwner} handleChange={setCustomizeOwner}
+                                      label={"Customize Owner Area"}/>
+                    </Box>
+                </Tooltip>
+                {customizeOwner &&
                     <Select
                         label="Owner"
                         placeholder="Option"
@@ -413,16 +426,18 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
                         value={programData.program_owner}
                         handleChange={(value: any) => {
                             programData.program_owner = value;
+                            programData.program_owner_detail = ""
+                            getOwnerDetail({type: value})
                             setStateTrigger(!stateTrigger);
                         }}
                     />
                 }
                 {
-                    (programData.program_owner && !isHQ) &&
+                    (programData.program_owner && customizeOwner) &&
                     <Select
                         label="Owner Detail"
                         placeholder="Option"
-                        options={ownerDetailOption.data}
+                        options={ownerDetailOption}
                         optionLabel="name"
                         value={programData.program_owner_detail}
                         handleChange={(value: any) => {

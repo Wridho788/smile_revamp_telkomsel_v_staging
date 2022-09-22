@@ -31,6 +31,7 @@ import {
   useKeywordRejectMutation,
 } from "redux/features/keyword/keyword-api-slice";
 import { useGetNotifViaQuery } from "redux/features/lov/lov-api-slice";
+import { keywordProgramDetailHelper } from "../Programs/Detail/KeywordLink/initial";
 
 const style = {
   position: "absolute" as "absolute",
@@ -169,6 +170,16 @@ const KeywordDetail: FC<IKeywordDetailsModalProps> = ({
     );
   };
 
+  // clean keyword program detail
+
+  const keywordProgramDetail = keywordProgramDetailHelper;
+
+  useEffect(() => {
+    setTimeout(() => {
+      keywordProgramDetail.opened = true;
+    }, 1000);
+  }, [keywordProgramDetail]);
+
   return (
     <ModalCustom
       keepMounted
@@ -212,7 +223,7 @@ const KeywordDetail: FC<IKeywordDetailsModalProps> = ({
                 )
               ) : (
                 <Alert sx={{ margin: 2 }} severity="warning">
-                  Waiting for Non HQApproval
+                  Waiting For approval 1
                 </Alert>
               )
             ) : (

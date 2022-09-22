@@ -30,6 +30,7 @@ import { useAppConfigQuery } from "../../../redux/features/app-config/app-config
 import { useAccountAuthenticateQuery } from "../../../redux/features/account/account-api-slice";
 
 import KeywordDetailsModal from "./KeywordDetail";
+import { keywordProgramDetailHelper } from "../Programs/Detail/KeywordLink/initial";
 import FilterKeyword from "./filter";
 import { BodyCopy } from "components/atoms";
 
@@ -212,16 +213,26 @@ const KeywordPrime = () => {
           </Alert>
         ) : rowData.isHQ ? (
           <Alert severity="warning" icon={false}>
-            Waiting Approval HQ Manager
+            Waiting For Approval 2
           </Alert>
         ) : (
           <Alert severity="warning" icon={false}>
-            Waiting Approval Area Manager
+            Waiting For Approval 1
           </Alert>
         )}
       </Box>
     );
   };
+
+  useEffect(() => {
+    if (
+      keywordProgramDetailHelper.data !== undefined &&
+      keywordProgramDetailHelper.opened === false
+    ) {
+      handleButtonDetail(keywordProgramDetailHelper.data);
+    }
+    return;
+  }, []);
 
   return (
     <Fragment>

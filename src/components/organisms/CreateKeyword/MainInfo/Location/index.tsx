@@ -12,8 +12,12 @@ import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { useLocationTemplateQuery } from "../../../../../redux/features/location/location-api-slice";
+import {
+  useLocationRebaseMutation,
+  useLocationTemplateQuery
+} from "../../../../../redux/features/location/location-api-slice";
 import { KeywordEligibilityLocationHelper } from "../../initial";
+import {useAccountAuthenticateQuery} from "../../../../../redux/features/account/account-api-slice";
 
 interface ILocationProps {
   keywordCreateState: ICreateKeyword;
@@ -30,8 +34,11 @@ const Location: React.FunctionComponent<ILocationProps> = ({
 }) => {
   const { data: locationTypeOptions = { data: [] } } =
     useGetLocationTypeQuery();
-  const { data: locationOptions = { data: [] } } =
-    useLocationTemplateQuery(FilterInitial);
+
+  const [getOwnerDetail, { data: locationOptions }] =
+      useLocationRebaseMutation();
+
+  const { data: accountAuth } = useAccountAuthenticateQuery();
 
   const keywordEligibilityLocationHelper = KeywordEligibilityLocationHelper;
   const [
@@ -44,6 +51,14 @@ const Location: React.FunctionComponent<ILocationProps> = ({
   useEffect(() => {
     setKeywordEligibilityLocationHelperState(keywordEligibilityLocationHelper);
   }, [keywordEligibilityLocationHelper, stateTrigger]);
+
+  useEffect(() => {
+    if (accountAuth?.account_location.location_detail.type) {
+      keywordCreateState.eligibility.location_type = accountAuth?.account_location.location_detail.type
+      setStateTrigger(!stateTrigger);
+    }
+  }, [keywordCreateState.eligibility?.eligibility_locations]);
+
 
   return (
     <Accordion sx={{ p: "1vw" }}>
@@ -65,38 +80,40 @@ const Location: React.FunctionComponent<ILocationProps> = ({
             value={keywordCreateState.eligibility.eligibility_locations}
             handleChange={(value: boolean) => {
               keywordCreate.eligibility.eligibility_locations = value;
+              getOwnerDetail({ type: accountAuth?.account_location.location_detail.type });
               setStateTrigger(!stateTrigger);
             }}
           />
-          {keywordCreateState.eligibility.eligibility_locations !== false && (
+          {keywordCreateState.eligibility.eligibility_locations && (
             <Select
               label="Location Type"
               placeholder="Option"
-              options={locationTypeOptions.data}
-              value={keywordEligibilityLocationHelperState.location_type}
+              options={locationTypeOptions.data.filter((item) => {
+                if (accountAuth?.account_location.location_detail.type === '62ffc0fc8a01008799e785be') {
+                  const scope: any = ['62ffc0fc8a01008799e785bc', '62ffc0fc8a01008799e785bd'];
+                  if (!scope.includes(item._id)) {
+                    return item;
+                  }
+                } else {
+                  return item;
+                }
+              })}
+              value={keywordCreateState.eligibility.location_type}
               handleChange={(value: string) => {
-                keywordEligibilityLocationHelper.location_type = value;
+                keywordCreate.eligibility.location_type = value;
                 keywordCreate.eligibility.locations = [];
+                getOwnerDetail({ type: value });
                 setStateTrigger(!stateTrigger);
               }}
             />
           )}
-          {keywordEligibilityLocationHelperState.location_type.length > 0 &&
-            locationOptions.data.find(
-              (e) =>
-                e["type"] ===
-                keywordEligibilityLocationHelperState.location_type
-            ) !== undefined && (
+          {keywordCreateState.eligibility.eligibility_locations && (
               <Grid item xs={3}>
                 <Select
                   multiple
                   label="Location"
                   placeholder="Option"
-                  options={locationOptions.data.filter(
-                    (e) =>
-                      e["type"] ===
-                      keywordEligibilityLocationHelperState.location_type
-                  )}
+                  options={locationOptions}
                   optionLabel={"name"}
                   value={keywordCreateState.eligibility.locations}
                   handleChange={(value: any) => {

@@ -100,7 +100,9 @@ const Merchant: React.FunctionComponent<IMerchantProps> = ({
   };
   const onSelectionChange = (event: any) => {
     const value = event.value;
-    keywordCreate.eligibility.merchant = value["_id"];
+    value === null
+      ? (keywordCreate.eligibility.merchant = "")
+      : (keywordCreate.eligibility.merchant = value["_id"]);
     selectedMerchant.data = value;
     setStateTrigger(!stateTrigger);
     setMerchantTrigger(!merchantTrigger);
@@ -164,7 +166,7 @@ const Merchant: React.FunctionComponent<IMerchantProps> = ({
             filterPlaceholder="Search by NPWP"
           />
         </DataTable>
-        {selectedMerchantState.data !== "" && (
+        {selectedMerchantState.data !== null && (
           <Alert severity="success" sx={{ mt: "1vw" }}>
             Selected Merchant : "{selectedMerchantState.data.merchant_name}"
           </Alert>

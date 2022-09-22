@@ -20,7 +20,7 @@ import {
 } from "../../pages";
 
 import NotificationManagement from "../../pages/NotificationManagement";
-import {Segmentation} from "../../components/organisms/CreateProgram";
+import { Segmentation } from "../../components/organisms/CreateProgram";
 
 // "AuthProvider" & "Protected"
 import AuthProvider from "../AuthProvider";

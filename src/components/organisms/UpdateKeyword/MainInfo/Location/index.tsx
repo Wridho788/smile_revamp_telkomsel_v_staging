@@ -81,31 +81,31 @@ const Location: React.FunctionComponent<ILocationProps> = ({
               }}
             />
           )}
-          {keywordEligibilityLocationHelperState.location_type.length > 0 &&
-            locationOptions.data.find(
-              (e) =>
-                e["type"] ===
-                keywordEligibilityLocationHelperState.location_type
-            ) !== undefined && (
-              <Grid item xs={3}>
-                <Select
-                  multiple
-                  label="Location"
-                  placeholder="Option"
-                  options={locationOptions.data.filter(
-                    (e) =>
-                      e["type"] ===
-                      keywordEligibilityLocationHelperState.location_type
-                  )}
-                  optionLabel={"name"}
-                  value={keywordCreateState.eligibility.locations}
-                  handleChange={(value: any) => {
-                    keywordCreate.eligibility.locations = value;
-                    setStateTrigger(!stateTrigger);
-                  }}
-                />
-              </Grid>
-            )}
+          {/*{keywordEligibilityLocationHelperState.location_type.length > 0 &&*/}
+          {/*  locationOptions.data.find(*/}
+          {/*    (e) =>*/}
+          {/*      e["type"] ===*/}
+          {/*      keywordEligibilityLocationHelperState.location_type*/}
+          {/*  ) !== undefined && (*/}
+          {/*    <Grid item xs={3}>*/}
+          {/*      <Select*/}
+          {/*        multiple*/}
+          {/*        label="Location"*/}
+          {/*        placeholder="Option"*/}
+          {/*        options={locationOptions.data.filter(*/}
+          {/*          (e) =>*/}
+          {/*            e["type"] ===*/}
+          {/*            keywordEligibilityLocationHelperState.location_type*/}
+          {/*        )}*/}
+          {/*        optionLabel={"name"}*/}
+          {/*        value={keywordCreateState.eligibility.locations}*/}
+          {/*        handleChange={(value: any) => {*/}
+          {/*          keywordCreate.eligibility.locations = value;*/}
+          {/*          setStateTrigger(!stateTrigger);*/}
+          {/*        }}*/}
+          {/*      />*/}
+          {/*    </Grid>*/}
+          {/*  )}*/}
         </Stack>
       </AccordionDetails>
     </Accordion>
