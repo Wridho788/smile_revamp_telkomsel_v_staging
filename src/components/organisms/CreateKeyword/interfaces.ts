@@ -19,6 +19,7 @@ export interface IKeywordEligibility {
   channel_validation_list: string[];
   program_id: string;
   eligibility_locations: boolean;
+  location_type: string;
   locations: string[];
   program_title_expose: string;
   program_experience: string[];

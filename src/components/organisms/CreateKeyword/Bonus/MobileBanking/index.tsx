@@ -87,7 +87,7 @@ const MobileBanking: React.FunctionComponent<IMobileBankingProps> = ({
     if (index === -1) {
       keywordCreate.bonus.push(KeywordBonusMobileBanking);
       const bonusIdx = keywordCreate.bonus.findIndex(
-        ({ bonus_type }) => bonus_type === "mobile_banking"
+        ({ bonus_type }) => bonus_type === "mbp"
       );
 
       setIndex(bonusIdx);
@@ -113,7 +113,7 @@ const MobileBanking: React.FunctionComponent<IMobileBankingProps> = ({
         keywordCreate.notification,
         ({ bonus_type_id }) => bonus_type_id === bonusTypeId
       ) &&
-      bonusType === "Mobile Banking"
+      bonusType === "mbp"
     ) {
       keywordCreate.notification = keywordCreate.notification.concat(
         keywordNotificationLuckyDraw
@@ -226,48 +226,49 @@ const MobileBanking: React.FunctionComponent<IMobileBankingProps> = ({
                     </BodyCopy>
                   </Grid>
                 </Grid>
-                {keywordCreateState.bonus[index].stock_location.map(
-                  (location: any, idx: any) => {
-                    const locationName = locationOptions.data.find(
-                      (e) => e["_id"] === location.location
-                    )?.name;
-                    return (
-                      <Grid key={`location__${idx}`} container>
-                        <Grid
-                          item
-                          xs={5}
-                          border="0.1vw solid rgba(0,0,0,0.1)"
-                          p="0.8vw"
-                        >
-                          <BodyCopy textTransform="uppercase">
-                            {locationName}
-                          </BodyCopy>
-                        </Grid>
-                        <Grid
-                          item
-                          xs={7}
-                          border="0.1vw solid rgba(0,0,0,0.1)"
-                          p="0.8vw"
-                        >
-                          <OutlinedTextField
-                            type="number"
-                            variant="outlined"
-                            InputProps={{ inputProps: { min: 0 } }}
-                            value={keywordCreateState.bonus[
-                              index
-                            ].stock_location[idx].stock.toString()}
-                            handleChange={(value: number) => {
-                              keywordCreate.bonus[index].stock_location[
-                                idx
-                              ].stock = Number(value);
-                              setStateTrigger(!stateTrigger);
-                            }}
-                          />
-                        </Grid>
-                      </Grid>
-                    );
-                  }
-                )}
+                {/*{keywordCreateState.bonus[index].stock_location.map(*/}
+                {/*  (location: any, idx: any) => {*/}
+                {/*    const locationName = locationOptions.data.find(*/}
+                {/*      (e) => e["_id"] === location.location*/}
+                {/*    )?.name;*/}
+                {/*    return (*/}
+                {/*      <Grid key={`location__${idx}`} container>*/}
+                {/*        <Grid*/}
+                {/*          item*/}
+                {/*          xs={5}*/}
+                {/*          border="0.1vw solid rgba(0,0,0,0.1)"*/}
+                {/*          p="0.8vw"*/}
+                {/*        >*/}
+                {/*          <BodyCopy textTransform="uppercase">*/}
+                {/*            {locationName}*/}
+                {/*          </BodyCopy>*/}
+                {/*        </Grid>*/}
+                {/*        <Grid*/}
+                {/*          item*/}
+                {/*          xs={7}*/}
+                {/*          border="0.1vw solid rgba(0,0,0,0.1)"*/}
+                {/*          p="0.8vw"*/}
+                {/*        >*/}
+                {/*          <OutlinedTextField*/}
+                {/*            isRequired={false}*/}
+                {/*            type="number"*/}
+                {/*            variant="outlined"*/}
+                {/*            InputProps={{ inputProps: { min: 0 } }}*/}
+                {/*            value={keywordCreateState.bonus[*/}
+                {/*              index*/}
+                {/*            ].stock_location[idx].stock.toString()}*/}
+                {/*            handleChange={(value: number) => {*/}
+                {/*              keywordCreate.bonus[index].stock_location[*/}
+                {/*                idx*/}
+                {/*              ].stock = Number(value);*/}
+                {/*              setStateTrigger(!stateTrigger);*/}
+                {/*            }}*/}
+                {/*          />*/}
+                {/*        </Grid>*/}
+                {/*      </Grid>*/}
+                {/*    );*/}
+                {/*  }*/}
+                {/*)}*/}
                 <SmallCopy color="primary" mt="1vw">
                   ** If you don't want set stock, please leave it blank
                 </SmallCopy>

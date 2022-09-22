@@ -103,6 +103,7 @@ const General: React.FunctionComponent<IGeneralProps> = ({
             }}
           />
           <OutlinedTextField
+            isRequired={false}
             label="Program Name to be Expose"
             placeholder="Program Name to be Expose"
             variant="outlined"
@@ -188,6 +189,7 @@ const General: React.FunctionComponent<IGeneralProps> = ({
               e["_id"] === keywordCreateState.eligibility.program_experience[0]
           )?.set_value !== "Auction" && (
             <Select
+              isRequired={false}
               label="Max Mode"
               placeholder="Option"
               options={MaxModeOptions}
@@ -377,7 +379,7 @@ const General: React.FunctionComponent<IGeneralProps> = ({
               </Grid>
             </Grid>
           )}
-          {keywordCreateState.eligibility.keyword_schedule === "Daily" && (
+          {/* {keywordCreateState.eligibility.keyword_schedule === "Daily" && (
             <Grid container columns={10}>
               <Grid item xs={4}>
                 <BodyCopy>Daily</BodyCopy>
@@ -484,8 +486,8 @@ const General: React.FunctionComponent<IGeneralProps> = ({
                 </Stack>
               </Grid>
             </Grid>
-          )}
-          {keywordCreateState.eligibility.keyword_schedule === "Hourly" && (
+          )} */}
+          {/* {keywordCreateState.eligibility.keyword_schedule === "Hourly" && (
             <Grid container columns={10}>
               <Grid item xs={4}>
                 <BodyCopy>Hourly</BodyCopy>
@@ -591,8 +593,9 @@ const General: React.FunctionComponent<IGeneralProps> = ({
                 </Stack>
               </Grid>
             </Grid>
-          )}
+          )} */}
           <Select
+            isRequired={false}
             label="Subsidized Program"
             placeholder="Option"
             options={BooleanOptions}
@@ -603,6 +606,7 @@ const General: React.FunctionComponent<IGeneralProps> = ({
             }}
           />
           <OutlinedTextField
+            isRequired={false}
             label="Total Budget"
             variant="outlined"
             InputProps={{
@@ -621,6 +625,7 @@ const General: React.FunctionComponent<IGeneralProps> = ({
             }}
           />
           <OutlinedTextField
+            isRequired={false}
             type="number"
             label="Customer Value"
             variant="outlined"
@@ -636,6 +641,7 @@ const General: React.FunctionComponent<IGeneralProps> = ({
               e["_id"] === keywordCreateState.eligibility.program_experience[0]
           )?.set_value !== "Auction" && (
             <Select
+              isRequired={false}
               label="Multiwhitelist"
               placeholder="Option"
               options={BooleanOptions}
@@ -652,6 +658,7 @@ const General: React.FunctionComponent<IGeneralProps> = ({
           )?.set_value !== "Auction" &&
             keywordCreateState.eligibility.multiwhitelist !== false && (
               <Select
+                isRequired={false}
                 label="Multiwhitelist Destination"
                 placeholder="Option"
                 options={programListOptions.data}
@@ -664,6 +671,7 @@ const General: React.FunctionComponent<IGeneralProps> = ({
               />
             )}
           <Select
+            isRequired={false}
             label="Channel Validation"
             placeholder="Option"
             options={BooleanOptions}
@@ -675,6 +683,7 @@ const General: React.FunctionComponent<IGeneralProps> = ({
           />
           {keywordCreateState.eligibility.channel_validation !== false && (
             <Select
+              isRequired={false}
               multiple
               label="Channel List"
               placeholder="Option"

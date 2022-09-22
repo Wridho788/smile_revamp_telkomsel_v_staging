@@ -12,7 +12,7 @@ export const locationSlice = createApi({
     baseQuery: API_HEADER(baseUrl + '/location'),
     endpoints(builder) {
         const responseHandler = (endpoint: string) =>
-            builder.query<IResponse, IParamsPrime | IParams>({
+            builder.query<IResponse | any, IParamsPrime | IParams>({
                 query: (params: IParamsPrime | IParams) => ({
                     url: endpoint,
                     params: params,
