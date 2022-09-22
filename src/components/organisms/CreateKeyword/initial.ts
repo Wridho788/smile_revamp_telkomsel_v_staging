@@ -43,6 +43,7 @@ export const KeywordEligibility: IKeywordEligibility = {
   channel_validation_list: [],
   program_id: "",
   eligibility_locations: false,
+  location_type: "",
   locations: [],
   program_title_expose: "",
   program_experience: [],

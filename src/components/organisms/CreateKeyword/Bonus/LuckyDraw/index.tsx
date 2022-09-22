@@ -480,7 +480,7 @@ const NotificationLuckyDraw: React.FunctionComponent<
                     </BodyCopy>
                   </Grid>
                 </Grid>
-                {keywordCreateState.bonus[index].locations.map(
+                {(keywordCreateState.bonus[index].locations && locationOptions) && keywordCreateState.bonus[index].locations.map(
                   (location: any, idx: any) => {
                     const locationName = locationOptions.data.find(
                       (e) => e["_id"] === location.location_id
