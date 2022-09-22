@@ -54,7 +54,8 @@ const Location: React.FunctionComponent<ILocationProps> = ({
 
   useEffect(() => {
     if (accountAuth?.account_location.location_detail.type) {
-      keywordEligibilityLocationHelperState.location_type = accountAuth?.account_location.location_detail.type
+      keywordCreateState.eligibility.location_type = accountAuth?.account_location.location_detail.type
+      setStateTrigger(!stateTrigger);
     }
   }, [keywordCreateState.eligibility?.eligibility_locations]);
 
@@ -97,9 +98,9 @@ const Location: React.FunctionComponent<ILocationProps> = ({
                   return item;
                 }
               })}
-              value={keywordEligibilityLocationHelperState.location_type}
+              value={keywordCreateState.eligibility.location_type}
               handleChange={(value: string) => {
-                keywordEligibilityLocationHelper.location_type = value;
+                keywordCreate.eligibility.location_type = value;
                 keywordCreate.eligibility.locations = [];
                 getOwnerDetail({ type: value });
                 setStateTrigger(!stateTrigger);

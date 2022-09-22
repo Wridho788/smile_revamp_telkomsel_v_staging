@@ -124,55 +124,55 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
                                 case "auction":
                                     return (
                                         <Box key={`bonusType__${idx}`}>
-                                            <Auction
-                                                bonusType={bonusType}
-                                                bonusTypeId={
-                                                    _find(
-                                                        bonusTypeOptions.data,
-                                                        ({ template }) => template === bonusType
-                                                    )?._id
-                                                }
-                                                keywordCreateState={keywordUpdateState}
-                                                keywordCreate={keywordUpdate}
-                                                stateTrigger={stateTrigger}
-                                                setStateTrigger={setStateTrigger}
-                                            />
+                                            {/*<Auction*/}
+                                            {/*    bonusType={bonusType}*/}
+                                            {/*    bonusTypeId={*/}
+                                            {/*        _find(*/}
+                                            {/*            bonusTypeOptions.data,*/}
+                                            {/*            ({ template }) => template === bonusType*/}
+                                            {/*        )?._id*/}
+                                            {/*    }*/}
+                                            {/*    keywordCreateState={keywordUpdateState}*/}
+                                            {/*    keywordCreate={keywordUpdate}*/}
+                                            {/*    stateTrigger={stateTrigger}*/}
+                                            {/*    setStateTrigger={setStateTrigger}*/}
+                                            {/*/>*/}
                                         </Box>
                                     );
                                 case "telco_postpaid":
                                     return (
                                         <Box key={`bonusType__${idx}`}>
-                                            <TelcoProductPostpaid
-                                                bonusType={bonusType}
-                                                bonusTypeId={
-                                                    _find(
-                                                        bonusTypeOptions.data,
-                                                        ({ template }) => template === bonusType
-                                                    )?._id
-                                                }
-                                                keywordCreateState={keywordUpdateState}
-                                                keywordCreate={keywordUpdate}
-                                                stateTrigger={stateTrigger}
-                                                setStateTrigger={setStateTrigger}
-                                            />
+                                            {/*<TelcoProductPostpaid*/}
+                                            {/*    bonusType={bonusType}*/}
+                                            {/*    bonusTypeId={*/}
+                                            {/*        _find(*/}
+                                            {/*            bonusTypeOptions.data,*/}
+                                            {/*            ({ template }) => template === bonusType*/}
+                                            {/*        )?._id*/}
+                                            {/*    }*/}
+                                            {/*    keywordCreateState={keywordUpdateState}*/}
+                                            {/*    keywordCreate={keywordUpdate}*/}
+                                            {/*    stateTrigger={stateTrigger}*/}
+                                            {/*    setStateTrigger={setStateTrigger}*/}
+                                            {/*/>*/}
                                         </Box>
                                     );
                                 case "telco_prepaid":
                                     return (
                                         <Box key={`bonusType__${idx}`}>
-                                            <TelcoProductPrepaid
-                                                bonusType={bonusType}
-                                                bonusTypeId={
-                                                    _find(
-                                                        bonusTypeOptions.data,
-                                                        ({ template }) => template === bonusType
-                                                    )?._id
-                                                }
-                                                keywordCreateState={keywordUpdateState}
-                                                keywordCreate={keywordUpdate}
-                                                stateTrigger={stateTrigger}
-                                                setStateTrigger={setStateTrigger}
-                                            />
+                                            {/*<TelcoProductPrepaid*/}
+                                            {/*    bonusType={bonusType}*/}
+                                            {/*    bonusTypeId={*/}
+                                            {/*        _find(*/}
+                                            {/*            bonusTypeOptions.data,*/}
+                                            {/*            ({ template }) => template === bonusType*/}
+                                            {/*        )?._id*/}
+                                            {/*    }*/}
+                                            {/*    keywordCreateState={keywordUpdateState}*/}
+                                            {/*    keywordCreate={keywordUpdate}*/}
+                                            {/*    stateTrigger={stateTrigger}*/}
+                                            {/*    setStateTrigger={setStateTrigger}*/}
+                                            {/*/>*/}
                                         </Box>
                                     );
                             }
