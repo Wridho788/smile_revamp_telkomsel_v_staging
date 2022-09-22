@@ -76,7 +76,7 @@ const LinkAja: React.FunctionComponent<INotificationLinkAjaProps> = ({
                 <Subtitle textTransform="uppercase">Link Aja</Subtitle>
             </AccordionSummary>
             <AccordionDetails>
-                <Stack spacing="2vw" px="0.5vw">
+                {index !== -1 && (<Stack spacing="2vw" px="0.5vw">
                     <Box>
                         <Grid container columns={4} spacing={2}>
                             <Grid item xs={2}>
@@ -140,13 +140,14 @@ const LinkAja: React.FunctionComponent<INotificationLinkAjaProps> = ({
                     {/* Stock Location Management */}
                     <Stack>
                         {locationOptions && <LocationManagement
+                            bonusType="link_aja"
                             keywordCreateState={keywordCreateState}
                             keywordCreate={keywordCreate}
                             stateTrigger={stateTrigger}
                             setStateTrigger={setStateTrigger}
                         />}
                     </Stack>
-                </Stack>
+                </Stack>)}
             </AccordionDetails>
         </Accordion>
     );

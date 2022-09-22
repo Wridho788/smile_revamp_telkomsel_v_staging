@@ -58,13 +58,17 @@ const NotificationTelcoProductPrepaid: React.FunctionComponent<
       );
       setIndex(bonusIdx);
 
-      keywordCreateState.eligibility.locations.map((location) =>
-          keywordCreate.bonus[bonusIdx].stock_location.push({
-            name: locationOptions.find((e: any) => e["_id"] === location).name,
-            location_id: location,
-            stock: 0
-          })
-      );
+      if (locationOptions) {
+        keywordCreateState.eligibility.locations.map((location) =>
+            keywordCreate.bonus[bonusIdx].stock_location.push({
+              name: locationOptions.find((e: any) => e["_id"] === location).name,
+              location_id: location,
+              stock: 0
+            })
+        );
+
+        setStateTrigger(!stateTrigger);
+      }
     }
   }, [isFetching]);
 
@@ -128,6 +132,7 @@ const NotificationTelcoProductPrepaid: React.FunctionComponent<
                 {/* Stock Location Management */}
                 <Stack>
                   {locationOptions && <LocationManagement
+                      bonusType="telco_prepaid"
                       keywordCreateState={keywordCreateState}
                       keywordCreate={keywordCreate}
                       stateTrigger={stateTrigger}

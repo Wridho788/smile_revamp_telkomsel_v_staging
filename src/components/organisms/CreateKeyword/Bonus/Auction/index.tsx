@@ -516,6 +516,7 @@ const NotificationAuction: React.FunctionComponent<
                   {/* Stock Location Management */}
                   <Stack>
                     {locationOptions && <LocationManagement
+                        bonusType="auction"
                         keywordCreateState={keywordCreateState}
                         keywordCreate={keywordCreate}
                         stateTrigger={stateTrigger}

@@ -36,7 +36,7 @@ const MobileBanking: React.FunctionComponent<IMobileBankingProps> = ({
   setStateTrigger,
 }) => {
   const { data: locationOptions, isFetching } =
-    useLocationTemplateQuery(FilterInitial);
+      useLocationTemplateQuery({ type: keywordCreate.eligibility.location_type });
 
   const [index, setIndex] = useState<number>(-1);
 
@@ -54,13 +54,18 @@ const MobileBanking: React.FunctionComponent<IMobileBankingProps> = ({
       );
 
       setIndex(bonusIdx);
-      keywordCreateState.eligibility.locations.map((location) => {
-        keywordCreate.bonus[bonusIdx].stock_location.push({
-          name: locationOptions.find((e: any) => e["_id"] === location).name,
-          location: location,
-          stock: 0,
+
+      if (locationOptions) {
+        keywordCreateState.eligibility.locations.map((location) => {
+          keywordCreate.bonus[bonusIdx].stock_location.push({
+            name: locationOptions.find((e: any) => e["_id"] === location).name,
+            location: location,
+            stock: 0,
+          });
         });
-      });
+
+        setStateTrigger(!stateTrigger);
+      }
     }
   }, [isFetching]);
 
@@ -135,6 +140,7 @@ const MobileBanking: React.FunctionComponent<IMobileBankingProps> = ({
               {/* Stock Location Management */}
               <Stack>
                 {locationOptions && <LocationManagement
+                    bonusType="mbp"
                     keywordCreateState={keywordCreateState}
                     keywordCreate={keywordCreate}
                     stateTrigger={stateTrigger}

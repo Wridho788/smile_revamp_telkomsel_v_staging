@@ -49,13 +49,17 @@ const DirectRedeem: React.FunctionComponent<IDirectRedeemProps> = ({
       );
       setIndex(bonusIdx);
 
-      keywordCreateState.eligibility.locations.map((location) =>
-        keywordCreate.bonus[bonusIdx].locations.push({
-          name: locationOptions.find((e: any) => e["_id"] === location).name,
-          location_id: location,
-          stock: 0,
-        })
-      );
+      if (locationOptions) {
+        keywordCreateState.eligibility.locations.map((location) =>
+            keywordCreate.bonus[bonusIdx].locations.push({
+              name: locationOptions.find((e: any) => e["_id"] === location).name,
+              location_id: location,
+              stock: 0,
+            })
+        );
+
+        setStateTrigger(!stateTrigger);
+      }
     }
   }, [isFetching]);
 
@@ -112,6 +116,7 @@ const DirectRedeem: React.FunctionComponent<IDirectRedeemProps> = ({
               {/* Stock Location Management */}
               <Stack>
                 {locationOptions && <LocationManagement
+                    bonusType="direct_redeem"
                     keywordCreateState={keywordCreateState}
                     keywordCreate={keywordCreate}
                     stateTrigger={stateTrigger}

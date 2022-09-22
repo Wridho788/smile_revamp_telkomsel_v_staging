@@ -56,13 +56,18 @@ const NotificationLuckyDraw: React.FunctionComponent<
       );
 
       setIndex(bonusIdx);
-      keywordCreateState.eligibility.locations.map((location) => {
-        keywordCreate.bonus[bonusIdx].stock_location.push({
-          name: locationOptions.find((e: any) => e["_id"] === location).name,
-          location: location,
-          stock: 0,
+
+      if (locationOptions) {
+        keywordCreateState.eligibility.locations.map((location) => {
+          keywordCreate.bonus[bonusIdx].stock_location.push({
+            name: locationOptions.find((e: any) => e["_id"] === location).name,
+            location: location,
+            stock: 0,
+          });
         });
-      });
+
+        setStateTrigger(!stateTrigger);
+      }
     }
   }, [isFetching]);
 
@@ -130,6 +135,7 @@ const NotificationLuckyDraw: React.FunctionComponent<
               {/* Stock Location Management */}
               <Stack>
                 {locationOptions && <LocationManagement
+                    bonusType="donation"
                     keywordCreateState={keywordCreateState}
                     keywordCreate={keywordCreate}
                     stateTrigger={stateTrigger}

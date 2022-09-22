@@ -101,7 +101,6 @@ const Location: React.FunctionComponent<ILocationProps> = ({
               value={keywordCreateState.eligibility.location_type}
               handleChange={(value: string) => {
                 keywordCreate.eligibility.location_type = value;
-                keywordCreate.eligibility.locations = [];
                 getOwnerDetail({ type: value });
                 setStateTrigger(!stateTrigger);
               }}

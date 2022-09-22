@@ -9,6 +9,7 @@ import {
 import { useLocationTemplateQuery } from "../../../../../redux/features/location/location-api-slice";
 
 interface INotificationLuckyDrawProps {
+  bonusType: string,
   keywordCreateState: any,
   keywordCreate: any,
   stateTrigger: boolean;
@@ -18,6 +19,7 @@ interface INotificationLuckyDrawProps {
 const LocationManagement: React.FunctionComponent<
   INotificationLuckyDrawProps
 > = ({
+  bonusType,
   keywordCreateState,
   keywordCreate,
   stateTrigger,
@@ -27,7 +29,7 @@ const LocationManagement: React.FunctionComponent<
       useLocationTemplateQuery({ type: keywordCreate.eligibility.location_type });
 
   const index = keywordCreate.bonus.findIndex(
-      ({ bonus_type }: any) => bonus_type === "lucky_draw"
+      ({ bonus_type }: any) => bonus_type === bonusType
   );
 
   return (
@@ -98,7 +100,7 @@ const LocationManagement: React.FunctionComponent<
                               idx
                               ].stock.toString()}
                           handleChange={(value: number) => {
-                            keywordCreate.bonus[index].locations[idx].stock =
+                            keywordCreateState.bonus[index].locations[idx].stock =
                                 Number(value);
                             setStateTrigger(!stateTrigger);
                           }}
@@ -139,7 +141,7 @@ const LocationManagement: React.FunctionComponent<
                               idx
                               ].stock.toString()}
                           handleChange={(value: number) => {
-                            keywordCreate.bonus[index].locations[idx].stock =
+                            keywordCreateState.bonus[index].locations[idx].stock =
                                 Number(value);
                             setStateTrigger(!stateTrigger);
                           }}

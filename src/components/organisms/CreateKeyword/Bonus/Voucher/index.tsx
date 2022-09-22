@@ -51,7 +51,7 @@ const Voucher: React.FunctionComponent<INotificationVoucherProps> = ({
     useEffect(() => {
         // Initial Keyword Bonus Link Aja
         const index = keywordCreate.bonus.findIndex(
-            ({bonus_type}) => bonus_type === "link_aja"
+            ({bonus_type}) => bonus_type === "discount_voucher"
         );
 
         if (index === -1) {
@@ -63,7 +63,7 @@ const Voucher: React.FunctionComponent<INotificationVoucherProps> = ({
 
             if (locationOptions) {
                 keywordCreateState.eligibility.locations.map((location) =>
-                    keywordCreateState.bonus[bonusIdx].stock_location.push({
+                    keywordCreate.bonus[bonusIdx].stock_location.push({
                         name: locationOptions.find((e: any) => e["_id"] === location).name,
                         location_id: location,
                         stock: 0,
@@ -85,7 +85,7 @@ const Voucher: React.FunctionComponent<INotificationVoucherProps> = ({
                 <Subtitle textTransform="uppercase">Voucher Discount</Subtitle>
             </AccordionSummary>
             <AccordionDetails>
-                <Stack spacing="2vw" px="0.5vw">
+                {index !== -1 && (<Stack spacing="2vw" px="0.5vw">
                     <SwitchCustom checked={switchState} handleChange={handleSwitch} label={"By Date"}/>
                     <Box>
                         <Grid container columns={4} spacing={2}>
@@ -151,13 +151,14 @@ const Voucher: React.FunctionComponent<INotificationVoucherProps> = ({
                     {/* Stock Location Management */}
                     <Stack>
                         {locationOptions && <LocationManagement
+                            bonusType="discount_voucher"
                             keywordCreateState={keywordCreateState}
                             keywordCreate={keywordCreate}
                             stateTrigger={stateTrigger}
                             setStateTrigger={setStateTrigger}
                         />}
                     </Stack>
-                </Stack>
+                </Stack>)}
             </AccordionDetails>
         </Accordion>
     );

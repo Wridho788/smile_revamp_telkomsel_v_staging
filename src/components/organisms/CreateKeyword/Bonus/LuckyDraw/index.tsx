@@ -454,6 +454,7 @@ const NotificationLuckyDraw: React.FunctionComponent<
               {/* Stock Location Management */}
               <Stack>
                 {locationOptions && <LocationManagement
+                    bonusType="lucky_draw"
                     keywordCreateState={keywordCreateState}
                     keywordCreate={keywordCreate}
                     stateTrigger={stateTrigger}

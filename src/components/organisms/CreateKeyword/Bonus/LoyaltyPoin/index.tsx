@@ -48,13 +48,17 @@ const LoyaltyPoin: React.FunctionComponent<ILoyaltyPoinProps> = ({
       );
       setIndex(bonusIdx);
 
-      keywordCreateState.eligibility.locations.map((location) =>
-        keywordCreate.bonus[bonusIdx].locations.push({
-          name: locationOptions.find((e: any) => e["_id"] === location).name,
-          location_id: location,
-          stock: 0,
-        })
-      );
+      if (locationOptions) {
+        keywordCreateState.eligibility.locations.map((location) =>
+            keywordCreate.bonus[bonusIdx].locations.push({
+              name: locationOptions.find((e: any) => e["_id"] === location).name,
+              location_id: location,
+              stock: 0,
+            })
+        );
+
+        setStateTrigger(!stateTrigger);
+      }
     }
   }, [isFetching]);
 
@@ -114,6 +118,7 @@ const LoyaltyPoin: React.FunctionComponent<ILoyaltyPoinProps> = ({
               {/* Stock Location Management */}
               <Stack>
                 {locationOptions && <LocationManagement
+                    bonusType="loyalty_poin"
                     keywordCreateState={keywordCreateState}
                     keywordCreate={keywordCreate}
                     stateTrigger={stateTrigger}
