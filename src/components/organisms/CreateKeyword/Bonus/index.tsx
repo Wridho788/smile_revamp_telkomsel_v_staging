@@ -244,9 +244,9 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
                               />
                           </Box>
                       );
-                  case "discount_voucher":
-                      return (
-                          <Box key={`bonusType__${idx}`}>
+                case "discount_voucher":
+                  return (
+                      <Box key={`bonusType__${idx}`}>
                               <Voucher
                                   bonusType={bonusType}
                                   keywordCreate={keywordCreate}
@@ -255,7 +255,7 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
                               />
                           </Box>
                       );
-                      case "Donation":
+                case "donation":
                   return (
                     <Box key={`bonusType__${idx}`}>
                       <Donation
@@ -273,7 +273,7 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
                       />
                     </Box>
                   );
-                case "mobile_banking":
+                case "mbp":
                   return (
                     <Box key={`bonusType__${idx}`}>
                       <MobileBanking

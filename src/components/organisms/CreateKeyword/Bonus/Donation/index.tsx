@@ -98,14 +98,14 @@ const NotificationLuckyDraw: React.FunctionComponent<
     getKeywordNotification("LUCKY_DRAW_NOTIFICATION");
 
     // Initial Keyword Bonus Lucky Draw
-    const indexI = keywordCreate.bonus.findIndex(
-      ({ bonus_type }) => bonus_type === "Donation"
+    const index = keywordCreate.bonus.findIndex(
+      ({ bonus_type }) => bonus_type === "donation"
     );
 
     if (index === -1) {
       keywordCreate.bonus.push(KeyWordBonusDonation);
       const bonusIdx = keywordCreate.bonus.findIndex(
-        ({ bonus_type }) => bonus_type === "Donation"
+        ({ bonus_type }) => bonus_type === "donation"
       );
       setIndex(bonusIdx);
       keywordCreateState.eligibility.locations.map((location) => {
@@ -130,7 +130,7 @@ const NotificationLuckyDraw: React.FunctionComponent<
         keywordCreate.notification,
         ({ bonus_type_id }) => bonus_type_id === bonusTypeId
       ) &&
-      bonusType === "Donation"
+      bonusType === "donation"
     ) {
       keywordCreate.notification = keywordCreate.notification.concat(
         keywordNotificationLuckyDraw
