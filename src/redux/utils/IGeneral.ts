@@ -14,9 +14,8 @@ export interface IParams {
   filter?: any;
   sort?: any;
   lazyEvent?: any;
-  type?:string,
-  program?:string
-
+  type?: string;
+  program?: string;
 }
 export interface IParamsPrime {
   first?: number;

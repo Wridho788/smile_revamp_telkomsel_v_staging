@@ -213,11 +213,11 @@ const KeywordPrime = () => {
           </Alert>
         ) : rowData.isHQ ? (
           <Alert severity="warning" icon={false}>
-            Waiting Approval HQ Manager
+            Waiting For Approval 2
           </Alert>
         ) : (
           <Alert severity="warning" icon={false}>
-            Waiting Approval Area Manager
+            Waiting For Approval 1
           </Alert>
         )}
       </Box>

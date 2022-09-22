@@ -18,7 +18,7 @@ export const MaxModeOptions = [
 export const KeywordScheduleTypeOptions = [
   { _id: "Shift", set_value: "Shift" },
   { _id: "Daily", set_value: "Daily" },
-  { _id: "Hourly", set_value: "Hourly" },
+  // { _id: "Hourly", set_value: "Hourly" },
 ];
 export const ComparisonOptions = [
   { _id: "LessThan", set_value: "LessThan" },
