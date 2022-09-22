@@ -64,7 +64,7 @@ const Index: React.FunctionComponent<ISelectProps> = ({
             inputProps={{ "aria-label": "Without label" }}
             {...props}
           >
-            <MenuItem disabled value="">
+            <MenuItem value="">
               {placeholder}
             </MenuItem>
             {typeof options !== "undefined" &&
