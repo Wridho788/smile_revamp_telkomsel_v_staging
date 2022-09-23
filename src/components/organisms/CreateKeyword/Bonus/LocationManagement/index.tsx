@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Box, Divider, Grid, Stack } from "@mui/material";
 import {
   OutlinedTextField,
@@ -25,9 +25,6 @@ const LocationManagement: React.FunctionComponent<
   stateTrigger,
   setStateTrigger
 }) => {
-  const { data: locationOptions } =
-      useLocationTemplateQuery({ type: keywordCreate.eligibility.location_type });
-
   const index = keywordCreate.bonus.findIndex(
       ({ bonus_type }: any) => bonus_type === bonusType
   );
@@ -71,7 +68,7 @@ const LocationManagement: React.FunctionComponent<
           </Grid>
         </Grid>
         {/* TODO: Handle response locations */}
-        {(locationOptions && keywordCreateState.bonus[index]?.locations) && (
+        {(keywordCreateState.bonus[index]?.locations && index !== -1) && (
             keywordCreateState.bonus[index].locations.map((location: any, idx: any) => {
               return (
                   <Grid key={`location__${idx}`} container>
@@ -112,7 +109,7 @@ const LocationManagement: React.FunctionComponent<
         )}
 
         {/* TODO: Handle response return stock_location */}
-        {(locationOptions && keywordCreateState.bonus[index]?.stock_location) && (
+        {(keywordCreateState.bonus[index]?.stock_location && index !== -1) && (
             keywordCreateState.bonus[index].stock_location.map((location: any, idx: any) => {
               return (
                   <Grid key={`location__${idx}`} container>
@@ -137,11 +134,11 @@ const LocationManagement: React.FunctionComponent<
                           type="number"
                           variant="outlined"
                           InputProps={{ inputProps: { min: 0 } }}
-                          value={keywordCreateState.bonus[index].locations[
+                          value={keywordCreateState.bonus[index].stock_location[
                               idx
                               ].stock.toString()}
                           handleChange={(value: number) => {
-                            keywordCreateState.bonus[index].locations[idx].stock =
+                            keywordCreateState.bonus[index].stock_location[idx].stock =
                                 Number(value);
                             setStateTrigger(!stateTrigger);
                           }}
@@ -151,6 +148,7 @@ const LocationManagement: React.FunctionComponent<
               );
             })
         )}
+
         <SmallCopy color="primary" mt="1vw">
           ** If you don't want set stock, please leave it blank
         </SmallCopy>

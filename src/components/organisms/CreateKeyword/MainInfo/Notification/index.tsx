@@ -122,19 +122,33 @@ const Notification: React.FunctionComponent<INotificationProps> = ({
                   p="2vw"
                 >
                   <Subtitle color="warning.main">{_.set_value}</Subtitle>
-                  <OutlinedTextField
-                    isRequired={
-                      _.set_value === "Keyword Verification" ? false : true
-                    }
-                    direction="column"
-                    label="Keyword Name"
-                    variant="outlined"
-                    value={keywordCreateState.eligibility.name}
-                    handleChange={(value: string) => {
-                      keywordCreate.eligibility.name = value;
-                      setStateTrigger(!stateTrigger);
-                    }}
-                  />
+                  {_.set_value === "Keyword Verification" ? (<OutlinedTextField
+                      isRequired={
+                        _.set_value === "Keyword Verification" ? false : true
+                      }
+                      direction="column"
+                      label="Keyword Name"
+                      variant="outlined"
+                      value={keywordCreateState.notification[idx].keyword_name}
+                      handleChange={(value: string) => {
+                        keywordCreate.notification[idx].keyword_name = value;
+                        setStateTrigger(!stateTrigger);
+                      }}
+                  />) : (
+                      <OutlinedTextField
+                          isRequired={
+                            _.set_value === "Keyword Verification" ? false : true
+                          }
+                          direction="column"
+                          label="Keyword Name"
+                          variant="outlined"
+                          value={keywordCreateState.eligibility.name}
+                          handleChange={(value: string) => {
+                            keywordCreate.eligibility.name = value;
+                            setStateTrigger(!stateTrigger);
+                          }}
+                      />
+                  )}
                   <Select
                     isRequired={
                       _.set_value === "Keyword Verification" ? false : true
