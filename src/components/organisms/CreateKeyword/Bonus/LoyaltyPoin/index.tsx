@@ -1,9 +1,9 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Stack, Switch, Grid } from "@mui/material";
 import {
-    OutlinedTextField,
-    Subtitle,
-    SmallCopy, BodyCopy,
+  OutlinedTextField,
+  Subtitle,
+  SmallCopy,
 } from "../../../../atoms";
 import { ICreateKeyword } from "../../interfaces";
 import Accordion from "@mui/material/Accordion";
@@ -41,7 +41,7 @@ const LoyaltyPoin: React.FunctionComponent<ILoyaltyPoinProps> = ({
       ({ bonus_type }) => bonus_type === "loyalty_poin"
     );
 
-    if (index === -1) {
+    if (locationOptions && index === -1) {
       keywordCreate.bonus.push(KeywordBonusLoyaltyPoin);
       const bonusIdx = keywordCreate.bonus.findIndex(
         ({ bonus_type }) => bonus_type === "loyalty_poin"
@@ -115,79 +115,16 @@ const LoyaltyPoin: React.FunctionComponent<ILoyaltyPoinProps> = ({
                 </Grid>
               </Grid>
 
-                {/* Stock Location Management */}
-                <Stack>
-                    <Grid container>
-                        <Grid
-                            item
-                            xs={5}
-                            border="0.1vw solid rgba(0,0,0,0.1)"
-                            p="0.8vw"
-                        >
-                            <BodyCopy
-                                align="center"
-                                textTransform="uppercase"
-                                fontWeight="bold"
-                            >
-                                Location
-                            </BodyCopy>
-                        </Grid>
-                        <Grid
-                            item
-                            xs={7}
-                            border="0.1vw solid rgba(0,0,0,0.1)"
-                            p="0.8vw"
-                        >
-                            <BodyCopy
-                                align="center"
-                                textTransform="uppercase"
-                                fontWeight="bold"
-                            >
-                                Stock Per Location
-                            </BodyCopy>
-                        </Grid>
-                    </Grid>
-
-                    {(locationOptions) && (
-                        keywordCreateState.bonus[index].locations.map((location: any, idx: any) => {
-                            return (
-                                <Grid key={`location__${idx}`} container>
-                                    <Grid
-                                        item
-                                        xs={5}
-                                        border="0.1vw solid rgba(0,0,0,0.1)"
-                                        p="0.8vw"
-                                    >
-                                        <BodyCopy textTransform="uppercase">
-                                            {location.name}
-                                        </BodyCopy>
-                                    </Grid>
-                                    <Grid
-                                        item
-                                        xs={7}
-                                        border="0.1vw solid rgba(0,0,0,0.1)"
-                                        p="0.8vw"
-                                    >
-                                        <OutlinedTextField
-                                            isRequired={false}
-                                            type="number"
-                                            variant="outlined"
-                                            InputProps={{ inputProps: { min: 0 } }}
-                                            value={keywordCreateState.bonus[index].locations[
-                                                idx
-                                                ].stock.toString()}
-                                            handleChange={(value: number) => {
-                                                keywordCreateState.bonus[index].locations[idx].stock =
-                                                    Number(value);
-                                                setStateTrigger(!stateTrigger);
-                                            }}
-                                        />
-                                    </Grid>
-                                </Grid>
-                            );
-                        })
-                    )}
-                </Stack>
+              {/* Stock Location Management */}
+              <Stack>
+                {locationOptions && <LocationManagement
+                    bonusType="loyalty_poin"
+                    keywordCreateState={keywordCreateState}
+                    keywordCreate={keywordCreate}
+                    stateTrigger={stateTrigger}
+                    setStateTrigger={setStateTrigger}
+                />}
+              </Stack>
             </>
           )}
         </Stack>
