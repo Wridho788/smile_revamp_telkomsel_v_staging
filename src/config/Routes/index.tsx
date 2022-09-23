@@ -25,6 +25,7 @@ import { Segmentation } from "../../components/organisms/CreateProgram";
 // "AuthProvider" & "Protected"
 import AuthProvider from "../AuthProvider";
 import Protected from "./Protected";
+import SignOut from "../../pages/SignOut";
 
 const Index = () => {
     return(
@@ -143,7 +144,7 @@ const Index = () => {
                             <Segmentation/>
                         </Protected>
                     }/>
-
+                <Route path="/signOut" element={<SignOut/>}/>
             </Routes>
         </AuthProvider>
     )
