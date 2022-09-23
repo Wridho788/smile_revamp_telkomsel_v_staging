@@ -111,7 +111,7 @@ const Filter: React.FC<IProps> = ({
         <Gap width={0} height={30} />
         <InputSearchable
           required
-          label="Partner"
+          label="Program Experience"
           options={listProgramExperience}
           onChange={(e: any, newValue: any) => {
             InitialFilter.program_experience = newValue
