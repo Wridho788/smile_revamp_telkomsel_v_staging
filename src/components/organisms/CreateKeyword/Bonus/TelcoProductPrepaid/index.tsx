@@ -131,6 +131,37 @@ const NotificationTelcoProductPrepaid: React.FunctionComponent<
                 </Stack>
 
                 <Stack>
+                  <Grid container>
+                    <Grid
+                        item
+                        xs={5}
+                        border="0.1vw solid rgba(0,0,0,0.1)"
+                        p="0.8vw"
+                    >
+                      <BodyCopy
+                          align="center"
+                          textTransform="uppercase"
+                          fontWeight="bold"
+                      >
+                        Location
+                      </BodyCopy>
+                    </Grid>
+                    <Grid
+                        item
+                        xs={7}
+                        border="0.1vw solid rgba(0,0,0,0.1)"
+                        p="0.8vw"
+                    >
+                      <BodyCopy
+                          align="center"
+                          textTransform="uppercase"
+                          fontWeight="bold"
+                      >
+                        Stock Per Location
+                      </BodyCopy>
+                    </Grid>
+                  </Grid>
+
                   {/* Stock Location Management */}
                   {(locationOptions) && (
                       keywordCreateState.bonus[index].stock_location.map((location: any, idx: any) => {
