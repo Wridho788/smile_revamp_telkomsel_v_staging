@@ -68,8 +68,8 @@ const LocationManagement: React.FunctionComponent<
           </Grid>
         </Grid>
         {/* TODO: Handle response locations */}
-        {(keywordCreateState.bonus[index]?.locations && index !== -1) && (
-            keywordCreateState.bonus[index].locations.map((location: any, idx: any) => {
+        {(keywordCreate.bonus[index]?.locations && index !== -1) && (
+            keywordCreate.bonus[index].locations.map((location: any, idx: any) => {
               return (
                   <Grid key={`location__${idx}`} container>
                     <Grid
@@ -109,8 +109,8 @@ const LocationManagement: React.FunctionComponent<
         )}
 
         {/* TODO: Handle response return stock_location */}
-        {(keywordCreateState.bonus[index]?.stock_location && index !== -1) && (
-            keywordCreateState.bonus[index].stock_location.map((location: any, idx: any) => {
+        {(keywordCreate.bonus[index]?.stock_location && index !== -1) && (
+            keywordCreate.bonus[index].stock_location.map((location: any, idx: any) => {
               return (
                   <Grid key={`location__${idx}`} container>
                     <Grid
