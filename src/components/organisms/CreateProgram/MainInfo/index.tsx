@@ -114,7 +114,7 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
                 if (index >= 1) {
                     try {
                         for (let i = 0; i < ownerOption.data.length; i++) {
-                            if(i >= index){
+                            if (i >= index) {
                                 ownerArray.push(ownerOption.data[i])
                             }
                         }
@@ -434,6 +434,14 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
                         setStateTrigger(!stateTrigger);
                     }}
                 />
+                {
+                    customizeOwner &&
+                    <Box>
+                        <Alert severity="info" color={"success"}>The owner area of this program supposed to be <b>[Location_Type]
+                            - [Location_Detail]</b>
+                        </Alert>
+                    </Box>
+                }
                 <Tooltip placement="top-start" title="Please wait until the owner data finished">
                     <Box>
                         <SwitchCustom color={"success"} checked={customizeOwner} handleChange={setCustomizeOwner}
