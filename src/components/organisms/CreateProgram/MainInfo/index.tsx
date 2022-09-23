@@ -20,7 +20,7 @@ import {
 } from "../../../atoms";
 import {useEffect, useState, Fragment} from "react";
 import {
-    useGetLocationTypeQuery,
+    useGetDetailLovMutation,
     useGetMechanismQuery, useGetOwnerQuery,
     useGetPointTypeQuery,
     useGetProgramGroupQuery,
@@ -37,7 +37,7 @@ import {ProgramDetailInitial} from "../../../../pages/CreateProgram/programIniti
 import {
     useLocationLocRebaseQuery,
     useLocationTemplateQuery,
-    useLocationRebaseMutation
+    useLocationRebaseMutation, useLocationTemplateForPrimeQuery
 } from "../../../../redux/features/location/location-api-slice";
 import {IParams} from "../../../../redux/utils/IGeneral";
 import {useAccountAuthenticateQuery, useLazyPicPrimeQuery} from "../../../../redux/features/account/account-api-slice";
@@ -95,37 +95,65 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
     const [getOwnerDetail, {data: ownerDetailOption}] =
         useLocationRebaseMutation();
     const [ownerList, setTess] = useState();
+    const [locationDetailName, setLocationDetailName] = useState();
+    const [locationId, setLocationId] = useState();
+    const [locationName, setLocationName] = useState();
+
+    const locationParams: IParams = {
+        lazyEvent: JSON.stringify({
+            first: 1,
+            rows: 1000,
+            sortField: "created_at",
+            sortOrder: 1,
+            filters: {},
+        }),
+    };
+    const {data: locationPrime, isFetching: locationFetch} = useLocationTemplateForPrimeQuery(locationParams);
+
 
     const {data: accountAuth, isFetching} = useAccountAuthenticateQuery();
     let {data: ownerOption = [], isSuccess} = useGetOwnerQuery();
     const ownerArray: any = []
     useEffect(() => {
-        if (!isFetching) {
-            const programOwner: string = accountAuth?.account_location.location_detail.type
-            programData.program_owner = programOwner
-            programData.program_owner_detail = accountAuth?.account_location.location
-            setStateTrigger(!stateTrigger)
-            // TODO still continue
-            const index = ownerOption.data.findIndex(
-                (e: any) => e["_id"] === programOwner)
-            if (isSuccess) {
-                try {
-                    for (let i = 0; i < ownerOption.data.length; i++) {
-                        if (i > index) {
-                            ownerArray.push(ownerOption.data[i])
+            if (!isFetching) {
+                const programOwner: string = accountAuth?.account_location.location_detail.type
+                setLocationDetailName(accountAuth?.account_location.location_detail.name)
+                programData.program_owner = programOwner
+                programData.program_owner_detail = accountAuth?.account_location.location
+                if (!locationFetch) {
+                    for (let i = 0; i < locationPrime.payload.data.length; i++) {
+                        if (locationPrime.payload.data[i]._id === accountAuth?.account_location.location) {
+                            setLocationName(locationPrime.payload.data[i].name)
                         }
                     }
-                } catch (error) {
-                    console.log(error)
                 }
-                setFilterOwnerFinish(!filterOwnerFinish)
-                setTess(ownerArray)
+
+                setStateTrigger(!stateTrigger)
+                // TODO still continue
+                const index = ownerOption.data.findIndex(
+                    (e: any) => e["_id"] === programOwner)
+                if (isSuccess) {
+                    try {
+                        for (let i = 0; i < ownerOption.data.length; i++) {
+                            if (i > index) {
+                                ownerArray.push(ownerOption.data[i])
+                            }
+                        }
+                    } catch (error) {
+                        console.log(error)
+                    }
+                    setFilterOwnerFinish(!filterOwnerFinish)
+                    setTess(ownerArray)
+                }
             }
         }
-    }, [isFetching]);
+        ,
+        [isFetching]
+    )
+    ;
     // TODO change default programOwner if notCustomizeOwner
     useEffect(() => {
-        if(!customizeOwner){
+        if (!customizeOwner) {
             const programOwner: string = accountAuth?.account_location.location_detail.type
             programData.program_owner = programOwner
             programData.program_owner_detail = accountAuth?.account_location.location
@@ -438,10 +466,11 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
                     }}
                 />
                 {
-                    customizeOwner &&
+                    !customizeOwner &&
                     <Box>
-                        <Alert severity="info" color={"success"}>The owner area of this program supposed to be <b>[Location_Type]
-                            - [Location_Detail]</b>
+                        <Alert severity="info" color={"success"}>The owner area of this program supposed to
+                            be <b>[{locationName}]
+                                - [{locationDetailName}]</b>
                         </Alert>
                     </Box>
                 }

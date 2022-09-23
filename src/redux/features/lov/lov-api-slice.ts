@@ -17,7 +17,7 @@ export const lovSlice = createApi({
             });
 
         const detailHandler = (endpoint: string) =>
-            builder.query<IData, string>({
+            builder.mutation<any, string>({
                 query: (_id: string) => ({
                     url: endpoint + _id + "/detail",
                 }),
@@ -84,8 +84,7 @@ export const {
     useGetTransactionTypeQuery,
     useGetProgramNotificationQuery,
     useGetProgramExperienceQuery,
-    useGetDetailLovQuery,
-    useLazyGetDetailLovQuery,
+    useGetDetailLovMutation,
     useGetProgramGroupQuery,
     useGetKeywordNotificationQuery,
     useLazyGetKeywordNotificationQuery,
