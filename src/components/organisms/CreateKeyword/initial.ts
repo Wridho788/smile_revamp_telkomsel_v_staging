@@ -18,8 +18,9 @@ import {
   IKeywordBonusMobileBanking,
   IKeywordBonusLoyaltyPoin,
   IKeywordBonusTelcoProductPostpaid,
-  IKeywordBonusTelcoProductPrepaid,
+  IKeywordBonusTelcoProductPrepaid, IKeywordBonusVoucher, IKeywordBonusLinkAja,
 } from "./interfaces";
+import {IBonusTypeVoucher} from "./Bonus/Voucher/interface";
 
 export const KeywordEligibilityLocationHelper: IKeywordEligibilityLocationHelper =
   {
@@ -152,6 +153,26 @@ export const KeywordBonusAuction: IKeywordBonusAuction = {
   redeem_after_verification: false,
 };
 
+export const KeywordBonusVoucher: IKeywordBonusVoucher = {
+  bonus_type: "discount_voucher",
+  exp_voucher: "",
+  voucher_type: "",
+  voucher_combination: "",
+  jumlah_total_voucher: 0,
+  stock_location: [],
+  redeem_after_verification: false
+}
+
+export const KeywordBonusLinkAja: IKeywordBonusLinkAja = {
+  nominal:"",
+  location:"",
+  bonus_type: "link_aja",
+  external_api_config: "",
+  bucket: "",
+  stock_location: [],
+  redeem_after_verification: false
+}
+
 export const KeyWordBonusDonation: IKeywordBonusDonation = {
   bonus_type: "donation",
   donation_category: "",
@@ -161,7 +182,7 @@ export const KeyWordBonusDonation: IKeywordBonusDonation = {
   redeem_after_verification: false,
 };
 export const KeywordBonusMobileBanking: IKeywordBonusMobileBanking = {
-  bonus_type: "mobile_banking",
+  bonus_type: "mbp",
   bank: "",
   ip_address: "",
   digit_coupon: "",
@@ -169,6 +190,7 @@ export const KeywordBonusMobileBanking: IKeywordBonusMobileBanking = {
   stock_location: [],
   redeem_after_verification: false,
 };
+
 export const KeywordNotificationAuctionHelper: IKeywordNotificationAuctionHelper[] =
   [
     {

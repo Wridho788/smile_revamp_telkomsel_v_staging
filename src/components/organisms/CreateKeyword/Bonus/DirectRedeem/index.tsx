@@ -1,13 +1,10 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { Stack, Switch, Grid, Divider } from "@mui/material";
+import { Stack, Switch, Grid } from "@mui/material";
 import {
-  OutlinedTextField,
   Subtitle,
-  BodyCopy,
   SmallCopy,
   Select,
 } from "../../../../atoms";
-import { FilterInitial } from "../../../../../redux/utils/initial-general";
 import { ICreateKeyword } from "../../interfaces";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
@@ -16,6 +13,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { KeywordBonusDirectRedeem } from "../../initial";
 import { useLocationTemplateQuery } from "../../../../../redux/features/location/location-api-slice";
 import { StockTypeOptions } from "../../options";
+import LocationManagement from "../LocationManagement";
 
 interface IDirectRedeemProps {
   bonusType: string;
@@ -27,15 +25,13 @@ interface IDirectRedeemProps {
 }
 
 const DirectRedeem: React.FunctionComponent<IDirectRedeemProps> = ({
-  bonusType,
-  bonusTypeId,
   keywordCreateState,
   keywordCreate,
   stateTrigger,
   setStateTrigger,
 }) => {
-  const { data: locationOptions = { data: [] } } =
-    useLocationTemplateQuery(FilterInitial);
+  const { data: locationOptions, isFetching } =
+      useLocationTemplateQuery({ type: keywordCreate.eligibility.location_type });
 
   const [index, setIndex] = useState<number>(-1);
 
@@ -52,14 +48,20 @@ const DirectRedeem: React.FunctionComponent<IDirectRedeemProps> = ({
         ({ bonus_type }) => bonus_type === "direct_redeem"
       );
       setIndex(bonusIdx);
-      keywordCreateState.eligibility.locations.map((location) =>
-        keywordCreate.bonus[bonusIdx].locations.push({
-          location_id: location,
-          stock: 0,
-        })
-      );
+
+      if (locationOptions) {
+        keywordCreateState.eligibility.locations.map((location) =>
+            keywordCreate.bonus[bonusIdx].locations.push({
+              name: locationOptions.find((e: any) => e["_id"] === location).name,
+              location_id: location,
+              stock: 0,
+            })
+        );
+
+        setStateTrigger(!stateTrigger);
+      }
     }
-  }, []);
+  }, [isFetching]);
 
   return (
     <Accordion sx={{ p: "1vw" }}>
@@ -68,7 +70,7 @@ const DirectRedeem: React.FunctionComponent<IDirectRedeemProps> = ({
         aria-controls="panel1a-content"
         id="panel1a-header"
       >
-        <Subtitle textTransform="uppercase">{bonusType}</Subtitle>
+        <Subtitle textTransform="uppercase">Direct Redeem</Subtitle>
       </AccordionSummary>
       <AccordionDetails>
         <Stack spacing="2vw" px="0.5vw">
@@ -110,87 +112,16 @@ const DirectRedeem: React.FunctionComponent<IDirectRedeemProps> = ({
                   </Stack>
                 </Grid>
               </Grid>
-              <Divider textAlign="left" sx={{ pt: "1vw" }}>
-                <Subtitle textTransform="uppercase">
-                  stock per location management
-                </Subtitle>
-              </Divider>
+
+              {/* Stock Location Management */}
               <Stack>
-                <Grid container>
-                  <Grid
-                    item
-                    xs={5}
-                    border="0.1vw solid rgba(0,0,0,0.1)"
-                    p="0.8vw"
-                  >
-                    <BodyCopy
-                      align="center"
-                      textTransform="uppercase"
-                      fontWeight="bold"
-                    >
-                      Location
-                    </BodyCopy>
-                  </Grid>
-                  <Grid
-                    item
-                    xs={7}
-                    border="0.1vw solid rgba(0,0,0,0.1)"
-                    p="0.8vw"
-                  >
-                    <BodyCopy
-                      align="center"
-                      textTransform="uppercase"
-                      fontWeight="bold"
-                    >
-                      Stock Per Location
-                    </BodyCopy>
-                  </Grid>
-                </Grid>
-                {/*{keywordCreateState.bonus[index].locations.map(*/}
-                {/*  (location: any, idx: any) => {*/}
-                {/*    const locationName = locationOptions.data.find(*/}
-                {/*      (e) => e["_id"] === location.location_id*/}
-                {/*    )?.name;*/}
-                {/*    return (*/}
-                {/*      <Grid key={`location__${idx}`} container>*/}
-                {/*        <Grid*/}
-                {/*          item*/}
-                {/*          xs={5}*/}
-                {/*          border="0.1vw solid rgba(0,0,0,0.1)"*/}
-                {/*          p="0.8vw"*/}
-                {/*        >*/}
-                {/*          <BodyCopy textTransform="uppercase">*/}
-                {/*            {locationName}*/}
-                {/*          </BodyCopy>*/}
-                {/*        </Grid>*/}
-                {/*        <Grid*/}
-                {/*          item*/}
-                {/*          xs={7}*/}
-                {/*          border="0.1vw solid rgba(0,0,0,0.1)"*/}
-                {/*          p="0.8vw"*/}
-                {/*        >*/}
-                {/*          <OutlinedTextField*/}
-                {/*            isRequired={false}*/}
-                {/*            type="number"*/}
-                {/*            variant="outlined"*/}
-                {/*            InputProps={{ inputProps: { min: 0 } }}*/}
-                {/*            value={keywordCreateState.bonus[index].locations[*/}
-                {/*              idx*/}
-                {/*            ].stock.toString()}*/}
-                {/*            handleChange={(value: number) => {*/}
-                {/*              keywordCreate.bonus[index].locations[idx].stock =*/}
-                {/*                Number(value);*/}
-                {/*              setStateTrigger(!stateTrigger);*/}
-                {/*            }}*/}
-                {/*          />*/}
-                {/*        </Grid>*/}
-                {/*      </Grid>*/}
-                {/*    );*/}
-                {/*  }*/}
-                {/*)}*/}
-                <SmallCopy color="primary" mt="1vw">
-                  ** If you don't want set stock, please leave it blank
-                </SmallCopy>
+                {locationOptions && <LocationManagement
+                    bonusType="direct_redeem"
+                    keywordCreateState={keywordCreateState}
+                    keywordCreate={keywordCreate}
+                    stateTrigger={stateTrigger}
+                    setStateTrigger={setStateTrigger}
+                />}
               </Stack>
             </>
           )}

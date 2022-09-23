@@ -1,33 +1,24 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { Stack, Grid, Divider } from "@mui/material";
+import { Stack, Grid } from "@mui/material";
 import {
   OutlinedTextField,
   Subtitle,
-  BodyCopy,
-  SmallCopy,
+
 } from "components/atoms";
 import { FilterInitial } from "redux/utils/initial-general";
 import {
   ICreateKeyword,
-  IKeywordNotificationLuckyDraw,
-  IKeywordNotificationLuckyDrawHelper,
+
 } from "../../interfaces";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import {
-  useGetNotifViaQuery,
-  useLazyGetKeywordNotificationQuery,
-} from "redux/features/lov/lov-api-slice";
-import { useNotificationTemplateQuery } from "redux/features/notification/notification-api-slice";
-import {
-  KeywordNotificationLuckyDrawHelper,
-  KeywordNotificationLuckyDraw,
   KeywordBonusMobileBanking,
 } from "../../initial";
 import { useLocationTemplateQuery } from "redux/features/location/location-api-slice";
-import _find from "lodash/find";
+import LocationManagement from "../LocationManagement";
 
 interface IMobileBankingProps {
   bonusType: string;
@@ -39,51 +30,23 @@ interface IMobileBankingProps {
 }
 
 const MobileBanking: React.FunctionComponent<IMobileBankingProps> = ({
-  bonusType,
-  bonusTypeId,
   keywordCreateState,
   keywordCreate,
   stateTrigger,
   setStateTrigger,
 }) => {
-  const { data: viaOptions = { data: [] } } = useGetNotifViaQuery();
-  const { data: templateOptions = { data: [] } } =
-    useNotificationTemplateQuery(FilterInitial);
-  const [
-    getKeywordNotification,
-    {
-      data: keywordNotification = {
-        data: [],
-      },
-      isLoading,
-    },
-  ] = useLazyGetKeywordNotificationQuery();
-
-  const keywordNotificationLuckyDrawHelper = KeywordNotificationLuckyDrawHelper;
-  const [
-    keywordNotificationLuckyDrawHelperState,
-    setKeywordNotificationLuckyDrawHelperState,
-  ] = useState<IKeywordNotificationLuckyDrawHelper[]>(
-    keywordNotificationLuckyDrawHelper
-  );
-
-  const keywordNotificationLuckyDraw: IKeywordNotificationLuckyDraw[] =
-    KeywordNotificationLuckyDraw;
-  const [
-    keywordNotificationLuckyDrawState,
-    setKeywordNotificationLuckyDrawState,
-  ] = useState<IKeywordNotificationLuckyDraw[]>(keywordNotificationLuckyDraw);
-
-  const { data: locationOptions = { data: [] } } =
-    useLocationTemplateQuery(FilterInitial);
+  const { data: locationOptions, isFetching } =
+      useLocationTemplateQuery({ type: keywordCreate.eligibility.location_type });
 
   const [index, setIndex] = useState<number>(-1);
 
   // TODO: Get Lucky Draw Notification
   useEffect(() => {
-    getKeywordNotification("LUCKY_DRAW_NOTIFICATION");
+    // Initial Keyword Bonus Mobile Banking
+    const index = keywordCreate.bonus.findIndex(
+        ({bonus_type}) => bonus_type === "mbp"
+    );
 
-    // Initial Keyword Bonus Lucky Draw
     if (index === -1) {
       keywordCreate.bonus.push(KeywordBonusMobileBanking);
       const bonusIdx = keywordCreate.bonus.findIndex(
@@ -91,37 +54,20 @@ const MobileBanking: React.FunctionComponent<IMobileBankingProps> = ({
       );
 
       setIndex(bonusIdx);
-      keywordCreateState.eligibility.locations.map((location) => {
-        keywordCreate.bonus[bonusIdx].stock_location.push({
-          location: location,
-          stock: 0,
+
+      if (locationOptions) {
+        keywordCreateState.eligibility.locations.map((location) => {
+          keywordCreate.bonus[bonusIdx].stock_location.push({
+            name: locationOptions.find((e: any) => e["_id"] === location).name,
+            location: location,
+            stock: 0,
+          });
         });
-      });
+
+        setStateTrigger(!stateTrigger);
+      }
     }
-  }, []);
-
-  useEffect(() => {
-    setKeywordNotificationLuckyDrawHelperState(
-      keywordNotificationLuckyDrawHelper
-    );
-  }, [keywordNotificationLuckyDrawHelper, stateTrigger]);
-
-  useEffect(() => {
-    // Prevent duplicate data of "Lucky Draw"
-    if (
-      !_find(
-        keywordCreate.notification,
-        ({ bonus_type_id }) => bonus_type_id === bonusTypeId
-      ) &&
-      bonusType === "mbp"
-    ) {
-      keywordCreate.notification = keywordCreate.notification.concat(
-        keywordNotificationLuckyDraw
-      );
-    }
-
-    setKeywordNotificationLuckyDrawState(keywordNotificationLuckyDraw);
-  }, [keywordNotificationLuckyDraw, stateTrigger]);
+  }, [isFetching]);
 
   return (
     <Accordion sx={{ p: "1vw" }}>
@@ -130,7 +76,7 @@ const MobileBanking: React.FunctionComponent<IMobileBankingProps> = ({
         aria-controls="panel1a-content"
         id="panel1a-header"
       >
-        <Subtitle textTransform="uppercase">{bonusType}</Subtitle>
+        <Subtitle textTransform="uppercase">Mobile Banking</Subtitle>
       </AccordionSummary>
       <AccordionDetails>
         <Stack spacing="2vw" px="0.5vw">
@@ -190,88 +136,16 @@ const MobileBanking: React.FunctionComponent<IMobileBankingProps> = ({
                   />
                 </Grid>
               </Grid>
-              <Divider textAlign="left" sx={{ pt: "1vw" }}>
-                <Subtitle textTransform="uppercase">
-                  stock per location management
-                </Subtitle>
-              </Divider>
+
+              {/* Stock Location Management */}
               <Stack>
-                <Grid container>
-                  <Grid
-                    item
-                    xs={5}
-                    border="0.1vw solid rgba(0,0,0,0.1)"
-                    p="0.8vw"
-                  >
-                    <BodyCopy
-                      align="center"
-                      textTransform="uppercase"
-                      fontWeight="bold"
-                    >
-                      Location
-                    </BodyCopy>
-                  </Grid>
-                  <Grid
-                    item
-                    xs={7}
-                    border="0.1vw solid rgba(0,0,0,0.1)"
-                    p="0.8vw"
-                  >
-                    <BodyCopy
-                      align="center"
-                      textTransform="uppercase"
-                      fontWeight="bold"
-                    >
-                      Stock Per Location
-                    </BodyCopy>
-                  </Grid>
-                </Grid>
-                {/*{keywordCreateState.bonus[index].stock_location.map(*/}
-                {/*  (location: any, idx: any) => {*/}
-                {/*    const locationName = locationOptions.data.find(*/}
-                {/*      (e) => e["_id"] === location.location*/}
-                {/*    )?.name;*/}
-                {/*    return (*/}
-                {/*      <Grid key={`location__${idx}`} container>*/}
-                {/*        <Grid*/}
-                {/*          item*/}
-                {/*          xs={5}*/}
-                {/*          border="0.1vw solid rgba(0,0,0,0.1)"*/}
-                {/*          p="0.8vw"*/}
-                {/*        >*/}
-                {/*          <BodyCopy textTransform="uppercase">*/}
-                {/*            {locationName}*/}
-                {/*          </BodyCopy>*/}
-                {/*        </Grid>*/}
-                {/*        <Grid*/}
-                {/*          item*/}
-                {/*          xs={7}*/}
-                {/*          border="0.1vw solid rgba(0,0,0,0.1)"*/}
-                {/*          p="0.8vw"*/}
-                {/*        >*/}
-                {/*          <OutlinedTextField*/}
-                {/*            isRequired={false}*/}
-                {/*            type="number"*/}
-                {/*            variant="outlined"*/}
-                {/*            InputProps={{ inputProps: { min: 0 } }}*/}
-                {/*            value={keywordCreateState.bonus[*/}
-                {/*              index*/}
-                {/*            ].stock_location[idx].stock.toString()}*/}
-                {/*            handleChange={(value: number) => {*/}
-                {/*              keywordCreate.bonus[index].stock_location[*/}
-                {/*                idx*/}
-                {/*              ].stock = Number(value);*/}
-                {/*              setStateTrigger(!stateTrigger);*/}
-                {/*            }}*/}
-                {/*          />*/}
-                {/*        </Grid>*/}
-                {/*      </Grid>*/}
-                {/*    );*/}
-                {/*  }*/}
-                {/*)}*/}
-                <SmallCopy color="primary" mt="1vw">
-                  ** If you don't want set stock, please leave it blank
-                </SmallCopy>
+                {locationOptions && <LocationManagement
+                    bonusType="mbp"
+                    keywordCreateState={keywordCreateState}
+                    keywordCreate={keywordCreate}
+                    stateTrigger={stateTrigger}
+                    setStateTrigger={setStateTrigger}
+                />}
               </Stack>
             </>
           )}

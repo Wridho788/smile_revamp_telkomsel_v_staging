@@ -15,49 +15,55 @@ import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import {BonusTypeLinkAjaInitial} from "./initial";
 import LocationManagement from "../LocationManagement";
+import { useLocationTemplateQuery } from "../../../../../redux/features/location/location-api-slice";
+import { KeywordBonusLinkAja } from "../../initial";
 
-interface INotificationLuckyDrawProps {
+interface INotificationLinkAjaProps {
     bonusType: string;
+    keywordCreateState: ICreateKeyword;
     keywordCreate: ICreateKeyword;
     stateTrigger: boolean;
     setStateTrigger: Dispatch<SetStateAction<boolean>>;
 }
 
-const LinkAja: React.FunctionComponent<INotificationLuckyDrawProps> = ({
-                                                                           bonusType,
-                                                                           keywordCreate,
-                                                                           stateTrigger,
-                                                                           setStateTrigger,
-                                                                       }) => {
-    const bonusTypeLinkAja = BonusTypeLinkAjaInitial
-    const locations = keywordCreate.eligibility.locations
+const LinkAja: React.FunctionComponent<INotificationLinkAjaProps> = ({
+   keywordCreateState,
+   keywordCreate,
+   stateTrigger,
+   setStateTrigger,
+}) => {
+    const { data: locationOptions, isFetching } =
+        useLocationTemplateQuery({ type: keywordCreate.eligibility.location_type });
+
+    const [index, setIndex] = useState<number>(-1);
 
     useEffect(() => {
-        const index: number = keywordCreate.bonus.findIndex(
+        // Initial Keyword Bonus Link Aja
+        const index = keywordCreate.bonus.findIndex(
             ({bonus_type}) => bonus_type === "link_aja"
         );
+
         if (index === -1) {
-            keywordCreate.bonus.push(bonusTypeLinkAja);
-            locations.map((location) =>
-                bonusTypeLinkAja.stock_location.push({
-                    location_id: location,
-                    stock: 0,
-                }))
-        }
-    }, []);
-    useEffect(() => {
-        bonusTypeLinkAja.stock_location = []
-        locations.map((location) => {
-                bonusTypeLinkAja.stock_location.push({
-                    location_id: location,
-                    stock: 0,
-                })
+            keywordCreate.bonus.push(KeywordBonusLinkAja);
+            const bonusIdx = keywordCreate.bonus.findIndex(
+                ({ bonus_type }) => bonus_type === "link_aja"
+            );
+            setIndex(bonusIdx);
+
+            if (locationOptions) {
+                keywordCreateState.eligibility.locations.map((location) =>
+                    keywordCreateState.bonus[bonusIdx].stock_location.push({
+                        name: locationOptions.find((e: any) => e["_id"] === location).name,
+                        location_id: location,
+                        stock: 0,
+                    })
+                );
+
+                setStateTrigger(!stateTrigger);
             }
-        )
-        setStateTrigger(!stateTrigger);
-    }, [locations]);
+        }
+    }, [isFetching]);
 
 
     return (
@@ -67,10 +73,10 @@ const LinkAja: React.FunctionComponent<INotificationLuckyDrawProps> = ({
                 aria-controls="panel1a-content"
                 id="panel1a-header"
             >
-                <Subtitle textTransform="uppercase">{bonusType}</Subtitle>
+                <Subtitle textTransform="uppercase">Link Aja</Subtitle>
             </AccordionSummary>
             <AccordionDetails>
-                <Stack spacing="2vw" px="0.5vw">
+                {index !== -1 && (<Stack spacing="2vw" px="0.5vw">
                     <Box>
                         <Grid container columns={4} spacing={2}>
                             <Grid item xs={2}>
@@ -78,9 +84,9 @@ const LinkAja: React.FunctionComponent<INotificationLuckyDrawProps> = ({
                                     direction="column"
                                     label="Nominal"
                                     variant="outlined"
-                                    value={bonusTypeLinkAja.nominal}
+                                    value={keywordCreate.bonus[index].nominal}
                                     handleChange={(value: string) => {
-                                        bonusTypeLinkAja.nominal = value;
+                                        keywordCreate.bonus[index].nominal = value;
                                         setStateTrigger(!stateTrigger);
                                     }}
                                 />
@@ -91,9 +97,9 @@ const LinkAja: React.FunctionComponent<INotificationLuckyDrawProps> = ({
                                     direction="column"
                                     label="External API Configuration"
                                     variant="outlined"
-                                    value={bonusTypeLinkAja.external_api_config}
+                                    value={keywordCreate.bonus[index].external_api_config}
                                     handleChange={(value: string) => {
-                                        bonusTypeLinkAja.external_api_config = value;
+                                        keywordCreate.bonus[index].external_api_config = value;
                                         setStateTrigger(!stateTrigger);
                                     }}
                                 />
@@ -108,9 +114,9 @@ const LinkAja: React.FunctionComponent<INotificationLuckyDrawProps> = ({
                                     direction="column"
                                     label="Location"
                                     variant="outlined"
-                                    value={bonusTypeLinkAja.location}
+                                    value={keywordCreate.bonus[index].location}
                                     handleChange={(value: string) => {
-                                        bonusTypeLinkAja.location = value;
+                                        keywordCreate.bonus[index].location = value;
                                         setStateTrigger(!stateTrigger);
                                     }}
                                 />
@@ -121,21 +127,27 @@ const LinkAja: React.FunctionComponent<INotificationLuckyDrawProps> = ({
                                     direction="column"
                                     label="Bucket"
                                     variant="outlined"
-                                    value={bonusTypeLinkAja.bucket}
+                                    value={keywordCreate.bonus[index].bucket}
                                     handleChange={(value: string) => {
-                                        bonusTypeLinkAja.bucket = value;
+                                        keywordCreate.bonus[index].bucket = value;
                                         setStateTrigger(!stateTrigger);
                                     }}
                                 />
                             </Grid>
                         </Grid>
                     </Box>
-                    {/*<LocationManagement*/}
-                    {/*    initialName={bonusTypeLinkAja.stock_location}*/}
-                    {/*    stateTrigger={stateTrigger}*/}
-                    {/*    setStateTrigger={setStateTrigger}*/}
-                    {/*/>*/}
-                </Stack>
+
+                    {/* Stock Location Management */}
+                    <Stack>
+                        {locationOptions && <LocationManagement
+                            bonusType="link_aja"
+                            keywordCreateState={keywordCreateState}
+                            keywordCreate={keywordCreate}
+                            stateTrigger={stateTrigger}
+                            setStateTrigger={setStateTrigger}
+                        />}
+                    </Stack>
+                </Stack>)}
             </AccordionDetails>
         </Accordion>
     );
