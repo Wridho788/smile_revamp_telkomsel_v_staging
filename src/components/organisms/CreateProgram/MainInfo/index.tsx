@@ -21,7 +21,7 @@ import {
 import {useEffect, useState, Fragment} from "react";
 import {
     useGetLocationTypeQuery,
-    useGetMechanismQuery,
+    useGetMechanismQuery, useGetOwnerQuery,
     useGetPointTypeQuery,
     useGetProgramGroupQuery,
 } from "../../../../redux/features/lov/lov-api-slice";
@@ -85,9 +85,7 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
 
     const [searchInput, setSearchInput] = useState<string>("");
     const [stateTrigger, setStateTrigger] = React.useState<boolean>(false);
-
-    useEffect(() => {
-    }, [programData, stateTrigger]);
+    const [filterOwnerFinish, setFilterOwnerFinish] = React.useState<boolean>(false);
 
     // TODO LOGIC DATATABLE
     const [selected, setSelected] = React.useState<readonly string[]>([]);
@@ -96,30 +94,44 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
     const [customizeOwner, setCustomizeOwner] = useState(false);
     const [getOwnerDetail, {data: ownerDetailOption}] =
         useLocationRebaseMutation();
+    const [ownerList, setTess] = useState();
 
     const {data: accountAuth, isFetching} = useAccountAuthenticateQuery();
-    const {data: ownerOption = {data: []}, isSuccess} = useGetLocationTypeQuery();
+    let {data: ownerOption = [], isSuccess} = useGetOwnerQuery();
+    const ownerArray: any = []
     useEffect(() => {
         if (!isFetching) {
-            const programOwner:string = accountAuth?.account_location.location_detail.type
+            const programOwner: string = accountAuth?.account_location.location_detail.type
             programData.program_owner = programOwner
+            console.log(programData.program_owner)
             programData.program_owner_detail = accountAuth?.account_location.location
             getOwnerDetail({type: programOwner})
-
+            setStateTrigger(!stateTrigger)
             // TODO still continue
-            // const index: number = ownerOption.data.findIndex(
-            //     ({_id}) => _id === programOwner)
-            // if (isSuccess) {
-            //     if (index !== 0) {
-            //         ownerOption.data.splice(index - 1, index);
-            //     }
-            // }
+            const index = ownerOption.data.findIndex(
+                (e: any) => e["_id"] === programOwner)
+            if (isSuccess) {
+                if (index >= 1) {
+                    try {
+                        for (let i = 0; i < ownerOption.data.length; i++) {
+                            if(i >= index){
+                                ownerArray.push(ownerOption.data[i])
+                            }
+                        }
+                    } catch (error) {
+                        console.log(error)
+                    }
+                    setFilterOwnerFinish(!filterOwnerFinish)
+                    setTess(ownerArray)
+                }
+            }
 
         }
     }, [isFetching]);
 
     useEffect(() => {
-    }, [isFetching]);
+    }, [programData, stateTrigger]);
+
 
     const picLazyParam: IParams = {
         lazyEvent: JSON.stringify({
@@ -158,10 +170,21 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
         setRowsPerPage(parseInt(event.target.value, 10));
         setPage(0);
     };
+    if (!filterOwnerFinish) {
+        return <Box
+            sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                alignContent: "center",
+            }}
+        >
+            <CircularProgress/>
+        </Box>
+    }
 
     return (
         <Fragment>
-
             <Box pt={5} mx={2}>
                 <Box>
                     <Stack sx={{width: "100%"}} spacing={2}>
@@ -421,7 +444,7 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
                     <Select
                         label="Owner"
                         placeholder="Option"
-                        options={ownerOption.data}
+                        options={ownerList}
                         optionLabel="set_value"
                         value={programData.program_owner}
                         handleChange={(value: any) => {
@@ -478,7 +501,7 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
                 />
 
                 <Select
-                    label="Threshold Alarm Experied"
+                    label="Threshold Alarm Expired"
                     placeholder="Option"
                     value={Number(programData.threshold_alarm_expired)}
                     options={ThresholdAlarmExpiredOption}
@@ -489,8 +512,8 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
                 />
                 <OutlinedTextField
                     InputProps={{inputProps: {min: 70, max: 100}}}
-                    label="Threshold Alarm Voucher"
-                    placeholder="Threshold Alrm Voucher"
+                    label="Threshold Quota"
+                    placeholder="Threshold Quota"
                     value={programData.threshold_alarm_voucher}
                     handleChange={(value: any) => {
                         programData.threshold_alarm_voucher = Number(value);
