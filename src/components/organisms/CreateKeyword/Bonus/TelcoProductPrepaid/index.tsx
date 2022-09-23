@@ -1,7 +1,8 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { Stack } from "@mui/material";
+import {Grid, Stack} from "@mui/material";
 
 import {
+  BodyCopy,
   OutlinedTextField,
   Select,
   Subtitle,
@@ -60,7 +61,7 @@ const NotificationTelcoProductPrepaid: React.FunctionComponent<
 
       if (locationOptions) {
         keywordCreateState.eligibility.locations.map((location) =>
-            keywordCreate.bonus[bonusIdx].stock_location.push({
+            keywordCreateState.bonus[bonusIdx].stock_location.push({
               name: locationOptions.find((e: any) => e["_id"] === location).name,
               location_id: location,
               stock: 0
@@ -129,15 +130,78 @@ const NotificationTelcoProductPrepaid: React.FunctionComponent<
                   />
                 </Stack>
 
-                {/* Stock Location Management */}
                 <Stack>
-                  {locationOptions && <LocationManagement
-                      bonusType="telco_prepaid"
-                      keywordCreateState={keywordCreateState}
-                      keywordCreate={keywordCreate}
-                      stateTrigger={stateTrigger}
-                      setStateTrigger={setStateTrigger}
-                  />}
+                  <Grid container>
+                    <Grid
+                        item
+                        xs={5}
+                        border="0.1vw solid rgba(0,0,0,0.1)"
+                        p="0.8vw"
+                    >
+                      <BodyCopy
+                          align="center"
+                          textTransform="uppercase"
+                          fontWeight="bold"
+                      >
+                        Location
+                      </BodyCopy>
+                    </Grid>
+                    <Grid
+                        item
+                        xs={7}
+                        border="0.1vw solid rgba(0,0,0,0.1)"
+                        p="0.8vw"
+                    >
+                      <BodyCopy
+                          align="center"
+                          textTransform="uppercase"
+                          fontWeight="bold"
+                      >
+                        Stock Per Location
+                      </BodyCopy>
+                    </Grid>
+                  </Grid>
+
+                  {/* Stock Location Management */}
+                  {(locationOptions) && (
+                      keywordCreateState.bonus[index].stock_location.map((location: any, idx: any) => {
+                        return (
+                            <Grid key={`location__${idx}`} container>
+                              <Grid
+                                  item
+                                  xs={5}
+                                  border="0.1vw solid rgba(0,0,0,0.1)"
+                                  p="0.8vw"
+                              >
+                                <BodyCopy textTransform="uppercase">
+                                  {location.name}
+                                </BodyCopy>
+                              </Grid>
+                              <Grid
+                                  item
+                                  xs={7}
+                                  border="0.1vw solid rgba(0,0,0,0.1)"
+                                  p="0.8vw"
+                              >
+                                <OutlinedTextField
+                                    isRequired={false}
+                                    type="number"
+                                    variant="outlined"
+                                    InputProps={{ inputProps: { min: 0 } }}
+                                    value={keywordCreateState.bonus[index].stock_location[
+                                        idx
+                                        ].stock.toString()}
+                                    handleChange={(value: number) => {
+                                      keywordCreateState.bonus[index].stock_location[idx].stock =
+                                          Number(value);
+                                      setStateTrigger(!stateTrigger);
+                                    }}
+                                />
+                              </Grid>
+                            </Grid>
+                        );
+                      })
+                  )}
                 </Stack>
               </Stack>
             )}
