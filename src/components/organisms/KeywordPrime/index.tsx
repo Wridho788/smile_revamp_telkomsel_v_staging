@@ -25,12 +25,14 @@ import {
   InitialKeywordApproval as InitialProgramExperience,
 } from "./initial";
 import { useLazyKeywordListPrimeQuery } from "../../../redux/features/keyword/keyword-api-slice";
-import { useGetProgramExperienceQuery } from "../../../redux/features/lov/lov-api-slice";
+import { useGetProgramExperienceQuery, useGetLocationTypeQuery } from "../../../redux/features/lov/lov-api-slice";
 import { useAppConfigQuery } from "../../../redux/features/app-config/app-config-api-slice";
 import { useAccountAuthenticateQuery } from "../../../redux/features/account/account-api-slice";
+import {useDetailProgramQuery} from "../../../redux/features/program/program-api-slice";
 
 import KeywordDetailsModal from "./KeywordDetail";
 import { keywordProgramDetailHelper } from "../Programs/Detail/KeywordLink/initial";
+import {ProgramDetailInitial} from "../../../pages/CreateProgram/programInitial";
 import FilterKeyword from "./filter";
 import { BodyCopy } from "components/atoms";
 
@@ -78,14 +80,14 @@ const KeywordPrime = () => {
   const defaultRoleManager =
     appConfig !== undefined
       ? appConfig.find((item) => item["param_key"] === "DEFAULT_ROLE_MANAGER")[
-          "param_value"
-        ]
+      "param_value"
+      ]
       : undefined;
   const defaultRoleManagerHQ =
     appConfig !== undefined
       ? appConfig.find((item) => item["param_key"] === "DEFAULT_LOCATION_HQ")[
-          "param_value"
-        ]
+      "param_value"
+      ]
       : undefined;
 
   const { data: accountAuth } = useAccountAuthenticateQuery();
@@ -118,6 +120,8 @@ const KeywordPrime = () => {
     handleButtonDetail(event.data);
   };
 
+  const { data: locationTypeOptions = { data: [] } } =
+    useGetLocationTypeQuery();
   const { data: programExperienceList = { data: [InitialProgramExperience] } } =
     useGetProgramExperienceQuery();
   const [
@@ -192,6 +196,37 @@ const KeywordPrime = () => {
     return <span>{program}</span>;
   };
 
+  const ProgramNameRender = (rowData: IkeywordPrime) => {
+    let {program_id} = rowData?.eligibility
+    const {data : programDetail = ProgramDetailInitial.data, isLoading} = useDetailProgramQuery(program_id ?? '')
+    return <span>{programDetail?.name || ""}</span>;
+  };
+
+  const CreatedAtRender = (rowData: any) => {
+    return (
+      <span>
+        {moment(rowData?.created_at).format("MMMM DD, YYYY")}
+      </span>
+    );
+  };
+
+  const CreatedByRender = (rowData: any) => {
+    return (
+      <span>
+        {rowData?.created_by?.user_name}
+      </span>
+    );
+  };
+
+  const LocationCreatedRender = (rowData: any) => {
+    let location = "";
+    let location_type: string = rowData?.created_by?.account_location?.location_detail?.type;
+    locationTypeOptions?.data?.forEach((value: any) => {
+      if (value?._id === location_type) location = value?.set_value;
+    });
+    return <span>{location}</span>;
+  };
+
   const StatusApprovalRender = (rowData: any) => {
     return (
       <Box
@@ -259,7 +294,7 @@ const KeywordPrime = () => {
         }
         isHqLogin={
           accountAuth &&
-          accountAuth.account_location.location_detail.type ===
+            accountAuth.account_location.location_detail.type ===
             defaultRoleManagerHQ
             ? true
             : false
@@ -386,6 +421,30 @@ const KeywordPrime = () => {
                       field="set_value"
                       header="PROGRAM EXPERIENCE"
                       body={ProgramExperienceRender}
+                    />
+                    <Column
+                      style={{ flexGrow: 1, flexBasis: "250px" }}
+                      field="set_value"
+                      header="PROGRAM NAME"
+                      body={ProgramNameRender}
+                    />
+                    <Column
+                      style={{ flexGrow: 1, flexBasis: "250px" }}
+                      field="set_value"
+                      header="CREATED AT"
+                      body={CreatedAtRender}
+                    />
+                    <Column
+                      style={{ flexGrow: 1, flexBasis: "250px" }}
+                      field="set_value"
+                      header="CREATED BY"
+                      body={CreatedByRender}
+                    />
+                    <Column
+                      style={{ flexGrow: 1, flexBasis: "250px" }}
+                      field="set_value"
+                      header="LOCATION CREATED"
+                      body={LocationCreatedRender}
                     />
                     <Column
                       style={{
