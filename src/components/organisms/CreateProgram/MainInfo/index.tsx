@@ -103,31 +103,34 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
         if (!isFetching) {
             const programOwner: string = accountAuth?.account_location.location_detail.type
             programData.program_owner = programOwner
-            console.log(programData.program_owner)
             programData.program_owner_detail = accountAuth?.account_location.location
-            getOwnerDetail({type: programOwner})
             setStateTrigger(!stateTrigger)
             // TODO still continue
             const index = ownerOption.data.findIndex(
                 (e: any) => e["_id"] === programOwner)
             if (isSuccess) {
-                if (index >= 1) {
-                    try {
-                        for (let i = 0; i < ownerOption.data.length; i++) {
-                            if(i >= index){
-                                ownerArray.push(ownerOption.data[i])
-                            }
+                try {
+                    for (let i = 0; i < ownerOption.data.length; i++) {
+                        if (i > index) {
+                            ownerArray.push(ownerOption.data[i])
                         }
-                    } catch (error) {
-                        console.log(error)
                     }
-                    setFilterOwnerFinish(!filterOwnerFinish)
-                    setTess(ownerArray)
+                } catch (error) {
+                    console.log(error)
                 }
+                setFilterOwnerFinish(!filterOwnerFinish)
+                setTess(ownerArray)
             }
-
         }
     }, [isFetching]);
+    // TODO change default programOwner if notCustomizeOwner
+    useEffect(() => {
+        if(!customizeOwner){
+            const programOwner: string = accountAuth?.account_location.location_detail.type
+            programData.program_owner = programOwner
+            programData.program_owner_detail = accountAuth?.account_location.location
+        }
+    }, [customizeOwner]);
 
     useEffect(() => {
     }, [programData, stateTrigger]);
@@ -434,6 +437,14 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
                         setStateTrigger(!stateTrigger);
                     }}
                 />
+                {
+                    customizeOwner &&
+                    <Box>
+                        <Alert severity="info" color={"success"}>The owner area of this program supposed to be <b>[Location_Type]
+                            - [Location_Detail]</b>
+                        </Alert>
+                    </Box>
+                }
                 <Tooltip placement="top-start" title="Please wait until the owner data finished">
                     <Box>
                         <SwitchCustom color={"success"} checked={customizeOwner} handleChange={setCustomizeOwner}

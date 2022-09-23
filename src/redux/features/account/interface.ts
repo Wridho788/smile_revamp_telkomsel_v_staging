@@ -17,7 +17,7 @@ export interface IResponse {
 export interface IResponseAuthenticate {
   id: string;
   username: string;
-  firstname: string;
+  firstname?: string;
   lastname: string;
   job_title: string;
   job_level: string;

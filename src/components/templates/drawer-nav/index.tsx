@@ -28,6 +28,8 @@ import { Link } from "react-router-dom";
 import { ExpandLess, ExpandMore, StarBorder } from "@mui/icons-material";
 import SidebarItem from "./sidebarItem";
 import { SmallCopy } from "../../atoms";
+import {useAccountAuthenticateQuery} from "../../../redux/features/account/account-api-slice";
+import {useEffect, useState} from "react";
 
 const drawerWidth = 300;
 const drawerHeight = "70%";
@@ -92,7 +94,13 @@ const Index: React.FC<LayoutProps> = ({ children }: LayoutProps) => {
   const theme = useTheme();
   // const [open, setOpen] = React.useState<boolean>(false);
   let [open, setOpenList] = React.useState<boolean>(false);
-
+    const [firstName, setFirstName] = useState("");
+    const {data: accountAuth, isFetching} = useAccountAuthenticateQuery();
+    useEffect(() => {
+        if (!isFetching) {
+            setFirstName(accountAuth?.firstname ?? "Unknown")
+        }
+    }, [isFetching]);
   return (
     <Box>
       <CssBaseline />
@@ -187,7 +195,7 @@ const Index: React.FC<LayoutProps> = ({ children }: LayoutProps) => {
                 <img src={UserIcon} style={{ height: 30 }} />
               </ListItemIcon>
               <ListItemText
-                primary={<SmallCopy>{"Nathan Smitch"}</SmallCopy>}
+                primary={<SmallCopy>{firstName}</SmallCopy>}
                 sx={{ opacity: open ? 1 : 0 }}
               />
             </ListItemButton>
