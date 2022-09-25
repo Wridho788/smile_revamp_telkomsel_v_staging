@@ -25,14 +25,17 @@ import {
   InitialKeywordApproval as InitialProgramExperience,
 } from "./initial";
 import { useLazyKeywordListPrimeQuery } from "../../../redux/features/keyword/keyword-api-slice";
-import { useGetProgramExperienceQuery, useGetLocationTypeQuery } from "../../../redux/features/lov/lov-api-slice";
+import {
+  useGetProgramExperienceQuery,
+  useGetLocationTypeQuery,
+} from "../../../redux/features/lov/lov-api-slice";
 import { useAppConfigQuery } from "../../../redux/features/app-config/app-config-api-slice";
 import { useAccountAuthenticateQuery } from "../../../redux/features/account/account-api-slice";
-import {useDetailProgramQuery} from "../../../redux/features/program/program-api-slice";
+import { useDetailProgramQuery } from "../../../redux/features/program/program-api-slice";
 
 import KeywordDetailsModal from "./KeywordDetail";
 import { keywordProgramDetailHelper } from "../Programs/Detail/KeywordLink/initial";
-import {ProgramDetailInitial} from "../../../pages/CreateProgram/programInitial";
+import { ProgramDetailInitial } from "../../../pages/CreateProgram/programInitial";
 import FilterKeyword from "./filter";
 import { BodyCopy } from "components/atoms";
 
@@ -77,17 +80,17 @@ const KeywordPrime = () => {
 
   // Role Access Authentication Check
   const { data: appConfig } = useAppConfigQuery();
-  const defaultRoleManager =
+  const defaultRoleManager: any =
     appConfig !== undefined
       ? appConfig.find((item) => item["param_key"] === "DEFAULT_ROLE_MANAGER")[
-      "param_value"
-      ]
+          "param_value"
+        ]
       : undefined;
   const defaultRoleManagerHQ =
     appConfig !== undefined
       ? appConfig.find((item) => item["param_key"] === "DEFAULT_LOCATION_HQ")[
-      "param_value"
-      ]
+          "param_value"
+        ]
       : undefined;
 
   const { data: accountAuth } = useAccountAuthenticateQuery();
@@ -197,30 +200,24 @@ const KeywordPrime = () => {
   };
 
   const ProgramNameRender = (rowData: IkeywordPrime) => {
-    let {program_id} = rowData?.eligibility
-    const {data : programDetail = ProgramDetailInitial.data, isLoading} = useDetailProgramQuery(program_id ?? '')
+    let { program_id } = rowData?.eligibility;
+    const { data: programDetail = ProgramDetailInitial.data, isLoading } =
+      useDetailProgramQuery(program_id ?? "");
     return <span>{programDetail?.name || ""}</span>;
   };
 
   const CreatedAtRender = (rowData: any) => {
-    return (
-      <span>
-        {moment(rowData?.created_at).format("MMMM DD, YYYY")}
-      </span>
-    );
+    return <span>{moment(rowData?.created_at).format("MMMM DD, YYYY")}</span>;
   };
 
   const CreatedByRender = (rowData: any) => {
-    return (
-      <span>
-        {rowData?.created_by?.user_name}
-      </span>
-    );
+    return <span>{rowData?.created_by?.user_name}</span>;
   };
 
   const LocationCreatedRender = (rowData: any) => {
     let location = "";
-    let location_type: string = rowData?.created_by?.account_location?.location_detail?.type;
+    let location_type: string =
+      rowData?.created_by?.account_location?.location_detail?.type;
     locationTypeOptions?.data?.forEach((value: any) => {
       if (value?._id === location_type) location = value?.set_value;
     });
@@ -294,7 +291,7 @@ const KeywordPrime = () => {
         }
         isHqLogin={
           accountAuth &&
-            accountAuth.account_location.location_detail.type ===
+          accountAuth.account_location.location_detail.type ===
             defaultRoleManagerHQ
             ? true
             : false

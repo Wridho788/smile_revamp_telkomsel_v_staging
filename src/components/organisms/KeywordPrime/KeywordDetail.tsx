@@ -29,6 +29,7 @@ import moment from "moment";
 import {
   useKeywordApproveMutation,
   useKeywordRejectMutation,
+  useLazyKeywordListPrimeQuery,
 } from "redux/features/keyword/keyword-api-slice";
 import { useGetNotifViaQuery } from "redux/features/lov/lov-api-slice";
 import { keywordProgramDetailHelper } from "../Programs/Detail/KeywordLink/initial";
@@ -69,7 +70,7 @@ const KeywordDetail: FC<IKeywordDetailsModalProps> = ({
 }) => {
   const { eligibility, notification } = data;
   const { data: notifVia } = useGetNotifViaQuery();
-  const [rejectionIssue, setRejectionIssue] = useState("");
+  const [approvalIssue, setApprovalIssue] = useState("");
 
   const [approveProgram, { isLoading: isLoadingApprove }] =
     useKeywordApproveMutation();
@@ -77,33 +78,49 @@ const KeywordDetail: FC<IKeywordDetailsModalProps> = ({
     useKeywordRejectMutation();
 
   const approveHandler = async () => {
-    approveProgram(data["_id"] ?? "").then((res: any) => {
-      if (res?.error) {
-        handleClose();
-        Swal.fire(res.error.data.message, "Failed!", "warning");
-      } else {
-        if (res?.data.status === 200) {
-          handleClose();
-          Swal.fire(res?.data.message, "Approved!", "success");
-          window.location.reload();
+    const id = data["_id"];
+    const reason_approve = approvalIssue;
+    if (id) {
+      approveProgram({ id: id, reason_approve: reason_approve }).then(
+        (res: any) => {
+          if (res?.error) {
+            handleClose();
+            Swal.fire(res.error.data.message, "Failed", "warning");
+          } else {
+            if (res?.data.status === 200) {
+              handleClose();
+              Swal.fire(res?.data.message, "Approved", "success");
+              setTimeout(() => {
+                window.location.reload();
+              }, 2000);
+            }
+          }
         }
-      }
-    });
+      );
+    }
   };
 
   const rejectHandler = async () => {
-    rejectProgram(data["_id"] ?? "").then((res: any) => {
-      if (res?.error) {
-        handleClose();
-        Swal.fire(res.error.data.message, "Failed", "warning");
-      } else {
-        if (res?.data.status === 200) {
-          handleClose();
-          Swal.fire(res?.data.message, "Rejected", "success");
-          window.location.reload();
+    const id = data["_id"];
+    const reason_reject = approvalIssue;
+    if (id) {
+      rejectProgram({ id: id, reason_reject: reason_reject }).then(
+        (res: any) => {
+          if (res?.error) {
+            handleClose();
+            Swal.fire(res.error.data.message, "Failed", "warning");
+          } else {
+            if (res?.data.status === 200) {
+              handleClose();
+              Swal.fire(res?.data.message, "Rejected", "success");
+              setTimeout(() => {
+                window.location.reload();
+              }, 2000);
+            }
+          }
         }
-      }
-    });
+      );
+    }
   };
 
   const renderApproveSection = (text: string) => {
@@ -155,8 +172,8 @@ const KeywordDetail: FC<IKeywordDetailsModalProps> = ({
               label=""
               placeholder="Leave comment of your approval action ..."
               variant={"outlined"}
-              value={rejectionIssue}
-              handleChange={setRejectionIssue}
+              value={approvalIssue}
+              handleChange={setApprovalIssue}
               multiline
               rows={3}
             />
