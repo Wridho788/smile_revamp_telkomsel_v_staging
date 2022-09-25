@@ -47,7 +47,6 @@ const NotificationOther: React.FunctionComponent<
     return (
         <Accordion sx={{ p: "1vw" }}>
             <AccordionSummary
-                expandIcon={<ExpandMoreIcon fontSize="large" />}
                 aria-controls="panel1a-content"
                 id="panel1a-header"
             >
