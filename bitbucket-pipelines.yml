@@ -17,5 +17,5 @@ pipelines:
             - pipe: atlassian/ssh-run:0.4.1
               variables:
                SSH_USER: 'ec2-user'
-               SERVER: '13.229.104.241'
+               SERVER: '18.143.54.48'
                COMMAND: '/bin/bash pipeline-deploy/run-SLRevampFE.sh'
