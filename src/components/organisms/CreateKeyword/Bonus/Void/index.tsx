@@ -51,7 +51,7 @@ const NotificationVoid: React.FunctionComponent<
                 aria-controls="panel1a-content"
                 id="panel1a-header"
             >
-                <Subtitle textTransform="uppercase">Other</Subtitle>
+                <Subtitle textTransform="uppercase">Void</Subtitle>
             </AccordionSummary>
         </Accordion>
     );
