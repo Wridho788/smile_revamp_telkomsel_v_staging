@@ -18,9 +18,11 @@ import {
   IKeywordBonusMobileBanking,
   IKeywordBonusLoyaltyPoin,
   IKeywordBonusTelcoProductPostpaid,
-  IKeywordBonusTelcoProductPrepaid, IKeywordBonusVoucher, IKeywordBonusLinkAja,
+  IKeywordBonusTelcoProductPrepaid,
+  IKeywordBonusVoucher,
+  IKeywordBonusLinkAja,
 } from "./interfaces";
-import {IBonusTypeVoucher} from "./Bonus/Voucher/interface";
+import { IBonusTypeVoucher } from "./Bonus/Voucher/interface";
 
 export const KeywordEligibilityLocationHelper: IKeywordEligibilityLocationHelper =
   {
@@ -160,18 +162,18 @@ export const KeywordBonusVoucher: IKeywordBonusVoucher = {
   voucher_combination: "",
   jumlah_total_voucher: 0,
   stock_location: [],
-  redeem_after_verification: false
-}
+  redeem_after_verification: false,
+};
 
 export const KeywordBonusLinkAja: IKeywordBonusLinkAja = {
-  nominal:"",
-  location:"",
+  nominal: "",
+  location: "",
   bonus_type: "link_aja",
   external_api_config: "",
   bucket: "",
   stock_location: [],
-  redeem_after_verification: false
-}
+  redeem_after_verification: false,
+};
 
 export const KeyWordBonusDonation: IKeywordBonusDonation = {
   bonus_type: "donation",
@@ -274,6 +276,7 @@ export const KeywordNotificationEligibility: IKeywordNotificationEligibility[] =
   [
     {
       bonus_type_id: "",
+      keyword_name: "",
       code_identifier: "",
       notification_content: "",
       start_period: new Date(),
@@ -283,6 +286,7 @@ export const KeywordNotificationEligibility: IKeywordNotificationEligibility[] =
     },
     {
       bonus_type_id: "",
+      keyword_name: "",
       code_identifier: "",
       notification_content: "",
       start_period: new Date(),
@@ -292,6 +296,7 @@ export const KeywordNotificationEligibility: IKeywordNotificationEligibility[] =
     },
     {
       bonus_type_id: "",
+      keyword_name: "",
       code_identifier: "",
       notification_content: "",
       start_period: new Date(),
@@ -301,6 +306,7 @@ export const KeywordNotificationEligibility: IKeywordNotificationEligibility[] =
     },
     {
       bonus_type_id: "",
+      keyword_name: "",
       code_identifier: "",
       notification_content: "",
       start_period: new Date(),

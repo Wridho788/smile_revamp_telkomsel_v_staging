@@ -23,19 +23,21 @@ export const keywordSlice = createApi({
         query: (_id: string) => ({
           url: endpoint + _id + "/detail",
         }),
+        providesTags: ["Keyword"],
       });
     const approvalHandler = (endpoint: string) =>
-      builder.mutation<any, string>({
-        query: (_id: string) => ({
-          url: `/${_id}/${endpoint}`,
+      builder.mutation<{ success: boolean; body: any }, any>({
+        query: (body) => ({
+          url: `/${body.id}/${endpoint}`,
           method: "PATCH",
+          body: { reason_approve: body.reason_approve },
         }),
         invalidatesTags: ["Keyword"],
       });
     const rejectionHandler = (endpoint: string) =>
       builder.mutation<{ success: boolean; body: any }, any>({
         query: (body) => ({
-          url: `/${body._id}/${endpoint}`,
+          url: `/${body.id}/${endpoint}`,
           method: "PATCH",
           body: { reason_reject: body.reason_reject },
         }),
