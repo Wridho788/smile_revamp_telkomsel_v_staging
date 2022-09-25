@@ -123,14 +123,15 @@ const Notification: React.FunctionComponent<INotificationProps> = ({
                 >
                   <Subtitle color="warning.main">{_.set_value}</Subtitle>
                   <OutlinedTextField
-                    disabled={true}
                     isRequired={false}
                     direction="column"
                     label="Keyword Name"
                     variant="outlined"
-                    value={keywordCreateState.eligibility.name}
+                    value={
+                      keywordNotificationEligibilityState[idx].keyword_name
+                    }
                     handleChange={(value: string) => {
-                      keywordCreate.eligibility.name = value;
+                      keywordNotificationEligibility[idx].keyword_name = value;
                       setStateTrigger(!stateTrigger);
                     }}
                   />
