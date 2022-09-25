@@ -98,15 +98,6 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
     const [locationDetailName, setLocationDetailName] = useState();
     const [locationTypeName, setLocationTypeName] = useState("");
 
-    const locationParams: IParams = {
-        lazyEvent: JSON.stringify({
-            first: 1,
-            rows: 1000,
-            sortField: "created_at",
-            sortOrder: 1,
-            filters: {},
-        }),
-    };
     const [getLovDetail] = useGetDetailLovMutation();
 
 
