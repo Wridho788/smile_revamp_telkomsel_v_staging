@@ -5,7 +5,7 @@ import {
   Switch,
   Box,
   CircularProgress,
-  Grid
+  Grid,
 } from "@mui/material";
 import {
   Select,
@@ -87,8 +87,9 @@ const NotificationLuckyDraw: React.FunctionComponent<
     setKeywordNotificationLuckyDrawState,
   ] = useState<IKeywordNotificationLuckyDraw[]>(keywordNotificationLuckyDraw);
 
-  const { data: locationOptions, isFetching } =
-    useLocationTemplateQuery({ type: keywordCreate.eligibility.location_type });
+  const { data: locationOptions, isFetching } = useLocationTemplateQuery({
+    type: keywordCreate.eligibility.location_type,
+  });
 
   const [index, setIndex] = useState<number>(-1);
 
@@ -110,11 +111,11 @@ const NotificationLuckyDraw: React.FunctionComponent<
 
       if (locationOptions) {
         keywordCreateState.eligibility.locations.map((location) =>
-            keywordCreateState.bonus[bonusIdx].locations.push({
-              name: locationOptions.find((e: any) => e["_id"] === location).name,
-              location_id: location,
-              stock: 0,
-            })
+          keywordCreateState.bonus[bonusIdx].locations.push({
+            name: locationOptions.find((e: any) => e["_id"] === location).name,
+            location_id: location,
+            stock: 0,
+          })
         );
 
         setStateTrigger(!stateTrigger);
@@ -191,6 +192,7 @@ const NotificationLuckyDraw: React.FunctionComponent<
                   >
                     <Subtitle color="warning.main">{_.set_value}</Subtitle>
                     <OutlinedTextField
+                      isRequired={false}
                       direction="column"
                       label="Keyword Name"
                       variant="outlined"
@@ -207,6 +209,7 @@ const NotificationLuckyDraw: React.FunctionComponent<
                       disabled={idx === 2 ? true : false}
                     />
                     <Select
+                      isRequired={false}
                       direction="column"
                       label="Notification Template"
                       placeholder="Option"
@@ -229,6 +232,7 @@ const NotificationLuckyDraw: React.FunctionComponent<
                     {keywordNotificationLuckyDrawHelperState[idx]
                       .notification_template !== "" && (
                       <OutlinedTextField
+                        isRequired={false}
                         direction="column"
                         label="Notification Content"
                         variant="outlined"
@@ -309,6 +313,7 @@ const NotificationLuckyDraw: React.FunctionComponent<
                       </Stack>
                     )}
                     <Select
+                      isRequired={false}
                       direction="column"
                       label="Notification Via"
                       placeholder="Option"
@@ -343,6 +348,7 @@ const NotificationLuckyDraw: React.FunctionComponent<
                     </Stack>
                     <Stack direction="row" spacing="2vw" alignItems="center">
                       <ResponsiveDateTimePicker
+                        isRequired={false}
                         disabled={
                           keywordNotificationLuckyDrawHelperState[idx]
                             .follow_period
@@ -367,6 +373,7 @@ const NotificationLuckyDraw: React.FunctionComponent<
                         }}
                       />
                       <ResponsiveDateTimePicker
+                        isRequired={false}
                         disabled={
                           keywordNotificationLuckyDrawHelperState[idx]
                             .follow_period
@@ -453,13 +460,15 @@ const NotificationLuckyDraw: React.FunctionComponent<
 
               {/* Stock Location Management */}
               <Stack>
-                {locationOptions && <LocationManagement
+                {locationOptions && (
+                  <LocationManagement
                     bonusType="lucky_draw"
                     keywordCreateState={keywordCreateState}
                     keywordCreate={keywordCreate}
                     stateTrigger={stateTrigger}
                     setStateTrigger={setStateTrigger}
-                />}
+                  />
+                )}
               </Stack>
             </>
           )}

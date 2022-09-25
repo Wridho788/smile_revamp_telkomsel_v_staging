@@ -122,37 +122,21 @@ const Notification: React.FunctionComponent<INotificationProps> = ({
                   p="2vw"
                 >
                   <Subtitle color="warning.main">{_.set_value}</Subtitle>
-                  {_.set_value === "Keyword Verification" ? (<OutlinedTextField
-                      isRequired={
-                        _.set_value === "Keyword Verification" ? false : true
-                      }
-                      direction="column"
-                      label="Keyword Name"
-                      variant="outlined"
-                      value={keywordCreateState.notification[idx].keyword_name}
-                      handleChange={(value: string) => {
-                        keywordCreate.notification[idx].keyword_name = value;
-                        setStateTrigger(!stateTrigger);
-                      }}
-                  />) : (
-                      <OutlinedTextField
-                          isRequired={
-                            _.set_value === "Keyword Verification" ? false : true
-                          }
-                          direction="column"
-                          label="Keyword Name"
-                          variant="outlined"
-                          value={keywordCreateState.eligibility.name}
-                          handleChange={(value: string) => {
-                            keywordCreate.eligibility.name = value;
-                            setStateTrigger(!stateTrigger);
-                          }}
-                      />
-                  )}
-                  <Select
-                    isRequired={
-                      _.set_value === "Keyword Verification" ? false : true
+                  <OutlinedTextField
+                    isRequired={false}
+                    direction="column"
+                    label="Keyword Name"
+                    variant="outlined"
+                    value={
+                      keywordNotificationEligibilityState[idx].keyword_name
                     }
+                    handleChange={(value: string) => {
+                      keywordNotificationEligibility[idx].keyword_name = value;
+                      setStateTrigger(!stateTrigger);
+                    }}
+                  />
+                  <Select
+                    isRequired={false}
                     direction="column"
                     label="Notification Template"
                     placeholder="Option"
@@ -175,9 +159,7 @@ const Notification: React.FunctionComponent<INotificationProps> = ({
                   {keywordNotificationEligibilityHelperState[idx]
                     .notification_template !== "" && (
                     <OutlinedTextField
-                      isRequired={
-                        _.set_value === "Keyword Verification" ? false : true
-                      }
+                      isRequired={false}
                       direction="column"
                       label="Notification Content"
                       variant="outlined"
@@ -258,9 +240,7 @@ const Notification: React.FunctionComponent<INotificationProps> = ({
                     </Stack>
                   )}
                   <Select
-                    isRequired={
-                      _.set_value === "Keyword Verification" ? false : true
-                    }
+                    isRequired={false}
                     direction="column"
                     label="Notification Via"
                     placeholder="Option"
@@ -295,6 +275,7 @@ const Notification: React.FunctionComponent<INotificationProps> = ({
                   </Stack>
                   <Stack direction="row" spacing="2vw" alignItems="center">
                     <ResponsiveDateTimePicker
+                      isRequired={false}
                       disabled={
                         keywordNotificationEligibilityHelperState[idx]
                           .follow_period
@@ -319,6 +300,7 @@ const Notification: React.FunctionComponent<INotificationProps> = ({
                       }}
                     />
                     <ResponsiveDateTimePicker
+                      isRequired={false}
                       disabled={
                         keywordNotificationEligibilityHelperState[idx]
                           .follow_period

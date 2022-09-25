@@ -1,11 +1,5 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
-import {
-  Stack,
-  Button,
-  Switch,
-  Box,
-  CircularProgress,
-} from "@mui/material";
+import { Stack, Button, Switch, Box, CircularProgress } from "@mui/material";
 
 import {
   BodyCopy,
@@ -118,8 +112,9 @@ const NotificationAuction: React.FunctionComponent<
   const [keywordNotificationAuctionState, setKeywordNotificationAuctionState] =
     useState<IKeywordNotificationAuction[]>(keywordNotificationAuction);
 
-  const { data: locationOptions, isFetching } =
-      useLocationTemplateQuery({ type: keywordCreate.eligibility.location_type });
+  const { data: locationOptions, isFetching } = useLocationTemplateQuery({
+    type: keywordCreate.eligibility.location_type,
+  });
 
   const [index, setIndex] = useState<number>(-1);
 
@@ -135,17 +130,17 @@ const NotificationAuction: React.FunctionComponent<
     if (locationOptions && index === -1) {
       keywordCreate.bonus.push(KeywordBonusAuction);
       const bonusIdx = keywordCreate.bonus.findIndex(
-          ({ bonus_type }) => bonus_type === "auction"
+        ({ bonus_type }) => bonus_type === "auction"
       );
       setIndex(bonusIdx);
 
       if (locationOptions) {
         keywordCreateState.eligibility.locations.map((location) =>
-            keywordCreateState.bonus[bonusIdx].stock_location.push({
-              name: locationOptions.find((e: any) => e["_id"] === location).name,
-              location_id: location,
-              stock: 0,
-            })
+          keywordCreateState.bonus[bonusIdx].stock_location.push({
+            name: locationOptions.find((e: any) => e["_id"] === location).name,
+            location_id: location,
+            stock: 0,
+          })
         );
 
         setStateTrigger(!stateTrigger);
@@ -212,6 +207,7 @@ const NotificationAuction: React.FunctionComponent<
                   >
                     <Subtitle color="warning.main">{_.set_value}</Subtitle>
                     <OutlinedTextField
+                      isRequired={false}
                       disabled={true}
                       direction="column"
                       label="Keyword Name"
@@ -223,6 +219,7 @@ const NotificationAuction: React.FunctionComponent<
                       }}
                     />
                     <Select
+                      isRequired={false}
                       direction="column"
                       label="Notification Template"
                       placeholder="Option"
@@ -245,6 +242,7 @@ const NotificationAuction: React.FunctionComponent<
                     {keywordNotificationAuctionHelperState[idx]
                       .notification_template !== "" && (
                       <OutlinedTextField
+                        isRequired={false}
                         direction="column"
                         label="Notification Content"
                         variant="outlined"
@@ -324,6 +322,7 @@ const NotificationAuction: React.FunctionComponent<
                       </Stack>
                     )}
                     <Select
+                      isRequired={false}
                       direction="column"
                       label="Notification Via"
                       placeholder="Option"
@@ -357,6 +356,7 @@ const NotificationAuction: React.FunctionComponent<
                     </Stack>
                     <Stack direction="row" spacing="2vw" alignItems="center">
                       <ResponsiveDateTimePicker
+                        isRequired={false}
                         disabled={
                           keywordNotificationAuctionHelperState[idx]
                             .follow_period
@@ -379,6 +379,7 @@ const NotificationAuction: React.FunctionComponent<
                         }}
                       />
                       <ResponsiveDateTimePicker
+                        isRequired={false}
                         disabled={
                           keywordNotificationAuctionHelperState[idx]
                             .follow_period
@@ -515,13 +516,15 @@ const NotificationAuction: React.FunctionComponent<
 
                   {/* Stock Location Management */}
                   <Stack>
-                    {locationOptions && <LocationManagement
+                    {locationOptions && (
+                      <LocationManagement
                         bonusType="auction"
                         keywordCreateState={keywordCreateState}
                         keywordCreate={keywordCreate}
                         stateTrigger={stateTrigger}
                         setStateTrigger={setStateTrigger}
-                    />}
+                      />
+                    )}
                   </Stack>
                 </Stack>
               )}

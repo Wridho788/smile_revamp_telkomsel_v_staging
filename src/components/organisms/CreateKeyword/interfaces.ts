@@ -102,6 +102,7 @@ export interface IKeywordNotificationEligibilityHelper {
 
 export interface IKeywordNotificationEligibility {
   bonus_type_id: string;
+  keyword_name: string;
   code_identifier: string;
   notification_content: string;
   start_period: Date;
