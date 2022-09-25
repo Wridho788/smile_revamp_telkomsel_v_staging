@@ -183,6 +183,7 @@ export const KeyWordBonusDonation: IKeywordBonusDonation = {
   stock_location: [],
   redeem_after_verification: false,
 };
+
 export const KeywordBonusMobileBanking: IKeywordBonusMobileBanking = {
   bonus_type: "mbp",
   bank: "",
@@ -191,6 +192,18 @@ export const KeywordBonusMobileBanking: IKeywordBonusMobileBanking = {
   combination_coupon: "",
   stock_location: [],
   redeem_after_verification: false,
+};
+
+export const KeywordBonusVoid: any = {
+  bonus_type: "void"
+};
+
+export const KeywordBonusVoting: any = {
+  bonus_type: "voting"
+};
+
+export const KeywordBonusOther: any = {
+  bonus_type: "other"
 };
 
 export const KeywordNotificationAuctionHelper: IKeywordNotificationAuctionHelper[] =
