@@ -20,7 +20,7 @@ import {
 } from "../../../atoms";
 import {useEffect, useState, Fragment} from "react";
 import {
-    useGetDetailLovMutation,
+    useGetDetailLovMutation, useGetLovListQuery,
     useGetMechanismQuery, useGetOwnerQuery,
     useGetPointTypeQuery,
     useGetProgramGroupQuery,
@@ -96,19 +96,9 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
         useLocationRebaseMutation();
     const [ownerList, setTess] = useState();
     const [locationDetailName, setLocationDetailName] = useState();
-    const [locationId, setLocationId] = useState();
-    const [locationName, setLocationName] = useState();
+    const [locationTypeName, setLocationTypeName] = useState("");
 
-    const locationParams: IParams = {
-        lazyEvent: JSON.stringify({
-            first: 1,
-            rows: 1000,
-            sortField: "created_at",
-            sortOrder: 1,
-            filters: {},
-        }),
-    };
-    const {data: locationPrime, isFetching: locationFetch} = useLocationTemplateForPrimeQuery(locationParams);
+    const [getLovDetail] = useGetDetailLovMutation();
 
 
     const {data: accountAuth, isFetching} = useAccountAuthenticateQuery();
@@ -116,22 +106,17 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
     const ownerArray: any = []
     useEffect(() => {
             if (!isFetching) {
-                const programOwner: string = accountAuth?.account_location.location_detail.type
+                const locationTypeId: string = accountAuth?.account_location.location_detail.type
                 setLocationDetailName(accountAuth?.account_location.location_detail.name)
-                programData.program_owner = programOwner
+                programData.program_owner = locationTypeId
                 programData.program_owner_detail = accountAuth?.account_location.location
-                if (!locationFetch) {
-                    for (let i = 0; i < locationPrime.payload.data.length; i++) {
-                        if (locationPrime.payload.data[i]._id === accountAuth?.account_location.location) {
-                            setLocationName(locationPrime.payload.data[i].name)
-                        }
-                    }
-                }
-
+                getLovDetail(locationTypeId).then((res :any) =>{
+                    setLocationTypeName(res.data.set_value)
+                })
                 setStateTrigger(!stateTrigger)
                 // TODO still continue
                 const index = ownerOption.data.findIndex(
-                    (e: any) => e["_id"] === programOwner)
+                    (e: any) => e["_id"] === locationTypeId)
                 if (isSuccess) {
                     try {
                         for (let i = 0; i < ownerOption.data.length; i++) {
@@ -469,7 +454,7 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
                     !customizeOwner &&
                     <Box>
                         <Alert severity="info" color={"success"}>The owner area of this program supposed to
-                            be <b>[{locationName}]
+                            be <b>[{locationTypeName}]
                                 - [{locationDetailName}]</b>
                         </Alert>
                     </Box>
