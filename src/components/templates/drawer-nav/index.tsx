@@ -28,8 +28,9 @@ import { Link } from "react-router-dom";
 import { ExpandLess, ExpandMore, StarBorder } from "@mui/icons-material";
 import SidebarItem from "./sidebarItem";
 import { SmallCopy } from "../../atoms";
-import {useAccountAuthenticateQuery} from "../../../redux/features/account/account-api-slice";
-import {useEffect, useState} from "react";
+import { useAccountAuthenticateQuery } from "../../../redux/features/account/account-api-slice";
+import { useEffect, useState } from "react";
+import UserDetail from "components/organisms/UserDetail";
 
 const drawerWidth = 300;
 const drawerHeight = "70%";
@@ -94,16 +95,19 @@ const Index: React.FC<LayoutProps> = ({ children }: LayoutProps) => {
   const theme = useTheme();
   // const [open, setOpen] = React.useState<boolean>(false);
   let [open, setOpenList] = React.useState<boolean>(false);
-    const [firstName, setFirstName] = useState("");
-    const {data: accountAuth, isFetching} = useAccountAuthenticateQuery();
-    useEffect(() => {
-        if (!isFetching) {
-            setFirstName(accountAuth?.firstname ?? "Unknown")
-        }
-    }, [isFetching]);
+  const [firstName, setFirstName] = useState("");
+  const [openUserDetail, setOpenUserDetail] = useState<boolean>(false);
+  const handleCloseUserDetail = () => setOpenUserDetail(!openUserDetail);
+  const { data: accountAuth, isFetching } = useAccountAuthenticateQuery();
+  useEffect(() => {
+    if (!isFetching) {
+      setFirstName(`${accountAuth?.firstname} ${accountAuth?.lastname}` ?? "Unknown")
+    }
+  }, [isFetching]);
   return (
     <Box>
       <CssBaseline />
+    {openUserDetail && <UserDetail open={openUserDetail} handleClose={handleCloseUserDetail} data={accountAuth} />}
       <Drawer variant="permanent" open={open} anchor="right">
         {open == false ? (
           <Toolbar
@@ -184,6 +188,7 @@ const Index: React.FC<LayoutProps> = ({ children }: LayoutProps) => {
                 justifyContent: open ? "initial" : "center",
                 px: 2.5,
               }}
+              onClick={handleCloseUserDetail}
             >
               <ListItemIcon
                 sx={{

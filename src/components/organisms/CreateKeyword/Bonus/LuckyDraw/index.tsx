@@ -101,7 +101,7 @@ const NotificationLuckyDraw: React.FunctionComponent<
       ({ bonus_type }) => bonus_type === "lucky_draw"
     );
 
-    if (index === -1) {
+    if (locationOptions && index === -1) {
       keywordCreate.bonus.push(KeywordBonusLuckyDraw);
       const bonusIdx = keywordCreate.bonus.findIndex(
         ({ bonus_type }) => bonus_type === "lucky_draw"

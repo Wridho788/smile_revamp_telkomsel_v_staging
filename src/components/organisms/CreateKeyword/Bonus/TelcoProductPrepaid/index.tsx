@@ -51,7 +51,7 @@ const NotificationTelcoProductPrepaid: React.FunctionComponent<
       ({ bonus_type }) => bonus_type === "telco_prepaid"
     );
 
-    if (index === -1) {
+    if (locationOptions && index === -1) {
       keywordCreate.bonus.push(KeywordBonusTelcoProductPrepaid);
       const bonusIdx = keywordCreate.bonus.findIndex(
           ({ bonus_type }) => bonus_type === "telco_prepaid"
@@ -60,7 +60,7 @@ const NotificationTelcoProductPrepaid: React.FunctionComponent<
 
       if (locationOptions) {
         keywordCreateState.eligibility.locations.map((location) =>
-            keywordCreate.bonus[bonusIdx].stock_location.push({
+            keywordCreateState.bonus[bonusIdx].stock_location.push({
               name: locationOptions.find((e: any) => e["_id"] === location).name,
               location_id: location,
               stock: 0

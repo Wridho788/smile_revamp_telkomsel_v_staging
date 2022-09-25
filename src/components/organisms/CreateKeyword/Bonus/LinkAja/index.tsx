@@ -44,7 +44,7 @@ const LinkAja: React.FunctionComponent<INotificationLinkAjaProps> = ({
             ({bonus_type}) => bonus_type === "link_aja"
         );
 
-        if (index === -1) {
+        if (locationOptions && index === -1) {
             keywordCreate.bonus.push(KeywordBonusLinkAja);
             const bonusIdx = keywordCreate.bonus.findIndex(
                 ({ bonus_type }) => bonus_type === "link_aja"

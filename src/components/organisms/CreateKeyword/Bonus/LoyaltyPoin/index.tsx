@@ -41,7 +41,7 @@ const LoyaltyPoin: React.FunctionComponent<ILoyaltyPoinProps> = ({
       ({ bonus_type }) => bonus_type === "loyalty_poin"
     );
 
-    if (index === -1) {
+    if (locationOptions && index === -1) {
       keywordCreate.bonus.push(KeywordBonusLoyaltyPoin);
       const bonusIdx = keywordCreate.bonus.findIndex(
         ({ bonus_type }) => bonus_type === "loyalty_poin"
@@ -50,7 +50,7 @@ const LoyaltyPoin: React.FunctionComponent<ILoyaltyPoinProps> = ({
 
       if (locationOptions) {
         keywordCreateState.eligibility.locations.map((location) =>
-            keywordCreate.bonus[bonusIdx].locations.push({
+            keywordCreateState.bonus[bonusIdx].locations.push({
               name: locationOptions.find((e: any) => e["_id"] === location).name,
               location_id: location,
               stock: 0,

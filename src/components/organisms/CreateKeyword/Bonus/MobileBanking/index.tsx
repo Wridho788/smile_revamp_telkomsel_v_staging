@@ -47,7 +47,7 @@ const MobileBanking: React.FunctionComponent<IMobileBankingProps> = ({
         ({bonus_type}) => bonus_type === "mbp"
     );
 
-    if (index === -1) {
+    if (locationOptions && index === -1) {
       keywordCreate.bonus.push(KeywordBonusMobileBanking);
       const bonusIdx = keywordCreate.bonus.findIndex(
         ({ bonus_type }) => bonus_type === "mbp"
@@ -57,7 +57,7 @@ const MobileBanking: React.FunctionComponent<IMobileBankingProps> = ({
 
       if (locationOptions) {
         keywordCreateState.eligibility.locations.map((location) => {
-          keywordCreate.bonus[bonusIdx].stock_location.push({
+          keywordCreateState.bonus[bonusIdx].stock_location.push({
             name: locationOptions.find((e: any) => e["_id"] === location).name,
             location: location,
             stock: 0,
