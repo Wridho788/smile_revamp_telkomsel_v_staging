@@ -3,6 +3,7 @@ import TextField from "@mui/material/TextField";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { MobileDatePicker } from "@mui/x-date-pickers/MobileDatePicker";
+import { DesktopDatePicker } from "@mui/x-date-pickers";
 
 export default function PopUpDatePicker(props: any) {
   const { datePickerRef, setFilterValue } = props;
@@ -10,9 +11,10 @@ export default function PopUpDatePicker(props: any) {
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
-      <MobileDatePicker
+      <DesktopDatePicker
+        disabled={props.disabled ? props.disabled : false}
         inputRef={datePickerRef}
-        value={value}
+        value={props.value ? props.value : value}
         onAccept={(value) => {
           setFilterValue(value);
         }}
