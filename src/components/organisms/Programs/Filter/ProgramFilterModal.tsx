@@ -53,17 +53,14 @@ const ProgramFilterProgram: React.FC<IProps> = ({
 
     return (
         <Dialog open={open} onClose={onClose} fullWidth>
-            <Box sx={{ padding: "20px 50px" }}>
+            <Box sx={{ padding: "20px 20px" }}>
                 <Stack
                     direction="row"
-                    //   justifyContent="center"
-                    spacing="2vw"
+                    spacing="1vw"
                     sx={{
                         overflowX: "scroll",
-                        scrollbarWidth: "none",
-                        "&::-webkit-scrollbar": {
-                            display: "none",
-                        },
+                        "-webkit-overflow-scrolling": "touch",
+                        padding: "20px"
                     }}
                 >
                     {[{ _id: "", name: "All Status" }, ...listProgramApproval].map(
