@@ -59,6 +59,7 @@ export const lovSlice = createApi({
             getKeywordNotification: detailKeywordNotificationHandler(
                 "/keyword_notification/"
             ),
+            getProgramApproval: responseHandler("/program/approval"),
             getKeywordApproval: responseHandler("/keyword/approval"),
             getOwner: builder.query<any,  number | void>({
                 query: () => ({url: "/location_type"}),
@@ -89,4 +90,5 @@ export const {
     useGetKeywordNotificationQuery,
     useLazyGetKeywordNotificationQuery,
     useGetKeywordApprovalQuery,
+    useGetProgramApprovalQuery
 } = lovSlice;

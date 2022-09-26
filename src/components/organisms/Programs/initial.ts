@@ -1,4 +1,5 @@
-import { IData } from "../../../redux/features/program/interface";
+import { IData } from "../../../redux/features/program/interface"
+import { IFilter, IProgramApproval } from "./interface";
 
 export const ProgramItemInitial: IData = {
   _id: "",
@@ -22,4 +23,26 @@ export const ProgramItemInitial: IData = {
     set_value: "",
   },
   program_notification: [],
+};
+
+export const InitialFilter: IFilter = {
+  program_approval: {
+    _id: "",
+    name: "",
+  },
+  program_experience: {
+    _id: "",
+    name: "",
+  },
+};
+
+export const InitialProgramApproval: IProgramApproval = {
+  _id: "",
+  group_name: "",
+  set_value: "",
+  created_by: "",
+  created_at: "",
+  updated_at: "",
+  deleted_at: null,
+  __v: 0,
 };
