@@ -12,6 +12,7 @@ interface IProps<T> {
   onChange: (e: any, newValue: T | null) => void;
   size?: "small" | "medium";
   required?: boolean;
+  disabled?: boolean;
 }
 const InputSearchable = <T extends Pick<InitialOptions, "name">>({
   label,
@@ -19,10 +20,12 @@ const InputSearchable = <T extends Pick<InitialOptions, "name">>({
   options,
   size = "small",
   required,
+  disabled = false,
   onChange,
 }: IProps<T>) => {
   return (
     <Autocomplete
+      disabled={disabled}
       autoComplete={false}
       value={value}
       size={size}
