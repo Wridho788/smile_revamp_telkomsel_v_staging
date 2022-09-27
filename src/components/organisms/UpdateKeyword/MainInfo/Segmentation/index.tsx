@@ -73,6 +73,7 @@ const Segmentation: React.FunctionComponent<ISegmentationProps> = ({
                       keywordCreate.eligibility.segmentation_customer_tier = value;
                       setStateTrigger(!stateTrigger);
                   }}
+                  isRequired={false}
               />
               <Select
                   multiple
@@ -85,6 +86,7 @@ const Segmentation: React.FunctionComponent<ISegmentationProps> = ({
                       keywordCreate.eligibility.segmentation_customer_brand = value;
                       setStateTrigger(!stateTrigger);
                   }}
+                  isRequired={false}
               />
               <Select
                   multiple
@@ -100,6 +102,7 @@ const Segmentation: React.FunctionComponent<ISegmentationProps> = ({
                           value;
                       setStateTrigger(!stateTrigger);
                   }}
+                  isRequired={false}
               />
               <Select
                   label="Customer Prepaid Registration"
@@ -114,6 +117,7 @@ const Segmentation: React.FunctionComponent<ISegmentationProps> = ({
                           value;
                       setStateTrigger(!stateTrigger);
                   }}
+                  isRequired={false}
               />
               <Select
                   label="Telkomsel LOS Operator"
@@ -127,6 +131,7 @@ const Segmentation: React.FunctionComponent<ISegmentationProps> = ({
                           value;
                       setStateTrigger(!stateTrigger);
                   }}
+                  isRequired={false}
               />
               {keywordCreateState.eligibility.segmentation_customer_los_operator !==
                   "Ranged" && (
@@ -146,6 +151,7 @@ const Segmentation: React.FunctionComponent<ISegmentationProps> = ({
                                   Number(value);
                               setStateTrigger(!stateTrigger);
                           }}
+                          isRequired={false}
                       />
                   )}
               {keywordCreateState.eligibility.segmentation_customer_los_operator ===
@@ -168,6 +174,7 @@ const Segmentation: React.FunctionComponent<ISegmentationProps> = ({
                               }
                               setStateTrigger(!stateTrigger);
                           }}
+                          isRequired={false}
                       />
                   )}
               {keywordCreateState.eligibility.segmentation_customer_los_operator ===
@@ -208,6 +215,7 @@ const Segmentation: React.FunctionComponent<ISegmentationProps> = ({
                                   Number(value);
                               setStateTrigger(!stateTrigger);
                           }}
+                          isRequired={false}
                       />
                   )}
               <Select
@@ -219,6 +227,7 @@ const Segmentation: React.FunctionComponent<ISegmentationProps> = ({
                       keywordCreate.eligibility.for_new_redeemer = value;
                       setStateTrigger(!stateTrigger);
                   }}
+                  isRequired={false}
               />
               <Select
                   label="Customer Type"
@@ -229,6 +238,7 @@ const Segmentation: React.FunctionComponent<ISegmentationProps> = ({
                       keywordCreate.eligibility.segmentation_customer_type = value;
                       setStateTrigger(!stateTrigger);
                   }}
+                  isRequired={false}
               />
               <Select
                   label="Customer KYC Completness"
@@ -243,6 +253,7 @@ const Segmentation: React.FunctionComponent<ISegmentationProps> = ({
                           value;
                       setStateTrigger(!stateTrigger);
                   }}
+                  isRequired={false}
               />
               <Select
                   label="Customer ARPU Operator"
@@ -256,6 +267,7 @@ const Segmentation: React.FunctionComponent<ISegmentationProps> = ({
                           value;
                       setStateTrigger(!stateTrigger);
                   }}
+                  isRequired={false}
               />
               {keywordCreateState.eligibility
                       .segmentation_customer_arpu_operator !== "" &&
@@ -279,6 +291,7 @@ const Segmentation: React.FunctionComponent<ISegmentationProps> = ({
                                   Number(res);
                               setStateTrigger(!stateTrigger);
                           }}
+                          isRequired={false}
                       />
                   )}
               {keywordCreateState.eligibility
@@ -308,6 +321,7 @@ const Segmentation: React.FunctionComponent<ISegmentationProps> = ({
                           }
                           setStateTrigger(!stateTrigger);
                       }}
+                      isRequired={false}
                   />
               )}
               {keywordCreateState.eligibility
@@ -354,6 +368,7 @@ const Segmentation: React.FunctionComponent<ISegmentationProps> = ({
                               Number(res);
                           setStateTrigger(!stateTrigger);
                       }}
+                      isRequired={false}
                   />
               )}
           </Stack>) : ''}

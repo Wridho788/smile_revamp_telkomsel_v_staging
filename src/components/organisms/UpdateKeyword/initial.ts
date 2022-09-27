@@ -14,10 +14,15 @@ import {
   IKeywordNotificationAuction,
   IKeywordNotificationAuctionHelper,
   IKeywordBonusDirectRedeem,
+  IKeywordBonusDonation,
+  IKeywordBonusMobileBanking,
   IKeywordBonusLoyaltyPoin,
   IKeywordBonusTelcoProductPostpaid,
-  IKeywordBonusTelcoProductPrepaid
+  IKeywordBonusTelcoProductPrepaid,
+  IKeywordBonusVoucher,
+  IKeywordBonusLinkAja,
 } from "./interfaces";
+import { IBonusTypeVoucher } from "./Bonus/Voucher/interface";
 
 export const KeywordEligibilityLocationHelper: IKeywordEligibilityLocationHelper =
   {
@@ -29,10 +34,10 @@ const KeywordEligibilityKeywordShift: IKeywordEligibilityKeywordShift = {
   to: new Date(),
 };
 
-const KeywordEligibility: IKeywordEligibility = {
+export const KeywordEligibility: IKeywordEligibility = {
   name: "",
-  start_period: new Date(),
-  end_period: new Date(),
+  start_period: "",
+  end_period: "",
   keyword_type: "",
   point_type: "",
   poin_value: "",
@@ -41,10 +46,10 @@ const KeywordEligibility: IKeywordEligibility = {
   channel_validation_list: [],
   program_id: "",
   eligibility_locations: false,
+  location_type: "",
   locations: [],
   program_title_expose: "",
   program_experience: [],
-  customer_experience: [],
   program_bersubsidi: false,
   merchant: "",
   merchandise_keyword: false,
@@ -95,7 +100,7 @@ export const KeywordBonusLuckyDrawLocation: IKeywordBonusLuckyDrawLocation = {
 };
 
 export const KeywordBonusLuckyDraw: IKeywordBonusLuckyDraw = {
-  bonus_type: "Lucky Draw Coupon",
+  bonus_type: "lucky_draw",
   lucky_draw_reguler: true,
   lucky_draw_allow_inject_coupon: false,
   lucky_draw_prize: "",
@@ -104,39 +109,41 @@ export const KeywordBonusLuckyDraw: IKeywordBonusLuckyDraw = {
 };
 
 export const KeywordBonusDirectRedeem: IKeywordBonusDirectRedeem = {
-  bonus_type: "Direct Redeem",
+  bonus_type: "direct_redeem",
   stock_type: "",
   redeem_after_verification: false,
   locations: [],
 };
 
 export const KeywordBonusLoyaltyPoin: IKeywordBonusLoyaltyPoin = {
-  bonus_type: "Loyalty Poin",
+  bonus_type: "loyalty_poin",
   earning_poin: 0,
   redeem_after_verification: false,
   locations: [],
 };
 
-export const KeywordBonusTelcoProductPostpaid: IKeywordBonusTelcoProductPostpaid = {
-  bonus_type: "Telco Product Postpaid",
-  telco_post_product_name: "",
-  telco_post_bid: "",
-  telco_post_api_config: "False",
-  stock_location: [],
-  redeem_after_verification: false
-}
+export const KeywordBonusTelcoProductPostpaid: IKeywordBonusTelcoProductPostpaid =
+  {
+    bonus_type: "telco_postpaid",
+    telco_post_product_name: "",
+    telco_post_bid: "",
+    telco_post_api_config: "False",
+    stock_location: [],
+    redeem_after_verification: false,
+  };
 
-export const KeywordBonusTelcoProductPrepaid: IKeywordBonusTelcoProductPrepaid = {
-  bonus_type: "Telco Product Prepaid",
-  telco_post_product_name: "",
-  telco_post_bid: "",
-  telco_post_api_config: "False",
-  stock_location: [],
-  redeem_after_verification: false
-}
+export const KeywordBonusTelcoProductPrepaid: IKeywordBonusTelcoProductPrepaid =
+  {
+    bonus_type: "telco_prepaid",
+    telco_post_product_name: "",
+    telco_post_bid: "",
+    telco_post_api_config: "False",
+    stock_location: [],
+    redeem_after_verification: false,
+  };
 
 export const KeywordBonusAuction: IKeywordBonusAuction = {
-  bonus_type: "Auction",
+  bonus_type: "auction",
   auction_prize_desc_id: "",
   auction_prize_desc_en: "",
   auction_prize_image: "",
@@ -146,6 +153,57 @@ export const KeywordBonusAuction: IKeywordBonusAuction = {
   auction_prize_name: "",
   stock_location: [],
   redeem_after_verification: false,
+};
+
+export const KeywordBonusVoucher: IKeywordBonusVoucher = {
+  bonus_type: "discount_voucher",
+  exp_voucher: "",
+  voucher_type: "",
+  voucher_combination: "",
+  jumlah_total_voucher: 0,
+  stock_location: [],
+  redeem_after_verification: false,
+};
+
+export const KeywordBonusLinkAja: IKeywordBonusLinkAja = {
+  nominal: "",
+  location: "",
+  bonus_type: "link_aja",
+  external_api_config: "",
+  bucket: "",
+  stock_location: [],
+  redeem_after_verification: false,
+};
+
+export const KeyWordBonusDonation: IKeywordBonusDonation = {
+  bonus_type: "donation",
+  donation_category: "",
+  minimum_poin: 0,
+  target_poin: 0,
+  stock_location: [],
+  redeem_after_verification: false,
+};
+
+export const KeywordBonusMobileBanking: IKeywordBonusMobileBanking = {
+  bonus_type: "mbp",
+  bank: "",
+  ip_address: "",
+  digit_coupon: "",
+  combination_coupon: "",
+  stock_location: [],
+  redeem_after_verification: false,
+};
+
+export const KeywordBonusVoid: any = {
+  bonus_type: "void"
+};
+
+export const KeywordBonusVoting: any = {
+  bonus_type: "voting"
+};
+
+export const KeywordBonusOther: any = {
+  bonus_type: "other"
 };
 
 export const KeywordNotificationAuctionHelper: IKeywordNotificationAuctionHelper[] =
@@ -231,6 +289,7 @@ export const KeywordNotificationEligibility: IKeywordNotificationEligibility[] =
   [
     {
       bonus_type_id: "",
+      keyword_name: "",
       code_identifier: "",
       notification_content: "",
       start_period: new Date(),
@@ -240,6 +299,7 @@ export const KeywordNotificationEligibility: IKeywordNotificationEligibility[] =
     },
     {
       bonus_type_id: "",
+      keyword_name: "",
       code_identifier: "",
       notification_content: "",
       start_period: new Date(),
@@ -249,6 +309,7 @@ export const KeywordNotificationEligibility: IKeywordNotificationEligibility[] =
     },
     {
       bonus_type_id: "",
+      keyword_name: "",
       code_identifier: "",
       notification_content: "",
       start_period: new Date(),
@@ -258,6 +319,7 @@ export const KeywordNotificationEligibility: IKeywordNotificationEligibility[] =
     },
     {
       bonus_type_id: "",
+      keyword_name: "",
       code_identifier: "",
       notification_content: "",
       start_period: new Date(),
@@ -290,6 +352,7 @@ export const KeywordNotificationLuckyDrawHelper: IKeywordNotificationLuckyDrawHe
 export const KeywordNotificationLuckyDraw: IKeywordNotificationLuckyDraw[] = [
   {
     bonus_type_id: "",
+    keyword_name: "",
     code_identifier: "",
     notification_content: "",
     start_period: new Date(),
@@ -299,6 +362,7 @@ export const KeywordNotificationLuckyDraw: IKeywordNotificationLuckyDraw[] = [
   },
   {
     bonus_type_id: "",
+    keyword_name: "",
     code_identifier: "",
     notification_content: "",
     start_period: new Date(),
@@ -308,6 +372,7 @@ export const KeywordNotificationLuckyDraw: IKeywordNotificationLuckyDraw[] = [
   },
   {
     bonus_type_id: "",
+    keyword_name: "",
     code_identifier: "",
     notification_content: "",
     start_period: new Date(),
@@ -317,6 +382,7 @@ export const KeywordNotificationLuckyDraw: IKeywordNotificationLuckyDraw[] = [
   },
   {
     bonus_type_id: "",
+    keyword_name: "",
     code_identifier: "",
     notification_content: "",
     start_period: new Date(),
