@@ -11,6 +11,12 @@ interface IProgramDetailsModalProps extends ModalProps {
   isHqLogin: boolean;
 }
 
+interface IProgramFilterModalProps extends ModalProps {
+  roleAccess: boolean;
+  data: any;
+  isHqLogin: boolean;
+}
+
 interface IKeywordDetailsModalProps extends ModalProps {
   roleAccess: boolean;
   data: any;
@@ -24,6 +30,7 @@ interface IPicManagemenrModalProps extends ModalProps {
 export type {
   ModalProps,
   IProgramDetailsModalProps,
+  IProgramFilterModalProps,
   IKeywordDetailsModalProps,
   IPicManagemenrModalProps,
 };
