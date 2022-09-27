@@ -102,14 +102,14 @@ const NotificationLuckyDraw: React.FunctionComponent<
       ({ bonus_type }) => bonus_type === "lucky_draw"
     );
 
-    if (locationOptions && index === -1) {
+    if ((locationOptions && index === -1) || !keywordCreate.eligibility.eligibility_locations) {
       keywordCreate.bonus.push(KeywordBonusLuckyDraw);
       const bonusIdx = keywordCreate.bonus.findIndex(
         ({ bonus_type }) => bonus_type === "lucky_draw"
       );
       setIndex(bonusIdx);
 
-      if (locationOptions) {
+      if (locationOptions && keywordCreate.eligibility.eligibility_locations) {
         keywordCreateState.eligibility.locations.map((location) =>
           keywordCreateState.bonus[bonusIdx].locations.push({
             name: locationOptions.find((e: any) => e["_id"] === location).name,

@@ -44,14 +44,14 @@ const LinkAja: React.FunctionComponent<INotificationLinkAjaProps> = ({
             ({bonus_type}) => bonus_type === "link_aja"
         );
 
-        if (locationOptions && index === -1) {
+        if ((locationOptions && index === -1) || !keywordCreate.eligibility.eligibility_locations) {
             keywordCreate.bonus.push(KeywordBonusLinkAja);
             const bonusIdx = keywordCreate.bonus.findIndex(
                 ({ bonus_type }) => bonus_type === "link_aja"
             );
             setIndex(bonusIdx);
 
-            if (locationOptions) {
+            if (locationOptions && keywordCreate.eligibility.eligibility_locations) {
                 keywordCreateState.eligibility.locations.map((location) =>
                     keywordCreateState.bonus[bonusIdx].stock_location.push({
                         name: locationOptions.find((e: any) => e["_id"] === location).name,

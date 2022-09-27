@@ -53,14 +53,14 @@ const NotificationTelcoProductPostpaid: React.FunctionComponent<
       ({ bonus_type }) => bonus_type === "telco_postpaid"
     );
 
-    if (locationOptions && index === -1) {
+    if ((locationOptions && index === -1) || !keywordCreate.eligibility.eligibility_locations) {
       keywordCreate.bonus.push(KeywordBonusTelcoProductPostpaid);
       const bonusIdx = keywordCreate.bonus.findIndex(
           ({ bonus_type }) => bonus_type === "telco_postpaid"
       );
       setIndex(bonusIdx);
 
-      if (locationOptions) {
+      if (locationOptions && keywordCreate.eligibility.eligibility_locations) {
         keywordCreateState.eligibility.locations.map((location) =>
             keywordCreateState.bonus[bonusIdx].stock_location.push({
               name: locationOptions.find((e: any) => e["_id"] === location).name,
