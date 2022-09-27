@@ -1,5 +1,5 @@
 import React, { Dispatch, SetStateAction } from "react";
-import { InputAdornment, Stack } from "@mui/material";
+import {Box, CircularProgress, InputAdornment, Stack} from "@mui/material";
 import { Select, OutlinedTextField, Subtitle } from "../../../../atoms";
 import { FilterInitial } from "../../../../../redux/utils/initial-general";
 import { IUpdateKeyword } from "../../interfaces";
@@ -45,7 +45,16 @@ const Segmentation: React.FunctionComponent<ISegmentationProps> = ({
         aria-controls="panel1a-content"
         id="panel1a-header"
       >
-        <Subtitle textTransform="uppercase">segmentation eligibility</Subtitle>
+        <Subtitle textTransform="uppercase">
+            <Stack direction="row" spacing={2}>
+                <Box className="accordion-loading">
+                    <CircularProgress size={16}></CircularProgress>
+                </Box>
+                <Box className="accordion-subtitle">
+                    segmentation eligibility
+                </Box>
+            </Stack>
+        </Subtitle>
       </AccordionSummary>
       <AccordionDetails>
         <Stack spacing="1vw" px="2vw" py="0.5vw">

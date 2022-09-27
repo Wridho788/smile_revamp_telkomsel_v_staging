@@ -22,6 +22,7 @@ export interface IKeywordEligibility {
   locations: string[];
   program_title_expose: string;
   program_experience: string[];
+  customer_experience: string[];
   program_bersubsidi: boolean;
   merchant: string;
   merchandise_keyword: boolean;

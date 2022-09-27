@@ -44,6 +44,7 @@ const KeywordEligibility: IKeywordEligibility = {
   locations: [],
   program_title_expose: "",
   program_experience: [],
+  customer_experience: [],
   program_bersubsidi: false,
   merchant: "",
   merchandise_keyword: false,

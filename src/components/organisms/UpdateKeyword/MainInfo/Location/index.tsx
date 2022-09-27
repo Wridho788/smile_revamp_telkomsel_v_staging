@@ -1,5 +1,5 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { Grid, Stack } from "@mui/material";
+import {Box, CircularProgress, Grid, Stack} from "@mui/material";
 import { Select, Subtitle } from "../../../../atoms";
 import { useGetLocationTypeQuery } from "../../../../../redux/features/lov/lov-api-slice";
 import { FilterInitial } from "../../../../../redux/utils/initial-general";
@@ -12,7 +12,10 @@ import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { useLocationTemplateQuery } from "../../../../../redux/features/location/location-api-slice";
+import {
+  useLocationRebaseMutation,
+  useLocationTemplateQuery
+} from "../../../../../redux/features/location/location-api-slice";
 import { KeywordEligibilityLocationHelper } from "../../initial";
 
 interface ILocationProps {
@@ -28,10 +31,11 @@ const Location: React.FunctionComponent<ILocationProps> = ({
   stateTrigger,
   setStateTrigger,
 }) => {
-  const { data: locationTypeOptions = { data: [] } } =
+  const { data: locationTypeOptions = { data: [] }, isFetching } =
     useGetLocationTypeQuery();
-  const { data: locationOptions = { data: [] } } =
-    useLocationTemplateQuery(FilterInitial);
+
+  const [getOwnerDetail, { data: locationOptions }] =
+      useLocationRebaseMutation();
 
   const keywordEligibilityLocationHelper = KeywordEligibilityLocationHelper;
   const [
@@ -45,6 +49,10 @@ const Location: React.FunctionComponent<ILocationProps> = ({
     setKeywordEligibilityLocationHelperState(keywordEligibilityLocationHelper);
   }, [keywordEligibilityLocationHelper, stateTrigger]);
 
+  // useEffect(() => {
+  //   getOwnerDetail({ type: keywordEligibilityLocationHelperState.location_type });
+  // }, [keywordCreateState.eligibility?.eligibility_locations]);
+
   return (
     <Accordion sx={{ p: "1vw" }}>
       <AccordionSummary
@@ -53,60 +61,57 @@ const Location: React.FunctionComponent<ILocationProps> = ({
         id="panel1a-header"
       >
         <Subtitle textTransform="uppercase">
-          location redeem eligibility
+          <Stack direction="row" spacing={2}>
+            {isFetching && (<Box className="accordion-loading">
+              <CircularProgress size={16}></CircularProgress>
+            </Box>)}
+            <Box className="accordion-subtitle">
+              location redeem eligibility
+            </Box>
+          </Stack>
         </Subtitle>
       </AccordionSummary>
       <AccordionDetails>
-        <Stack spacing="1vw" px="2vw" py="0.5vw">
+        {!isFetching && (<Stack spacing="1vw" px="2vw" py="0.5vw">
           <Select
-            label="Eligibility Location"
-            placeholder="Option"
-            options={BooleanOptions}
-            value={keywordCreateState.eligibility.eligibility_locations}
-            handleChange={(value: boolean) => {
-              keywordCreate.eligibility.eligibility_locations = value;
-              setStateTrigger(!stateTrigger);
-            }}
-          />
-          {keywordCreateState.eligibility.eligibility_locations !== false && (
-            <Select
-              label="Location Type"
+              label="Eligibility Location"
               placeholder="Option"
-              options={locationTypeOptions.data}
-              value={keywordEligibilityLocationHelperState.location_type}
-              handleChange={(value: string) => {
-                keywordEligibilityLocationHelper.location_type = value;
-                keywordCreate.eligibility.locations = [];
+              options={BooleanOptions}
+              value={keywordCreateState.eligibility.eligibility_locations}
+              handleChange={(value: boolean) => {
+                keywordCreate.eligibility.eligibility_locations = value;
                 setStateTrigger(!stateTrigger);
               }}
-            />
-          )}
-          {/*{keywordEligibilityLocationHelperState.location_type.length > 0 &&*/}
-          {/*  locationOptions.data.find(*/}
-          {/*    (e) =>*/}
-          {/*      e["type"] ===*/}
-          {/*      keywordEligibilityLocationHelperState.location_type*/}
-          {/*  ) !== undefined && (*/}
-          {/*    <Grid item xs={3}>*/}
-          {/*      <Select*/}
-          {/*        multiple*/}
-          {/*        label="Location"*/}
+          />
+          {/*{keywordCreateState.eligibility.eligibility_locations && (*/}
+          {/*    <Select*/}
+          {/*        label="Location Type"*/}
           {/*        placeholder="Option"*/}
-          {/*        options={locationOptions.data.filter(*/}
-          {/*          (e) =>*/}
-          {/*            e["type"] ===*/}
-          {/*            keywordEligibilityLocationHelperState.location_type*/}
-          {/*        )}*/}
-          {/*        optionLabel={"name"}*/}
-          {/*        value={keywordCreateState.eligibility.locations}*/}
-          {/*        handleChange={(value: any) => {*/}
-          {/*          keywordCreate.eligibility.locations = value;*/}
+          {/*        options={locationTypeOptions.data}*/}
+          {/*        value={keywordEligibilityLocationHelperState.location_type}*/}
+          {/*        handleChange={(value: string) => {*/}
+          {/*          keywordEligibilityLocationHelper.location_type = value;*/}
           {/*          setStateTrigger(!stateTrigger);*/}
           {/*        }}*/}
+          {/*    />*/}
+          {/*)}*/}
+          {/*{keywordCreateState.eligibility.eligibility_locations && (*/}
+          {/*    <Grid item xs={3}>*/}
+          {/*      <Select*/}
+          {/*          multiple*/}
+          {/*          label="Location"*/}
+          {/*          placeholder="Option"*/}
+          {/*          options={locationOptions}*/}
+          {/*          optionLabel={"name"}*/}
+          {/*          value={keywordCreateState.eligibility.locations}*/}
+          {/*          handleChange={(value: any) => {*/}
+          {/*            keywordCreate.eligibility.locations = value;*/}
+          {/*            setStateTrigger(!stateTrigger);*/}
+          {/*          }}*/}
           {/*      />*/}
           {/*    </Grid>*/}
-          {/*  )}*/}
-        </Stack>
+          {/*)}*/}
+        </Stack>)}
       </AccordionDetails>
     </Accordion>
   );

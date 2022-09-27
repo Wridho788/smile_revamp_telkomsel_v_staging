@@ -14,7 +14,7 @@ import {
   selectedMerchantData,
   lazyParamsData,
 } from "./initial";
-import { Alert } from "@mui/material";
+import {Alert, Box, CircularProgress, Stack} from "@mui/material";
 
 interface IMerchantProps {
   keywordCreate: IUpdateKeyword;
@@ -116,7 +116,14 @@ const Merchant: React.FunctionComponent<IMerchantProps> = ({
         id="panel1a-header"
       >
         <Subtitle textTransform="uppercase">
-          merchant redeem eligibility
+          <Stack direction="row" spacing={2}>
+            <Box className="accordion-loading">
+              <CircularProgress size={16}></CircularProgress>
+            </Box>
+            <Box className="accordion-subtitle">
+              merchant redeem eligibility
+            </Box>
+          </Stack>
         </Subtitle>
       </AccordionSummary>
       <AccordionDetails>

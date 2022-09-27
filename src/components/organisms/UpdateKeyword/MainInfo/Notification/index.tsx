@@ -96,7 +96,14 @@ const Notification: React.FunctionComponent<INotificationProps> = ({
         id="panel1a-header"
       >
         <Subtitle textTransform="uppercase">
-          notification redeem eligibility
+          <Stack direction="row" spacing={2}>
+            <Box className="accordion-loading">
+              <CircularProgress size={16}></CircularProgress>
+            </Box>
+            <Box className="accordion-subtitle">
+              notification redeem eligibility
+            </Box>
+          </Stack>
         </Subtitle>
       </AccordionSummary>
       <AccordionDetails>
