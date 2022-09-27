@@ -1,19 +1,17 @@
-import { useLazyMerchantManagementListQuery } from "../../../../../redux/features/merchant/merchant-api-slice";
-import { IUpdateKeyword } from "../../interfaces";
-import React, { useState, useEffect, Dispatch, SetStateAction } from "react";
-import { DataTable } from "primereact/datatable";
-import { Column } from "primereact/column";
+import {
+  useDetailMerchantQuery,
+  useLazyMerchantManagementListQuery
+} from "../../../../../redux/features/merchant/merchant-api-slice";
+import {IUpdateKeyword} from "../../interfaces";
+import React, {Dispatch, SetStateAction, useEffect, useState} from "react";
+import {DataTable} from "primereact/datatable";
+import {Column} from "primereact/column";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { Subtitle } from "../../../../atoms";
-import {
-  merchantsData,
-  totalRecordsData,
-  selectedMerchantData,
-  lazyParamsData,
-} from "./initial";
+import {Subtitle} from "../../../../atoms";
+import {lazyParamsData, merchantsData, selectedMerchantData, totalRecordsData,} from "./initial";
 import {Alert, Box, CircularProgress, Stack} from "@mui/material";
 
 interface IMerchantProps {
@@ -28,10 +26,11 @@ const Merchant: React.FunctionComponent<IMerchantProps> = ({
   setStateTrigger,
 }) => {
   const [getMerchantsList] = useLazyMerchantManagementListQuery();
+  const { data: merchant = { data: [] } } = useDetailMerchantQuery(keywordCreate.eligibility.merchant);
 
   const merchants = merchantsData;
   const totalRecords = totalRecordsData;
-  const selectedMerchant = selectedMerchantData;
+  const selectedMerchant = { data: merchant };
   const lazyParams = lazyParamsData;
   // const loading = loadingData;
 
@@ -99,11 +98,7 @@ const Merchant: React.FunctionComponent<IMerchantProps> = ({
     setLazyParamsTrigger(!lazyParamsTrigger);
   };
   const onSelectionChange = (event: any) => {
-    const value = event.value;
-    value === null
-      ? (keywordCreate.eligibility.merchant = "")
-      : (keywordCreate.eligibility.merchant = value["_id"]);
-    selectedMerchant.data = value;
+    selectedMerchant.data = event.value;
     setStateTrigger(!stateTrigger);
     setMerchantTrigger(!merchantTrigger);
   };
@@ -117,9 +112,9 @@ const Merchant: React.FunctionComponent<IMerchantProps> = ({
       >
         <Subtitle textTransform="uppercase">
           <Stack direction="row" spacing={2}>
-            <Box className="accordion-loading">
+            {loading && (<Box className="accordion-loading">
               <CircularProgress size={16}></CircularProgress>
-            </Box>
+            </Box>)}
             <Box className="accordion-subtitle">
               merchant redeem eligibility
             </Box>
@@ -148,29 +143,29 @@ const Merchant: React.FunctionComponent<IMerchantProps> = ({
           filters={lazyParamsState.data.filters}
         >
           <Column
-            selectionMode="single"
-            headerStyle={{ width: "1vw" }}
+              selectionMode="single"
+              headerStyle={{width: "1vw"}}
           ></Column>
           <Column
-            field="merchant_name"
-            header="Merchant Name"
-            sortable
-            filter
-            filterPlaceholder="Search by merchant name"
+              field="merchant_name"
+              header="Merchant Name"
+              sortable
+              filter
+              filterPlaceholder="Search by merchant name"
           />
           <Column
-            field="address"
-            sortable
-            filter
-            header="Address"
-            filterPlaceholder="Search by address"
+              field="address"
+              sortable
+              filter
+              header="Address"
+              filterPlaceholder="Search by address"
           />
           <Column
-            field="npwp"
-            sortable
-            filter
-            header="NPWP"
-            filterPlaceholder="Search by NPWP"
+              field="npwp"
+              sortable
+              filter
+              header="NPWP"
+              filterPlaceholder="Search by NPWP"
           />
         </DataTable>
         {selectedMerchantState.data !== null && (
