@@ -301,23 +301,19 @@ const KeywordPrime = () => {
       <Stack direction={"row"} justifyContent={"space-between"}>
         <H2 color={"secondary.dark"}>Keyword</H2>
         <Stack direction="row" alignItems="center" spacing={"1vw"}>
-          <DarkButton
+          <IconButton
             href="/create-keyword/"
-            size="medium"
+            size="small"
             sx={{
-              bgcolor: "#188a42",
-              "&:hover": {
-                bgcolor: "#001A41",
-              },
-              // borderRadius: "0.4vw",
+              bgcolor: "primary",
+              borderRadius: "0.4vw",
               opacity: 0.8,
+              width: "2.1vw",
+              height: "2.1vw",
             }}
           >
-            <Add
-              sx={{ color: "#FFF", "&:hover": { color: "#001A41" } }}
-              fontSize="inherit"
-            />
-          </DarkButton>
+            <Add fontSize="inherit" />
+          </IconButton>
           <DarkButton
             variant="contained"
             size="medium"
