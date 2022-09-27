@@ -41,6 +41,7 @@ import _find from "lodash/find";
 import { useLocationTemplateQuery } from "../../../../../redux/features/location/location-api-slice";
 import { useKeywordUploadAuctionMutation } from "../../../../../redux/features/keyword/keyword-api-slice";
 import LocationManagement from "../LocationManagement";
+import Swal from "sweetalert2";
 
 interface INotificationAuctionProps {
   bonusType: string;
@@ -71,19 +72,28 @@ const NotificationAuction: React.FunctionComponent<
 
   const onUpload = () => {
     setLoading(true);
+
+    const formData = new FormData();
+    formData.append("image", uploadInputRef.current?.files[0]);
+
+    uploadImgAuction(formData).then((res: any) => {
+      if (res?.data.payload) {
+        Swal.fire(`Success`, "Image uploaded", "success");
+        keywordCreate.bonus[index]["auction_prize_image"] = res?.data.payload;
+      } else {
+        Swal.fire(`Error`, "Failed to upload", "warning");
+      }
+
+      setLoading(false);
+    });
+  };
+
+  const onPreview = () => {
     if (uploadInputRef.current?.files.length) {
       const temp = URL.createObjectURL(uploadInputRef.current?.files[0]);
       setPreview(temp);
-
-      const formData = new FormData();
-      formData.append("image", uploadInputRef.current?.files[0]);
-
-      uploadImgAuction(formData).then((res: any) => {
-        keywordCreate.bonus[index]["auction_prize_image"] = res?.data.payload;
-        setLoading(false);
-      });
     }
-  };
+  }
 
   const { data: viaOptions = { data: [] } } = useGetNotifViaQuery();
   const { data: templateOptions = { data: [] } } =
@@ -489,27 +499,51 @@ const NotificationAuction: React.FunctionComponent<
                       />
                     </Stack>
                     <Stack spacing={2}>
-                      {!loading ? (
-                        <Box
-                          component="img"
-                          alt="Telkomsel Upload"
-                          src={preview}
-                        ></Box>
-                      ) : (
-                        <CircularProgress></CircularProgress>
-                      )}
-                      <Button
-                        variant="contained"
-                        component="label"
-                        onChange={onUpload}
+                      <Box
+                          style={{
+                            display: 'inline-block',
+                            position: 'relative'
+                          }}
                       >
-                        Upload
-                        <input
+                        <label
+                            htmlFor="preview"
+                        >
+                          {loading && (<CircularProgress style={{
+                            position: 'absolute',
+                            top: '50%',
+                            left: '50%',
+                            marginLeft: 'auto',
+                            marginRight: 'auto'
+                          }}></CircularProgress>)}
+                          <Box
+                              component="img"
+                              position="inherit"
+                              alt="Telkomsel Upload"
+                              src={preview}
+                              style={{
+                                maxWidth: '100%',
+                                width: '100%',
+                                height: '100%',
+                                objectFit: 'cover'
+                              }}
+                          ></Box>
+                        </label>
+                      </Box>
+                      <input
                           hidden
+                          id="preview"
                           ref={uploadInputRef}
                           accept="image/*"
                           type="file"
-                        />
+                          onChange={onPreview}
+                          style={{ display: "none" }}
+                      />
+                      <Button
+                        variant="contained"
+                        component="label"
+                        onClick={onUpload}
+                      >
+                        Upload
                       </Button>
                     </Stack>
                   </Stack>

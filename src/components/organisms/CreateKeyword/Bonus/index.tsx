@@ -22,6 +22,11 @@ import TelcoProductPostpaid from "./TelcoProductPostpaid";
 import Donation from "./Donation";
 import MobileBanking from "./MobileBanking";
 
+// Sub Component of Bonus without "configuration"
+import Void from "./Void";
+import Voting from "./Voting";
+import Other from "./Other";
+
 interface IBonusProps {}
 
 const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
@@ -292,6 +297,60 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
                         setStateTrigger={setStateTrigger}
                       />
                     </Box>
+                  );
+                case "void":
+                  return (
+                      <Box key={`bonusType__${idx}`}>
+                        <Void
+                            bonusType={bonusType}
+                            bonusTypeId={
+                              _find(
+                                  bonusTypeOptions.data,
+                                  ({ set_value }) => set_value === bonusType
+                              )?._id
+                            }
+                            keywordCreateState={keywordCreateState}
+                            keywordCreate={keywordCreate}
+                            stateTrigger={stateTrigger}
+                            setStateTrigger={setStateTrigger}
+                        />
+                      </Box>
+                  );
+                case "voting":
+                  return (
+                      <Box key={`bonusType__${idx}`}>
+                        <Voting
+                            bonusType={bonusType}
+                            bonusTypeId={
+                              _find(
+                                  bonusTypeOptions.data,
+                                  ({ set_value }) => set_value === bonusType
+                              )?._id
+                            }
+                            keywordCreateState={keywordCreateState}
+                            keywordCreate={keywordCreate}
+                            stateTrigger={stateTrigger}
+                            setStateTrigger={setStateTrigger}
+                        />
+                      </Box>
+                  );
+                case "other":
+                  return (
+                      <Box key={`bonusType__${idx}`}>
+                        <Other
+                            bonusType={bonusType}
+                            bonusTypeId={
+                              _find(
+                                  bonusTypeOptions.data,
+                                  ({ set_value }) => set_value === bonusType
+                              )?._id
+                            }
+                            keywordCreateState={keywordCreateState}
+                            keywordCreate={keywordCreate}
+                            stateTrigger={stateTrigger}
+                            setStateTrigger={setStateTrigger}
+                        />
+                      </Box>
                   );
               }
             })}
