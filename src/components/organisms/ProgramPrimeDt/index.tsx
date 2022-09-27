@@ -20,7 +20,12 @@ import { IProgram } from "../../../redux/features/program-primedt/interface";
 import moment from "moment";
 import { useAppConfigQuery } from "../../../redux/features/app-config/app-config-api-slice";
 import { useAccountAuthenticateQuery } from "../../../redux/features/account/account-api-slice";
+
+// Modal
 import ProgramDetailsModal from "../Programs/Detail/ProgramDetailsModal";
+import ProgramFilterModal from "../Programs/Filter/ProgramFilterModal";
+import { InitialFilter } from "../Programs/initial";
+import { FilterMatchMode } from "primereact/api";
 
 const ProgramPrimeDt: FC = () => {
   const [programs, setPrograms] = useState<any>([ProgramInitial]);
@@ -34,6 +39,14 @@ const ProgramPrimeDt: FC = () => {
     sortOrder: -1,
     filters: {
       name: { value: "", matchMode: "contains" },
+      program_experience: {
+        value: InitialFilter.program_experience._id,
+        matchMode: FilterMatchMode.CONTAINS
+      },
+      program_approval: {
+        value: InitialFilter.program_approval._id,
+        matchMode: FilterMatchMode.EQUALS
+      }
     },
   });
 
@@ -57,10 +70,18 @@ const ProgramPrimeDt: FC = () => {
   // Detail Program
   const [item, setItem] = useState([ProgramInitial]);
   const [open, setOpen] = useState(false);
+  const [trigger, setTrigger] = useState<boolean>(false);
+
   const handleButtonDetail = async (item: any) => {
     setItem(item);
     setOpen(true);
   };
+
+  // TODO: Filter Program Modal
+  const [filter, setFilter] = useState(false);
+  const toggleFilter = (() => {
+    setFilter(!filter);
+  });
 
   const onPage = (event: any) => {
     setLazyParams(event);
@@ -81,13 +102,27 @@ const ProgramPrimeDt: FC = () => {
 
   let loadLazyTimeout: any = null;
   const loadLazyData = () => {
+    setLoading(true);
+
+    if (loadLazyTimeout) clearTimeout(loadLazyTimeout);
     loadLazyTimeout = setTimeout(async () => {
       const { data }: any = await getProgramList({
-        lazyEvent: JSON.stringify(lazyParams),
+        lazyEvent: JSON.stringify({
+          ...lazyParams,
+          filters: {
+
+            // Filter field
+            program_approval: {
+              value: InitialFilter.program_approval._id,
+              matchMode: FilterMatchMode.EQUALS
+            }
+          }
+        }),
       });
-      console.log(data.payload);
+
       setPrograms(data.payload.data);
       setTotalRecords(data.payload.totalRecords);
+      setLoading(false);
     }, Math.random() * 1000 + 250);
   };
 
@@ -98,7 +133,7 @@ const ProgramPrimeDt: FC = () => {
 
   useEffect(() => {
     loadLazyData();
-  }, [lazyParams]);
+  }, [lazyParams, trigger]);
 
   // Customize Column Render Component
   const NameRender = (rowData: IProgram) => {
@@ -175,17 +210,23 @@ const ProgramPrimeDt: FC = () => {
         roleAccess={
           accountAuth && defaultRoleManager
             ? accountAuth.role === defaultRoleManager
-              ? true
-              : false
             : false
         }
         isHqLogin={
-          accountAuth &&
-          accountAuth.account_location.location_detail.type ===
-            defaultRoleManagerHQ
-            ? true
-            : false
+          !!(accountAuth &&
+              accountAuth.account_location.location_detail.type ===
+              defaultRoleManagerHQ)
         }
+      />
+
+      {/* TODO: Modal Program Filter Element */}
+      <ProgramFilterModal
+          loading={loading}
+          open={filter}
+          onClose={() => toggleFilter()}
+          filters={InitialFilter}
+          trigger={trigger}
+          setTrigger={setTrigger}
       />
 
       {/* Header Action */}
@@ -216,6 +257,7 @@ const ProgramPrimeDt: FC = () => {
             variant="contained"
             size="medium"
             startIcon={<FilterListIcon />}
+            onClick={toggleFilter}
           >
             <BodyCopy>Filter</BodyCopy>
           </DarkButton>
