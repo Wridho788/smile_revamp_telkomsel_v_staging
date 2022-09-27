@@ -153,10 +153,7 @@ const MerchantManagement = () => {
     useGetLocationTypeQuery();
   const { data: locationList = { data: [LocationInitial] } } =
     useLocationTemplateQuery({
-      skip: 0,
-      limit: 10,
-      filter: `{"type": "${locationType}"}`,
-      sort: "{}",
+      type: locationType,
     });
   const { data: picRole = { data: [RoleInitial] } } = useAccountRoleQuery({
     skip: 0,
