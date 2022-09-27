@@ -8,7 +8,7 @@ const baseUrl = process.env.REACT_APP_BASE_URL
 
 export const authSlice = createApi({
     reducerPath: 'authApi',
-    baseQuery: API_HEADER(baseUrl + '/oauth', false),
+    baseQuery: API_HEADER(baseUrl + '/v1/oauth', false),
     endpoints(builder) {
         const postHandler = (endpoint: string) =>
             builder.mutation<{ success: IData; body: IAuthSignIn }, any>({
