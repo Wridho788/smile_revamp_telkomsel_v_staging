@@ -2,7 +2,7 @@ import React, { FC, useEffect, useState } from "react";
 import { BodyCopy, H2 } from "../../atoms";
 import {
   Alert,
-  Box,
+  Box, Chip,
   Grid,
   IconButton,
   Paper,
@@ -268,6 +268,34 @@ const ProgramPrimeDt: FC = () => {
       <Grid container mt={10}>
         <Grid item xs={12}>
           <Box>
+            <Stack direction="row" spacing="1vw" mb={1}>
+              {Object.values(InitialFilter).map(
+                  (item) =>
+                      item.name && (
+                          <Chip
+                              sx={{
+                                backgroundColor: "rgb(25, 118, 210)",
+                                color: "#FFF",
+                                "& .MuiChip-deleteIcon": {
+                                  color: "#FFF",
+                                },
+                              }}
+                              label={item.name}
+                              onDelete={() => {
+                                if (InitialFilter.program_approval === item) {
+                                  InitialFilter.program_approval = {
+                                    _id: "",
+                                    name: "",
+                                  };
+                                }
+
+                                setTrigger(!trigger);
+                              }}
+                          />
+                      )
+              )}
+            </Stack>
+
             <Paper>
               <div className="card">
                 <DataTable
