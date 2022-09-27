@@ -42,14 +42,14 @@ const DirectRedeem: React.FunctionComponent<IDirectRedeemProps> = ({
       ({ bonus_type }) => bonus_type === "direct_redeem"
     );
 
-    if (locationOptions && index === -1) {
+    if ((locationOptions && index === -1) || !keywordCreate.eligibility.eligibility_locations) {
       keywordCreate.bonus.push(KeywordBonusDirectRedeem);
       const bonusIdx = keywordCreate.bonus.findIndex(
         ({ bonus_type }) => bonus_type === "direct_redeem"
       );
       setIndex(bonusIdx);
 
-      if (locationOptions) {
+      if (locationOptions && keywordCreate.eligibility.eligibility_locations) {
         keywordCreateState.eligibility.locations.map((location) =>
             keywordCreateState.bonus[bonusIdx].locations.push({
               name: locationOptions.find((e: any) => e["_id"] === location).name,
