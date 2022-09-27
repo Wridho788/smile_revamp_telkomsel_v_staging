@@ -5,7 +5,7 @@ import {
   Subtitle,
 
 } from "components/atoms";
-import { FilterInitial } from "redux/utils/initial-general";
+// import { FilterInitial } from "redux/utils/initial-general";
 import {
   IUpdateKeyword,
 
@@ -47,7 +47,7 @@ const MobileBanking: React.FunctionComponent<IMobileBankingProps> = ({
         ({bonus_type}) => bonus_type === "mbp"
     );
 
-    if (locationOptions && index === -1) {
+    if ((locationOptions && index === -1) || !keywordCreate.eligibility.eligibility_locations) {
       keywordCreate.bonus.push(KeywordBonusMobileBanking);
       const bonusIdx = keywordCreate.bonus.findIndex(
         ({ bonus_type }) => bonus_type === "mbp"
@@ -55,7 +55,7 @@ const MobileBanking: React.FunctionComponent<IMobileBankingProps> = ({
 
       setIndex(bonusIdx);
 
-      if (locationOptions) {
+      if (locationOptions && keywordCreate.eligibility.eligibility_locations) {
         keywordCreateState.eligibility.locations.map((location) => {
           keywordCreateState.bonus[bonusIdx].stock_location.push({
             name: locationOptions.find((e: any) => e["_id"] === location).name,
