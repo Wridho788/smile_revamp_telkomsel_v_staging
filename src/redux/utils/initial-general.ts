@@ -55,7 +55,6 @@ export const PicTypeOption = [
   { _id: "Role", set_value: "Role" },
 ];
 export const ThresholdAlarmExpiredOption = [
-  { _id: "0", set_value: "Option" },
   { _id: "1", set_value: "H-1" },
   { _id: "2", set_value: "H-2" },
   { _id: "3", set_value: "H-3" },
