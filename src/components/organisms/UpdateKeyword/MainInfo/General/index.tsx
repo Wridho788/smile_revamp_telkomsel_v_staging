@@ -1,5 +1,5 @@
 import React, { Dispatch, SetStateAction } from "react";
-import { Button, Grid, IconButton, Stack } from "@mui/material";
+import {Box, Button, CircularProgress, Grid, IconButton, Stack} from "@mui/material";
 import {
   Select,
   OutlinedTextField,
@@ -48,15 +48,18 @@ const General: React.FunctionComponent<IGeneralProps> = ({
   stateTrigger,
   setStateTrigger,
 }) => {
-  const { data: pointTypeOptions = { data: [] } } = useGetPointTypeQuery();
-  const { data: programListOptions = { data: [] } } =
+  // const { data: pointTypeOptions = { data: [] } } = useGetPointTypeQuery();
+
+  const { data: programListOptions = { data: [] }, isFetching: isFetchingProgram } =
     useProgramListQuery(FilterInitial);
-  const { data: channelOptions = { data: [] } } =
+  const { data: channelOptions = { data: [] }, isFetching: isFetchingChannel } =
     useChannelListQuery(FilterInitial);
-  const { data: programExperienceOptions = { data: [] } } =
+  const { data: programExperienceOptions = { data: [] }, isFetching: isFetchingProgramExp } =
     useGetProgramExperienceQuery();
+
   // const { data: customerBadgeOptions = { data: [] } } =
   //   useCustomerBadgeListQuery(FilterInitial);
+
   return (
     <Accordion sx={{ p: "1vw" }}>
       <AccordionSummary
@@ -65,7 +68,16 @@ const General: React.FunctionComponent<IGeneralProps> = ({
         id="panel1a-header"
       >
         <Subtitle textTransform="uppercase">
-          general redeem eligibility
+            <Stack direction="row" spacing={2}>
+                {(!isFetchingProgram && isFetchingChannel && isFetchingProgramExp) ? (
+                    <Box className="accordion-loading">
+                        <CircularProgress size={16}></CircularProgress>
+                    </Box>) : ""
+                }
+                <Box className="accordion-subtitle">
+                    general redeem eligibility
+                </Box>
+            </Stack>
         </Subtitle>
       </AccordionSummary>
       <AccordionDetails>

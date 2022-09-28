@@ -1,19 +1,11 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
-import {
-  Stack,
-  Button,
-  Switch,
-  Box,
-  CircularProgress,
-  Grid,
-} from "@mui/material";
+import { Stack, Button, Switch, Box, CircularProgress } from "@mui/material";
 
 import {
   BodyCopy,
   OutlinedTextField,
   ResponsiveDateTimePicker,
   Select,
-  SmallCopy,
   Subtitle,
 } from "../../../../atoms";
 
@@ -48,6 +40,8 @@ import {
 import _find from "lodash/find";
 import { useLocationTemplateQuery } from "../../../../../redux/features/location/location-api-slice";
 import { useKeywordUploadAuctionMutation } from "../../../../../redux/features/keyword/keyword-api-slice";
+import LocationManagement from "../LocationManagement";
+import Swal from "sweetalert2";
 
 interface INotificationAuctionProps {
   bonusType: string;
@@ -78,19 +72,28 @@ const NotificationAuction: React.FunctionComponent<
 
   const onUpload = () => {
     setLoading(true);
+
+    const formData = new FormData();
+    formData.append("image", uploadInputRef.current?.files[0]);
+
+    uploadImgAuction(formData).then((res: any) => {
+      if (res?.data.payload) {
+        Swal.fire(`Success`, "Image uploaded", "success");
+        keywordCreate.bonus[index]["auction_prize_image"] = res?.data.payload;
+      } else {
+        Swal.fire(`Error`, "Failed to upload", "warning");
+      }
+
+      setLoading(false);
+    });
+  };
+
+  const onPreview = () => {
     if (uploadInputRef.current?.files.length) {
       const temp = URL.createObjectURL(uploadInputRef.current?.files[0]);
       setPreview(temp);
-
-      const formData = new FormData();
-      formData.append("image", uploadInputRef.current?.files[0]);
-
-      uploadImgAuction(formData).then((res: any) => {
-        keywordCreate.bonus[index]["auction_prize_image"] = res?.data.payload;
-        setLoading(false);
-      });
     }
-  };
+  }
 
   const { data: viaOptions = { data: [] } } = useGetNotifViaQuery();
   const { data: templateOptions = { data: [] } } =
@@ -119,8 +122,9 @@ const NotificationAuction: React.FunctionComponent<
   const [keywordNotificationAuctionState, setKeywordNotificationAuctionState] =
     useState<IKeywordNotificationAuction[]>(keywordNotificationAuction);
 
-  const { data: locationOptions = { data: [] } } =
-    useLocationTemplateQuery(FilterInitial);
+  const { data: locationOptions, isFetching } = useLocationTemplateQuery({
+    type: keywordCreate.eligibility.location_type,
+  });
 
   const [index, setIndex] = useState<number>(-1);
 
@@ -133,15 +137,26 @@ const NotificationAuction: React.FunctionComponent<
       ({ bonus_type }) => bonus_type === "auction"
     );
 
-    if (index === -1) {
+    if ((locationOptions && index === -1) || !keywordCreate.eligibility.eligibility_locations) {
       keywordCreate.bonus.push(KeywordBonusAuction);
-      setIndex(
-        keywordCreate.bonus.findIndex(
-          ({ bonus_type }) => bonus_type === "auction"
-        )
+      const bonusIdx = keywordCreate.bonus.findIndex(
+        ({ bonus_type }) => bonus_type === "auction"
       );
+      setIndex(bonusIdx);
+
+      if (locationOptions && keywordCreate.eligibility.eligibility_locations) {
+        keywordCreateState.eligibility.locations.map((location) =>
+          keywordCreateState.bonus[bonusIdx].stock_location.push({
+            name: locationOptions.find((e: any) => e["_id"] === location).name,
+            location_id: location,
+            stock: 0,
+          })
+        );
+
+        setStateTrigger(!stateTrigger);
+      }
     }
-  }, []);
+  }, [isFetching]);
 
   useEffect(() => {
     setKeywordNotificationAuctionHelperState(keywordNotificationAuctionHelper);
@@ -154,7 +169,7 @@ const NotificationAuction: React.FunctionComponent<
         keywordCreate.notification,
         ({ bonus_type_id }) => bonus_type_id === bonusTypeId
       ) &&
-      bonusType === "Auction"
+      bonusType === "auction"
     ) {
       keywordCreate.notification = keywordCreate.notification.concat(
         keywordNotificationAuction
@@ -171,7 +186,7 @@ const NotificationAuction: React.FunctionComponent<
         aria-controls="panel1a-content"
         id="panel1a-header"
       >
-        <Subtitle textTransform="uppercase">{bonusType}</Subtitle>
+        <Subtitle textTransform="uppercase">Auction</Subtitle>
       </AccordionSummary>
       <AccordionDetails>
         <Stack spacing="1vw" px="2vw" py="0.5vw">
@@ -202,6 +217,7 @@ const NotificationAuction: React.FunctionComponent<
                   >
                     <Subtitle color="warning.main">{_.set_value}</Subtitle>
                     <OutlinedTextField
+                      isRequired={false}
                       disabled={true}
                       direction="column"
                       label="Keyword Name"
@@ -213,6 +229,7 @@ const NotificationAuction: React.FunctionComponent<
                       }}
                     />
                     <Select
+                      isRequired={false}
                       direction="column"
                       label="Notification Template"
                       placeholder="Option"
@@ -235,6 +252,7 @@ const NotificationAuction: React.FunctionComponent<
                     {keywordNotificationAuctionHelperState[idx]
                       .notification_template !== "" && (
                       <OutlinedTextField
+                        isRequired={false}
                         direction="column"
                         label="Notification Content"
                         variant="outlined"
@@ -314,6 +332,7 @@ const NotificationAuction: React.FunctionComponent<
                       </Stack>
                     )}
                     <Select
+                      isRequired={false}
                       direction="column"
                       label="Notification Via"
                       placeholder="Option"
@@ -347,6 +366,7 @@ const NotificationAuction: React.FunctionComponent<
                     </Stack>
                     <Stack direction="row" spacing="2vw" alignItems="center">
                       <ResponsiveDateTimePicker
+                        isRequired={false}
                         disabled={
                           keywordNotificationAuctionHelperState[idx]
                             .follow_period
@@ -369,6 +389,7 @@ const NotificationAuction: React.FunctionComponent<
                         }}
                       />
                       <ResponsiveDateTimePicker
+                        isRequired={false}
                         disabled={
                           keywordNotificationAuctionHelperState[idx]
                             .follow_period
@@ -478,82 +499,66 @@ const NotificationAuction: React.FunctionComponent<
                       />
                     </Stack>
                     <Stack spacing={2}>
-                      {!loading ? (
-                        <Box
-                          component="img"
-                          alt="Telkomsel Upload"
-                          src={
-                            keywordCreate.bonus[index]["auction_prize_image"]
-                          }
-                        ></Box>
-                      ) : (
-                        <CircularProgress></CircularProgress>
-                      )}
-                      <Button
-                        variant="contained"
-                        component="label"
-                        onChange={onUpload}
+                      <Box
+                          style={{
+                            display: 'inline-block',
+                            position: 'relative'
+                          }}
                       >
-                        Upload
-                        <input
+                        <label
+                            htmlFor="preview"
+                        >
+                          {loading && (<CircularProgress style={{
+                            position: 'absolute',
+                            top: '50%',
+                            left: '50%',
+                            marginLeft: 'auto',
+                            marginRight: 'auto'
+                          }}></CircularProgress>)}
+                          <Box
+                              component="img"
+                              position="inherit"
+                              alt="Telkomsel Upload"
+                              src={preview}
+                              style={{
+                                maxWidth: '100%',
+                                width: '100%',
+                                height: '100%',
+                                objectFit: 'cover'
+                              }}
+                          ></Box>
+                        </label>
+                      </Box>
+                      <input
                           hidden
+                          id="preview"
                           ref={uploadInputRef}
                           accept="image/*"
                           type="file"
-                        />
+                          onChange={onPreview}
+                          style={{ display: "none" }}
+                      />
+                      <Button
+                        variant="contained"
+                        component="label"
+                        onClick={onUpload}
+                      >
+                        Upload
                       </Button>
                     </Stack>
                   </Stack>
-                  <Stack spacing={2}>
-                    <Subtitle color="warning.main">
-                      STOCK PER LOCATION MANAGEMENT
-                    </Subtitle>
-                    {/*{keywordCreate.bonus[index].stock_location.map(*/}
-                    {/*  (location: any, idx: any) => {*/}
-                    {/*    const locationName = locationOptions.data.find(*/}
-                    {/*      (e) => e["_id"] === location.location_id*/}
-                    {/*    )?.name;*/}
-                    {/*    return (*/}
-                    {/*      <Grid key={`location__${idx}`} container>*/}
-                    {/*        <Grid*/}
-                    {/*          item*/}
-                    {/*          xs={5}*/}
-                    {/*          border="0.1vw solid rgba(0,0,0,0.1)"*/}
-                    {/*          p="0.8vw"*/}
-                    {/*        >*/}
-                    {/*          <BodyCopy textTransform="uppercase">*/}
-                    {/*            {locationName}*/}
-                    {/*          </BodyCopy>*/}
-                    {/*        </Grid>*/}
-                    {/*        <Grid*/}
-                    {/*          item*/}
-                    {/*          xs={7}*/}
-                    {/*          border="0.1vw solid rgba(0,0,0,0.1)"*/}
-                    {/*          p="0.8vw"*/}
-                    {/*        >*/}
-                    {/*          <OutlinedTextField*/}
-                    {/*            isRequired={false}*/}
-                    {/*            type="number"*/}
-                    {/*            variant="outlined"*/}
-                    {/*            InputProps={{ inputProps: { min: 0 } }}*/}
-                    {/*            value={keywordCreate.bonus[*/}
-                    {/*              index*/}
-                    {/*            ].stock_location[idx].stock.toString()}*/}
-                    {/*            handleChange={(value: number) => {*/}
-                    {/*              keywordCreate.bonus[index].stock_location[*/}
-                    {/*                idx*/}
-                    {/*              ].stock = Number(value);*/}
-                    {/*              setStateTrigger(!stateTrigger);*/}
-                    {/*            }}*/}
-                    {/*          />*/}
-                    {/*        </Grid>*/}
-                    {/*      </Grid>*/}
-                    {/*    );*/}
-                    {/*  }*/}
-                    {/*)}*/}
-                    <SmallCopy color="primary" mt="1vw">
-                      ** If you don't want set stock, please leave it blank
-                    </SmallCopy>
+
+                  {/* Stock Location Management */}
+                  <Stack>
+                    {locationOptions && (
+                      <LocationManagement
+                        bonusType="auction"
+                        keywordCreateState={keywordCreateState}
+                        keywordCreate={keywordCreate}
+                        stateTrigger={stateTrigger}
+                        setStateTrigger={setStateTrigger}
+                      />
+                    )}
                   </Stack>
                 </Stack>
               )}
