@@ -19,6 +19,7 @@ export interface IKeywordEligibility {
   channel_validation_list: string[];
   program_id: string;
   eligibility_locations: boolean;
+  location_type: string;
   locations: string[];
   program_title_expose: string;
   program_experience: string[];
@@ -101,6 +102,7 @@ export interface IKeywordNotificationEligibilityHelper {
 
 export interface IKeywordNotificationEligibility {
   bonus_type_id: string;
+  keyword_name: string;
   code_identifier: string;
   notification_content: string;
   start_period: Date;
@@ -116,6 +118,7 @@ export interface IKeywordNotificationLuckyDrawHelper {
 
 export interface IKeywordNotificationLuckyDraw {
   bonus_type_id: string;
+  keyword_name: string;
   code_identifier: string;
   notification_content: string;
   start_period: Date;
@@ -177,6 +180,53 @@ export interface IUpdateKeyword {
   eligibility: IKeywordEligibility;
   bonus: any[];
   notification: any[];
+}
+
+export interface IKeywordBonusLinkAja {
+  nominal: string;
+  location: string;
+  bonus_type: string;
+  external_api_config: string;
+  bucket: string;
+  stock_location: any[];
+  redeem_after_verification: boolean;
+}
+
+export interface IKeywordBonusVoucher {
+  bonus_type: string;
+  exp_voucher: string;
+  voucher_type: string;
+  voucher_combination: string;
+  jumlah_total_voucher: number;
+  stock_location: any[];
+  redeem_after_verification: boolean;
+}
+
+export interface IKeywordBonusDonation {
+  bonus_type: string;
+  donation_category: string;
+  minimum_poin: number;
+  target_poin: number;
+  stock_location: {
+    bucket?: any;
+    location: string;
+    stock: number;
+  }[];
+  redeem_after_verification: boolean;
+}
+
+export interface IKeywordBonusMobileBanking {
+  bonus_type: string;
+  bank: string;
+  ip_address: string;
+  digit_coupon: string;
+  combination_coupon: string;
+  stock_location: {
+    bucket?: any;
+    location: string;
+    stock: number;
+  }[];
+  redeem_after_verification: boolean;
 }
 
 // export interface IKeywordBonus {

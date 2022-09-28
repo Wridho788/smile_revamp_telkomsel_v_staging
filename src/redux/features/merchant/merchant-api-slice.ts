@@ -2,6 +2,7 @@ import { createApi } from "@reduxjs/toolkit/query/react";
 import { API_HEADER } from "../../utils/header";
 import { IResponse } from "./interface";
 import { IParams, IParamsPrime } from "../../utils/IGeneral";
+import {ICreateProgram} from "../../../pages/CreateProgram/interface";
 
 const baseUrl = process.env.REACT_APP_BASE_URL;
 
@@ -64,6 +65,13 @@ export const merchantSlice = createApi({
           },
         }),
       });
+    // For while set type query to be any, please adjust it
+    const detailHandler = (endpoint: string) =>
+        builder.query<any, string>({
+          query: (_id: string) => ({
+            url: endpoint + _id + "/detail",
+          }),
+        });
     return {
       merchantManagementList: responseHandler("/prime"),
       merchantBulkItem: responseHandler("/bulk/"),
@@ -77,9 +85,13 @@ export const merchantSlice = createApi({
       // put
       updateMerchantManagement: putHandler("/"),
       updateMerchantPartner: putFileHandler(baseUrl + "/v1/merchant-patner"),
+
       // delete
       deleteMerchantManagement: deleteHandler(""),
       deleteMerchantPartner: deleteHandler(baseUrl + "/v1/merchant-patner"),
+
+      // detail
+      detailMerchant: detailHandler(baseUrl + "/v2/merchant/"),
     };
   },
 });
@@ -95,4 +107,5 @@ export const {
   useUpdateMerchantManagementMutation,
   useDeleteMerchantManagementMutation,
   useDeleteMerchantPartnerMutation,
+  useDetailMerchantQuery
 } = merchantSlice;

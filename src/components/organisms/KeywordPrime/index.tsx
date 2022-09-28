@@ -303,7 +303,7 @@ const KeywordPrime = () => {
         <Stack direction="row" alignItems="center" spacing={"1vw"}>
           <IconButton
             href="/create-keyword/"
-            size="medium"
+            size="small"
             sx={{
               bgcolor: "primary",
               borderRadius: "0.4vw",
