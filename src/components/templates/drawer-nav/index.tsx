@@ -200,7 +200,7 @@ const Index: React.FC<LayoutProps> = ({ children }: LayoutProps) => {
                 <img src={UserIcon} style={{ height: 30 }} />
               </ListItemIcon>
               <ListItemText
-                primary={<SmallCopy>{firstName}</SmallCopy>}
+                primary={<SmallCopy>{first_name}</SmallCopy>}
                 sx={{ opacity: open ? 1 : 0 }}
               />
             </ListItemButton>
