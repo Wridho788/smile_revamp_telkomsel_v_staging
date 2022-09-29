@@ -1,4 +1,4 @@
-import {IAuthSignIn} from "../../redux/features/auth/interface";
+import { IAuthSignIn } from "../../redux/features/auth/interface";
 
 export const AuthInitial: IAuthSignIn = {
     username: "admin@mercht-623bdcce7399b50e38fbe93a",
