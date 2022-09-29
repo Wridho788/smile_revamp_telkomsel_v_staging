@@ -26,7 +26,7 @@ const fontContent = {
 };
 
 const UserDetail: FC<ModalProps> = ({ open, handleClose, data }) => {
-    const {username, firstname, lastname, job_level, role_detail, account_location, identification } = data;
+    const {username, first_name, last_name, job_level, role_detail, account_location, identification } = data;
     return (
         <ModalCustom
             keepMounted
@@ -67,7 +67,7 @@ const UserDetail: FC<ModalProps> = ({ open, handleClose, data }) => {
                                     <b>First Name</b>
                                 </Typography>
                                 <Typography sx={fontContent}>
-                                    {firstname}
+                                    {first_name}
                                 </Typography>
                             </Grid>
 
@@ -76,7 +76,7 @@ const UserDetail: FC<ModalProps> = ({ open, handleClose, data }) => {
                                     <b>Last Name</b>
                                 </Typography>
                                 <Typography sx={fontContent}>
-                                    {lastname}
+                                    {last_name}
                                 </Typography>
                             </Grid>
 
