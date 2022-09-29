@@ -33,7 +33,7 @@ const Auth: React.FunctionComponent = () => {
 
         const data: IAuthSignIn = {
             username,
-            zpassword: password,
+            password,
             client_id: env.REACT_APP_CLIENT_ID,
             client_secret: env.REACT_APP_CLIENT_SECRET
         };
