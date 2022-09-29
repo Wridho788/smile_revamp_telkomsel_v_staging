@@ -15,10 +15,10 @@ export interface IResponse {
 }
 
 export interface IResponseAuthenticate {
-  id: string;
-  username: string;
-  firstname?: string;
-  lastname: string;
+  _id: string;
+  user_name: string;
+  first_name?: string;
+  last_name: string;
   job_title: string;
   job_level: string;
   identification: {
