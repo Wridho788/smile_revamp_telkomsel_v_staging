@@ -28,11 +28,7 @@ import ProgramFilterModal from "../Programs/Filter/ProgramFilterModal";
 import { InitialFilter } from "../Programs/initial";
 import { FilterMatchMode } from "primereact/api";
 
-// React Router DOM
-import { useNavigate } from "react-router-dom";
-
 const ProgramPrimeDt: FC = () => {
-	const navigate = useNavigate();
 	const [programs, setPrograms] = useState<any>([ProgramInitial]);
 	const [loading, setLoading] = useState<boolean>(false);
 	const [totalRecords, setTotalRecords] = useState<number>(0);
@@ -248,7 +244,7 @@ const ProgramPrimeDt: FC = () => {
 				</H2>
 				<Stack direction="row" alignItems="center" spacing={"1vw"}>
 					<IconButton
-						onClick={() => navigate("/create-program")}
+						href={"/create-program"}
 						size="small"
 						sx={{
 							bgcolor: "primary",
