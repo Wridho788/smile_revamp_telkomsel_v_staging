@@ -1,36 +1,37 @@
 interface ModalProps {
-  open: any;
-  handleClose?: any;
-  title?: string;
-  description?: any;
+	open: any;
+	handleClose?: any;
+	title?: string;
+	description?: any;
 }
 
 interface IProgramDetailsModalProps extends ModalProps {
-  roleAccess: boolean;
-  data: any;
-  isHqLogin: boolean;
+	roleAccess: boolean;
+	data: any;
+	isHqLogin: boolean;
+	refetchProgram?: () => void;
 }
 
 interface IProgramFilterModalProps extends ModalProps {
-  roleAccess: boolean;
-  data: any;
-  isHqLogin: boolean;
+	roleAccess: boolean;
+	data: any;
+	isHqLogin: boolean;
 }
 
 interface IKeywordDetailsModalProps extends ModalProps {
-  roleAccess: boolean;
-  data: any;
-  isHqLogin?: boolean;
+	roleAccess: boolean;
+	data: any;
+	isHqLogin?: boolean;
 }
 
 interface IPicManagemenrModalProps extends ModalProps {
-  handleResfresh?: any;
+	handleResfresh?: any;
 }
 
 export type {
-  ModalProps,
-  IProgramDetailsModalProps,
-  IProgramFilterModalProps,
-  IKeywordDetailsModalProps,
-  IPicManagemenrModalProps,
+	ModalProps,
+	IProgramDetailsModalProps,
+	IProgramFilterModalProps,
+	IKeywordDetailsModalProps,
+	IPicManagemenrModalProps
 };
