@@ -1,34 +1,39 @@
-import React, { useState } from 'react';
-import env from "react-dotenv";
+// React
+import React, { useEffect } from "react";
+
+// React Router DOM
 import { useNavigate } from "react-router-dom";
 
-import { TelkomselLabel } from "../../assets/images"
-import { OutlinedTextField, SmallCopy } from "../../components";
-import {Box, Button, CircularProgress, Paper, Stack} from "@mui/material";
+// Material UI
+import { Paper } from "@mui/material";
 
+// Swal
 import Swal from "sweetalert2";
 
-import { IAuthSignIn } from "../../redux/features/auth/interface";
+// Custom Hooks
+import { useAppDispatch } from "../../service/hooks";
 
-
-
-import { useAuth } from "../../config/AuthProvider";
+// Mutations
+import { AUTH_CLEAR } from "../../redux/features/auth/auth-store-slice";
 
 const SignOut: React.FunctionComponent = () => {
-    const { setToken }: any = useAuth();
-    const [isLoading, setIsLoading] = useState<boolean>(false);
+	const dispatch = useAppDispatch();
+	const navigate = useNavigate();
 
-    const navigate = useNavigate();
+	useEffect(() => {
+		(async () => {
+			// Clear store
+			dispatch(AUTH_CLEAR());
 
-    setToken('', 'access_token');
-    setToken('', 'refresh_token');
+			// Navigate to entry point
+			navigate("/");
 
-    Swal.fire('Sign Out Success', "", "success").then(()=> navigate('/'));
+			// Show toast
+			Swal.fire("Sign Out Success", "", "success");
+		})();
+	}, [dispatch, navigate]);
 
-    return (
-        <Paper />
-    )
-
-}
+	return <Paper />;
+};
 
 export default SignOut;

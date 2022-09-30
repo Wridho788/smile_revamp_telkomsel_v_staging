@@ -5,18 +5,20 @@
  * **/
 
 import { Navigate } from "react-router-dom";
-import { useAuth } from "../AuthProvider";
+
+import { useAppSelector } from "../../service/hooks";
 
 // For While Type "any"
 const Protected = ({ children }: any) => {
-    // For While Type "any"
-    const { access_token, refresh_token }: any = useAuth();
+	const access_token = useAppSelector(state => state.auth.access_token);
+	const refresh_token = useAppSelector(state => state.auth.refresh_token);
 
-    if (!access_token && !refresh_token) {
-        return <Navigate to="/login" replace />
-    }
+	// Check if user didn't authenticated
+	if (!access_token && !refresh_token) {
+		return <Navigate to="/login" replace />;
+	}
 
-    return children;
-}
+	return children;
+};
 
 export default Protected;
