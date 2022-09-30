@@ -15,7 +15,7 @@ const AddProgramGroup: FC<ProgramGroupProps> = ({ label }) => {
 
     const handleCreateProgramGroup = async () => {
         await createProgramGroup({ group_name: name }).then((res: any) => {
-            if (res?.data?.statusCode === 201) {
+            if (res?.data?.status === 200) {
                 Swal.fire("Success!", `${res?.data?.message}`, "success");
             } else {
                 Swal.fire('Error!', '', 'error');
