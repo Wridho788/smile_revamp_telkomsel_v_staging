@@ -31,7 +31,8 @@ export const API_HEADER = (baseUrl: string | undefined, isAuth: boolean = true) 
                 }
             });
 
-            const refresh = baseQueryRefresh("/oauth/refresh-token", api, extraOptions);
+            const refresh = await baseQueryRefresh("/v1/oauth/refresh-token", api, extraOptions);
+            console.log("Refresh", refresh)
 
             if (refresh?.data) {
                 localStorage.setItem("access_token", refresh?.data.access_token);
