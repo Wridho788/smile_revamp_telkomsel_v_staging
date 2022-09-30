@@ -147,6 +147,15 @@ const ProgramPrimeDt: FC = () => {
   const EndPeriodRender = (rowData: IProgram) => {
     return <span>{moment(rowData.end_period).format("MMMM DD, YYYY")}</span>;
   };
+  const CreateAtRender = (rowData: IProgram) => {
+    return <span>{moment(rowData?.created_at).format("MMMM DD, YYYY")}</span>;
+  };
+  const CreateByRender = (rowData: IProgram) => {
+    return <span>{rowData?.created_by?.first_name} {rowData?.created_by?.last_name}</span>;
+  };
+  const RoleCreatorRender = (rowData: IProgram) => {
+    return <span>{rowData?.created_by?.role_detail?.name}</span>;
+  };
   const ThresholdAlarmExpiredRender = (rowData: IProgram) => {
     return (
       <Box sx={{ textAlign: "center", width: "100%" }}>
@@ -341,6 +350,30 @@ const ProgramPrimeDt: FC = () => {
                     header="END PERIOD"
                     sortable
                     body={EndPeriodRender}
+                    filterPlaceholder="Search"
+                  />
+                  <Column
+                    style={{ flexGrow: 1, flexBasis: "250px" }}
+                    field="create_at"
+                    header="CREATE AT"
+                    sortable
+                    body={CreateAtRender}
+                    filterPlaceholder="Search"
+                  />
+                  <Column
+                    style={{ flexGrow: 1, flexBasis: "250px" }}
+                    field="create_by"
+                    header="CREATE BY"
+                    sortable
+                    body={CreateByRender}
+                    filterPlaceholder="Search"
+                  />
+                  <Column
+                    style={{ flexGrow: 1, flexBasis: "250px" }}
+                    field="role_create"
+                    header="ROLE CREATOR"
+                    sortable
+                    body={RoleCreatorRender}
                     filterPlaceholder="Search"
                   />
                   <Column
