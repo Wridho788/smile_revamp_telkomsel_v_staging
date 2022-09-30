@@ -76,7 +76,7 @@ export const accountSlice = createApi({
             // get
             picPrime: lazyHandler(baseUrl + "/v1/pic/prime"),
             accountRole: responseHandler("/role"),
-            accountAuthenticate: responseHandlerAuthenticate("/authenticate"),
+            accountAuthenticate: responseHandlerAuthenticate("/authenticate/business"),
             // post
 
             // put

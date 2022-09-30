@@ -101,7 +101,7 @@ const Index: React.FC<LayoutProps> = ({ children }: LayoutProps) => {
   const { data: accountAuth, isFetching } = useAccountAuthenticateQuery();
   useEffect(() => {
     if (!isFetching) {
-      setFirstName(`${accountAuth?.firstname} ${accountAuth?.lastname}` ?? "Unknown")
+      setFirstName(`${accountAuth?.first_name} ${accountAuth?.last_name}` ?? "Unknown")
     }
   }, [isFetching]);
   return (
