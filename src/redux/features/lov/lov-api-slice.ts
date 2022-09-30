@@ -1,7 +1,7 @@
-import {createApi} from "@reduxjs/toolkit/query/react";
-import {API_HEADER} from "../../utils/header";
-import {IParams} from "../../utils/IGeneral";
-import {IData, IResponse} from "./interface";
+import { createApi } from "@reduxjs/toolkit/query/react";
+import { API_HEADER } from "../../utils/header";
+import { IParams } from "../../utils/IGeneral";
+import { IData, IResponse } from "./interface";
 
 const baseUrl = process.env.REACT_APP_BASE_URL;
 
@@ -15,7 +15,17 @@ export const lovSlice = createApi({
                     return endpoint;
                 },
             });
-
+        const postHandler = (endpoint: string) =>
+            builder.mutation<{ success: boolean; body: any }, any>({
+                query: (body) => ({
+                    url: endpoint,
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: body,
+                }),
+            });
         const detailHandler = (endpoint: string) =>
             builder.mutation<any, string>({
                 query: (_id: string) => ({
@@ -61,9 +71,12 @@ export const lovSlice = createApi({
             ),
             getProgramApproval: responseHandler("/program/approval"),
             getKeywordApproval: responseHandler("/keyword/approval"),
-            getOwner: builder.query<any,  number | void>({
-                query: () => ({url: "/location_type"}),
-            })
+            getOwner: builder.query<any, number | void>({
+                query: () => ({ url: "/location_type" }),
+            }),
+
+            //post
+            createProgramGroup: postHandler("/program/group")
         };
     },
 });
@@ -90,5 +103,6 @@ export const {
     useGetKeywordNotificationQuery,
     useLazyGetKeywordNotificationQuery,
     useGetKeywordApprovalQuery,
-    useGetProgramApprovalQuery
+    useGetProgramApprovalQuery,
+    useCreateProgramGroupMutation,
 } = lovSlice;
