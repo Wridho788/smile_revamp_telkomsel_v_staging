@@ -11,6 +11,8 @@ import * as React from "react";
 import { BodyCopy } from "../Typography";
 import { ISelectProps } from "./types";
 
+import AddProgramGroup from "components/organisms/ProgramGroup/AddProgramGroup";
+
 const Index: React.FunctionComponent<ISelectProps> = ({
   label,
   placeholder,
@@ -26,6 +28,7 @@ const Index: React.FunctionComponent<ISelectProps> = ({
   isRequired = true,
   ...props
 }) => {
+
   return (
     <Grid
       container
@@ -76,6 +79,8 @@ const Index: React.FunctionComponent<ISelectProps> = ({
                   {data[optionLabel]}
                 </MenuItem>
               ))}
+
+             {label === "Program Group" && <AddProgramGroup label={label} />}
           </Select>
         </FormControl>
       </Grid>
