@@ -730,7 +730,17 @@ const KeywordDetail: FC<IKeywordDetailsModalProps> = ({
                   </Grid>
                   <Grid item xs={3}>
                     <Typography sx={fontContent}>
-                      <b>Customer Prepaid</b>
+                      <b>Customer Most Redeem</b>
+                    </Typography>
+                    <Typography sx={fontContent}>
+                      {eligibility?.segmentation_customer_most_redeem.map(
+                        (item: any) => item
+                      )}
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={3}>
+                    <Typography sx={fontContent}>
+                      <b>Customer Prepaid Registration</b>
                     </Typography>
                     <Typography sx={fontContent}>
                       {eligibility?.segmentation_customer_prepaid_registration
@@ -756,6 +766,14 @@ const KeywordDetail: FC<IKeywordDetailsModalProps> = ({
                   </Grid>
                   <Grid item xs={3}>
                     <Typography sx={fontContent}>
+                      <b>Customer Los</b>
+                    </Typography>
+                    <Typography sx={fontContent}>
+                      {eligibility?.segmentation_customer_los}
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={3}>
+                    <Typography sx={fontContent}>
                       <b>Customer Los Min</b>
                     </Typography>
                     <Typography sx={fontContent}>
@@ -768,24 +786,6 @@ const KeywordDetail: FC<IKeywordDetailsModalProps> = ({
                     </Typography>
                     <Typography sx={fontContent}>
                       {eligibility?.segmentation_customer_los_max}
-                    </Typography>
-                  </Grid>
-                  <Grid item xs={3}>
-                    <Typography sx={fontContent}>
-                      <b>Customer Los</b>
-                    </Typography>
-                    <Typography sx={fontContent}>
-                      {eligibility?.segmentation_customer_los}
-                    </Typography>
-                  </Grid>
-                  <Grid item xs={3}>
-                    <Typography sx={fontContent}>
-                      <b>Customer Most Redeem</b>
-                    </Typography>
-                    <Typography sx={fontContent}>
-                      {eligibility?.segmentation_customer_most_redeem.map(
-                        (item: any) => item
-                      )}
                     </Typography>
                   </Grid>
                   <Grid item xs={3}>
@@ -828,6 +828,30 @@ const KeywordDetail: FC<IKeywordDetailsModalProps> = ({
                     </Typography>
                     <Typography sx={fontContent}>
                       {eligibility?.segmentation_customer_poin_balance_max}
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={3}>
+                    <Typography sx={fontContent}>
+                      <b>Customer Preference</b>
+                    </Typography>
+                    <Typography sx={fontContent}>
+                      {eligibility?.segmentation_customer_preference}
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={3}>
+                    <Typography sx={fontContent}>
+                      <b>Customer Arpu Operator</b>
+                    </Typography>
+                    <Typography sx={fontContent}>
+                      {eligibility?.segmentation_customer_arpu_operator}
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={3}>
+                    <Typography sx={fontContent}>
+                      <b>Customer Arpu</b>
+                    </Typography>
+                    <Typography sx={fontContent}>
+                      {eligibility?.segmentation_customer_arpu}
                     </Typography>
                   </Grid>
                   <Grid item xs={3}>
@@ -999,10 +1023,558 @@ const KeywordDetail: FC<IKeywordDetailsModalProps> = ({
                       </Typography>
                     </AccordionSummary>
                     <AccordionDetails>
-                      <Typography>Locations</Typography>
                       <Gap width={0} height={10} />
-                      <Grid container>
-                        {item.locations
+                      <Grid container spacing="2vw">
+                        {item.bonus_type === "telco_postpaid" ? (
+                          <>
+                            <Grid item xs={3}>
+                              <Typography sx={fontContent}>
+                                <b>Telco Post Product Name</b>
+                              </Typography>
+                              <Typography sx={fontContent}>
+                                {item.telco_post_product_name}
+                              </Typography>
+                            </Grid>
+                            <Grid item xs={3}>
+                              <Typography sx={fontContent}>
+                                <b>Telco Post Bid</b>
+                              </Typography>
+                              <Typography sx={fontContent}>
+                                {item.telco_post_bid}
+                              </Typography>
+                            </Grid>
+                            <Grid item xs={3}>
+                              <Typography sx={fontContent}>
+                                <b>Telco Post API config</b>
+                              </Typography>
+                              <Typography sx={fontContent}>
+                                {item.telco_post_api_config}
+                              </Typography>
+                            </Grid>
+                            <Grid item xs={3}>
+                              <Typography sx={fontContent}>
+                                <b>Redeem after verification</b>
+                              </Typography>
+                              <Typography sx={fontContent}>
+                                {item.redeem_after_verification
+                                  ? "True"
+                                  : "False"}
+                              </Typography>
+                            </Grid>
+                            <Grid item xs={12}>
+                              <Typography>Locations</Typography>
+                              <Grid container spacing="1vw">
+                                {item.stock_location.map(
+                                  (data: any, index: number) => (
+                                    <Grid key={index} item xs={4}>
+                                      <Typography sx={fontContent}>
+                                        <b>{data.location_id}</b>
+                                      </Typography>
+                                      <Typography sx={fontContent}>
+                                        {data.stock}
+                                      </Typography>
+                                    </Grid>
+                                  )
+                                )}
+                              </Grid>
+                            </Grid>
+                          </>
+                        ) : item.bonus_type === "telco_prepaid" ? (
+                          <>
+                            <Grid item xs={3}>
+                              <Typography sx={fontContent}>
+                                <b>Telco Pre Product Name</b>
+                              </Typography>
+                              <Typography sx={fontContent}>
+                                {item.telco_pre_product_name}
+                              </Typography>
+                            </Grid>
+                            <Grid item xs={3}>
+                              <Typography sx={fontContent}>
+                                <b>Telco Pre Bid</b>
+                              </Typography>
+                              <Typography sx={fontContent}>
+                                {item.telco_pre_bid}
+                              </Typography>
+                            </Grid>
+                            <Grid item xs={3}>
+                              <Typography sx={fontContent}>
+                                <b>Telco Pre API config</b>
+                              </Typography>
+                              <Typography sx={fontContent}>
+                                {item.telco_pre_api_config}
+                              </Typography>
+                            </Grid>
+                            <Grid item xs={3}>
+                              <Typography sx={fontContent}>
+                                <b>Redeem after verification</b>
+                              </Typography>
+                              <Typography sx={fontContent}>
+                                {item.redeem_after_verification
+                                  ? "True"
+                                  : "False"}
+                              </Typography>
+                            </Grid>
+                            <Grid item xs={12}>
+                              <Typography>Locations</Typography>
+                              <Grid container spacing="1vw">
+                                {item.stock_location.map(
+                                  (data: any, index: number) => (
+                                    <Grid key={index} item xs={4}>
+                                      <Typography sx={fontContent}>
+                                        <b>{data.location_id}</b>
+                                      </Typography>
+                                      <Typography sx={fontContent}>
+                                        {data.stock}
+                                      </Typography>
+                                    </Grid>
+                                  )
+                                )}
+                              </Grid>
+                            </Grid>
+                          </>
+                        ) : item.bonus_type === "loyalty_poin" ? (
+                          <>
+                            <Grid item xs={3}>
+                              <Typography sx={fontContent}>
+                                <b>Redeem after verification</b>
+                              </Typography>
+                              <Typography sx={fontContent}>
+                                {item.redeem_after_verification
+                                  ? "True"
+                                  : "False"}
+                              </Typography>
+                            </Grid>
+                            <Grid item xs={12}>
+                              <Typography>Locations</Typography>
+                              <Grid container spacing="1vw">
+                                {item.locations.map(
+                                  (data: any, index: number) => (
+                                    <Grid key={index} item xs={4}>
+                                      <Typography sx={fontContent}>
+                                        <b>{data.location_id}</b>
+                                      </Typography>
+                                      <Typography sx={fontContent}>
+                                        {data.stock}
+                                      </Typography>
+                                    </Grid>
+                                  )
+                                )}
+                              </Grid>
+                            </Grid>
+                          </>
+                        ) : item.bonus_type === "lucky_draw" ? (
+                          <>
+                            <Grid item xs={3}>
+                              <Typography sx={fontContent}>
+                                <b>Lucky Draw Regular</b>
+                              </Typography>
+                              <Typography sx={fontContent}>
+                                {item.lucky_draw_reguler ? "True" : "False"}
+                              </Typography>
+                            </Grid>
+                            <Grid item xs={3}>
+                              <Typography sx={fontContent}>
+                                <b>Lucky Draw Allow Inject Coupon</b>
+                              </Typography>
+                              <Typography sx={fontContent}>
+                                {item.lucky_draw_allow_inject_coupon
+                                  ? "True"
+                                  : "False"}
+                              </Typography>
+                            </Grid>
+                            <Grid item xs={3}>
+                              <Typography sx={fontContent}>
+                                <b>Lucky Draw Prize</b>
+                              </Typography>
+                              <Typography sx={fontContent}>
+                                {item.lucky_draw_prize}
+                              </Typography>
+                            </Grid>
+                            <Grid item xs={3}>
+                              <Typography sx={fontContent}>
+                                <b>Redeem after verification</b>
+                              </Typography>
+                              <Typography sx={fontContent}>
+                                {item.redeem_after_verification
+                                  ? "True"
+                                  : "False"}
+                              </Typography>
+                            </Grid>
+                            <Grid item xs={12}>
+                              <Typography>Locations</Typography>
+                              <Grid container spacing="1vw">
+                                {item.locations.map(
+                                  (data: any, index: number) => (
+                                    <Grid key={index} item xs={4}>
+                                      <Typography sx={fontContent}>
+                                        <b>{data.location_id}</b>
+                                      </Typography>
+                                      <Typography sx={fontContent}>
+                                        {data.stock}
+                                      </Typography>
+                                    </Grid>
+                                  )
+                                )}
+                              </Grid>
+                            </Grid>
+                          </>
+                        ) : item.bonus_type === "auction" ? (
+                          <>
+                            <Grid item xs={3}>
+                              <Typography sx={fontContent}>
+                                <b>Auction Prize Description ID</b>
+                              </Typography>
+                              <Typography sx={fontContent}>
+                                {item.auction_prize_desc_id}
+                              </Typography>
+                            </Grid>
+                            <Grid item xs={3}>
+                              <Typography sx={fontContent}>
+                                <b>Auction Prize Description EN</b>
+                              </Typography>
+                              <Typography sx={fontContent}>
+                                {item.auction_prize_desc_en}
+                              </Typography>
+                            </Grid>
+                            <Grid item xs={3}>
+                              <Typography sx={fontContent}>
+                                <b>Auction Prize Image</b>
+                              </Typography>
+                              <Typography sx={fontContent}>
+                                {item.auction_prize_image}
+                              </Typography>
+                            </Grid>
+                            <Grid item xs={3}>
+                              <Typography sx={fontContent}>
+                                <b>Auction Poin Min Bidding</b>
+                              </Typography>
+                              <Typography sx={fontContent}>
+                                {item.auction_poin_min_bidding}
+                              </Typography>
+                            </Grid>
+                            <Grid item xs={3}>
+                              <Typography sx={fontContent}>
+                                <b>Auction Multiplier Poin</b>
+                              </Typography>
+                              <Typography sx={fontContent}>
+                                {item.auction_multiplier_poin}
+                              </Typography>
+                            </Grid>
+                            <Grid item xs={3}>
+                              <Typography sx={fontContent}>
+                                <b>Auction Max Winner Inphase</b>
+                              </Typography>
+                              <Typography sx={fontContent}>
+                                {item.auction_max_winner_inphase}
+                              </Typography>
+                            </Grid>
+                            <Grid item xs={3}>
+                              <Typography sx={fontContent}>
+                                <b>Redeem after verification</b>
+                              </Typography>
+                              <Typography sx={fontContent}>
+                                {item.redeem_after_verification
+                                  ? "True"
+                                  : "False"}
+                              </Typography>
+                            </Grid>
+                            <Grid item xs={12}>
+                              <Typography>Locations</Typography>
+                              <Grid container spacing="1vw">
+                                {item.stock_location.map(
+                                  (data: any, index: number) => (
+                                    <Grid key={index} item xs={4}>
+                                      <Typography sx={fontContent}>
+                                        <b>{data.location_id}</b>
+                                      </Typography>
+                                      <Typography sx={fontContent}>
+                                        {data.stock}
+                                      </Typography>
+                                    </Grid>
+                                  )
+                                )}
+                              </Grid>
+                            </Grid>
+                          </>
+                        ) : item.bonus_type === "voting" ? (
+                          <>
+                            <Grid item xs={3}>
+                              <Typography sx={fontContent}>
+                                <b>Target Redeemer</b>
+                              </Typography>
+                              <Typography sx={fontContent}>
+                                {item.target_redeemer}
+                              </Typography>
+                            </Grid>
+                            <Grid item xs={3}>
+                              <Typography sx={fontContent}>
+                                <b>Redeem after verification</b>
+                              </Typography>
+                              <Typography sx={fontContent}>
+                                {item.redeem_after_verification
+                                  ? "True"
+                                  : "False"}
+                              </Typography>
+                            </Grid>
+                            <Grid item xs={12}>
+                              <Typography>Locations</Typography>
+                              <Grid container spacing="1vw">
+                                {item.stock_location.map(
+                                  (data: any, index: number) => (
+                                    <Grid key={index} item xs={4}>
+                                      <Typography sx={fontContent}>
+                                        <b>{data.location_id}</b>
+                                      </Typography>
+                                      <Typography sx={fontContent}>
+                                        {data.stock}
+                                      </Typography>
+                                    </Grid>
+                                  )
+                                )}
+                              </Grid>
+                            </Grid>
+                          </>
+                        ) : item.bonus_type === "donation" ? (
+                          <>
+                            <Grid item xs={3}>
+                              <Typography sx={fontContent}>
+                                <b>Donation Category</b>
+                              </Typography>
+                              <Typography sx={fontContent}>
+                                {item.donation_category}
+                              </Typography>
+                            </Grid>
+                            <Grid item xs={3}>
+                              <Typography sx={fontContent}>
+                                <b>Minimum Poin</b>
+                              </Typography>
+                              <Typography sx={fontContent}>
+                                {item.minimum_poin}
+                              </Typography>
+                            </Grid>
+                            <Grid item xs={3}>
+                              <Typography sx={fontContent}>
+                                <b>Target Poin</b>
+                              </Typography>
+                              <Typography sx={fontContent}>
+                                {item.target_poin}
+                              </Typography>
+                            </Grid>
+                            <Grid item xs={3}>
+                              <Typography sx={fontContent}>
+                                <b>Redeem after verification</b>
+                              </Typography>
+                              <Typography sx={fontContent}>
+                                {item.redeem_after_verification
+                                  ? "True"
+                                  : "False"}
+                              </Typography>
+                            </Grid>
+                            <Grid item xs={12}>
+                              <Typography>Locations</Typography>
+                              <Grid container spacing="1vw">
+                                {item.stock_location.map(
+                                  (data: any, index: number) => (
+                                    <Grid key={index} item xs={4}>
+                                      <Typography sx={fontContent}>
+                                        <b>{data.location_id}</b>
+                                      </Typography>
+                                      <Typography sx={fontContent}>
+                                        {data.stock}
+                                      </Typography>
+                                    </Grid>
+                                  )
+                                )}
+                              </Grid>
+                            </Grid>
+                          </>
+                        ) : item.bonus_type === "mbp" ? (
+                          <>
+                            <Grid item xs={3}>
+                              <Typography sx={fontContent}>
+                                <b>Bank</b>
+                              </Typography>
+                              <Typography sx={fontContent}>
+                                {item.bank}
+                              </Typography>
+                            </Grid>
+                            <Grid item xs={3}>
+                              <Typography sx={fontContent}>
+                                <b>IP Address</b>
+                              </Typography>
+                              <Typography sx={fontContent}>
+                                {item.ip_address}
+                              </Typography>
+                            </Grid>
+                            <Grid item xs={3}>
+                              <Typography sx={fontContent}>
+                                <b>Digit Coupon</b>
+                              </Typography>
+                              <Typography sx={fontContent}>
+                                {item.digit_coupon}
+                              </Typography>
+                            </Grid>
+                            <Grid item xs={3}>
+                              <Typography sx={fontContent}>
+                                <b>Combination Coupon</b>
+                              </Typography>
+                              <Typography sx={fontContent}>
+                                {item.combination_coupon}
+                              </Typography>
+                            </Grid>
+                            <Grid item xs={3}>
+                              <Typography sx={fontContent}>
+                                <b>Redeem after verification</b>
+                              </Typography>
+                              <Typography sx={fontContent}>
+                                {item.redeem_after_verification
+                                  ? "True"
+                                  : "False"}
+                              </Typography>
+                            </Grid>
+                            <Grid item xs={12}>
+                              <Typography>Locations</Typography>
+                              <Grid container spacing="1vw">
+                                {item.stock_location.map(
+                                  (data: any, index: number) => (
+                                    <Grid key={index} item xs={4}>
+                                      <Typography sx={fontContent}>
+                                        <b>{data.location_id}</b>
+                                      </Typography>
+                                      <Typography sx={fontContent}>
+                                        {data.stock}
+                                      </Typography>
+                                    </Grid>
+                                  )
+                                )}
+                              </Grid>
+                            </Grid>
+                          </>
+                        ) : item.bonus_type === "link_aja" ? (
+                          <>
+                            <Grid item xs={3}>
+                              <Typography sx={fontContent}>
+                                <b>Redeem after verification</b>
+                              </Typography>
+                              <Typography sx={fontContent}>
+                                {item.redeem_after_verification
+                                  ? "True"
+                                  : "False"}
+                              </Typography>
+                            </Grid>
+                            <Grid item xs={12}>
+                              <Typography>Locations</Typography>
+                              <Grid container spacing="1vw">
+                                {item.locations.map(
+                                  (data: any, index: number) => (
+                                    <Grid key={index} item xs={4}>
+                                      <Typography sx={fontContent}>
+                                        <b>{data.location_id}</b>
+                                      </Typography>
+                                      <Typography sx={fontContent}>
+                                        {data.stock}
+                                      </Typography>
+                                    </Grid>
+                                  )
+                                )}
+                              </Grid>
+                            </Grid>
+                          </>
+                        ) : item.bonus_type === "direct_redeem" ? (
+                          <>
+                            <Grid item xs={3}>
+                              <Typography sx={fontContent}>
+                                <b>Redeem after verification</b>
+                              </Typography>
+                              <Typography sx={fontContent}>
+                                {item.redeem_after_verification
+                                  ? "True"
+                                  : "False"}
+                              </Typography>
+                            </Grid>
+                            <Grid item xs={12}>
+                              <Typography>Locations</Typography>
+                              <Grid container spacing="1vw">
+                                {item.stock_location.map(
+                                  (data: any, index: number) => (
+                                    <Grid key={index} item xs={4}>
+                                      <Typography sx={fontContent}>
+                                        <b>{data.location_id}</b>
+                                      </Typography>
+                                      <Typography sx={fontContent}>
+                                        {data.stock}
+                                      </Typography>
+                                    </Grid>
+                                  )
+                                )}
+                              </Grid>
+                            </Grid>
+                          </>
+                        ) : item.bonus_type === "discount_voucher" ? (
+                          <>
+                            <Grid item xs={3}>
+                              <Typography sx={fontContent}>
+                                <b>Exp Voucher</b>
+                              </Typography>
+                              <Typography sx={fontContent}>
+                                {item.exp_voucher}
+                              </Typography>
+                            </Grid>
+                            <Grid item xs={3}>
+                              <Typography sx={fontContent}>
+                                <b>Voucher Type</b>
+                              </Typography>
+                              <Typography sx={fontContent}>
+                                {item.voucher_type}
+                              </Typography>
+                            </Grid>
+                            <Grid item xs={3}>
+                              <Typography sx={fontContent}>
+                                <b>Voucher Combination</b>
+                              </Typography>
+                              <Typography sx={fontContent}>
+                                {item.voucher_combination}
+                              </Typography>
+                            </Grid>
+                            <Grid item xs={3}>
+                              <Typography sx={fontContent}>
+                                <b>Voucher Count</b>
+                              </Typography>
+                              <Typography sx={fontContent}>
+                                {item.jumlah_total_voucher}
+                              </Typography>
+                            </Grid>
+                            <Grid item xs={3}>
+                              <Typography sx={fontContent}>
+                                <b>Redeem after verification</b>
+                              </Typography>
+                              <Typography sx={fontContent}>
+                                {item.redeem_after_verification
+                                  ? "True"
+                                  : "False"}
+                              </Typography>
+                            </Grid>
+                            <Grid item xs={12}>
+                              <Typography>Locations</Typography>
+                              <Grid container spacing="1vw">
+                                {item.stock_location.map(
+                                  (data: any, index: number) => (
+                                    <Grid key={index} item xs={4}>
+                                      <Typography sx={fontContent}>
+                                        <b>{data.location_id}</b>
+                                      </Typography>
+                                      <Typography sx={fontContent}>
+                                        {data.stock}
+                                      </Typography>
+                                    </Grid>
+                                  )
+                                )}
+                              </Grid>
+                            </Grid>
+                          </>
+                        ) : null}
+                        {/* {item.locations
                           ? item.locations.map((data: any, index: number) => (
                               <Grid key={index} item xs={4}>
                                 <Typography sx={fontContent}>
@@ -1025,7 +1597,7 @@ const KeywordDetail: FC<IKeywordDetailsModalProps> = ({
                                   </Typography>
                                 </Grid>
                               )
-                            )}
+                            )} */}
                       </Grid>
                     </AccordionDetails>
                   </Accordion>
