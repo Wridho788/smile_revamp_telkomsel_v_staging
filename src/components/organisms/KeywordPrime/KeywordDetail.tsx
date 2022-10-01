@@ -78,61 +78,60 @@ const KeywordDetail: FC<IKeywordDetailsModalProps> = ({
   data,
   roleAccess,
   isHqLogin,
-    userLoginId
+  userLoginId,
 }) => {
   const { eligibility, notification, bonus } = data;
   const { data: notifVia } = useGetNotifViaQuery();
-  const [approvalIssue, setApprovalIssue] = useState("");
 
   const [approveProgram, { isLoading: isLoadingApprove }] =
     useKeywordApproveMutation();
   const [rejectProgram, { isLoading: isLoadingReject }] =
     useKeywordRejectMutation();
 
+  const [reasonApproval, setReasonApproval] = useState("");
+
+  let approveBody = {
+    _id: data._id,
+    reason_approve: reasonApproval,
+  };
+
+  let rejectBody = {
+    _id: data._id,
+    reason_reject: reasonApproval,
+  };
+
   const approveHandler = async () => {
-    const id = data["_id"];
-    const reason_approve = approvalIssue;
-    if (id) {
-      approveProgram({ id: id, reason_approve: reason_approve }).then(
-        (res: any) => {
-          if (res?.error) {
-            handleClose();
-            Swal.fire(res.error.data.message, "Failed", "warning");
-          } else {
-            if (res?.data.status === 200) {
-              handleClose();
-              Swal.fire(res?.data.message, "Approved", "success");
-              setTimeout(() => {
-                window.location.reload();
-              }, 2000);
-            }
-          }
+    approveProgram(approveBody).then((res: any) => {
+      if (res?.error) {
+        handleClose();
+        Swal.fire(res.error.data.message, "Failed", "warning");
+      } else {
+        if (res?.data.status === 200) {
+          handleClose();
+          Swal.fire(res?.data.message, "Approved", "success");
+          setTimeout(() => {
+            window.location.reload();
+          }, 2000);
         }
-      );
-    }
+      }
+    });
   };
 
   const rejectHandler = async () => {
-    const id = data["_id"];
-    const reason_reject = approvalIssue;
-    if (id) {
-      rejectProgram({ id: id, reason_reject: reason_reject }).then(
-        (res: any) => {
-          if (res?.error) {
-            handleClose();
-            Swal.fire(res.error.data.message, "Failed", "warning");
-          } else {
-            if (res?.data.status === 200) {
-              handleClose();
-              Swal.fire(res?.data.message, "Rejected", "success");
-              setTimeout(() => {
-                window.location.reload();
-              }, 2000);
-            }
-          }
+    rejectProgram(rejectBody).then((res: any) => {
+      if (res?.error) {
+        handleClose();
+        Swal.fire(res.error.data.message, "Failed", "warning");
+      } else {
+        if (res?.data.status === 200) {
+          handleClose();
+          Swal.fire(res?.data.message, "Rejected", "success");
+          setTimeout(() => {
+            window.location.reload();
+          }, 2000);
         }
-      );
-    }
+      }
+    });
   };
 
   // const renderApproveSection = (text: string) => {
@@ -201,192 +200,208 @@ const KeywordDetail: FC<IKeywordDetailsModalProps> = ({
 
   const renderApproveSection = (text: string) => {
     return (
-        <>
-          {roleAccess ? (
-              <>
-                <Stack
-                    spacing="2vw"
-                    ml="1vw"
-                    mr="1vw"
-                    sx={{backgroundColor: "#fff", borderRadius: 2}}
+      <>
+        {roleAccess ? (
+          <>
+            <Stack
+              spacing="2vw"
+              ml="1vw"
+              mr="1vw"
+              sx={{ backgroundColor: "#fff", borderRadius: 2 }}
+            >
+              <Box>
+                <Alert severity="success">{text}</Alert>
+              </Box>
+              <Stack direction="row" sx={{ flex: 1 }}>
+                <OutlinedTextField
+                  isRequired={false}
+                  direction="column"
+                  label=""
+                  placeholder="Leave comment of your approval action ..."
+                  variant={"outlined"}
+                  value={reasonApproval}
+                  handleChange={setReasonApproval}
+                  multiline
+                  rows={3}
+                />
+              </Stack>
+              <Stack
+                direction="row"
+                sx={{
+                  justifyContent: "flex-end",
+                }}
+                spacing="1vw"
+              >
+                <Button
+                  disabled={isLoadingApprove || isLoadingReject}
+                  onClick={rejectHandler}
+                  variant={"contained"}
+                  color="error"
                 >
-                  <Box>
-                    <Alert severity="success">
-                      {text}
-                    </Alert>
-                  </Box>
-                  <Stack direction="row" sx={{flex: 1}}>
-                    <OutlinedTextField
-                        isRequired={false}
-                        direction="column"
-                        label=""
-                        placeholder="Leave comment of your approval action ..."
-                        variant={"outlined"}
-                        value={""}
-                        handleChange={setApprovalIssue}
-                        multiline
-                        rows={3}
-                    />
-                  </Stack>
-                  <Stack
-                      direction="row"
-                      sx={{
-                        justifyContent: "flex-end"
-                      }}
-                      spacing="1vw"
-                  >
-                    <Button
-                        disabled={isLoadingApprove || isLoadingReject}
-                        onClick={rejectHandler}
-                        variant={"contained"}
-                        color="error"
-                    >
-                      Reject
-                    </Button>
-                    <Button
-                        disabled={isLoadingApprove || isLoadingReject}
-                        onClick={approveHandler}
-                        variant={"contained"}
-                        color="success"
-                        sx={{color: "white"}}
-                    >
-                      Approve
-                    </Button>
-                  </Stack>
-                </Stack>
-              </>
-          ) : (
-              <Alert sx={{margin: 2}} severity="info">
-                {text}
-              </Alert>
-          )}
-        </>
+                  Reject
+                </Button>
+                <Button
+                  disabled={isLoadingApprove || isLoadingReject}
+                  onClick={approveHandler}
+                  variant={"contained"}
+                  color="success"
+                  sx={{ color: "white" }}
+                >
+                  Approve
+                </Button>
+              </Stack>
+            </Stack>
+          </>
+        ) : (
+          <Alert sx={{ margin: 2 }} severity="info">
+            {text}
+          </Alert>
+        )}
+      </>
     );
   };
 
   const checkToRenderApprovalSection = () => {
-    var approval_status_value: string = ""
+    var approval_status_value: string = "";
     if (data.approval_log && data.approval_log.length > 0) {
-      approval_status_value = data.approval_log[data.approval_log.length - 1].status[0].set_value
+      approval_status_value =
+        data.approval_log[data.approval_log.length - 1].status[0].set_value;
     }
     if (!data.isHQ && data.created_by) {
       if (userLoginId === data.created_by.superior_local?._id) {
-        if(data.approval_log && data.approval_log.length < 1 || approval_status_value === "Rejected by Manager Non HQ"){
+        if (
+          (data.approval_log && data.approval_log.length < 1) ||
+          approval_status_value === "Rejected by Manager Non HQ"
+        ) {
           return (
-              <>
-                {renderApproveSection(`Hi, ${data.created_by.superior_local?.first_name}. We're happy to see you in, This program need your approval`)}
-              </>
-          )
+            <>
+              {renderApproveSection(
+                `Hi, ${data.created_by.superior_local?.first_name}. We're happy to see you in, This program need your approval`
+              )}
+            </>
+          );
         }
       }
       if (userLoginId === data.created_by.superior_hq?._id) {
-        if(data.approval_log && data.approval_log.length > 1 && approval_status_value === "Rejected by Manager HQ" || approval_status_value === "Approved by Manager Non HQ"){
+        if (
+          (data.approval_log &&
+            data.approval_log.length > 1 &&
+            approval_status_value === "Rejected by Manager HQ") ||
+          approval_status_value === "Approved by Manager Non HQ"
+        ) {
           return (
-              <>
-                {renderApproveSection(`Hi, ${data.created_by.superior_hq?.first_name}. We're happy to see you in, This program need your approval`)}
-              </>
-          )
+            <>
+              {renderApproveSection(
+                `Hi, ${data.created_by.superior_hq?.first_name}. We're happy to see you in, This program need your approval`
+              )}
+            </>
+          );
         }
       }
     }
 
-    if(data.isHQ && data.created_by){
+    if (data.isHQ && data.created_by) {
       if (userLoginId === data.created_by.superior_hq?._id) {
-        if(data.approval_log && data.approval_log.length > 1 && approval_status_value === "Rejected by Manager HQ" || approval_status_value !== "Approved by Manager HQ"){
+        if (
+          (data.approval_log &&
+            data.approval_log.length > 1 &&
+            approval_status_value === "Rejected by Manager HQ") ||
+          approval_status_value !== "Approved by Manager HQ"
+        ) {
           return (
-              <>
-                {renderApproveSection(`Hi, ${data.created_by.superior_hq?.first_name}. We're happy to see you in, This program need your approval`)}
-              </>
-          )
+            <>
+              {renderApproveSection(
+                `Hi, ${data.created_by.superior_hq?.first_name}. We're happy to see you in, This program need your approval`
+              )}
+            </>
+          );
         }
       }
     }
-  }
+  };
 
   const alertApproveInfo = () => {
-    var approval_status_value: string = ""
+    var approval_status_value: string = "";
     if (data.approval_log && data.approval_log.length > 0) {
-      approval_status_value = data.approval_log[data.approval_log.length - 1].status[0].set_value
+      approval_status_value =
+        data.approval_log[data.approval_log.length - 1].status[0].set_value;
     }
     return (
-        <>
-          {
-              !data.isHQ && data.approval_log && data.approval_log.length < 1 &&
-              <Alert sx={{margin: 2}} severity="error">
-                Waiting for approval 1 ({data.created_by.superior_local?.first_name})
-                - <b>This Program is NEW</b>
+      <>
+        {!data.isHQ && data.approval_log && data.approval_log.length < 1 && (
+          <Alert sx={{ margin: 2 }} severity="error">
+            Waiting for approval 1 ({data.created_by.superior_local?.first_name}
+            ) - <b>This Program is NEW</b>
+          </Alert>
+        )}
+        {!data.isHQ && data.approval_log && data.approval_log.length > 0 && (
+          <>
+            {approval_status_value === "Rejected by Manager Non HQ" && (
+              <Alert sx={{ margin: 2 }} severity="error">
+                Waiting for approval 1 (
+                {data.created_by.superior_local?.first_name}) -{" "}
+                <b>This Program is {approval_status_value}</b>
               </Alert>
-          }
-          {
-              !data.isHQ && data.approval_log && data.approval_log.length > 0 &&
-              <>
-                {
-                    approval_status_value === "Rejected by Manager Non HQ" &&
-                    <Alert sx={{margin: 2}} severity="error">
-                      Waiting for approval 1
-                      ({data.created_by.superior_local?.first_name})
-                      - <b>This Program is {approval_status_value}</b>
-                    </Alert>
-                }
-                {
-                    approval_status_value === "Approved by Manager Non HQ" || approval_status_value === "Rejected by Manager HQ" &&
-                    <Alert sx={{margin: 2}} severity="error">
-                      Waiting for approval 2
-                      ({data.created_by.superior_hq?.first_name})
-                      - <b>This Program is {approval_status_value}</b>
-                      {
-                          approval_status_value === "Rejected by Manager HQ" &&
-                          <>
-                            <br/> Rejection Reason : <i></i>
-                          </>
-                      }
-                    </Alert>
-                }
-                {
-                    approval_status_value === "Approved by Manager Non HQ" &&
-                    <Alert sx={{margin: 2}} severity="success">
-                      Approved by {data.created_by.superior_local?.first_name} - <b> Waiting Approval from {data.created_by.superior_hq?.first_name} </b>
-                    </Alert>
-                }
-                {
-                    approval_status_value === "Approved by Manager HQ" &&
-                    <Alert sx={{margin: 2}} severity="success">
-                      This Program is {approval_status_value} <b>({data.created_by.superior_hq?.first_name})</b>
-                    </Alert>
-                }
-              </>
-          }
+            )}
+            {approval_status_value === "Approved by Manager Non HQ" ||
+              (approval_status_value === "Rejected by Manager HQ" && (
+                <Alert sx={{ margin: 2 }} severity="error">
+                  Waiting for approval 2 (
+                  {data.created_by.superior_hq?.first_name}) -{" "}
+                  <b>This Program is {approval_status_value}</b>
+                  {approval_status_value === "Rejected by Manager HQ" && (
+                    <>
+                      <br /> Rejection Reason : <i></i>
+                    </>
+                  )}
+                </Alert>
+              ))}
+            {approval_status_value === "Approved by Manager Non HQ" && (
+              <Alert sx={{ margin: 2 }} severity="success">
+                Approved by {data.created_by.superior_local?.first_name} -{" "}
+                <b>
+                  {" "}
+                  Waiting Approval from{" "}
+                  {data.created_by.superior_hq?.first_name}{" "}
+                </b>
+              </Alert>
+            )}
+            {approval_status_value === "Approved by Manager HQ" && (
+              <Alert sx={{ margin: 2 }} severity="success">
+                This Program is {approval_status_value}{" "}
+                <b>({data.created_by.superior_hq?.first_name})</b>
+              </Alert>
+            )}
+          </>
+        )}
 
-          {/*  Untuk Data HQ  */}
-          {
-              data.isHQ && data.approval_log && data.approval_log.length < 1 &&
-              <Alert sx={{margin: 2}} severity="error">
-                Waiting for approval 2 ({data.created_by.superior_hq?.first_name})
-                - <b>This Program is NEW</b>
+        {/*  Untuk Data HQ  */}
+        {data.isHQ && data.approval_log && data.approval_log.length < 1 && (
+          <Alert sx={{ margin: 2 }} severity="error">
+            Waiting for approval 2 ({data.created_by.superior_hq?.first_name}) -{" "}
+            <b>This Program is NEW</b>
+          </Alert>
+        )}
+        {data.isHQ && data.approval_log && data.approval_log.length > 0 && (
+          <>
+            {approval_status_value === "Rejected by Manager HQ" && (
+              <Alert sx={{ margin: 2 }} severity="error">
+                Waiting for approval 2 (
+                {data.created_by.superior_hq?.first_name}) -{" "}
+                <b>This Program is {approval_status_value}</b>
               </Alert>
-          }
-          {
-              data.isHQ && data.approval_log && data.approval_log.length > 0 &&
-              <>
-                {
-                    approval_status_value === "Rejected by Manager HQ" &&
-                    <Alert sx={{margin: 2}} severity="error">
-                      Waiting for approval 2
-                      ({data.created_by.superior_hq?.first_name})
-                      - <b>This Program is {approval_status_value}</b>
-                    </Alert>
-                }
-                {
-                    approval_status_value === "Approved by Manager HQ" &&
-                    <Alert sx={{margin: 2}} severity="success">
-                      This Program is {approval_status_value} <b>({data.created_by.superior_hq?.first_name})</b>
-                    </Alert>
-                }
-              </>
-          }
-        </>
-    )
-  }
+            )}
+            {approval_status_value === "Approved by Manager HQ" && (
+              <Alert sx={{ margin: 2 }} severity="success">
+                This Program is {approval_status_value}{" "}
+                <b>({data.created_by.superior_hq?.first_name})</b>
+              </Alert>
+            )}
+          </>
+        )}
+      </>
+    );
+  };
   // clean keyword program detail
 
   const keywordProgramDetail = keywordProgramDetailHelper;
@@ -419,8 +434,6 @@ const KeywordDetail: FC<IKeywordDetailsModalProps> = ({
         {/* TODO: Checking status "Approval" of Detail Program */}
         {alertApproveInfo()}
         {checkToRenderApprovalSection()}
-
-
 
         <Grid sx={{ flexGrow: 1 }}>
           <Grid container direction="column" mt={2} p={2} spacing={"1vw"}>
