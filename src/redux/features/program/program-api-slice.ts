@@ -26,10 +26,11 @@ export const programSlice = createApi({
         }),
       });
     const approvalHandler = (endpoint: string) =>
-      builder.mutation<any, string>({
-        query: (_id: string) => ({
-          url: `/${_id}/${endpoint}`,
+      builder.mutation<{ success: boolean; body: any }, any>({
+        query: (body) => ({
+          url: `/${body._id}/${endpoint}`,
           method: "PATCH",
+          params: { reason_approve: body.reason_approve },
         }),
         invalidatesTags: ["Program"],
       });
@@ -38,7 +39,7 @@ export const programSlice = createApi({
         query: (body) => ({
           url: `/${body._id}/${endpoint}`,
           method: "PATCH",
-          body: { reason_reject: body.reason_reject },
+          params: { reason_reject: body.reason_reject },
         }),
         invalidatesTags: ["Program"],
       });
