@@ -23,6 +23,7 @@ interface IKeywordDetailsModalProps extends ModalProps {
 	roleAccess: boolean;
 	data: any;
 	isHqLogin?: boolean;
+	userLoginId:string;
 }
 
 interface IPicManagemenrModalProps extends ModalProps {

@@ -78,6 +78,7 @@ const KeywordDetail: FC<IKeywordDetailsModalProps> = ({
   data,
   roleAccess,
   isHqLogin,
+    userLoginId
 }) => {
   const { eligibility, notification, bonus } = data;
   const { data: notifVia } = useGetNotifViaQuery();
@@ -134,70 +135,258 @@ const KeywordDetail: FC<IKeywordDetailsModalProps> = ({
     }
   };
 
+  // const renderApproveSection = (text: string) => {
+  //   return (
+  //     <>
+  //       {roleAccess ? (
+  //         <>
+  //           <Stack
+  //             direction="row"
+  //             alignItems="center"
+  //             justifyContent="space-between"
+  //             spacing="2vw"
+  //             mt="1vw"
+  //             sx={{ p: 2, backgroundColor: "#E5E5E5", borderRadius: 2 }}
+  //           >
+  //             <Stack direction="row" spacing="1vw">
+  //               <Alert sx={{ margin: 2 }} severity="warning">
+  //                 {text}
+  //               </Alert>
+  //             </Stack>
+  //             <Stack
+  //               direction="row"
+  //               sx={{
+  //                 justifyContent: "space-between",
+  //               }}
+  //               spacing="1vw"
+  //             >
+  //               <Button
+  //                 disabled={isLoadingApprove || isLoadingReject}
+  //                 onClick={approveHandler}
+  //                 variant={"contained"}
+  //                 color="success"
+  //                 sx={{ color: "white" }}
+  //               >
+  //                 Approve
+  //               </Button>
+  //               <Button
+  //                 disabled={isLoadingApprove || isLoadingReject}
+  //                 onClick={rejectHandler}
+  //                 variant={"contained"}
+  //                 color="error"
+  //               >
+  //                 Reject
+  //               </Button>
+  //             </Stack>
+  //           </Stack>
+  //           <OutlinedTextField
+  //             direction="column"
+  //             label=""
+  //             placeholder="Leave comment of your approval action ..."
+  //             variant={"outlined"}
+  //             value={approvalIssue}
+  //             handleChange={setApprovalIssue}
+  //             multiline
+  //             rows={3}
+  //           />
+  //         </>
+  //       ) : (
+  //         <Alert sx={{ margin: 2 }} severity="info">
+  //           {text}
+  //         </Alert>
+  //       )}
+  //     </>
+  //   );
+  // };
+
   const renderApproveSection = (text: string) => {
     return (
-      <>
-        {roleAccess ? (
-          <>
-            <Stack
-              direction="row"
-              alignItems="center"
-              justifyContent="space-between"
-              spacing="2vw"
-              mt="1vw"
-              sx={{ p: 2, backgroundColor: "#E5E5E5", borderRadius: 2 }}
-            >
-              <Stack direction="row" spacing="1vw">
-                <Alert sx={{ margin: 2 }} severity="warning">
-                  {text}
-                </Alert>
-              </Stack>
-              <Stack
-                direction="row"
-                sx={{
-                  justifyContent: "space-between",
-                }}
-                spacing="1vw"
-              >
-                <Button
-                  disabled={isLoadingApprove || isLoadingReject}
-                  onClick={approveHandler}
-                  variant={"contained"}
-                  color="success"
-                  sx={{ color: "white" }}
+        <>
+          {roleAccess ? (
+              <>
+                <Stack
+                    spacing="2vw"
+                    ml="1vw"
+                    mr="1vw"
+                    sx={{backgroundColor: "#fff", borderRadius: 2}}
                 >
-                  Approve
-                </Button>
-                <Button
-                  disabled={isLoadingApprove || isLoadingReject}
-                  onClick={rejectHandler}
-                  variant={"contained"}
-                  color="error"
-                >
-                  Reject
-                </Button>
-              </Stack>
-            </Stack>
-            <OutlinedTextField
-              direction="column"
-              label=""
-              placeholder="Leave comment of your approval action ..."
-              variant={"outlined"}
-              value={approvalIssue}
-              handleChange={setApprovalIssue}
-              multiline
-              rows={3}
-            />
-          </>
-        ) : (
-          <Alert sx={{ margin: 2 }} severity="info">
-            {text}
-          </Alert>
-        )}
-      </>
+                  <Box>
+                    <Alert severity="success">
+                      {text}
+                    </Alert>
+                  </Box>
+                  <Stack direction="row" sx={{flex: 1}}>
+                    <OutlinedTextField
+                        isRequired={false}
+                        direction="column"
+                        label=""
+                        placeholder="Leave comment of your approval action ..."
+                        variant={"outlined"}
+                        value={""}
+                        handleChange={setApprovalIssue}
+                        multiline
+                        rows={3}
+                    />
+                  </Stack>
+                  <Stack
+                      direction="row"
+                      sx={{
+                        justifyContent: "flex-end"
+                      }}
+                      spacing="1vw"
+                  >
+                    <Button
+                        disabled={isLoadingApprove || isLoadingReject}
+                        onClick={rejectHandler}
+                        variant={"contained"}
+                        color="error"
+                    >
+                      Reject
+                    </Button>
+                    <Button
+                        disabled={isLoadingApprove || isLoadingReject}
+                        onClick={approveHandler}
+                        variant={"contained"}
+                        color="success"
+                        sx={{color: "white"}}
+                    >
+                      Approve
+                    </Button>
+                  </Stack>
+                </Stack>
+              </>
+          ) : (
+              <Alert sx={{margin: 2}} severity="info">
+                {text}
+              </Alert>
+          )}
+        </>
     );
   };
 
+  const checkToRenderApprovalSection = () => {
+    var approval_status_value: string = ""
+    if (data.approval_log && data.approval_log.length > 0) {
+      approval_status_value = data.approval_log[data.approval_log.length - 1].status[0].set_value
+    }
+    if (!data.isHQ && data.created_by) {
+      if (userLoginId === data.created_by.superior_local?._id) {
+        if(data.approval_log && data.approval_log.length < 1 || approval_status_value === "Rejected by Manager Non HQ"){
+          return (
+              <>
+                {renderApproveSection(`Hi, ${data.created_by.superior_local?.first_name}. We're happy to see you in, This program need your approval`)}
+              </>
+          )
+        }
+      }
+      if (userLoginId === data.created_by.superior_hq?._id) {
+        if(data.approval_log && data.approval_log.length > 1 && approval_status_value === "Rejected by Manager HQ" || approval_status_value === "Approved by Manager Non HQ"){
+          return (
+              <>
+                {renderApproveSection(`Hi, ${data.created_by.superior_hq?.first_name}. We're happy to see you in, This program need your approval`)}
+              </>
+          )
+        }
+      }
+    }
+
+    if(data.isHQ && data.created_by){
+      if (userLoginId === data.created_by.superior_hq?._id) {
+        if(data.approval_log && data.approval_log.length > 1 && approval_status_value === "Rejected by Manager HQ" || approval_status_value !== "Approved by Manager HQ"){
+          return (
+              <>
+                {renderApproveSection(`Hi, ${data.created_by.superior_hq?.first_name}. We're happy to see you in, This program need your approval`)}
+              </>
+          )
+        }
+      }
+    }
+  }
+
+  const alertApproveInfo = () => {
+    var approval_status_value: string = ""
+    if (data.approval_log && data.approval_log.length > 0) {
+      approval_status_value = data.approval_log[data.approval_log.length - 1].status[0].set_value
+    }
+    return (
+        <>
+          {
+              !data.isHQ && data.approval_log && data.approval_log.length < 1 &&
+              <Alert sx={{margin: 2}} severity="error">
+                Waiting for approval 1 ({data.created_by.superior_local?.first_name})
+                - <b>This Program is NEW</b>
+              </Alert>
+          }
+          {
+              !data.isHQ && data.approval_log && data.approval_log.length > 0 &&
+              <>
+                {
+                    approval_status_value === "Rejected by Manager Non HQ" &&
+                    <Alert sx={{margin: 2}} severity="error">
+                      Waiting for approval 1
+                      ({data.created_by.superior_local?.first_name})
+                      - <b>This Program is {approval_status_value}</b>
+                    </Alert>
+                }
+                {
+                    approval_status_value === "Approved by Manager Non HQ" || approval_status_value === "Rejected by Manager HQ" &&
+                    <Alert sx={{margin: 2}} severity="error">
+                      Waiting for approval 2
+                      ({data.created_by.superior_hq?.first_name})
+                      - <b>This Program is {approval_status_value}</b>
+                      {
+                          approval_status_value === "Rejected by Manager HQ" &&
+                          <>
+                            <br/> Rejection Reason : <i></i>
+                          </>
+                      }
+                    </Alert>
+                }
+                {
+                    approval_status_value === "Approved by Manager Non HQ" &&
+                    <Alert sx={{margin: 2}} severity="success">
+                      Approved by {data.created_by.superior_local?.first_name} - <b> Waiting Approval from {data.created_by.superior_hq?.first_name} </b>
+                    </Alert>
+                }
+                {
+                    approval_status_value === "Approved by Manager HQ" &&
+                    <Alert sx={{margin: 2}} severity="success">
+                      This Program is {approval_status_value} <b>({data.created_by.superior_hq?.first_name})</b>
+                    </Alert>
+                }
+              </>
+          }
+
+          {/*  Untuk Data HQ  */}
+          {
+              data.isHQ && data.approval_log && data.approval_log.length < 1 &&
+              <Alert sx={{margin: 2}} severity="error">
+                Waiting for approval 2 ({data.created_by.superior_hq?.first_name})
+                - <b>This Program is NEW</b>
+              </Alert>
+          }
+          {
+              data.isHQ && data.approval_log && data.approval_log.length > 0 &&
+              <>
+                {
+                    approval_status_value === "Rejected by Manager HQ" &&
+                    <Alert sx={{margin: 2}} severity="error">
+                      Waiting for approval 2
+                      ({data.created_by.superior_hq?.first_name})
+                      - <b>This Program is {approval_status_value}</b>
+                    </Alert>
+                }
+                {
+                    approval_status_value === "Approved by Manager HQ" &&
+                    <Alert sx={{margin: 2}} severity="success">
+                      This Program is {approval_status_value} <b>({data.created_by.superior_hq?.first_name})</b>
+                    </Alert>
+                }
+              </>
+          }
+        </>
+    )
+  }
   // clean keyword program detail
 
   const keywordProgramDetail = keywordProgramDetailHelper;
@@ -228,117 +417,13 @@ const KeywordDetail: FC<IKeywordDetailsModalProps> = ({
           <BodyCopy>Keyword ID : {data["_id"] ?? "Description"}</BodyCopy>
         </Box>
         {/* TODO: Checking status "Approval" of Detail Program */}
+        {alertApproveInfo()}
+        {checkToRenderApprovalSection()}
 
-        {data.approval_log && data.approval_log.length > 0 ? (
-          isHqLogin ? (
-            !data.isHQ &&
-            data.approval_log[data.approval_log.length - 1].status[0]
-              .set_value === "Approved by Manager HQ" ? (
-              <Alert sx={{ margin: 2 }} severity="success">
-                {
-                  data.approval_log[data.approval_log.length - 1].status[0]
-                    .set_value
-                }
-              </Alert>
-            ) : // Jika bukan approved by manager HQ, check apakah direject oleh manager HQ
-            data.approval_log[data.approval_log.length - 1].status[0]
-                .set_value !== "Approved by Manager Non HQ" ? (
-              // Check apakah di reject oleh manager HQ
-              data.approval_log[data.approval_log.length - 1].status[0]
-                .set_value === "Rejected by Manager HQ" ? (
-                renderApproveSection(
-                  "HQ Manager Approval Needed after rejection"
-                )
-              ) : (
-                <Alert sx={{ margin: 2 }} severity="warning">
-                  Waiting For approval 1
-                </Alert>
-              )
-            ) : (
-              renderApproveSection("HQ Manager Approval Needed")
-            )
-          ) : !data.isHQ &&
-            data.approval_log[data.approval_log.length - 1].status[0]
-              .set_value === "Approved by Manager HQ" ? (
-            <Alert sx={{ margin: 2 }} severity="success">
-              {
-                data.approval_log[data.approval_log.length - 1].status[0]
-                  .set_value
-              }
-            </Alert>
-          ) : data.approval_log[data.approval_log.length - 1].status[0]
-              .set_value !== "Approved by Manager Non HQ" ? (
-            // Check apakah status bukan Approved by Manager Non HQ dikarenakan direject oleh manager HQ
-            data.approval_log[data.approval_log.length - 1].status[0]
-              .set_value === "Rejected by Manager HQ" ? (
-              <Alert sx={{ margin: 2 }} severity="warning">
-                Rejected By Manager HQ
-              </Alert>
-            ) : (
-              renderApproveSection("Need approve by Area Manager")
-            )
-          ) : (
-            <Alert sx={{ margin: 2 }} severity="success">
-              Your Management Level has approved this program
-            </Alert>
-          )
-        ) : isHqLogin ? (
-          data.isHQ ? (
-            renderApproveSection("Need approve by HQ Manager")
-          ) : (
-            <Alert sx={{ margin: 2 }} severity="warning">
-              Need approve by Area Manager first.
-            </Alert>
-          )
-        ) : (
-          renderApproveSection("Need approve by Area Manager")
-        )}
 
-        <Paper>
-          <Grid container>
-            <Box item component={Grid} xs={12}>
-              <List
-                sx={{
-                  width: "100%",
-                  maxWidth: 360,
-                  bgcolor: "background.paper",
-                }}
-              >
-                {data.approval_log && data.approval_log.length > 0 ? (
-                  data.approval_log.map((item: any) => {
-                    return (
-                      <ListItem>
-                        <ListItemAvatar>
-                          <Avatar>
-                            <FiberManualRecordIcon />
-                          </Avatar>
-                        </ListItemAvatar>
-                        <ListItemText
-                          primary={item.status[0].set_value}
-                          secondary={moment(item.approved_at).format(
-                            "MMMM d, YYYY"
-                          )}
-                        />
-                      </ListItem>
-                    );
-                  })
-                ) : (
-                  <ListItem>
-                    <ListItemAvatar>
-                      <Avatar>
-                        <ImageIcon />
-                      </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText primary="Belum Ada" secondary="Jan 9, 2014" />
-                  </ListItem>
-                )}
-              </List>
-            </Box>
-          </Grid>
-        </Paper>
 
         <Grid sx={{ flexGrow: 1 }}>
-          <Grid container direction="column" mt={2} spacing={"1vw"}>
+          <Grid container direction="column" mt={2} p={2} spacing={"1vw"}>
             <Grid item md={6} px={2}>
               <Stack direction="row" justifyContent="space-between">
                 <Typography
