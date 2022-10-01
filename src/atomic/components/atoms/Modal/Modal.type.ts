@@ -9,6 +9,7 @@ interface IProgramDetailsModalProps extends ModalProps {
 	roleAccess: boolean;
 	data: any;
 	isHqLogin: boolean;
+	userLoginId: string;
 	refetchProgram?: () => void;
 }
 
