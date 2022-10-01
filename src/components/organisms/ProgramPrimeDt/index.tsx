@@ -168,6 +168,10 @@ const ProgramPrimeDt: FC = () => {
 		);
 	};
 	const StatusApprovalRender = (rowData: any) => {
+		var approval_status_value: string = ""
+		if (rowData.approval_log && rowData.approval_log.length > 0) {
+			approval_status_value = rowData.approval_log[rowData.approval_log.length - 1].status[0].set_value
+		}
 		return (
 			<Box
 				sx={{
@@ -178,22 +182,53 @@ const ProgramPrimeDt: FC = () => {
 					alignContent: "center"
 				}}
 			>
-				{rowData.approval_log && rowData.approval_log.length > 0 ? (
-					<Alert severity="success" icon={false}>
+				{
+					rowData.approval_log && rowData.approval_log.length > 0 &&
+					<>
 						{
-							rowData.approval_log[rowData.approval_log.length - 1].status[0]
-								.set_value
+							approval_status_value === "Approved by Manager Non HQ" &&
+							<Alert severity="warning" icon={false}>
+								Approved by <b>{rowData.created_by && rowData.created_by.superior_local?.first_name}</b>
+								<br/> <Typography variant={"body1"}>Waiting for Approver 2 <b>({rowData.created_by && rowData.created_by.superior_hq?.first_name})</b></Typography>
+							</Alert>
 						}
-					</Alert>
-				) : rowData.isHQ ? (
-					<Alert severity="warning" icon={false}>
-						Waiting For approval 2
-					</Alert>
-				) : (
-					<Alert severity="warning" icon={false}>
-						Waiting For approval 1
-					</Alert>
-				)}
+						{
+							approval_status_value === "Rejected by Manager Non HQ" &&
+							<Alert severity="error" icon={false}>
+								Rejected by <b>{rowData.created_by && rowData.created_by.superior_local?.first_name}</b>
+								<br/> <Typography variant={"body1"}>Waiting for Approver 1 <b>({rowData.created_by && rowData.created_by.superior_local?.first_name})</b></Typography>
+							</Alert>
+						}
+						{
+							approval_status_value === "Rejected by Manager HQ" &&
+							<Alert severity="error" icon={false}>
+								Rejected by <b>{rowData.created_by && rowData.created_by.superior_hq?.first_name}</b>
+								<br/> <Typography variant={"body1"}>Waiting for Approver 2 <b>({rowData.created_by && rowData.created_by.superior_hq?.first_name})</b></Typography>
+							</Alert>
+						}
+						{
+							approval_status_value === "Approved by Manager HQ" &&
+							<Alert severity="success">
+								<b>Approved by {rowData.created_by && rowData.created_by.superior_hq?.first_name}</b>
+							</Alert>
+						}
+					</>
+
+				}
+				{
+					rowData.approval_log && rowData.approval_log.length < 1 &&
+					<>
+						{
+							rowData.isHQ ?
+								<Alert severity="success">
+									<b>Waiting Approver 2 {rowData.created_by && rowData.created_by.superior_hq?.first_name}</b>
+								</Alert> :
+								<Alert severity="success">
+									<b>Waiting Approver 1 {rowData.created_by && rowData.created_by.superior_local?.first_name}</b>
+								</Alert>
+						}
+					</>
+				}
 			</Box>
 		);
 	};
@@ -219,6 +254,7 @@ const ProgramPrimeDt: FC = () => {
 							defaultRoleManagerHQ
 					)
 				}
+				userLoginId={accountAuth ? accountAuth._id : ""}
 				refetchProgram={loadLazyData}
 			/>
 
