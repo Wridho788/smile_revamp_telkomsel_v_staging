@@ -220,10 +220,10 @@ const ProgramPrimeDt: FC = () => {
 					<>
 						{
 							rowData.isHQ ?
-								<Alert severity="success">
+								<Alert severity="warning" icon={false}>
 									<b>Waiting Approver 2 {rowData.created_by && rowData.created_by.superior_hq?.first_name}</b>
 								</Alert> :
-								<Alert severity="success">
+								<Alert severity="warning" icon={false}>
 									<b>Waiting Approver 1 {rowData.created_by && rowData.created_by.superior_local?.first_name}</b>
 								</Alert>
 						}

@@ -224,35 +224,101 @@ const KeywordPrime = () => {
     return <span>{location}</span>;
   };
 
+  // const StatusApprovalRender = (rowData: any) => {
+  //   return (
+  //     <Box
+  //       sx={{
+  //         display: "flex",
+  //         textAlign: "center",
+  //         width: "100%",
+  //         justifyContent: "left",
+  //         alignItems: "center",
+  //         alignContent: "center",
+  //       }}
+  //     >
+  //       {rowData.approval_log && rowData.approval_log.length > 0 ? (
+  //         <Alert severity="success" icon={false}>
+  //           {
+  //             rowData.approval_log[rowData.approval_log.length - 1].status[0]
+  //               .set_value
+  //           }
+  //         </Alert>
+  //       ) : rowData.isHQ ? (
+  //         <Alert severity="warning" icon={false}>
+  //           Waiting For Approval 2
+  //         </Alert>
+  //       ) : (
+  //         <Alert severity="warning" icon={false}>
+  //           Waiting For Approval 1
+  //         </Alert>
+  //       )}
+  //     </Box>
+  //   );
+  // };
+
   const StatusApprovalRender = (rowData: any) => {
+    var approval_status_value: string = ""
+    if (rowData.approval_log && rowData.approval_log.length > 0) {
+      approval_status_value = rowData.approval_log[rowData.approval_log.length - 1].status[0].set_value
+    }
     return (
-      <Box
-        sx={{
-          display: "flex",
-          textAlign: "center",
-          width: "100%",
-          justifyContent: "left",
-          alignItems: "center",
-          alignContent: "center",
-        }}
-      >
-        {rowData.approval_log && rowData.approval_log.length > 0 ? (
-          <Alert severity="success" icon={false}>
-            {
-              rowData.approval_log[rowData.approval_log.length - 1].status[0]
-                .set_value
-            }
-          </Alert>
-        ) : rowData.isHQ ? (
-          <Alert severity="warning" icon={false}>
-            Waiting For Approval 2
-          </Alert>
-        ) : (
-          <Alert severity="warning" icon={false}>
-            Waiting For Approval 1
-          </Alert>
-        )}
-      </Box>
+        <Box
+            sx={{
+              textAlign: "center",
+              width: "100%",
+              justifyContent: "center",
+              alignItems: "center",
+              alignContent: "center"
+            }}
+        >
+          {
+              rowData.approval_log && rowData.approval_log.length > 0 &&
+              <>
+                {
+                    approval_status_value === "Approved by Manager Non HQ" &&
+                    <Alert severity="warning" icon={false}>
+                      Approved by <b>{rowData.created_by && rowData.created_by.superior_local?.first_name}</b>
+                      <br/> <Typography variant={"body1"}>Waiting for Approver 2 <b>({rowData.created_by && rowData.created_by.superior_hq?.first_name})</b></Typography>
+                    </Alert>
+                }
+                {
+                    approval_status_value === "Rejected by Manager Non HQ" &&
+                    <Alert severity="error" icon={false}>
+                      Rejected by <b>{rowData.created_by && rowData.created_by.superior_local?.first_name}</b>
+                      <br/> <Typography variant={"body1"}>Waiting for Approver 1 <b>({rowData.created_by && rowData.created_by.superior_local?.first_name})</b></Typography>
+                    </Alert>
+                }
+                {
+                    approval_status_value === "Rejected by Manager HQ" &&
+                    <Alert severity="error" icon={false}>
+                      Rejected by <b>{rowData.created_by && rowData.created_by.superior_hq?.first_name}</b>
+                      <br/> <Typography variant={"body1"}>Waiting for Approver 2 <b>({rowData.created_by && rowData.created_by.superior_hq?.first_name})</b></Typography>
+                    </Alert>
+                }
+                {
+                    approval_status_value === "Approved by Manager HQ" &&
+                    <Alert severity="success">
+                      <b>Approved by {rowData.created_by && rowData.created_by.superior_hq?.first_name}</b>
+                    </Alert>
+                }
+              </>
+
+          }
+          {
+              rowData.approval_log && rowData.approval_log.length < 1 &&
+              <>
+                {
+                  rowData.isHQ ?
+                      <Alert severity="warning" icon={false}>
+                        <b>Waiting Approver 2 {rowData.created_by && rowData.created_by.superior_hq?.first_name}</b>
+                      </Alert> :
+                      <Alert severity="warning" icon={false}>
+                        <b>Waiting Approver 1 {rowData.created_by && rowData.created_by.superior_local?.first_name}</b>
+                      </Alert>
+                }
+              </>
+          }
+        </Box>
     );
   };
 
@@ -296,6 +362,7 @@ const KeywordPrime = () => {
             ? true
             : false
         }
+        userLoginId={accountAuth ? accountAuth._id : ""}
       />
 
       <Stack direction={"row"} justifyContent={"space-between"}>
@@ -422,6 +489,18 @@ const KeywordPrime = () => {
                       body={ProgramNameRender}
                     />
                     <Column
+                        style={{
+                          flexGrow: 1,
+                          flexBasis: "250px",
+                          alignItems: "center",
+                        }}
+                        field="program_time_zone"
+                        header="STATUS"
+                        sortable
+                        body={StatusApprovalRender}
+                        filterPlaceholder="Search"
+                    />
+                    <Column
                       style={{ flexGrow: 1, flexBasis: "250px" }}
                       field="set_value"
                       header="CREATED AT"
@@ -439,18 +518,7 @@ const KeywordPrime = () => {
                       header="LOCATION CREATED"
                       body={LocationCreatedRender}
                     />
-                    <Column
-                      style={{
-                        flexGrow: 1,
-                        flexBasis: "250px",
-                        alignItems: "center",
-                      }}
-                      field="program_time_zone"
-                      header="STATUS"
-                      sortable
-                      body={StatusApprovalRender}
-                      filterPlaceholder="Search"
-                    />
+
                   </DataTable>
                 </div>
               </Paper>

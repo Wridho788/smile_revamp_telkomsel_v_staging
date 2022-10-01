@@ -363,49 +363,6 @@ const ProgramDetailsModal: FC<IProgramDetailsModalProps> = ({
                 {/* TODO: Checking status "Approval" of Detail Program */}
                 {alertApproveInfo()}
                 {checkToRenderApprovalSection()}
-                {/*<Paper>*/}
-                {/*	<Grid container>*/}
-                {/*		<Box item component={Grid} xs={12}>*/}
-                {/*			<List*/}
-                {/*				sx={{*/}
-                {/*					width: "100%",*/}
-                {/*					maxWidth: 360,*/}
-                {/*					bgcolor: "background.paper"*/}
-                {/*				}}*/}
-                {/*			>*/}
-                {/*				{data.approval_log && data.approval_log.length > 0 ? (*/}
-                {/*					data.approval_log.map((item: any) => {*/}
-                {/*						return (*/}
-                {/*							<ListItem>*/}
-                {/*								<ListItemAvatar>*/}
-                {/*									<Avatar>*/}
-                {/*										<FiberManualRecordIcon />*/}
-                {/*									</Avatar>*/}
-                {/*								</ListItemAvatar>*/}
-                {/*								<ListItemText*/}
-                {/*									primary={item.status[0].set_value}*/}
-                {/*									secondary={moment(item.approved_at).format(*/}
-                {/*										"MMMM d, YYYY"*/}
-                {/*									)}*/}
-                {/*								/>*/}
-                {/*							</ListItem>*/}
-                {/*						);*/}
-                {/*					})*/}
-                {/*				) : (*/}
-                {/*					<ListItem>*/}
-                {/*						<ListItemAvatar>*/}
-                {/*							<Avatar>*/}
-                {/*								<ImageIcon />*/}
-                {/*							</Avatar>*/}
-                {/*						</ListItemAvatar>*/}
-                {/*						<ListItemText primary="Belum Ada" secondary="Jan 9, 2014" />*/}
-                {/*					</ListItem>*/}
-                {/*				)}*/}
-                {/*			</List>*/}
-                {/*		</Box>*/}
-                {/*	</Grid>*/}
-                {/*</Paper>*/}
-
                 <Grid sx={{flexGrow: 1, marginTop:3}}>
                     <Grid container mt={2}>
                         <Grid item md={6} px={2}>
