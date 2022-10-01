@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import env from "react-dotenv";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Navigate } from "react-router-dom";
 
 import { TelkomselLabel } from "../../assets/images";
 import { OutlinedTextField, SmallCopy } from "../../components";
