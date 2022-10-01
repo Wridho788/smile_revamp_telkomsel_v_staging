@@ -33,6 +33,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import InputAdornment from "@mui/material/InputAdornment";
 import { parseISO } from "date-fns";
 import { strToInt, thousandSeparator } from "../../../../../utils";
+import TextArea from "components/atoms/TextArea";
 
 interface IGeneralProps {
   keywordCreateState: ICreateKeyword;
@@ -237,13 +238,14 @@ const General: React.FunctionComponent<IGeneralProps> = ({
             }}
           />
           {keywordCreateState.eligibility.enable_sms_masking !== false && (
-            <OutlinedTextField
+            <TextArea
               label="SMS Masking Content"
-              placeholder="SMS Masking Content"
-              variant="outlined"
+              rows={4}
+              min={10}
+              max={100}
               value={keywordCreateState.eligibility.sms_masking}
-              handleChange={(value: string) => {
-                keywordCreate.eligibility.sms_masking = value;
+              onChange={(e) => {
+                keywordCreate.eligibility.sms_masking = e.target.value;
                 setStateTrigger(!stateTrigger);
               }}
             />
