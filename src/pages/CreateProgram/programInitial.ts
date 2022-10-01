@@ -67,10 +67,10 @@ export const ProgramDetailInitial: IFindProgram = {
 };
 
 export const variableInitial = [
-  "[PROGRAM_NAME]",
+  "[NAMA_PROGRAM]",
   "[KEYWORD_A]",
-  "[END_DATE]",
-  "[END_TIME]",
+  "[END_DATE IN DD-MM-YYYY]",
+  "[END_TIME HH:MM]",
   "[TIME_ZONE]",
   "[VOUCHER_CODE]",
   "[MERCHANT_NAME]",
@@ -79,5 +79,4 @@ export const variableInitial = [
   "[BUCKET_POINT]",
   "[COUPON_AMOUNT]",
   "[BONUS_NAME]",
-  "[TIME_ZONE]",
 ];
