@@ -48,9 +48,9 @@ export const picSlice = createApi({
                 }),
             });
         const deleteHandler = (endpoint: string) =>
-            builder.mutation<{ success: boolean; id: number }, number>({
-                query: (id) => ({
-                    url: endpoint + id + "/delete",
+            builder.mutation<{ success: boolean; _id: string }, string>({
+                query: (_id) => ({
+                    url: endpoint + _id,
                     method: "DELETE",
                     headers: {
                         "Content-Type": "application/json",
@@ -60,11 +60,11 @@ export const picSlice = createApi({
         return {
             picDetail: detailHandler(baseUrl + '/v1/pic'),
             // POST
-            addPic: postHandler(baseUrl + '/v1/pic'),
+            addPic: postHandler(baseUrl + '/v1/pic/'),
             // PUT 
-            updatePic: putHandler(baseUrl + '/v1/pic'),
+            updatePic: putHandler(baseUrl + '/v1/pic/'),
             // Delete
-            deletePic: deleteHandler(baseUrl + '/v1/pic'),
+            deletePic: deleteHandler(baseUrl + '/v1/pic/'),
             picTemplateForPrime: responseHandler("/prime"),
         };
     },

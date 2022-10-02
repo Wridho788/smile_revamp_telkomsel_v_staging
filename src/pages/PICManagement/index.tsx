@@ -115,6 +115,54 @@ const Index = () => {
     setOpen({ ...open, add: false });
   };
 
+  const onShowUpdateForm = async (data: typeof PicInital) => {
+    setOpen({ ...open, edit: true });
+    setPicDetail(data);
+    setInitialPic(data as any);
+  };
+  const onUpdatePic = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try {
+      const data = {
+        _id: picDetail?._id,
+        name: picDetail?.msisdn,
+        msisdn: picDetail?.name,
+        email: picDetail?.email,
+      };
+      await updatePic(data);
+      Swal.fire({
+        icon: 'success',
+        title: 'Success...',
+        text: 'PIC success updated.',
+      });
+    } catch {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Update merchant is failed',
+      });
+    }
+
+    setTriger((prev) => !prev);
+    setOpen({ ...open, edit: false });
+  };
+  const onDeletePic = async (data: typeof picDetail) => {
+    Swal.fire({
+      title: 'Do you want to delete data?',
+      showDenyButton: true,
+      confirmButtonText: `Delete`,
+      denyButtonText: `Don't Delete`,
+    }).then(async (result) => {
+      /* Read more about isConfirmed, isDenied below */
+      if (result.isConfirmed) {
+        deletePic(data ? data._id : '');
+        await Swal.fire('Deleted!', '', 'success');
+        setTriger((prev) => !prev);
+      } else if (result.isDenied) {
+        Swal.fire('Data are not deleted', '', 'info');
+      }
+    });
+  };
   // handle prime react
 
   let loadLazyTimeout: any = null;
@@ -161,10 +209,14 @@ const Index = () => {
   const actionBodyTemplate = (rowData: any) => {
     return (
       <React.Fragment>
-        <IconButton sx={{ backgroundColor: '#83BB57', color: '#FFF' }}>
+        <IconButton
+          sx={{ backgroundColor: '#83BB57', color: '#FFF' }}
+          onClick={() => onShowUpdateForm(rowData)}>
           <DriveFileRenameOutlineOutlined />
         </IconButton>
-        <IconButton sx={{ backgroundColor: '#ED0226', color: '#FFF' }}>
+        <IconButton
+          sx={{ backgroundColor: '#ED0226', color: '#FFF' }}
+          onClick={() => onDeletePic(rowData)}>
           <DeleteForeverOutlined />
         </IconButton>
       </React.Fragment>
@@ -178,7 +230,7 @@ const Index = () => {
           paddingLeft: '50px',
           paddingRight: '50px',
         }}>
-        <H2>PIC CUSTOMER</H2>
+        <H2>PIC MANAGEMENT</H2>
         <Gap width={0} height={20} />
 
         <Box>
@@ -255,6 +307,10 @@ const Index = () => {
             {picDetail?.name && picDetail?.msisdn && picDetail?.email}
           </SmallCopy>
           <SmallCopy>
+            Pic ID: {''}
+            {picDetail?._id}
+          </SmallCopy>
+          <SmallCopy>
             PIC Level / Tier:{' '}
             {picDetail?.created_by?.job_level &&
               picDetail?.created_by?.job_level}
@@ -288,7 +344,6 @@ const Index = () => {
                 />
               </Box>
               <Gap width={0} height={20} />
-
               <Box sx={{ display: 'flex' }}>
                 <TextField
                   size='small'
@@ -332,6 +387,74 @@ const Index = () => {
           </DialogActions>
         </form>
         <Gap width={0} height={20} />
+      </Dialog>
+
+      {/*=========================== Dialog of Edit PIC ======================== */}
+      {/* ============================================================================== */}
+      <Dialog
+        fullWidth
+        open={open.edit}
+        onClose={() => setOpen({ ...open, edit: false })}
+        sx={{ '& .MuiPaper-root': { overflowY: 'initial' } }}>
+        <DialogTitle variant='h5'>Update PIC</DialogTitle>
+        <Gap width={0} height={10} />
+        <form onSubmit={onUpdatePic}>
+          <DialogContent>
+            <Stack sx={{ display: 'flex' }} px='3vw'>
+              <Box sx={{ display: 'flex' }}>
+                <TextField
+                  size='small'
+                  fullWidth
+                  label='PIC Name'
+                  value={picDetail?.name}
+                  name='name'
+                  onChange={onChange}
+                  required
+                />
+              </Box>
+              <Gap width={0} height={20} />
+              <Box sx={{ display: 'flex' }}>
+                <TextField
+                  size='small'
+                  fullWidth
+                  label='PIC MSISDN'
+                  value={picDetail?.msisdn}
+                  name='msisdn'
+                  onChange={onChange}
+                  required
+                />
+              </Box>
+              <Gap width={0} height={20} />
+              <Box sx={{ display: 'flex' }}>
+                <TextField
+                  size='small'
+                  fullWidth
+                  label='PIC Email'
+                  value={picDetail?.email}
+                  name='email'
+                  onChange={onChange}
+                  required
+                />
+              </Box>
+            </Stack>
+          </DialogContent>
+          <DialogActions>
+            <Stack px='3vw'>
+              <Button
+                sx={{
+                  background: '#7B61FF',
+                  color: '#FFF',
+                  '&:hover': {
+                    color: '#7B61FF',
+                  },
+                }}
+                autoFocus
+                type='submit'>
+                Update Pic
+              </Button>
+            </Stack>
+          </DialogActions>
+        </form>
       </Dialog>
     </DrawerNav>
   );
