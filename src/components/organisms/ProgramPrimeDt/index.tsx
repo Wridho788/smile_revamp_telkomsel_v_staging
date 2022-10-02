@@ -223,6 +223,23 @@ const ProgramPrimeDt: FC = () => {
 						}
 					</>
 				}
+
+				{
+					rowData.approval_log && rowData.approval_log.length < 1 &&
+					<>
+						{
+							!rowData.isHQ ?
+								<Alert severity="info" icon={false}>
+									Waiting approval 1 <b>{rowData.created_by && rowData.created_by.superior_local?.first_name}</b>
+									<br /> <Typography variant={"body1"}>Program is <b>NEW</b></Typography>
+								</Alert> :
+								<Alert severity="info" icon={false}>
+									Waiting approval 2 <b>{rowData.created_by && rowData.created_by.superior_hq?.first_name}</b>
+									<br /> <Typography variant={"body1"}>Program is <b>NEW</b></Typography>
+								</Alert>
+						}
+					</>
+				}
 			</Box>
 		)
 	}
