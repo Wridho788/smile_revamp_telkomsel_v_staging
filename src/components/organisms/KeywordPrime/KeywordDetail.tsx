@@ -78,61 +78,125 @@ const KeywordDetail: FC<IKeywordDetailsModalProps> = ({
   data,
   roleAccess,
   isHqLogin,
+  userLoginId,
 }) => {
   const { eligibility, notification, bonus } = data;
   const { data: notifVia } = useGetNotifViaQuery();
-  const [approvalIssue, setApprovalIssue] = useState("");
 
   const [approveProgram, { isLoading: isLoadingApprove }] =
     useKeywordApproveMutation();
   const [rejectProgram, { isLoading: isLoadingReject }] =
     useKeywordRejectMutation();
 
+  const [reasonApproval, setReasonApproval] = useState("");
+
+  let approveBody = {
+    _id: data._id,
+    reason_approve: reasonApproval,
+  };
+
+  let rejectBody = {
+    _id: data._id,
+    reason_reject: reasonApproval,
+  };
+
   const approveHandler = async () => {
-    const id = data["_id"];
-    const reason_approve = approvalIssue;
-    if (id) {
-      approveProgram({ id: id, reason_approve: reason_approve }).then(
-        (res: any) => {
-          if (res?.error) {
-            handleClose();
-            Swal.fire(res.error.data.message, "Failed", "warning");
-          } else {
-            if (res?.data.status === 200) {
-              handleClose();
-              Swal.fire(res?.data.message, "Approved", "success");
-              setTimeout(() => {
-                window.location.reload();
-              }, 2000);
-            }
-          }
+    approveProgram(approveBody).then((res: any) => {
+      if (res?.error) {
+        handleClose();
+        Swal.fire(res.error.data.message, "Failed", "warning");
+      } else {
+        if (res?.data.status === 200) {
+          handleClose();
+          Swal.fire(res?.data.message, "Approved", "success");
+          setTimeout(() => {
+            window.location.reload();
+          }, 2000);
         }
-      );
-    }
+      }
+    });
   };
 
   const rejectHandler = async () => {
-    const id = data["_id"];
-    const reason_reject = approvalIssue;
-    if (id) {
-      rejectProgram({ id: id, reason_reject: reason_reject }).then(
-        (res: any) => {
-          if (res?.error) {
-            handleClose();
-            Swal.fire(res.error.data.message, "Failed", "warning");
-          } else {
-            if (res?.data.status === 200) {
-              handleClose();
-              Swal.fire(res?.data.message, "Rejected", "success");
-              setTimeout(() => {
-                window.location.reload();
-              }, 2000);
-            }
-          }
+    rejectProgram(rejectBody).then((res: any) => {
+      if (res?.error) {
+        handleClose();
+        Swal.fire(res.error.data.message, "Failed", "warning");
+      } else {
+        if (res?.data.status === 200) {
+          handleClose();
+          Swal.fire(res?.data.message, "Rejected", "success");
+          setTimeout(() => {
+            window.location.reload();
+          }, 2000);
         }
-      );
-    }
+      }
+    });
   };
+
+  // const renderApproveSection = (text: string) => {
+  //   return (
+  //     <>
+  //       {roleAccess ? (
+  //         <>
+  //           <Stack
+  //             direction="row"
+  //             alignItems="center"
+  //             justifyContent="space-between"
+  //             spacing="2vw"
+  //             mt="1vw"
+  //             sx={{ p: 2, backgroundColor: "#E5E5E5", borderRadius: 2 }}
+  //           >
+  //             <Stack direction="row" spacing="1vw">
+  //               <Alert sx={{ margin: 2 }} severity="warning">
+  //                 {text}
+  //               </Alert>
+  //             </Stack>
+  //             <Stack
+  //               direction="row"
+  //               sx={{
+  //                 justifyContent: "space-between",
+  //               }}
+  //               spacing="1vw"
+  //             >
+  //               <Button
+  //                 disabled={isLoadingApprove || isLoadingReject}
+  //                 onClick={approveHandler}
+  //                 variant={"contained"}
+  //                 color="success"
+  //                 sx={{ color: "white" }}
+  //               >
+  //                 Approve
+  //               </Button>
+  //               <Button
+  //                 disabled={isLoadingApprove || isLoadingReject}
+  //                 onClick={rejectHandler}
+  //                 variant={"contained"}
+  //                 color="error"
+  //               >
+  //                 Reject
+  //               </Button>
+  //             </Stack>
+  //           </Stack>
+  //           <OutlinedTextField
+  //             direction="column"
+  //             label=""
+  //             placeholder="Leave comment of your approval action ..."
+  //             variant={"outlined"}
+  //             value={approvalIssue}
+  //             handleChange={setApprovalIssue}
+  //             multiline
+  //             rows={3}
+  //           />
+  //         </>
+  //       ) : (
+  //         <Alert sx={{ margin: 2 }} severity="info">
+  //           {text}
+  //         </Alert>
+  //       )}
+  //     </>
+  //   );
+  // };
 
   const renderApproveSection = (text: string) => {
     return (
@@ -140,25 +204,42 @@ const KeywordDetail: FC<IKeywordDetailsModalProps> = ({
         {roleAccess ? (
           <>
             <Stack
-              direction="row"
-              alignItems="center"
-              justifyContent="space-between"
               spacing="2vw"
-              mt="1vw"
-              sx={{ p: 2, backgroundColor: "#E5E5E5", borderRadius: 2 }}
+              ml="1vw"
+              mr="1vw"
+              sx={{ backgroundColor: "#fff", borderRadius: 2 }}
             >
-              <Stack direction="row" spacing="1vw">
-                <Alert sx={{ margin: 2 }} severity="warning">
-                  {text}
-                </Alert>
+              <Box>
+                <Alert severity="success">{text}</Alert>
+              </Box>
+              <Stack direction="row" sx={{ flex: 1 }}>
+                <OutlinedTextField
+                  isRequired={false}
+                  direction="column"
+                  label=""
+                  placeholder="Leave comment of your approval action ..."
+                  variant={"outlined"}
+                  value={reasonApproval}
+                  handleChange={setReasonApproval}
+                  multiline
+                  rows={3}
+                />
               </Stack>
               <Stack
                 direction="row"
                 sx={{
-                  justifyContent: "space-between",
+                  justifyContent: "flex-end",
                 }}
                 spacing="1vw"
               >
+                <Button
+                  disabled={isLoadingApprove || isLoadingReject}
+                  onClick={rejectHandler}
+                  variant={"contained"}
+                  color="error"
+                >
+                  Reject
+                </Button>
                 <Button
                   disabled={isLoadingApprove || isLoadingReject}
                   onClick={approveHandler}
@@ -168,26 +249,8 @@ const KeywordDetail: FC<IKeywordDetailsModalProps> = ({
                 >
                   Approve
                 </Button>
-                <Button
-                  disabled={isLoadingApprove || isLoadingReject}
-                  onClick={rejectHandler}
-                  variant={"contained"}
-                  color="error"
-                >
-                  Reject
-                </Button>
               </Stack>
             </Stack>
-            <OutlinedTextField
-              direction="column"
-              label=""
-              placeholder="Leave comment of your approval action ..."
-              variant={"outlined"}
-              value={approvalIssue}
-              handleChange={setApprovalIssue}
-              multiline
-              rows={3}
-            />
           </>
         ) : (
           <Alert sx={{ margin: 2 }} severity="info">
@@ -198,6 +261,147 @@ const KeywordDetail: FC<IKeywordDetailsModalProps> = ({
     );
   };
 
+  const checkToRenderApprovalSection = () => {
+    var approval_status_value: string = "";
+    if (data.approval_log && data.approval_log.length > 0) {
+      approval_status_value =
+        data.approval_log[data.approval_log.length - 1].status[0].set_value;
+    }
+    if (!data.isHQ && data.created_by) {
+      if (userLoginId === data.created_by.superior_local?._id) {
+        if (
+          (data.approval_log && data.approval_log.length < 1) ||
+          approval_status_value === "Rejected by Manager Non HQ"
+        ) {
+          return (
+            <>
+              {renderApproveSection(
+                `Hi, ${data.created_by.superior_local?.first_name}. We're happy to see you in, This program need your approval`
+              )}
+            </>
+          );
+        }
+      }
+      if (userLoginId === data.created_by.superior_hq?._id) {
+        if (
+          (data.approval_log &&
+            data.approval_log.length > 1 &&
+            approval_status_value === "Rejected by Manager HQ") ||
+          approval_status_value === "Approved by Manager Non HQ"
+        ) {
+          return (
+            <>
+              {renderApproveSection(
+                `Hi, ${data.created_by.superior_hq?.first_name}. We're happy to see you in, This program need your approval`
+              )}
+            </>
+          );
+        }
+      }
+    }
+
+    if (data.isHQ && data.created_by) {
+      if (userLoginId === data.created_by.superior_hq?._id) {
+        if (
+          (data.approval_log &&
+            data.approval_log.length > 1 &&
+            approval_status_value === "Rejected by Manager HQ") ||
+          approval_status_value !== "Approved by Manager HQ"
+        ) {
+          return (
+            <>
+              {renderApproveSection(
+                `Hi, ${data.created_by.superior_hq?.first_name}. We're happy to see you in, This program need your approval`
+              )}
+            </>
+          );
+        }
+      }
+    }
+  };
+
+  const alertApproveInfo = () => {
+    var approval_status_value: string = "";
+    if (data.approval_log && data.approval_log.length > 0) {
+      approval_status_value =
+        data.approval_log[data.approval_log.length - 1].status[0].set_value;
+    }
+    return (
+      <>
+        {!data.isHQ && data.approval_log && data.approval_log.length < 1 && (
+          <Alert sx={{ margin: 2 }} severity="error">
+            Waiting for approval 1 ({data.created_by.superior_local?.first_name}
+            ) - <b>This Program is NEW</b>
+          </Alert>
+        )}
+        {!data.isHQ && data.approval_log && data.approval_log.length > 0 && (
+          <>
+            {approval_status_value === "Rejected by Manager Non HQ" && (
+              <Alert sx={{ margin: 2 }} severity="error">
+                Waiting for approval 1 (
+                {data.created_by.superior_local?.first_name}) -{" "}
+                <b>This Program is {approval_status_value}</b>
+              </Alert>
+            )}
+            {approval_status_value === "Approved by Manager Non HQ" ||
+              (approval_status_value === "Rejected by Manager HQ" && (
+                <Alert sx={{ margin: 2 }} severity="error">
+                  Waiting for approval 2 (
+                  {data.created_by.superior_hq?.first_name}) -{" "}
+                  <b>This Program is {approval_status_value}</b>
+                  {approval_status_value === "Rejected by Manager HQ" && (
+                    <>
+                      <br /> Rejection Reason : <i></i>
+                    </>
+                  )}
+                </Alert>
+              ))}
+            {approval_status_value === "Approved by Manager Non HQ" && (
+              <Alert sx={{ margin: 2 }} severity="success">
+                Approved by {data.created_by.superior_local?.first_name} -{" "}
+                <b>
+                  {" "}
+                  Waiting Approval from{" "}
+                  {data.created_by.superior_hq?.first_name}{" "}
+                </b>
+              </Alert>
+            )}
+            {approval_status_value === "Approved by Manager HQ" && (
+              <Alert sx={{ margin: 2 }} severity="success">
+                This Program is {approval_status_value}{" "}
+                <b>({data.created_by.superior_hq?.first_name})</b>
+              </Alert>
+            )}
+          </>
+        )}
+
+        {/*  Untuk Data HQ  */}
+        {data.isHQ && data.approval_log && data.approval_log.length < 1 && (
+          <Alert sx={{ margin: 2 }} severity="error">
+            Waiting for approval 2 ({data.created_by.superior_hq?.first_name}) -{" "}
+            <b>This Program is NEW</b>
+          </Alert>
+        )}
+        {data.isHQ && data.approval_log && data.approval_log.length > 0 && (
+          <>
+            {approval_status_value === "Rejected by Manager HQ" && (
+              <Alert sx={{ margin: 2 }} severity="error">
+                Waiting for approval 2 (
+                {data.created_by.superior_hq?.first_name}) -{" "}
+                <b>This Program is {approval_status_value}</b>
+              </Alert>
+            )}
+            {approval_status_value === "Approved by Manager HQ" && (
+              <Alert sx={{ margin: 2 }} severity="success">
+                This Program is {approval_status_value}{" "}
+                <b>({data.created_by.superior_hq?.first_name})</b>
+              </Alert>
+            )}
+          </>
+        )}
+      </>
+    );
+  };
   // clean keyword program detail
 
   const keywordProgramDetail = keywordProgramDetailHelper;
@@ -228,117 +432,11 @@ const KeywordDetail: FC<IKeywordDetailsModalProps> = ({
           <BodyCopy>Keyword ID : {data["_id"] ?? "Description"}</BodyCopy>
         </Box>
         {/* TODO: Checking status "Approval" of Detail Program */}
-
-        {data.approval_log && data.approval_log.length > 0 ? (
-          isHqLogin ? (
-            !data.isHQ &&
-            data.approval_log[data.approval_log.length - 1].status[0]
-              .set_value === "Approved by Manager HQ" ? (
-              <Alert sx={{ margin: 2 }} severity="success">
-                {
-                  data.approval_log[data.approval_log.length - 1].status[0]
-                    .set_value
-                }
-              </Alert>
-            ) : // Jika bukan approved by manager HQ, check apakah direject oleh manager HQ
-            data.approval_log[data.approval_log.length - 1].status[0]
-                .set_value !== "Approved by Manager Non HQ" ? (
-              // Check apakah di reject oleh manager HQ
-              data.approval_log[data.approval_log.length - 1].status[0]
-                .set_value === "Rejected by Manager HQ" ? (
-                renderApproveSection(
-                  "HQ Manager Approval Needed after rejection"
-                )
-              ) : (
-                <Alert sx={{ margin: 2 }} severity="warning">
-                  Waiting For approval 1
-                </Alert>
-              )
-            ) : (
-              renderApproveSection("HQ Manager Approval Needed")
-            )
-          ) : !data.isHQ &&
-            data.approval_log[data.approval_log.length - 1].status[0]
-              .set_value === "Approved by Manager HQ" ? (
-            <Alert sx={{ margin: 2 }} severity="success">
-              {
-                data.approval_log[data.approval_log.length - 1].status[0]
-                  .set_value
-              }
-            </Alert>
-          ) : data.approval_log[data.approval_log.length - 1].status[0]
-              .set_value !== "Approved by Manager Non HQ" ? (
-            // Check apakah status bukan Approved by Manager Non HQ dikarenakan direject oleh manager HQ
-            data.approval_log[data.approval_log.length - 1].status[0]
-              .set_value === "Rejected by Manager HQ" ? (
-              <Alert sx={{ margin: 2 }} severity="warning">
-                Rejected By Manager HQ
-              </Alert>
-            ) : (
-              renderApproveSection("Need approve by Area Manager")
-            )
-          ) : (
-            <Alert sx={{ margin: 2 }} severity="success">
-              Your Management Level has approved this program
-            </Alert>
-          )
-        ) : isHqLogin ? (
-          data.isHQ ? (
-            renderApproveSection("Need approve by HQ Manager")
-          ) : (
-            <Alert sx={{ margin: 2 }} severity="warning">
-              Need approve by Area Manager first.
-            </Alert>
-          )
-        ) : (
-          renderApproveSection("Need approve by Area Manager")
-        )}
-
-        <Paper>
-          <Grid container>
-            <Box item component={Grid} xs={12}>
-              <List
-                sx={{
-                  width: "100%",
-                  maxWidth: 360,
-                  bgcolor: "background.paper",
-                }}
-              >
-                {data.approval_log && data.approval_log.length > 0 ? (
-                  data.approval_log.map((item: any) => {
-                    return (
-                      <ListItem>
-                        <ListItemAvatar>
-                          <Avatar>
-                            <FiberManualRecordIcon />
-                          </Avatar>
-                        </ListItemAvatar>
-                        <ListItemText
-                          primary={item.status[0].set_value}
-                          secondary={moment(item.approved_at).format(
-                            "MMMM d, YYYY"
-                          )}
-                        />
-                      </ListItem>
-                    );
-                  })
-                ) : (
-                  <ListItem>
-                    <ListItemAvatar>
-                      <Avatar>
-                        <ImageIcon />
-                      </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText primary="Belum Ada" secondary="Jan 9, 2014" />
-                  </ListItem>
-                )}
-              </List>
-            </Box>
-          </Grid>
-        </Paper>
+        {alertApproveInfo()}
+        {checkToRenderApprovalSection()}
 
         <Grid sx={{ flexGrow: 1 }}>
-          <Grid container direction="column" mt={2} spacing={"1vw"}>
+          <Grid container direction="column" mt={2} p={2} spacing={"1vw"}>
             <Grid item md={6} px={2}>
               <Stack direction="row" justifyContent="space-between">
                 <Typography
@@ -632,7 +730,17 @@ const KeywordDetail: FC<IKeywordDetailsModalProps> = ({
                   </Grid>
                   <Grid item xs={3}>
                     <Typography sx={fontContent}>
-                      <b>Customer Prepaid</b>
+                      <b>Customer Most Redeem</b>
+                    </Typography>
+                    <Typography sx={fontContent}>
+                      {eligibility?.segmentation_customer_most_redeem.map(
+                        (item: any) => item
+                      )}
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={3}>
+                    <Typography sx={fontContent}>
+                      <b>Customer Prepaid Registration</b>
                     </Typography>
                     <Typography sx={fontContent}>
                       {eligibility?.segmentation_customer_prepaid_registration
@@ -658,6 +766,14 @@ const KeywordDetail: FC<IKeywordDetailsModalProps> = ({
                   </Grid>
                   <Grid item xs={3}>
                     <Typography sx={fontContent}>
+                      <b>Customer Los</b>
+                    </Typography>
+                    <Typography sx={fontContent}>
+                      {eligibility?.segmentation_customer_los}
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={3}>
+                    <Typography sx={fontContent}>
                       <b>Customer Los Min</b>
                     </Typography>
                     <Typography sx={fontContent}>
@@ -670,24 +786,6 @@ const KeywordDetail: FC<IKeywordDetailsModalProps> = ({
                     </Typography>
                     <Typography sx={fontContent}>
                       {eligibility?.segmentation_customer_los_max}
-                    </Typography>
-                  </Grid>
-                  <Grid item xs={3}>
-                    <Typography sx={fontContent}>
-                      <b>Customer Los</b>
-                    </Typography>
-                    <Typography sx={fontContent}>
-                      {eligibility?.segmentation_customer_los}
-                    </Typography>
-                  </Grid>
-                  <Grid item xs={3}>
-                    <Typography sx={fontContent}>
-                      <b>Customer Most Redeem</b>
-                    </Typography>
-                    <Typography sx={fontContent}>
-                      {eligibility?.segmentation_customer_most_redeem.map(
-                        (item: any) => item
-                      )}
                     </Typography>
                   </Grid>
                   <Grid item xs={3}>
@@ -730,6 +828,30 @@ const KeywordDetail: FC<IKeywordDetailsModalProps> = ({
                     </Typography>
                     <Typography sx={fontContent}>
                       {eligibility?.segmentation_customer_poin_balance_max}
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={3}>
+                    <Typography sx={fontContent}>
+                      <b>Customer Preference</b>
+                    </Typography>
+                    <Typography sx={fontContent}>
+                      {eligibility?.segmentation_customer_preference}
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={3}>
+                    <Typography sx={fontContent}>
+                      <b>Customer Arpu Operator</b>
+                    </Typography>
+                    <Typography sx={fontContent}>
+                      {eligibility?.segmentation_customer_arpu_operator}
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={3}>
+                    <Typography sx={fontContent}>
+                      <b>Customer Arpu</b>
+                    </Typography>
+                    <Typography sx={fontContent}>
+                      {eligibility?.segmentation_customer_arpu}
                     </Typography>
                   </Grid>
                   <Grid item xs={3}>
@@ -901,10 +1023,558 @@ const KeywordDetail: FC<IKeywordDetailsModalProps> = ({
                       </Typography>
                     </AccordionSummary>
                     <AccordionDetails>
-                      <Typography>Locations</Typography>
                       <Gap width={0} height={10} />
-                      <Grid container>
-                        {item.locations
+                      <Grid container spacing="2vw">
+                        {item.bonus_type === "telco_postpaid" ? (
+                          <>
+                            <Grid item xs={3}>
+                              <Typography sx={fontContent}>
+                                <b>Telco Post Product Name</b>
+                              </Typography>
+                              <Typography sx={fontContent}>
+                                {item.telco_post_product_name}
+                              </Typography>
+                            </Grid>
+                            <Grid item xs={3}>
+                              <Typography sx={fontContent}>
+                                <b>Telco Post Bid</b>
+                              </Typography>
+                              <Typography sx={fontContent}>
+                                {item.telco_post_bid}
+                              </Typography>
+                            </Grid>
+                            <Grid item xs={3}>
+                              <Typography sx={fontContent}>
+                                <b>Telco Post API config</b>
+                              </Typography>
+                              <Typography sx={fontContent}>
+                                {item.telco_post_api_config}
+                              </Typography>
+                            </Grid>
+                            <Grid item xs={3}>
+                              <Typography sx={fontContent}>
+                                <b>Redeem after verification</b>
+                              </Typography>
+                              <Typography sx={fontContent}>
+                                {item.redeem_after_verification
+                                  ? "True"
+                                  : "False"}
+                              </Typography>
+                            </Grid>
+                            <Grid item xs={12}>
+                              <Typography>Locations</Typography>
+                              <Grid container spacing="1vw">
+                                {item.stock_location.map(
+                                  (data: any, index: number) => (
+                                    <Grid key={index} item xs={4}>
+                                      <Typography sx={fontContent}>
+                                        <b>{data.location_id}</b>
+                                      </Typography>
+                                      <Typography sx={fontContent}>
+                                        {data.stock}
+                                      </Typography>
+                                    </Grid>
+                                  )
+                                )}
+                              </Grid>
+                            </Grid>
+                          </>
+                        ) : item.bonus_type === "telco_prepaid" ? (
+                          <>
+                            <Grid item xs={3}>
+                              <Typography sx={fontContent}>
+                                <b>Telco Pre Product Name</b>
+                              </Typography>
+                              <Typography sx={fontContent}>
+                                {item.telco_pre_product_name}
+                              </Typography>
+                            </Grid>
+                            <Grid item xs={3}>
+                              <Typography sx={fontContent}>
+                                <b>Telco Pre Bid</b>
+                              </Typography>
+                              <Typography sx={fontContent}>
+                                {item.telco_pre_bid}
+                              </Typography>
+                            </Grid>
+                            <Grid item xs={3}>
+                              <Typography sx={fontContent}>
+                                <b>Telco Pre API config</b>
+                              </Typography>
+                              <Typography sx={fontContent}>
+                                {item.telco_pre_api_config}
+                              </Typography>
+                            </Grid>
+                            <Grid item xs={3}>
+                              <Typography sx={fontContent}>
+                                <b>Redeem after verification</b>
+                              </Typography>
+                              <Typography sx={fontContent}>
+                                {item.redeem_after_verification
+                                  ? "True"
+                                  : "False"}
+                              </Typography>
+                            </Grid>
+                            <Grid item xs={12}>
+                              <Typography>Locations</Typography>
+                              <Grid container spacing="1vw">
+                                {item.stock_location.map(
+                                  (data: any, index: number) => (
+                                    <Grid key={index} item xs={4}>
+                                      <Typography sx={fontContent}>
+                                        <b>{data.location_id}</b>
+                                      </Typography>
+                                      <Typography sx={fontContent}>
+                                        {data.stock}
+                                      </Typography>
+                                    </Grid>
+                                  )
+                                )}
+                              </Grid>
+                            </Grid>
+                          </>
+                        ) : item.bonus_type === "loyalty_poin" ? (
+                          <>
+                            <Grid item xs={3}>
+                              <Typography sx={fontContent}>
+                                <b>Redeem after verification</b>
+                              </Typography>
+                              <Typography sx={fontContent}>
+                                {item.redeem_after_verification
+                                  ? "True"
+                                  : "False"}
+                              </Typography>
+                            </Grid>
+                            <Grid item xs={12}>
+                              <Typography>Locations</Typography>
+                              <Grid container spacing="1vw">
+                                {item.locations.map(
+                                  (data: any, index: number) => (
+                                    <Grid key={index} item xs={4}>
+                                      <Typography sx={fontContent}>
+                                        <b>{data.location_id}</b>
+                                      </Typography>
+                                      <Typography sx={fontContent}>
+                                        {data.stock}
+                                      </Typography>
+                                    </Grid>
+                                  )
+                                )}
+                              </Grid>
+                            </Grid>
+                          </>
+                        ) : item.bonus_type === "lucky_draw" ? (
+                          <>
+                            <Grid item xs={3}>
+                              <Typography sx={fontContent}>
+                                <b>Lucky Draw Regular</b>
+                              </Typography>
+                              <Typography sx={fontContent}>
+                                {item.lucky_draw_reguler ? "True" : "False"}
+                              </Typography>
+                            </Grid>
+                            <Grid item xs={3}>
+                              <Typography sx={fontContent}>
+                                <b>Lucky Draw Allow Inject Coupon</b>
+                              </Typography>
+                              <Typography sx={fontContent}>
+                                {item.lucky_draw_allow_inject_coupon
+                                  ? "True"
+                                  : "False"}
+                              </Typography>
+                            </Grid>
+                            <Grid item xs={3}>
+                              <Typography sx={fontContent}>
+                                <b>Lucky Draw Prize</b>
+                              </Typography>
+                              <Typography sx={fontContent}>
+                                {item.lucky_draw_prize}
+                              </Typography>
+                            </Grid>
+                            <Grid item xs={3}>
+                              <Typography sx={fontContent}>
+                                <b>Redeem after verification</b>
+                              </Typography>
+                              <Typography sx={fontContent}>
+                                {item.redeem_after_verification
+                                  ? "True"
+                                  : "False"}
+                              </Typography>
+                            </Grid>
+                            <Grid item xs={12}>
+                              <Typography>Locations</Typography>
+                              <Grid container spacing="1vw">
+                                {item.locations.map(
+                                  (data: any, index: number) => (
+                                    <Grid key={index} item xs={4}>
+                                      <Typography sx={fontContent}>
+                                        <b>{data.location_id}</b>
+                                      </Typography>
+                                      <Typography sx={fontContent}>
+                                        {data.stock}
+                                      </Typography>
+                                    </Grid>
+                                  )
+                                )}
+                              </Grid>
+                            </Grid>
+                          </>
+                        ) : item.bonus_type === "auction" ? (
+                          <>
+                            <Grid item xs={3}>
+                              <Typography sx={fontContent}>
+                                <b>Auction Prize Description ID</b>
+                              </Typography>
+                              <Typography sx={fontContent}>
+                                {item.auction_prize_desc_id}
+                              </Typography>
+                            </Grid>
+                            <Grid item xs={3}>
+                              <Typography sx={fontContent}>
+                                <b>Auction Prize Description EN</b>
+                              </Typography>
+                              <Typography sx={fontContent}>
+                                {item.auction_prize_desc_en}
+                              </Typography>
+                            </Grid>
+                            <Grid item xs={3}>
+                              <Typography sx={fontContent}>
+                                <b>Auction Prize Image</b>
+                              </Typography>
+                              <Typography sx={fontContent}>
+                                {item.auction_prize_image}
+                              </Typography>
+                            </Grid>
+                            <Grid item xs={3}>
+                              <Typography sx={fontContent}>
+                                <b>Auction Poin Min Bidding</b>
+                              </Typography>
+                              <Typography sx={fontContent}>
+                                {item.auction_poin_min_bidding}
+                              </Typography>
+                            </Grid>
+                            <Grid item xs={3}>
+                              <Typography sx={fontContent}>
+                                <b>Auction Multiplier Poin</b>
+                              </Typography>
+                              <Typography sx={fontContent}>
+                                {item.auction_multiplier_poin}
+                              </Typography>
+                            </Grid>
+                            <Grid item xs={3}>
+                              <Typography sx={fontContent}>
+                                <b>Auction Max Winner Inphase</b>
+                              </Typography>
+                              <Typography sx={fontContent}>
+                                {item.auction_max_winner_inphase}
+                              </Typography>
+                            </Grid>
+                            <Grid item xs={3}>
+                              <Typography sx={fontContent}>
+                                <b>Redeem after verification</b>
+                              </Typography>
+                              <Typography sx={fontContent}>
+                                {item.redeem_after_verification
+                                  ? "True"
+                                  : "False"}
+                              </Typography>
+                            </Grid>
+                            <Grid item xs={12}>
+                              <Typography>Locations</Typography>
+                              <Grid container spacing="1vw">
+                                {item.stock_location.map(
+                                  (data: any, index: number) => (
+                                    <Grid key={index} item xs={4}>
+                                      <Typography sx={fontContent}>
+                                        <b>{data.location_id}</b>
+                                      </Typography>
+                                      <Typography sx={fontContent}>
+                                        {data.stock}
+                                      </Typography>
+                                    </Grid>
+                                  )
+                                )}
+                              </Grid>
+                            </Grid>
+                          </>
+                        ) : item.bonus_type === "voting" ? (
+                          <>
+                            <Grid item xs={3}>
+                              <Typography sx={fontContent}>
+                                <b>Target Redeemer</b>
+                              </Typography>
+                              <Typography sx={fontContent}>
+                                {item.target_redeemer}
+                              </Typography>
+                            </Grid>
+                            <Grid item xs={3}>
+                              <Typography sx={fontContent}>
+                                <b>Redeem after verification</b>
+                              </Typography>
+                              <Typography sx={fontContent}>
+                                {item.redeem_after_verification
+                                  ? "True"
+                                  : "False"}
+                              </Typography>
+                            </Grid>
+                            <Grid item xs={12}>
+                              <Typography>Locations</Typography>
+                              <Grid container spacing="1vw">
+                                {item.stock_location.map(
+                                  (data: any, index: number) => (
+                                    <Grid key={index} item xs={4}>
+                                      <Typography sx={fontContent}>
+                                        <b>{data.location_id}</b>
+                                      </Typography>
+                                      <Typography sx={fontContent}>
+                                        {data.stock}
+                                      </Typography>
+                                    </Grid>
+                                  )
+                                )}
+                              </Grid>
+                            </Grid>
+                          </>
+                        ) : item.bonus_type === "donation" ? (
+                          <>
+                            <Grid item xs={3}>
+                              <Typography sx={fontContent}>
+                                <b>Donation Category</b>
+                              </Typography>
+                              <Typography sx={fontContent}>
+                                {item.donation_category}
+                              </Typography>
+                            </Grid>
+                            <Grid item xs={3}>
+                              <Typography sx={fontContent}>
+                                <b>Minimum Poin</b>
+                              </Typography>
+                              <Typography sx={fontContent}>
+                                {item.minimum_poin}
+                              </Typography>
+                            </Grid>
+                            <Grid item xs={3}>
+                              <Typography sx={fontContent}>
+                                <b>Target Poin</b>
+                              </Typography>
+                              <Typography sx={fontContent}>
+                                {item.target_poin}
+                              </Typography>
+                            </Grid>
+                            <Grid item xs={3}>
+                              <Typography sx={fontContent}>
+                                <b>Redeem after verification</b>
+                              </Typography>
+                              <Typography sx={fontContent}>
+                                {item.redeem_after_verification
+                                  ? "True"
+                                  : "False"}
+                              </Typography>
+                            </Grid>
+                            <Grid item xs={12}>
+                              <Typography>Locations</Typography>
+                              <Grid container spacing="1vw">
+                                {item.stock_location.map(
+                                  (data: any, index: number) => (
+                                    <Grid key={index} item xs={4}>
+                                      <Typography sx={fontContent}>
+                                        <b>{data.location_id}</b>
+                                      </Typography>
+                                      <Typography sx={fontContent}>
+                                        {data.stock}
+                                      </Typography>
+                                    </Grid>
+                                  )
+                                )}
+                              </Grid>
+                            </Grid>
+                          </>
+                        ) : item.bonus_type === "mbp" ? (
+                          <>
+                            <Grid item xs={3}>
+                              <Typography sx={fontContent}>
+                                <b>Bank</b>
+                              </Typography>
+                              <Typography sx={fontContent}>
+                                {item.bank}
+                              </Typography>
+                            </Grid>
+                            <Grid item xs={3}>
+                              <Typography sx={fontContent}>
+                                <b>IP Address</b>
+                              </Typography>
+                              <Typography sx={fontContent}>
+                                {item.ip_address}
+                              </Typography>
+                            </Grid>
+                            <Grid item xs={3}>
+                              <Typography sx={fontContent}>
+                                <b>Digit Coupon</b>
+                              </Typography>
+                              <Typography sx={fontContent}>
+                                {item.digit_coupon}
+                              </Typography>
+                            </Grid>
+                            <Grid item xs={3}>
+                              <Typography sx={fontContent}>
+                                <b>Combination Coupon</b>
+                              </Typography>
+                              <Typography sx={fontContent}>
+                                {item.combination_coupon}
+                              </Typography>
+                            </Grid>
+                            <Grid item xs={3}>
+                              <Typography sx={fontContent}>
+                                <b>Redeem after verification</b>
+                              </Typography>
+                              <Typography sx={fontContent}>
+                                {item.redeem_after_verification
+                                  ? "True"
+                                  : "False"}
+                              </Typography>
+                            </Grid>
+                            <Grid item xs={12}>
+                              <Typography>Locations</Typography>
+                              <Grid container spacing="1vw">
+                                {item.stock_location.map(
+                                  (data: any, index: number) => (
+                                    <Grid key={index} item xs={4}>
+                                      <Typography sx={fontContent}>
+                                        <b>{data.location_id}</b>
+                                      </Typography>
+                                      <Typography sx={fontContent}>
+                                        {data.stock}
+                                      </Typography>
+                                    </Grid>
+                                  )
+                                )}
+                              </Grid>
+                            </Grid>
+                          </>
+                        ) : item.bonus_type === "link_aja" ? (
+                          <>
+                            <Grid item xs={3}>
+                              <Typography sx={fontContent}>
+                                <b>Redeem after verification</b>
+                              </Typography>
+                              <Typography sx={fontContent}>
+                                {item.redeem_after_verification
+                                  ? "True"
+                                  : "False"}
+                              </Typography>
+                            </Grid>
+                            <Grid item xs={12}>
+                              <Typography>Locations</Typography>
+                              <Grid container spacing="1vw">
+                                {item.locations.map(
+                                  (data: any, index: number) => (
+                                    <Grid key={index} item xs={4}>
+                                      <Typography sx={fontContent}>
+                                        <b>{data.location_id}</b>
+                                      </Typography>
+                                      <Typography sx={fontContent}>
+                                        {data.stock}
+                                      </Typography>
+                                    </Grid>
+                                  )
+                                )}
+                              </Grid>
+                            </Grid>
+                          </>
+                        ) : item.bonus_type === "direct_redeem" ? (
+                          <>
+                            <Grid item xs={3}>
+                              <Typography sx={fontContent}>
+                                <b>Redeem after verification</b>
+                              </Typography>
+                              <Typography sx={fontContent}>
+                                {item.redeem_after_verification
+                                  ? "True"
+                                  : "False"}
+                              </Typography>
+                            </Grid>
+                            <Grid item xs={12}>
+                              <Typography>Locations</Typography>
+                              <Grid container spacing="1vw">
+                                {item.stock_location.map(
+                                  (data: any, index: number) => (
+                                    <Grid key={index} item xs={4}>
+                                      <Typography sx={fontContent}>
+                                        <b>{data.location_id}</b>
+                                      </Typography>
+                                      <Typography sx={fontContent}>
+                                        {data.stock}
+                                      </Typography>
+                                    </Grid>
+                                  )
+                                )}
+                              </Grid>
+                            </Grid>
+                          </>
+                        ) : item.bonus_type === "discount_voucher" ? (
+                          <>
+                            <Grid item xs={3}>
+                              <Typography sx={fontContent}>
+                                <b>Exp Voucher</b>
+                              </Typography>
+                              <Typography sx={fontContent}>
+                                {item.exp_voucher}
+                              </Typography>
+                            </Grid>
+                            <Grid item xs={3}>
+                              <Typography sx={fontContent}>
+                                <b>Voucher Type</b>
+                              </Typography>
+                              <Typography sx={fontContent}>
+                                {item.voucher_type}
+                              </Typography>
+                            </Grid>
+                            <Grid item xs={3}>
+                              <Typography sx={fontContent}>
+                                <b>Voucher Combination</b>
+                              </Typography>
+                              <Typography sx={fontContent}>
+                                {item.voucher_combination}
+                              </Typography>
+                            </Grid>
+                            <Grid item xs={3}>
+                              <Typography sx={fontContent}>
+                                <b>Voucher Count</b>
+                              </Typography>
+                              <Typography sx={fontContent}>
+                                {item.jumlah_total_voucher}
+                              </Typography>
+                            </Grid>
+                            <Grid item xs={3}>
+                              <Typography sx={fontContent}>
+                                <b>Redeem after verification</b>
+                              </Typography>
+                              <Typography sx={fontContent}>
+                                {item.redeem_after_verification
+                                  ? "True"
+                                  : "False"}
+                              </Typography>
+                            </Grid>
+                            <Grid item xs={12}>
+                              <Typography>Locations</Typography>
+                              <Grid container spacing="1vw">
+                                {item.stock_location.map(
+                                  (data: any, index: number) => (
+                                    <Grid key={index} item xs={4}>
+                                      <Typography sx={fontContent}>
+                                        <b>{data.location_id}</b>
+                                      </Typography>
+                                      <Typography sx={fontContent}>
+                                        {data.stock}
+                                      </Typography>
+                                    </Grid>
+                                  )
+                                )}
+                              </Grid>
+                            </Grid>
+                          </>
+                        ) : null}
+                        {/* {item.locations
                           ? item.locations.map((data: any, index: number) => (
                               <Grid key={index} item xs={4}>
                                 <Typography sx={fontContent}>
@@ -927,7 +1597,7 @@ const KeywordDetail: FC<IKeywordDetailsModalProps> = ({
                                   </Typography>
                                 </Grid>
                               )
-                            )}
+                            )} */}
                       </Grid>
                     </AccordionDetails>
                   </Accordion>

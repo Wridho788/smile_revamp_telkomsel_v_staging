@@ -136,6 +136,7 @@ const Programs: React.FunctionComponent = () => {
             : false
         }
         isHqLogin={false}
+        userLoginId={""}
         // roleAccess={
         //   defaultRoleManager !== undefined && accountAuth !== undefined
         // }

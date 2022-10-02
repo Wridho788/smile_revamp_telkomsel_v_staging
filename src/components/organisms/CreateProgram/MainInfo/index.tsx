@@ -26,7 +26,8 @@ import {
 	useGetMechanismQuery,
 	useGetOwnerQuery,
 	useGetPointTypeQuery,
-	useGetProgramGroupQuery
+	useGetProgramGroupQuery,
+	useLazyGetOwnerQuery
 } from "../../../../redux/features/lov/lov-api-slice";
 import {
 	BooleanOption,
@@ -46,6 +47,7 @@ import {
 import { IParams } from "../../../../redux/utils/IGeneral";
 import {
 	useAccountAuthenticateQuery,
+	useLazyAccountAuthenticateQuery,
 	useLazyPicPrimeQuery
 } from "../../../../redux/features/account/account-api-slice";
 import TableContainer from "@mui/material/TableContainer";
@@ -110,39 +112,49 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
 
 	const [getLovDetail] = useGetDetailLovMutation();
 
-	const { data: accountAuth, isFetching } = useAccountAuthenticateQuery();
-	let { data: ownerOption = [], isSuccess } = useGetOwnerQuery();
+	const [getAuthenticatedUser, { data: accountAuth }] =
+		useLazyAccountAuthenticateQuery();
+	let [getOwner] = useLazyGetOwnerQuery();
 	const ownerArray: any = [];
 	useEffect(() => {
-		if (!isFetching) {
+		(async () => {
+			const authenticatedUserResponse = await getAuthenticatedUser();
+			const ownerOptionResponse = await getOwner();
+
 			const locationTypeId: string =
-				accountAuth?.account_location.location_detail.type;
-			setLocationDetailName(accountAuth?.account_location.location_detail.name);
+				authenticatedUserResponse?.data?.account_location.location_detail.type;
+			setLocationDetailName(
+				authenticatedUserResponse?.data?.account_location.location_detail.name
+			);
 			programData.program_owner = locationTypeId;
-			programData.program_owner_detail = accountAuth?.account_location.location;
+			programData.program_owner_detail =
+				authenticatedUserResponse?.data?.account_location.location;
 			getLovDetail(locationTypeId).then((res: any) => {
 				setLocationTypeName(res.data.set_value);
 			});
+
 			setStateTrigger(!stateTrigger);
+
 			// TODO still continue
-			const index = ownerOption?.data?.findIndex(
+			const index = ownerOptionResponse?.data?.data?.findIndex(
 				(e: any) => e["_id"] === locationTypeId
 			);
-			if (isSuccess) {
-				try {
-					for (let i = 0; i < ownerOption.data.length; i++) {
-						if (i > index) {
-							ownerArray.push(ownerOption.data[i]);
-						}
+
+			try {
+				for (let i = 0; i < ownerOptionResponse?.data?.data?.length; i++) {
+					if (i > index) {
+						ownerArray.push(ownerOptionResponse?.data?.data[i]);
 					}
-				} catch (error) {
-					console.log(error);
 				}
-				setFilterOwnerFinish(!filterOwnerFinish);
-				setTess(ownerArray);
+			} catch (error) {
+				console.log(error);
 			}
-		}
-	}, [isFetching]);
+
+			setFilterOwnerFinish(() => true);
+
+			setTess(ownerArray);
+		})();
+	}, []);
 	// TODO change default programOwner if notCustomizeOwner
 	useEffect(() => {
 		if (!customizeOwner) {

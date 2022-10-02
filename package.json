@@ -1,4 +1,6 @@
 {
+  "homepage": "http://172.20.10.5:3000/",
+  "proxy": "http://localhost:3000",
   "name": "reporting-mbi",
   "version": "0.1.0",
   "private": true,
@@ -44,6 +46,7 @@
     "react-use-disclosure": "^5.2.0",
     "redux-persist": "^6.0.0",
     "redux-thunk": "^2.4.1",
+    "serve": "^14.0.1",
     "styled-components": "^5.3.5",
     "sweetalert2": "11.0.18",
     "sweetalert2-react-content": "4.1.0",
