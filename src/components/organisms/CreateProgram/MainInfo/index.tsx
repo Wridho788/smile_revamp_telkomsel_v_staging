@@ -232,147 +232,6 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
 
 	return (
 		<Fragment>
-			<Box pt={5} mx={2}>
-				<Box>
-					<Stack sx={{ width: "100%" }} spacing={2}>
-						<Alert
-							action={
-								<Tooltip
-									placement="top"
-									title="This will redirect you to PIC Management page, all data you insert will be discard"
-									arrow
-								>
-									<Button
-										onClick={handleShowModalPic}
-										size="small"
-										sx={{
-											background: "#001A41",
-											color: "#FFF",
-											"&:hover": { color: "inherit" }
-										}}
-									>
-										PIC Management
-									</Button>
-								</Tooltip>
-							}
-							severity="info"
-						>
-							Don't find PIC ? Click button on the right corner
-						</Alert>
-					</Stack>
-				</Box>
-				<>
-					{" "}
-					<TableContainer component={Paper}>
-						<Table sx={{ minWidth: 650 }} aria-label="simple table">
-							<TableHead>
-								<TableRow>
-									<TableCell>
-										<Grid container>
-											<Grid xs={7}>
-												<Button
-													onClick={() => {
-														getPicLazy(picLazyParam);
-													}}
-													variant="outlined"
-													color="inherit"
-													size="small"
-												>
-													<CachedIcon />
-													<Typography ml={2} variant="body1">
-														Refresh PIC Data
-													</Typography>
-												</Button>
-
-												<Typography mt={1}>
-													<b style={{ color: "#888" }}>
-														Choose PIC to alert them about this Program
-													</b>
-												</Typography>
-											</Grid>
-											<Grid xs={5}>
-												<Input
-													fullWidth
-													placeholder="Search..."
-													onChange={e => setSearchInput(e.target.value)}
-												/>
-											</Grid>
-										</Grid>
-									</TableCell>
-								</TableRow>
-							</TableHead>
-							{fetchingPIC ? (
-								<Box p={5}>
-									<Box
-										sx={{
-											display: "flex",
-											justifyContent: "center",
-											alignItems: "center",
-											alignContent: "center"
-										}}
-									>
-										<CircularProgress />
-									</Box>
-									<Box
-										sx={{
-											display: "flex",
-											justifyContent: "center",
-											alignItems: "center",
-											alignContent: "center"
-										}}
-										mt={5}
-									>
-										<Typography variant={"h3"}>
-											Loading PIC Data, please wait...
-										</Typography>
-									</Box>
-								</Box>
-							) : picLazy.payload.data.length > 0 ? (
-								<TableBody>
-									{picLazy.payload.data.map((row, idx) => (
-										<TableRow
-											key={row._id}
-											sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-										>
-											<TableCell component="th" scope="row">
-												<FormControlLabel
-													key={`checkBox__${row._id}`}
-													control={
-														<Checkbox
-															onChange={handleChangeCheckbox}
-															value={row._id}
-														/>
-													}
-													label={`${row.msisdn} | ${row.name} | ${row.email}`}
-												/>
-											</TableCell>
-										</TableRow>
-									))}
-								</TableBody>
-							) : (
-								<Box
-									sx={{
-										display: "flex",
-										justifyContent: "center"
-									}}
-								>
-									<BodyCopy>No PIC Data ..</BodyCopy>
-								</Box>
-							)}
-						</Table>
-					</TableContainer>
-					<TablePagination
-						rowsPerPageOptions={[5, 10, 25]}
-						component="div"
-						count={picLazy.payload.totalRecords ?? 0}
-						rowsPerPage={rowsPerPage}
-						page={page}
-						onPageChange={handleChangePage}
-						onRowsPerPageChange={handleChangeRowsPerPage}
-					/>
-				</>
-			</Box>
-
 			<Stack mx={2} spacing={2}>
 				{/*<OutlinedTextField*/}
 				{/*    label="Program Group"*/}
@@ -599,6 +458,147 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
 				{/*    }}*/}
 				{/*/>*/}
 			</Stack>
+
+			<Box pt={5} mx={2}>
+				<Box>
+					<Stack sx={{ width: "100%" }} spacing={2}>
+						<Alert
+							action={
+								<Tooltip
+									placement="top"
+									title="This will redirect you to PIC Management page, all data you insert will be discard"
+									arrow
+								>
+									<Button
+										onClick={handleShowModalPic}
+										size="small"
+										sx={{
+											background: "#001A41",
+											color: "#FFF",
+											"&:hover": { color: "inherit" }
+										}}
+									>
+										PIC Management
+									</Button>
+								</Tooltip>
+							}
+							severity="info"
+						>
+							Don't find PIC ? Click button on the right corner
+						</Alert>
+					</Stack>
+				</Box>
+				<>
+					{" "}
+					<TableContainer component={Paper}>
+						<Table sx={{ minWidth: 650 }} aria-label="simple table">
+							<TableHead>
+								<TableRow>
+									<TableCell>
+										<Grid container>
+											<Grid xs={7}>
+												<Button
+													onClick={() => {
+														getPicLazy(picLazyParam);
+													}}
+													variant="outlined"
+													color="inherit"
+													size="small"
+												>
+													<CachedIcon />
+													<Typography ml={2} variant="body1">
+														Refresh PIC Data
+													</Typography>
+												</Button>
+
+												<Typography mt={1}>
+													<b style={{ color: "#888" }}>
+														Choose PIC to alert them about this Program
+													</b>
+												</Typography>
+											</Grid>
+											<Grid xs={5}>
+												<Input
+													fullWidth
+													placeholder="Search..."
+													onChange={e => setSearchInput(e.target.value)}
+												/>
+											</Grid>
+										</Grid>
+									</TableCell>
+								</TableRow>
+							</TableHead>
+							{fetchingPIC ? (
+								<Box p={5}>
+									<Box
+										sx={{
+											display: "flex",
+											justifyContent: "center",
+											alignItems: "center",
+											alignContent: "center"
+										}}
+									>
+										<CircularProgress />
+									</Box>
+									<Box
+										sx={{
+											display: "flex",
+											justifyContent: "center",
+											alignItems: "center",
+											alignContent: "center"
+										}}
+										mt={5}
+									>
+										<Typography variant={"h3"}>
+											Loading PIC Data, please wait...
+										</Typography>
+									</Box>
+								</Box>
+							) : picLazy.payload.data.length > 0 ? (
+								<TableBody>
+									{picLazy.payload.data.map((row, idx) => (
+										<TableRow
+											key={row._id}
+											sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+										>
+											<TableCell component="th" scope="row">
+												<FormControlLabel
+													key={`checkBox__${row._id}`}
+													control={
+														<Checkbox
+															onChange={handleChangeCheckbox}
+															value={row._id}
+														/>
+													}
+													label={`${row.msisdn} | ${row.name} | ${row.email}`}
+												/>
+											</TableCell>
+										</TableRow>
+									))}
+								</TableBody>
+							) : (
+								<Box
+									sx={{
+										display: "flex",
+										justifyContent: "center"
+									}}
+								>
+									<BodyCopy>No PIC Data ..</BodyCopy>
+								</Box>
+							)}
+						</Table>
+					</TableContainer>
+					<TablePagination
+						rowsPerPageOptions={[5, 10, 25]}
+						component="div"
+						count={picLazy.payload.totalRecords ?? 0}
+						rowsPerPage={rowsPerPage}
+						page={page}
+						onPageChange={handleChangePage}
+						onRowsPerPageChange={handleChangeRowsPerPage}
+					/>
+				</>
+			</Box>
 		</Fragment>
 	);
 };
