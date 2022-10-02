@@ -39,7 +39,7 @@ const Index = () => {
 
     if (!isToken) {
         window.addEventListener("message", function (e) {
-            if (e.origin !== "http://10.37.189.70:7443") return;
+            if (e.origin !== "http://127.0.0.1:3000") console.log(e.origin);
             const data = {
                 access_token: e.data.access_token ?? "",
                 refresh_token: e.data.refresh_token ?? "",
