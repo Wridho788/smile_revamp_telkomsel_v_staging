@@ -56,14 +56,14 @@ const ProgramPrimeDt: FC = () => {
 	const defaultRoleManager =
 		appConfig !== undefined
 			? appConfig.find(item => item["param_key"] === "DEFAULT_ROLE_MANAGER")[
-					"param_value"
-			  ]
+			"param_value"
+			]
 			: undefined;
 	const defaultRoleManagerHQ =
 		appConfig !== undefined
 			? appConfig.find(item => item["param_key"] === "DEFAULT_LOCATION_HQ")[
-					"param_value"
-			  ]
+			"param_value"
+			]
 			: undefined;
 
 	const { data: accountAuth } = useAccountAuthenticateQuery();
@@ -147,6 +147,15 @@ const ProgramPrimeDt: FC = () => {
 	const EndPeriodRender = (rowData: IProgram) => {
 		return <span>{moment(rowData.end_period).format("MMMM DD, YYYY")}</span>;
 	};
+	const CreateAtRender = (rowData: IProgram) => {
+		return <span>{moment(rowData?.created_at).format("MMMM DD, YYYY")}</span>;
+	};
+	const CreateByRender = (rowData: IProgram) => {
+		return <span>{rowData?.created_by?.first_name} {rowData?.created_by?.last_name}</span>;
+	};
+	const RoleCreatorRender = (rowData: IProgram) => {
+		return <span>{rowData?.created_by?.role_detail?.name}</span>;
+	};
 	const ThresholdAlarmExpiredRender = (rowData: IProgram) => {
 		return (
 			<Box sx={{ textAlign: "center", width: "100%" }}>
@@ -189,21 +198,21 @@ const ProgramPrimeDt: FC = () => {
 							approval_status_value === "Approved by Manager Non HQ" &&
 							<Alert severity="warning" icon={false}>
 								Approved by <b>{rowData.created_by && rowData.created_by.superior_local?.first_name}</b>
-								<br/> <Typography variant={"body1"}>Waiting for Approver 2 <b>({rowData.created_by && rowData.created_by.superior_hq?.first_name})</b></Typography>
+								<br /> <Typography variant={"body1"}>Waiting for Approver 2 <b>({rowData.created_by && rowData.created_by.superior_hq?.first_name})</b></Typography>
 							</Alert>
 						}
 						{
 							approval_status_value === "Rejected by Manager Non HQ" &&
 							<Alert severity="error" icon={false}>
 								Rejected by <b>{rowData.created_by && rowData.created_by.superior_local?.first_name}</b>
-								<br/> <Typography variant={"body1"}>Waiting for Approver 1 <b>({rowData.created_by && rowData.created_by.superior_local?.first_name})</b></Typography>
+								<br /> <Typography variant={"body1"}>Waiting for Approver 1 <b>({rowData.created_by && rowData.created_by.superior_local?.first_name})</b></Typography>
 							</Alert>
 						}
 						{
 							approval_status_value === "Rejected by Manager HQ" &&
 							<Alert severity="error" icon={false}>
 								Rejected by <b>{rowData.created_by && rowData.created_by.superior_hq?.first_name}</b>
-								<br/> <Typography variant={"body1"}>Waiting for Approver 2 <b>({rowData.created_by && rowData.created_by.superior_hq?.first_name})</b></Typography>
+								<br /> <Typography variant={"body1"}>Waiting for Approver 2 <b>({rowData.created_by && rowData.created_by.superior_hq?.first_name})</b></Typography>
 							</Alert>
 						}
 						{
@@ -213,25 +222,10 @@ const ProgramPrimeDt: FC = () => {
 							</Alert>
 						}
 					</>
-
-				}
-				{
-					rowData.approval_log && rowData.approval_log.length < 1 &&
-					<>
-						{
-							rowData.isHQ ?
-								<Alert severity="warning" icon={false}>
-									<b>Waiting Approver 2 {rowData.created_by && rowData.created_by.superior_hq?.first_name}</b>
-								</Alert> :
-								<Alert severity="warning" icon={false}>
-									<b>Waiting Approver 1 {rowData.created_by && rowData.created_by.superior_local?.first_name}</b>
-								</Alert>
-						}
-					</>
 				}
 			</Box>
-		);
-	};
+		)
+	}
 
 	return (
 		<>
@@ -251,7 +245,7 @@ const ProgramPrimeDt: FC = () => {
 					!!(
 						accountAuth &&
 						accountAuth.account_location.location_detail.type ===
-							defaultRoleManagerHQ
+						defaultRoleManagerHQ
 					)
 				}
 				userLoginId={accountAuth ? accountAuth._id : ""}
@@ -380,6 +374,30 @@ const ProgramPrimeDt: FC = () => {
 										header="END PERIOD"
 										sortable
 										body={EndPeriodRender}
+										filterPlaceholder="Search"
+									/>
+									<Column
+										style={{ flexGrow: 1, flexBasis: "250px" }}
+										field="create_at"
+										header="CREATE AT"
+										sortable
+										body={CreateAtRender}
+										filterPlaceholder="Search"
+									/>
+									<Column
+										style={{ flexGrow: 1, flexBasis: "250px" }}
+										field="create_by"
+										header="CREATE BY"
+										sortable
+										body={CreateByRender}
+										filterPlaceholder="Search"
+									/>
+									<Column
+										style={{ flexGrow: 1, flexBasis: "250px" }}
+										field="role_create"
+										header="ROLE CREATOR"
+										sortable
+										body={RoleCreatorRender}
 										filterPlaceholder="Search"
 									/>
 									<Column

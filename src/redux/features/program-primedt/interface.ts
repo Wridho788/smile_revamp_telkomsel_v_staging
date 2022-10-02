@@ -13,4 +13,6 @@ export interface IProgram {
     threshold_alarm_voucher: number;
     status: any;
     approval_log: any;
+    created_at: string;
+    created_by: any;
 }

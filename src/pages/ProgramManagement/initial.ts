@@ -10,4 +10,6 @@ export const ProgramInitial: IProgram = {
     threshold_alarm_voucher: 0,
     status: [],
     approval_log: [],
+    created_at: "",
+    created_by: {}
 }
