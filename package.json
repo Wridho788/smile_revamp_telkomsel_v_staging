@@ -1,6 +1,5 @@
 {
-  "homepage": "http://172.20.10.5:3000/",
-  "proxy": "http://localhost:3000",
+  "homepage": ".",
   "name": "reporting-mbi",
   "version": "0.1.0",
   "private": true,
