@@ -14,7 +14,7 @@ import { partnerSlice } from "../features/partner/partner-api-slice";
 import { outletSlice } from "../features/outlet/outlet-api-slice";
 import { programPrimedtSlice } from "../features/program-primedt/program-primedt-api-slice";
 import { uploadFIleSlice } from "../upload_file/upload-file-api-slice";
-
+import { picSlice } from "../features/pic/pic-api-slice";
 // Store
 import auth from "../features/auth/auth-store-slice";
 
@@ -34,5 +34,6 @@ export const rootReducer = combineReducers({
 	[partnerSlice.reducerPath]: partnerSlice.reducer,
 	[outletSlice.reducerPath]: outletSlice.reducer,
 	[programPrimedtSlice.reducerPath]: programPrimedtSlice.reducer,
-	[uploadFIleSlice.reducerPath]: uploadFIleSlice.reducer
+	[uploadFIleSlice.reducerPath]: uploadFIleSlice.reducer,
+	[picSlice.reducerPath]: picSlice.reducer
 });
