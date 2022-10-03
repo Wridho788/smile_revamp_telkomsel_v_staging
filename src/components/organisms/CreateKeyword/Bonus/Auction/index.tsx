@@ -211,6 +211,11 @@ const NotificationAuction: React.FunctionComponent<
 								keywordNotificationAuction[idx].code_identifier = _["_id"];
 								keywordNotificationAuction[idx].bonus_type_id = bonusTypeId;
 
+								// Check if notification is Keyword Status Per Product
+								const isKeyWordStatusPerProduct = _.set_value?.includes(
+									"Keyword Status Per Product"
+								);
+
 								return (
 									<Stack
 										key={idx}
@@ -221,16 +226,22 @@ const NotificationAuction: React.FunctionComponent<
 									>
 										<Subtitle color="warning.main">{_.set_value}</Subtitle>
 										<OutlinedTextField
-											isRequired={false}
-											disabled={
-												!_.set_value?.includes("Keyword Status Per Product")
-											}
+											isRequired={isKeyWordStatusPerProduct}
+											disabled={!isKeyWordStatusPerProduct}
 											direction="column"
 											label="Keyword Name"
 											variant="outlined"
-											value={keywordCreateState.eligibility.name}
+											value={
+												isKeyWordStatusPerProduct
+													? keywordNotificationAuction[idx]?.keyword_name
+													: keywordCreateState.eligibility.name
+											}
 											handleChange={(value: string) => {
-												keywordCreate.eligibility.name = value;
+												if (isKeyWordStatusPerProduct) {
+													keywordNotificationAuction[idx].keyword_name = value;
+												} else {
+													keywordCreate.eligibility.name = value;
+												}
 												setStateTrigger(!stateTrigger);
 											}}
 										/>
