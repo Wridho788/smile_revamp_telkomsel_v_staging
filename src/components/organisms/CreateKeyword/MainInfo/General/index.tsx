@@ -34,6 +34,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 import { parseISO } from "date-fns";
 import { strToInt, thousandSeparator } from "../../../../../utils";
 import TextArea from "components/atoms/TextArea";
+import moment from "moment";
 
 interface IGeneralProps {
   keywordCreateState: ICreateKeyword;

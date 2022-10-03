@@ -174,6 +174,7 @@ export interface IKeywordNotificationAuction {
   end_period: Date;
   notif_type: string;
   via: string;
+  keyword_name?: string;
 }
 
 export interface ICreateKeyword {

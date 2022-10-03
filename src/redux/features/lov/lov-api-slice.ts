@@ -101,6 +101,7 @@ export const {
 	useGetProgramExperienceQuery,
 	useGetDetailLovMutation,
 	useGetProgramGroupQuery,
+	useLazyGetProgramGroupQuery,
 	useGetKeywordNotificationQuery,
 	useLazyGetKeywordNotificationQuery,
 	useGetKeywordApprovalQuery,
