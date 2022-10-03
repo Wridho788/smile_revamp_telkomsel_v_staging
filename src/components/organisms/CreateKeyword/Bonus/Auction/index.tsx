@@ -42,6 +42,7 @@ import { useLocationTemplateQuery } from "../../../../../redux/features/location
 import { useKeywordUploadAuctionMutation } from "../../../../../redux/features/keyword/keyword-api-slice";
 import LocationManagement from "../LocationManagement";
 import Swal from "sweetalert2";
+import onlyNumber from "utils/onlyNumber";
 
 interface INotificationAuctionProps {
 	bonusType: string;
@@ -427,10 +428,15 @@ const NotificationAuction: React.FunctionComponent<
 												keywordCreate.bonus[index]["auction_poin_min_bidding"]
 											}
 											handleChange={(value: string) => {
-												keywordCreate.bonus[index]["auction_poin_min_bidding"] =
-													Number(value);
-												setStateTrigger(!stateTrigger);
+												// Only accept number
+												if (onlyNumber(value)) {
+													keywordCreate.bonus[index][
+														"auction_poin_min_bidding"
+													] = Number(value);
+													setStateTrigger(!stateTrigger);
+												}
 											}}
+											inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
 										/>
 										<OutlinedTextField
 											direction="column"
@@ -440,9 +446,13 @@ const NotificationAuction: React.FunctionComponent<
 												keywordCreate.bonus[index]["auction_multiplier_poin"]
 											}
 											handleChange={(value: string) => {
-												keywordCreate.bonus[index]["auction_multiplier_poin"] =
-													Number(value);
-												setStateTrigger(!stateTrigger);
+												// Only accept number
+												if (onlyNumber(value)) {
+													keywordCreate.bonus[index][
+														"auction_multiplier_poin"
+													] = Number(value);
+													setStateTrigger(!stateTrigger);
+												}
 											}}
 										/>
 										<OutlinedTextField
@@ -453,10 +463,13 @@ const NotificationAuction: React.FunctionComponent<
 												keywordCreate.bonus[index]["auction_max_winner_inphase"]
 											}
 											handleChange={(value: string) => {
-												keywordCreate.bonus[index][
-													"auction_max_winner_inphase"
-												] = Number(value);
-												setStateTrigger(!stateTrigger);
+												// Only accept number
+												if (onlyNumber(value)) {
+													keywordCreate.bonus[index][
+														"auction_max_winner_inphase"
+													] = Number(value);
+													setStateTrigger(!stateTrigger);
+												}
 											}}
 										/>
 									</Stack>
