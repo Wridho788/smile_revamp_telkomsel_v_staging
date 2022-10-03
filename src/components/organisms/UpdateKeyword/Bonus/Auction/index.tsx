@@ -222,7 +222,9 @@ const NotificationAuction: React.FunctionComponent<
 										<Subtitle color="warning.main">{_.set_value}</Subtitle>
 										<OutlinedTextField
 											isRequired={false}
-											disabled={true}
+											disabled={
+												!_.set_value?.includes("Keyword Status Per Product")
+											}
 											direction="column"
 											label="Keyword Name"
 											variant="outlined"
