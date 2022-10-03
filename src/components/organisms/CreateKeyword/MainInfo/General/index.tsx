@@ -83,11 +83,13 @@ const General: React.FunctionComponent<IGeneralProps> = ({
           /> */}
           <OutlinedTextField
             label={
-              programExperienceOptions.data.find(
-                (e) =>
-                  e["_id"] ===
-                  keywordCreateState.eligibility.program_experience[0]
-              )?.set_value === "Auction"
+              programExperienceOptions.data
+                .find(
+                  (e) =>
+                    e["_id"] ===
+                    keywordCreateState.eligibility.program_experience[0]
+                )
+                ?.set_value?.includes("Auction")
                 ? "Keyword Bid Name"
                 : "Keyword Redeem Name"
             }
@@ -169,10 +171,13 @@ const General: React.FunctionComponent<IGeneralProps> = ({
               setStateTrigger(!stateTrigger);
             }}
           />
-          {programExperienceOptions.data.find(
-            (e) =>
-              e["_id"] === keywordCreateState.eligibility.program_experience[0]
-          )?.set_value !== "Auction" && (
+          {!programExperienceOptions.data
+            .find(
+              (e) =>
+                e["_id"] ===
+                keywordCreateState.eligibility.program_experience[0]
+            )
+            ?.set_value?.includes("Auction") && (
             <OutlinedTextField
               type="number"
               label="POIN Redeemed"
@@ -185,10 +190,13 @@ const General: React.FunctionComponent<IGeneralProps> = ({
               }}
             />
           )}
-          {programExperienceOptions.data.find(
-            (e) =>
-              e["_id"] === keywordCreateState.eligibility.program_experience[0]
-          )?.set_value !== "Auction" && (
+          {!programExperienceOptions.data
+            .find(
+              (e) =>
+                e["_id"] ===
+                keywordCreateState.eligibility.program_experience[0]
+            )
+            ?.set_value?.includes("Auction") && (
             <Select
               isRequired={false}
               label="Max Mode"
@@ -212,10 +220,13 @@ const General: React.FunctionComponent<IGeneralProps> = ({
               setStateTrigger(!stateTrigger);
             }}
           />
-          {programExperienceOptions.data.find(
-            (e) =>
-              e["_id"] === keywordCreateState.eligibility.program_experience[0]
-          )?.set_value !== "Auction" && (
+          {!programExperienceOptions.data
+            .find(
+              (e) =>
+                e["_id"] ===
+                keywordCreateState.eligibility.program_experience[0]
+            )
+            ?.set_value?.includes("Auction") && (
             <Select
               label="Merchandise Keyword"
               placeholder="Option"
@@ -252,11 +263,13 @@ const General: React.FunctionComponent<IGeneralProps> = ({
           )}
           <Select
             label={
-              programExperienceOptions.data.find(
-                (e) =>
-                  e["_id"] ===
-                  keywordCreateState.eligibility.program_experience[0]
-              )?.set_value === "Auction"
+              programExperienceOptions.data
+                .find(
+                  (e) =>
+                    e["_id"] ===
+                    keywordCreateState.eligibility.program_experience[0]
+                )
+                ?.set_value?.includes("Auction")
                 ? "Auction Phase"
                 : "Keyword Schedule"
             }
@@ -638,10 +651,13 @@ const General: React.FunctionComponent<IGeneralProps> = ({
               setStateTrigger(!stateTrigger);
             }}
           />
-          {programExperienceOptions.data.find(
-            (e) =>
-              e["_id"] === keywordCreateState.eligibility.program_experience[0]
-          )?.set_value !== "Auction" && (
+          {!programExperienceOptions.data
+            .find(
+              (e) =>
+                e["_id"] ===
+                keywordCreateState.eligibility.program_experience[0]
+            )
+            ?.set_value?.includes("Auction") && (
             <Select
               isRequired={false}
               label="Multiwhitelist"
@@ -654,10 +670,13 @@ const General: React.FunctionComponent<IGeneralProps> = ({
               }}
             />
           )}
-          {programExperienceOptions.data.find(
-            (e) =>
-              e["_id"] === keywordCreateState.eligibility.program_experience[0]
-          )?.set_value !== "Auction" &&
+          {!programExperienceOptions.data
+            .find(
+              (e) =>
+                e["_id"] ===
+                keywordCreateState.eligibility.program_experience[0]
+            )
+            ?.set_value?.includes("Auction") &&
             keywordCreateState.eligibility.multiwhitelist !== false && (
               <Select
                 isRequired={false}
