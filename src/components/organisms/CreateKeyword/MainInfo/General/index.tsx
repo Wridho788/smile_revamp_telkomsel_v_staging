@@ -99,10 +99,9 @@ const General: React.FunctionComponent<IGeneralProps> = ({
             inputProps={{ maxLength: 16 }}
             value={keywordCreateState.eligibility.name}
             handleChange={(value: string) => {
-              keywordCreate.eligibility.name = value.replace(
-                /[^a-zA-Z0-9]/g,
-                ""
-              );
+              keywordCreate.eligibility.name = value
+                .replace(/[^a-zA-Z0-9]/g, "")
+                .toUpperCase();
               setStateTrigger(!stateTrigger);
             }}
           />
