@@ -69,7 +69,7 @@ const Ngrs: React.FunctionComponent<INotificationNgrsProps> = ({
       }
     }
   }, [isFetching]);
-  console.log(locationDetailOptions);
+
   return (
     <Accordion sx={{ p: "1vw" }}>
       <AccordionSummary

@@ -69,7 +69,7 @@ const LinkAjaMain: React.FunctionComponent<INotificationLinkAjaMainProps> = ({
       }
     }
   }, [isFetching]);
-  console.log(locationDetailOptions);
+
   return (
     <Accordion sx={{ p: "1vw" }}>
       <AccordionSummary

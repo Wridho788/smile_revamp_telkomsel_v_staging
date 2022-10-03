@@ -179,7 +179,7 @@ export const KeywordBonusLinkAjaMain: IKeywordBonusLinkAjaMain = {
 };
 
 export const KeywordBonusLinkAjaBonus: IKeywordBonusLinkAjaBonus = {
-  bonus_type: "linkaja_main",
+  bonus_type: "linkaja_bonus",
   nominal: 0,
   external_api_config: false,
   location: "",
@@ -190,7 +190,7 @@ export const KeywordBonusLinkAjaBonus: IKeywordBonusLinkAjaBonus = {
 };
 
 export const KeywordBonusNgrs: IKeywordBonusNgrs = {
-  bonus_type: "linkaja_main",
+  bonus_type: "ngrs",
   nominal: 0,
   external_api_config: false,
   location: "",
