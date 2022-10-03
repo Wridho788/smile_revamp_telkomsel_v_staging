@@ -127,11 +127,16 @@ const Notification: React.FunctionComponent<INotificationProps> = ({
                     direction="column"
                     label="Keyword Name"
                     variant="outlined"
+                    disabled={idx !== 0}
                     value={
-                      keywordNotificationEligibilityState[idx].keyword_name
+                      idx === 0
+                        ? keywordNotificationEligibility[idx].keyword_name
+                        : keywordCreateState.eligibility.name
                     }
                     handleChange={(value: string) => {
-                      keywordNotificationEligibility[idx].keyword_name = value;
+                      keywordNotificationEligibility[idx].keyword_name = value
+                        .replace(/[^a-zA-Z0-9]/g, "")
+                        .toUpperCase();
                       setStateTrigger(!stateTrigger);
                     }}
                   />
