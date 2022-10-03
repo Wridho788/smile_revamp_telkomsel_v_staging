@@ -21,13 +21,14 @@ import {
 } from "../../../atoms";
 import { useEffect, useState, Fragment } from "react";
 import {
-  useGetDetailLovMutation,
-  useGetLovListQuery,
-  useGetMechanismQuery,
-  useGetOwnerQuery,
-  useGetPointTypeQuery,
-  useGetProgramGroupQuery,
-  useLazyGetOwnerQuery,
+	useGetDetailLovMutation,
+	useGetLovListQuery,
+	useGetMechanismQuery,
+	useGetOwnerQuery,
+	useGetPointTypeQuery,
+	useGetProgramGroupQuery,
+	useLazyGetProgramGroupQuery,
+	useLazyGetOwnerQuery
 } from "../../../../redux/features/lov/lov-api-slice";
 import {
   BooleanOption,
@@ -90,9 +91,9 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
   //     programData._id = fetchDetail._id;
   // }, [fetchDetail]);
 
-  const { data: pointTypeOption = { data: [] } } = useGetPointTypeQuery();
-  const { data: mechanismOption = { data: [] } } = useGetMechanismQuery();
-  const { data: groupOption = { data: [] } } = useGetProgramGroupQuery();
+	const { data: pointTypeOption = { data: [] } } = useGetPointTypeQuery();
+	const { data: mechanismOption = { data: [] } } = useGetMechanismQuery();
+	const [getGroupOption, { data: groupOption = { data: [] } }] = useLazyGetProgramGroupQuery();
 
   const [searchInput, setSearchInput] = useState<string>("");
   const [stateTrigger, setStateTrigger] = React.useState<boolean>(false);
@@ -112,14 +113,15 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
 
   const [getLovDetail] = useGetDetailLovMutation();
 
-  const [getAuthenticatedUser, { data: accountAuth }] =
-    useLazyAccountAuthenticateQuery();
-  let [getOwner] = useLazyGetOwnerQuery();
-  const ownerArray: any = [];
-  useEffect(() => {
-    (async () => {
-      const authenticatedUserResponse = await getAuthenticatedUser();
-      const ownerOptionResponse = await getOwner();
+	const [getAuthenticatedUser, { data: accountAuth }] =
+		useLazyAccountAuthenticateQuery();
+	let [getOwner] = useLazyGetOwnerQuery();
+	const ownerArray: any = [];
+	useEffect(() => {
+		(async () => {
+			const authenticatedUserResponse = await getAuthenticatedUser();
+			const ownerOptionResponse = await getOwner();
+			await getGroupOption();
 
       const locationTypeId: string =
         authenticatedUserResponse?.data?.account_location.location_detail.type;
@@ -244,18 +246,19 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
         {/*    }}*/}
         {/*/>*/}
 
-        <Select
-          label="Program Group"
-          isRequired={false}
-          placeholder="Option"
-          options={groupOption.data}
-          optionLabel="group_name"
-          value={programData.program_group}
-          handleChange={(value: any) => {
-            programData.program_group = value;
-            setStateTrigger(!stateTrigger);
-          }}
-        />
+				<Select
+					label="Program Group"
+					isRequired={false}
+					placeholder="Option"
+					options={groupOption.data}
+					optionLabel="group_name"
+					value={programData.program_group}
+					handleChange={(value: any) => {
+						programData.program_group = value;
+						setStateTrigger(!stateTrigger);
+					}}
+					handleRefetch={() => getGroupOption()}
+				/>
 
         <OutlinedTextField
           isRequired={false}
