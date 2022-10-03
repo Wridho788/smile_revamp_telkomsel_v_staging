@@ -1,18 +1,18 @@
-import React, { FC, MouseEvent } from "react";
-import { Menu } from "../../../mocks/menuItems";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import { Link } from "react-router-dom";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import { Collapse } from "@mui/material";
-import List from "@mui/material/List";
-import Box from "@mui/material/Box";
-import { useTheme } from "@mui/material/styles";
-import { H3, BodyCopy, SmallCopy } from "../../../components";
-import { useNavigate } from "react-router-dom";
-import { ExpandLess, ExpandMore } from "@mui/icons-material";
-
+import React, { FC, MouseEvent } from 'react';
+import { Menu } from '../../../mocks/menuItems';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import { Link } from 'react-router-dom';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import { Collapse } from '@mui/material';
+import List from '@mui/material/List';
+import Box from '@mui/material/Box';
+import { useTheme } from '@mui/material/styles';
+import { H3, BodyCopy, SmallCopy } from '../../../components';
+import { useNavigate } from 'react-router-dom';
+import { ExpandLess, ExpandMore } from '@mui/icons-material';
+import { NotificationActive } from '../../../assets';
 interface SidebarItemProps {
   menu: Menu;
   openMenu: boolean;
@@ -24,35 +24,45 @@ const SidebarItem = ({ menu, openMenu }: SidebarItemProps) => {
   let [openList, setOpenList] = React.useState<boolean>(false);
 
   return (
-    <ListItem disablePadding sx={{ display: "block" }}>
+    <ListItem disablePadding sx={{ display: 'block' }}>
       <ListItemButton
         onClick={() => {
           if (!menu.hasChild) {
-            return router(menu.path ?? "/");
+            return router(menu.path ?? '/');
           } else {
             setOpenList(!openList);
           }
           // setOpenList(id);
         }}
         component={Link}
-        to={menu.path ?? ""}
+        to={menu.path ?? ''}
         sx={{
           minHeight: 48,
-          justifyContent: openMenu ? "initial" : "center",
+          justifyContent: openMenu ? 'initial' : 'center',
           px: 2.5,
-        }}
-      >
+        }}>
         <ListItemIcon
           sx={{
             minWidth: 0,
-            mr: openMenu ? 3 : "auto",
-            justifyContent: "center",
-          }}
-        >
+            mr: openMenu ? 3 : 'auto',
+            justifyContent: 'center',
+          }}>
           {<menu.icon />}
         </ListItemIcon>
         <ListItemText
           primary={<SmallCopy>{menu.label}</SmallCopy>}
+          sx={{ opacity: openMenu ? 1 : 0 }}
+        />
+        <ListItemIcon
+          sx={{
+            minWidth: 0,
+            mr: openMenu ? 3 : 'auto',
+            justifyContent: 'center',
+          }}>
+          <img src={NotificationActive} style={{ height: 30 }} />
+        </ListItemIcon>
+        <ListItemText
+          primary={<SmallCopy>Notifications</SmallCopy>}
           sx={{ opacity: openMenu ? 1 : 0 }}
         />
         {menu.hasChild && openMenu ? (
@@ -63,25 +73,46 @@ const SidebarItem = ({ menu, openMenu }: SidebarItemProps) => {
           )
         ) : null}
       </ListItemButton>
+      {/* <Divider />
+        <ListItem
+          disablePadding
+          sx={{
+            display: 'block',
+            top: 10,
+          }}>
+          <ListItemButton
+            sx={{
+              position: 'fixed',
+              bottom: 32,
+              zIndex: 9,
+              width: '100%',
+              backgroundColor: '#FFF',
+              minHeight: 48,
+              justifyContent: open ? 'initial' : 'center',
+              px: 2.5,
+            }}
+            onClick={handleCloseNotification}>
+            
+          </ListItemButton>
+        </ListItem>
+        <Divider /> */}
 
-      <Collapse in={openList} timeout="auto" unmountOnExit>
-        <List component="div" sx={{ marginLeft: 5 }} disablePadding>
+      <Collapse in={openList} timeout='auto' unmountOnExit>
+        <List component='div' sx={{ marginLeft: 5 }} disablePadding>
           <Box>
             {menu.child?.map((child, index) => (
               <ListItem
                 key={`menu__child__${index}`}
                 disablePadding
-                sx={{ display: "block" }}
-              >
+                sx={{ display: 'block' }}>
                 <ListItemButton
                   component={Link}
                   to={child.path}
                   sx={{
                     minHeight: 48,
-                    justifyContent: openMenu ? "initial" : "center",
+                    justifyContent: openMenu ? 'initial' : 'center',
                     px: 2.5,
-                  }}
-                >
+                  }}>
                   <ListItemText
                     primary={<SmallCopy>{child.label}</SmallCopy>}
                     sx={{ opacity: openMenu ? 1 : 0 }}
