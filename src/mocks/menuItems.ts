@@ -10,7 +10,8 @@ import {
     StarsOutlined,
     ErrorOutlineOutlined,
     ShareLocationOutlined,
-    Logout
+    Logout,
+    NotificationImportant
 } from "@mui/icons-material";
 
 export interface Menu {
@@ -87,5 +88,10 @@ export const menuItems: Menu[] = [
         hasChild: false,
         icon: Logout,
         path: "/signOut",
+    }, {
+        label: "Notifications",
+        hasChild: false,
+        icon: NotificationImportant,
+        path: "/notifications",
     },
 ];
