@@ -2,19 +2,19 @@ import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Stack, Button, Switch, Box, CircularProgress } from "@mui/material";
 
 import {
-  BodyCopy,
-  OutlinedTextField,
-  ResponsiveDateTimePicker,
-  Select,
-  Subtitle,
+	BodyCopy,
+	OutlinedTextField,
+	ResponsiveDateTimePicker,
+	Select,
+	Subtitle
 } from "../../../../atoms";
 
 import { Upload } from "../../../../../assets";
 
 import {
-  ICreateKeyword,
-  IKeywordNotificationAuction,
-  IKeywordNotificationAuctionHelper,
+	ICreateKeyword,
+	IKeywordNotificationAuction,
+	IKeywordNotificationAuctionHelper
 } from "../../interfaces";
 
 import { FilterInitial } from "../../../../../redux/utils/initial-general";
@@ -26,548 +26,568 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import AddBoxIcon from "@mui/icons-material/AddBox";
 
 import {
-  useGetNotifViaQuery,
-  useLazyGetKeywordNotificationQuery,
+	useGetNotifViaQuery,
+	useLazyGetKeywordNotificationQuery
 } from "../../../../../redux/features/lov/lov-api-slice";
 
 import { useNotificationTemplateQuery } from "../../../../../redux/features/notification/notification-api-slice";
 
 import {
-  KeywordBonusAuction,
-  KeywordNotificationAuction,
-  KeywordNotificationAuctionHelper,
+	KeywordBonusAuction,
+	KeywordNotificationAuction,
+	KeywordNotificationAuctionHelper
 } from "../../initial";
 import _find from "lodash/find";
 import { useLocationTemplateQuery } from "../../../../../redux/features/location/location-api-slice";
 import { useKeywordUploadAuctionMutation } from "../../../../../redux/features/keyword/keyword-api-slice";
 import LocationManagement from "../LocationManagement";
 import Swal from "sweetalert2";
+import onlyNumber from "utils/onlyNumber";
 
 interface INotificationAuctionProps {
-  bonusType: string;
-  bonusTypeId: any;
-  keywordCreateState: ICreateKeyword;
-  keywordCreate: ICreateKeyword;
-  stateTrigger: boolean;
-  setStateTrigger: Dispatch<SetStateAction<boolean>>;
+	bonusType: string;
+	bonusTypeId: any;
+	keywordCreateState: ICreateKeyword;
+	keywordCreate: ICreateKeyword;
+	stateTrigger: boolean;
+	setStateTrigger: Dispatch<SetStateAction<boolean>>;
 }
 
 const NotificationAuction: React.FunctionComponent<
-  INotificationAuctionProps
+	INotificationAuctionProps
 > = ({
-  bonusType,
-  bonusTypeId,
-  keywordCreateState,
-  keywordCreate,
-  stateTrigger,
-  setStateTrigger,
+	bonusType,
+	bonusTypeId,
+	keywordCreateState,
+	keywordCreate,
+	stateTrigger,
+	setStateTrigger
 }) => {
-  // Preview Image Auction
-  const [preview, setPreview] = React.useState(Upload);
-  const [loading, setLoading] = React.useState(false);
+	// Preview Image Auction
+	const [preview, setPreview] = React.useState(Upload);
+	const [loading, setLoading] = React.useState(false);
 
-  const uploadInputRef: any = React.useRef<any>(null);
+	const uploadInputRef: any = React.useRef<any>(null);
 
-  const [uploadImgAuction] = useKeywordUploadAuctionMutation();
+	const [uploadImgAuction] = useKeywordUploadAuctionMutation();
 
-  const onUpload = () => {
-    setLoading(true);
+	const onUpload = () => {
+		setLoading(true);
 
-    const formData = new FormData();
-    formData.append("image", uploadInputRef.current?.files[0]);
+		const formData = new FormData();
+		formData.append("image", uploadInputRef.current?.files[0]);
 
-    uploadImgAuction(formData).then((res: any) => {
-      if (res?.data.payload) {
-        Swal.fire(`Success`, "Image uploaded", "success");
-        keywordCreate.bonus[index]["auction_prize_image"] = res?.data.payload;
-      } else {
-        Swal.fire(`Error`, "Failed to upload", "warning");
-      }
+		uploadImgAuction(formData).then((res: any) => {
+			if (res?.data.payload) {
+				Swal.fire(`Success`, "Image uploaded", "success");
+				keywordCreate.bonus[index]["auction_prize_image"] = res?.data.payload;
+			} else {
+				Swal.fire(`Error`, "Failed to upload", "warning");
+			}
 
-      setLoading(false);
-    });
-  };
+			setLoading(false);
+		});
+	};
 
-  const onPreview = () => {
-    if (uploadInputRef.current?.files.length) {
-      const temp = URL.createObjectURL(uploadInputRef.current?.files[0]);
-      setPreview(temp);
-    }
-  }
+	const onPreview = () => {
+		if (uploadInputRef.current?.files.length) {
+			const temp = URL.createObjectURL(uploadInputRef.current?.files[0]);
+			setPreview(temp);
+		}
+	};
 
-  const { data: viaOptions = { data: [] } } = useGetNotifViaQuery();
-  const { data: templateOptions = { data: [] } } =
-    useNotificationTemplateQuery(FilterInitial);
-  const [
-    getKeywordNotification,
-    {
-      data: keywordNotification = {
-        data: [],
-      },
-      isLoading,
-    },
-  ] = useLazyGetKeywordNotificationQuery();
+	const { data: viaOptions = { data: [] } } = useGetNotifViaQuery();
+	const { data: templateOptions = { data: [] } } =
+		useNotificationTemplateQuery(FilterInitial);
+	const [
+		getKeywordNotification,
+		{
+			data: keywordNotification = {
+				data: []
+			},
+			isLoading
+		}
+	] = useLazyGetKeywordNotificationQuery();
 
-  const keywordNotificationAuctionHelper = KeywordNotificationAuctionHelper;
-  const [
-    keywordNotificationAuctionHelperState,
-    setKeywordNotificationAuctionHelperState,
-  ] = useState<IKeywordNotificationAuctionHelper[]>(
-    keywordNotificationAuctionHelper
-  );
+	const keywordNotificationAuctionHelper = KeywordNotificationAuctionHelper;
+	const [
+		keywordNotificationAuctionHelperState,
+		setKeywordNotificationAuctionHelperState
+	] = useState<IKeywordNotificationAuctionHelper[]>(
+		keywordNotificationAuctionHelper
+	);
 
-  const keywordNotificationAuction: IKeywordNotificationAuction[] =
-    KeywordNotificationAuction;
+	const keywordNotificationAuction: IKeywordNotificationAuction[] =
+		KeywordNotificationAuction;
 
-  const [keywordNotificationAuctionState, setKeywordNotificationAuctionState] =
-    useState<IKeywordNotificationAuction[]>(keywordNotificationAuction);
+	const [keywordNotificationAuctionState, setKeywordNotificationAuctionState] =
+		useState<IKeywordNotificationAuction[]>(keywordNotificationAuction);
 
-  const { data: locationOptions, isFetching } = useLocationTemplateQuery({
-    type: keywordCreate.eligibility.location_type,
-  });
+	const { data: locationOptions, isFetching } = useLocationTemplateQuery({
+		type: keywordCreate.eligibility.location_type
+	});
 
-  const [index, setIndex] = useState<number>(-1);
+	const [index, setIndex] = useState<number>(-1);
 
-  // TODO: Get Auction Notification
-  useEffect(() => {
-    getKeywordNotification("AUCTION_NOTIFICATION");
+	// TODO: Get Auction Notification
+	useEffect(() => {
+		getKeywordNotification("AUCTION_NOTIFICATION");
 
-    // Initial Keyword Bonus Auction
-    const index = keywordCreate.bonus.findIndex(
-      ({ bonus_type }) => bonus_type === "auction"
-    );
+		// Initial Keyword Bonus Auction
+		const index = keywordCreate.bonus.findIndex(
+			({ bonus_type }) => bonus_type === "auction"
+		);
 
-    if ((locationOptions && index === -1) || !keywordCreate.eligibility.eligibility_locations) {
-      keywordCreate.bonus.push(KeywordBonusAuction);
-      const bonusIdx = keywordCreate.bonus.findIndex(
-        ({ bonus_type }) => bonus_type === "auction"
-      );
-      setIndex(bonusIdx);
+		if (
+			(locationOptions && index === -1) ||
+			!keywordCreate.eligibility.eligibility_locations
+		) {
+			keywordCreate.bonus.push(KeywordBonusAuction);
+			const bonusIdx = keywordCreate.bonus.findIndex(
+				({ bonus_type }) => bonus_type === "auction"
+			);
+			setIndex(bonusIdx);
 
-      if (locationOptions && keywordCreate.eligibility.eligibility_locations) {
-        keywordCreateState.eligibility.locations.map((location) =>
-          keywordCreateState.bonus[bonusIdx].stock_location.push({
-            name: locationOptions.find((e: any) => e["_id"] === location).name,
-            location_id: location,
-            stock: 0,
-          })
-        );
+			if (locationOptions && keywordCreate.eligibility.eligibility_locations) {
+				keywordCreateState.eligibility.locations.map(location =>
+					keywordCreateState.bonus[bonusIdx].stock_location.push({
+						name: locationOptions.find((e: any) => e["_id"] === location).name,
+						location_id: location,
+						stock: 0
+					})
+				);
 
-        setStateTrigger(!stateTrigger);
-      }
-    }
-  }, [isFetching]);
+				setStateTrigger(!stateTrigger);
+			}
+		}
+	}, [isFetching]);
 
-  useEffect(() => {
-    setKeywordNotificationAuctionHelperState(keywordNotificationAuctionHelper);
-  }, [keywordNotificationAuctionHelper, stateTrigger]);
+	useEffect(() => {
+		setKeywordNotificationAuctionHelperState(keywordNotificationAuctionHelper);
+	}, [keywordNotificationAuctionHelper, stateTrigger]);
 
-  useEffect(() => {
-    // Prevent duplicate data of "Auction"
-    if (
-      !_find(
-        keywordCreate.notification,
-        ({ bonus_type_id }) => bonus_type_id === bonusTypeId
-      ) &&
-      bonusType === "auction"
-    ) {
-      keywordCreate.notification = keywordCreate.notification.concat(
-        keywordNotificationAuction
-      );
-    }
+	useEffect(() => {
+		// Prevent duplicate data of "Auction"
+		if (
+			!_find(
+				keywordCreate.notification,
+				({ bonus_type_id }) => bonus_type_id === bonusTypeId
+			) &&
+			bonusType === "auction"
+		) {
+			keywordCreate.notification = keywordCreate.notification.concat(
+				keywordNotificationAuction
+			);
+		}
 
-    setKeywordNotificationAuctionState(keywordNotificationAuction);
-  }, [keywordNotificationAuction, stateTrigger]);
+		setKeywordNotificationAuctionState(keywordNotificationAuction);
+	}, [keywordNotificationAuction, stateTrigger]);
 
-  return (
-    <Accordion sx={{ p: "1vw" }}>
-      <AccordionSummary
-        expandIcon={<ExpandMoreIcon fontSize="large" />}
-        aria-controls="panel1a-content"
-        id="panel1a-header"
-      >
-        <Subtitle textTransform="uppercase">Auction</Subtitle>
-      </AccordionSummary>
-      <AccordionDetails>
-        <Stack spacing="1vw" px="2vw" py="0.5vw">
-          {isLoading ? (
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                minHeight: "10vh",
-              }}
-            >
-              <CircularProgress />
-            </Box>
-          ) : (
-            <>
-              {keywordNotification.data.map((_: any, idx: any) => {
-                keywordNotificationAuction[idx].code_identifier = _["_id"];
-                keywordNotificationAuction[idx].bonus_type_id = bonusTypeId;
+	return (
+		<Accordion sx={{ p: "1vw" }}>
+			<AccordionSummary
+				expandIcon={<ExpandMoreIcon fontSize="large" />}
+				aria-controls="panel1a-content"
+				id="panel1a-header"
+			>
+				<Subtitle textTransform="uppercase">Auction</Subtitle>
+			</AccordionSummary>
+			<AccordionDetails>
+				<Stack spacing="1vw" px="2vw" py="0.5vw">
+					{isLoading ? (
+						<Box
+							sx={{
+								display: "flex",
+								justifyContent: "center",
+								alignItems: "center",
+								minHeight: "10vh"
+							}}
+						>
+							<CircularProgress />
+						</Box>
+					) : (
+						<>
+							{keywordNotification.data.map((_: any, idx: any) => {
+								keywordNotificationAuction[idx].code_identifier = _["_id"];
+								keywordNotificationAuction[idx].bonus_type_id = bonusTypeId;
 
-                return (
-                  <Stack
-                    key={idx}
-                    spacing="1vw"
-                    border="0.1vw solid rgba(0, 0, 0, 0.1)"
-                    borderRadius="0.3vw"
-                    p="2vw"
-                  >
-                    <Subtitle color="warning.main">{_.set_value}</Subtitle>
-                    <OutlinedTextField
-                      isRequired={false}
-                      disabled={true}
-                      direction="column"
-                      label="Keyword Name"
-                      variant="outlined"
-                      value={keywordCreateState.eligibility.name}
-                      handleChange={(value: string) => {
-                        keywordCreate.eligibility.name = value;
-                        setStateTrigger(!stateTrigger);
-                      }}
-                    />
-                    <Select
-                      isRequired={false}
-                      direction="column"
-                      label="Notification Template"
-                      placeholder="Option"
-                      options={templateOptions.data}
-                      optionLabel={"notif_name"}
-                      value={
-                        keywordNotificationAuctionHelperState[idx]
-                          .notification_template
-                      }
-                      handleChange={(value: string) => {
-                        keywordNotificationAuctionHelper[
-                          idx
-                        ].notification_template = value;
-                        keywordNotificationAuction[idx].notification_content =
-                          templateOptions?.data?.find((e) => e["_id"] === value)
-                            ?.notif_content ?? "";
-                        setStateTrigger(!stateTrigger);
-                      }}
-                    />
-                    {keywordNotificationAuctionHelperState[idx]
-                      .notification_template !== "" && (
-                      <OutlinedTextField
-                        isRequired={false}
-                        direction="column"
-                        label="Notification Content"
-                        variant="outlined"
-                        multiline
-                        rows={3}
-                        value={
-                          keywordNotificationAuctionState[idx]
-                            .notification_content
-                        }
-                        handleChange={(value: string) => {
-                          keywordNotificationAuction[idx].notification_content =
-                            value;
-                          setStateTrigger(!stateTrigger);
-                        }}
-                      />
-                    )}
-                    {keywordNotificationAuctionHelperState[idx]
-                      .notification_template !== "" && (
-                      <Stack direction="row" spacing="1vw">
-                        <Button
-                          onClick={() => {
-                            keywordNotificationAuction[
-                              idx
-                            ].notification_content += `[KeywordName]`;
-                            setStateTrigger(!stateTrigger);
-                          }}
-                          color="primary"
-                          variant="outlined"
-                          endIcon={<AddBoxIcon fontSize="large" />}
-                          sx={{
-                            borderRadius: "0.3vw",
-                            paddingInline: "1.5vw",
-                            paddingBlock: "0.5vw",
-                            textTransform: "capitalize",
-                          }}
-                        >
-                          [KeywordName]
-                        </Button>
-                        <Button
-                          onClick={() => {
-                            keywordNotificationAuction[
-                              idx
-                            ].notification_content += `[StartPeriod]`;
-                            setStateTrigger(!stateTrigger);
-                          }}
-                          color="primary"
-                          variant="outlined"
-                          endIcon={<AddBoxIcon fontSize="large" />}
-                          sx={{
-                            borderRadius: "0.3vw",
-                            paddingInline: "1.5vw",
-                            paddingBlock: "0.5vw",
-                            textTransform: "capitalize",
-                          }}
-                        >
-                          [StartPeriod]
-                        </Button>
-                        <Button
-                          onClick={() => {
-                            keywordNotificationAuction[
-                              idx
-                            ].notification_content += `[EndPeriod]`;
-                            setStateTrigger(!stateTrigger);
-                          }}
-                          color="primary"
-                          variant="outlined"
-                          endIcon={<AddBoxIcon fontSize="large" />}
-                          sx={{
-                            borderRadius: "0.3vw",
-                            paddingInline: "1.5vw",
-                            paddingBlock: "0.5vw",
-                            textTransform: "capitalize",
-                          }}
-                        >
-                          [EndPeriod]
-                        </Button>
-                      </Stack>
-                    )}
-                    <Select
-                      isRequired={false}
-                      direction="column"
-                      label="Notification Via"
-                      placeholder="Option"
-                      options={viaOptions.data}
-                      value={keywordNotificationAuctionState[idx].via}
-                      handleChange={(value: string) => {
-                        keywordNotificationAuction[idx].via = value;
-                        setStateTrigger(!stateTrigger);
-                      }}
-                    />
-                    <Stack direction="row" spacing="0.5vw" alignItems="center">
-                      <Switch
-                        checked={
-                          keywordNotificationAuctionHelperState[idx]
-                            .follow_period
-                        }
-                        onChange={(e) => {
-                          keywordNotificationAuctionHelper[idx].follow_period =
-                            e.target.checked;
-                          if (e.target.checked) {
-                            keywordNotificationAuction[idx].start_period =
-                              keywordCreateState.eligibility.start_period;
-                            keywordNotificationAuction[idx].end_period =
-                              keywordCreateState.eligibility.end_period;
-                          }
-                          setStateTrigger(!stateTrigger);
-                        }}
-                        inputProps={{ "aria-label": "controlled" }}
-                      />
-                      <BodyCopy>Follow Period of Keyword Redeem</BodyCopy>
-                    </Stack>
-                    <Stack direction="row" spacing="2vw" alignItems="center">
-                      <ResponsiveDateTimePicker
-                        isRequired={false}
-                        disabled={
-                          keywordNotificationAuctionHelperState[idx]
-                            .follow_period
-                        }
-                        direction="column"
-                        label="From"
-                        placeholder="From"
-                        value={
-                          keywordNotificationAuctionState[idx].start_period
-                        }
-                        handleChange={(value: Date) => {
-                          keywordNotificationAuction[idx].start_period = value;
-                          if (
-                            keywordNotificationAuctionState[idx].end_period <=
-                            value
-                          ) {
-                            keywordNotificationAuction[idx].end_period = value;
-                          }
-                          setStateTrigger(!stateTrigger);
-                        }}
-                      />
-                      <ResponsiveDateTimePicker
-                        isRequired={false}
-                        disabled={
-                          keywordNotificationAuctionHelperState[idx]
-                            .follow_period
-                        }
-                        direction="column"
-                        label="To"
-                        placeholder="To"
-                        minDateTime={
-                          keywordNotificationAuctionState[idx].start_period
-                        }
-                        value={keywordNotificationAuctionState[idx].end_period}
-                        handleChange={(value: Date) => {
-                          keywordNotificationAuction[idx].end_period = value;
-                          setStateTrigger(!stateTrigger);
-                        }}
-                      />
-                    </Stack>
-                  </Stack>
-                );
-              })}
+								return (
+									<Stack
+										key={idx}
+										spacing="1vw"
+										border="0.1vw solid rgba(0, 0, 0, 0.1)"
+										borderRadius="0.3vw"
+										p="2vw"
+									>
+										<Subtitle color="warning.main">{_.set_value}</Subtitle>
+										<OutlinedTextField
+											isRequired={false}
+											disabled={
+												!_.set_value?.includes("Keyword Status Per Product")
+											}
+											direction="column"
+											label="Keyword Name"
+											variant="outlined"
+											value={keywordCreateState.eligibility.name}
+											handleChange={(value: string) => {
+												keywordCreate.eligibility.name = value;
+												setStateTrigger(!stateTrigger);
+											}}
+										/>
+										<Select
+											isRequired={false}
+											direction="column"
+											label="Notification Template"
+											placeholder="Option"
+											options={templateOptions.data}
+											optionLabel={"notif_name"}
+											value={
+												keywordNotificationAuctionHelperState[idx]
+													.notification_template
+											}
+											handleChange={(value: string) => {
+												keywordNotificationAuctionHelper[
+													idx
+												].notification_template = value;
+												keywordNotificationAuction[idx].notification_content =
+													templateOptions?.data?.find(e => e["_id"] === value)
+														?.notif_content ?? "";
+												setStateTrigger(!stateTrigger);
+											}}
+										/>
+										{keywordNotificationAuctionHelperState[idx]
+											.notification_template !== "" && (
+											<OutlinedTextField
+												isRequired={false}
+												direction="column"
+												label="Notification Content"
+												variant="outlined"
+												multiline
+												rows={3}
+												value={
+													keywordNotificationAuctionState[idx]
+														.notification_content
+												}
+												handleChange={(value: string) => {
+													keywordNotificationAuction[idx].notification_content =
+														value;
+													setStateTrigger(!stateTrigger);
+												}}
+											/>
+										)}
+										{keywordNotificationAuctionHelperState[idx]
+											.notification_template !== "" && (
+											<Stack direction="row" spacing="1vw">
+												<Button
+													onClick={() => {
+														keywordNotificationAuction[
+															idx
+														].notification_content += `[KeywordName]`;
+														setStateTrigger(!stateTrigger);
+													}}
+													color="primary"
+													variant="outlined"
+													endIcon={<AddBoxIcon fontSize="large" />}
+													sx={{
+														borderRadius: "0.3vw",
+														paddingInline: "1.5vw",
+														paddingBlock: "0.5vw",
+														textTransform: "capitalize"
+													}}
+												>
+													[KeywordName]
+												</Button>
+												<Button
+													onClick={() => {
+														keywordNotificationAuction[
+															idx
+														].notification_content += `[StartPeriod]`;
+														setStateTrigger(!stateTrigger);
+													}}
+													color="primary"
+													variant="outlined"
+													endIcon={<AddBoxIcon fontSize="large" />}
+													sx={{
+														borderRadius: "0.3vw",
+														paddingInline: "1.5vw",
+														paddingBlock: "0.5vw",
+														textTransform: "capitalize"
+													}}
+												>
+													[StartPeriod]
+												</Button>
+												<Button
+													onClick={() => {
+														keywordNotificationAuction[
+															idx
+														].notification_content += `[EndPeriod]`;
+														setStateTrigger(!stateTrigger);
+													}}
+													color="primary"
+													variant="outlined"
+													endIcon={<AddBoxIcon fontSize="large" />}
+													sx={{
+														borderRadius: "0.3vw",
+														paddingInline: "1.5vw",
+														paddingBlock: "0.5vw",
+														textTransform: "capitalize"
+													}}
+												>
+													[EndPeriod]
+												</Button>
+											</Stack>
+										)}
+										<Select
+											isRequired={false}
+											direction="column"
+											label="Notification Via"
+											placeholder="Option"
+											options={viaOptions.data}
+											value={keywordNotificationAuctionState[idx].via}
+											handleChange={(value: string) => {
+												keywordNotificationAuction[idx].via = value;
+												setStateTrigger(!stateTrigger);
+											}}
+										/>
+										<Stack direction="row" spacing="0.5vw" alignItems="center">
+											<Switch
+												checked={
+													keywordNotificationAuctionHelperState[idx]
+														.follow_period
+												}
+												onChange={e => {
+													keywordNotificationAuctionHelper[idx].follow_period =
+														e.target.checked;
+													if (e.target.checked) {
+														keywordNotificationAuction[idx].start_period =
+															keywordCreateState.eligibility.start_period;
+														keywordNotificationAuction[idx].end_period =
+															keywordCreateState.eligibility.end_period;
+													}
+													setStateTrigger(!stateTrigger);
+												}}
+												inputProps={{ "aria-label": "controlled" }}
+											/>
+											<BodyCopy>Follow Period of Keyword Redeem</BodyCopy>
+										</Stack>
+										<Stack direction="row" spacing="2vw" alignItems="center">
+											<ResponsiveDateTimePicker
+												isRequired={false}
+												disabled={
+													keywordNotificationAuctionHelperState[idx]
+														.follow_period
+												}
+												direction="column"
+												label="From"
+												placeholder="From"
+												value={
+													keywordNotificationAuctionState[idx].start_period
+												}
+												handleChange={(value: Date) => {
+													keywordNotificationAuction[idx].start_period = value;
+													if (
+														keywordNotificationAuctionState[idx].end_period <=
+														value
+													) {
+														keywordNotificationAuction[idx].end_period = value;
+													}
+													setStateTrigger(!stateTrigger);
+												}}
+											/>
+											<ResponsiveDateTimePicker
+												isRequired={false}
+												disabled={
+													keywordNotificationAuctionHelperState[idx]
+														.follow_period
+												}
+												direction="column"
+												label="To"
+												placeholder="To"
+												minDateTime={
+													keywordNotificationAuctionState[idx].start_period
+												}
+												value={keywordNotificationAuctionState[idx].end_period}
+												handleChange={(value: Date) => {
+													keywordNotificationAuction[idx].end_period = value;
+													setStateTrigger(!stateTrigger);
+												}}
+											/>
+										</Stack>
+									</Stack>
+								);
+							})}
 
-              {index !== -1 && (
-                <Stack spacing={4}>
-                  <Stack spacing={2} direction="row">
-                    <OutlinedTextField
-                      direction="column"
-                      label="Poin Min Bidding"
-                      variant="outlined"
-                      value={
-                        keywordCreate.bonus[index]["auction_poin_min_bidding"]
-                      }
-                      handleChange={(value: string) => {
-                        keywordCreate.bonus[index]["auction_poin_min_bidding"] =
-                          Number(value);
-                        setStateTrigger(!stateTrigger);
-                      }}
-                    />
-                    <OutlinedTextField
-                      direction="column"
-                      label="Poin Multiplier"
-                      variant="outlined"
-                      value={
-                        keywordCreate.bonus[index]["auction_multiplier_poin"]
-                      }
-                      handleChange={(value: string) => {
-                        keywordCreate.bonus[index]["auction_multiplier_poin"] =
-                          Number(value);
-                        setStateTrigger(!stateTrigger);
-                      }}
-                    />
-                    <OutlinedTextField
-                      direction="column"
-                      label="Max Winner in a Phase"
-                      variant="outlined"
-                      value={
-                        keywordCreate.bonus[index]["auction_max_winner_inphase"]
-                      }
-                      handleChange={(value: string) => {
-                        keywordCreate.bonus[index][
-                          "auction_max_winner_inphase"
-                        ] = Number(value);
-                        setStateTrigger(!stateTrigger);
-                      }}
-                    />
-                  </Stack>
-                  <Stack spacing={2}>
-                    <Subtitle color="warning.main">
-                      PRIZE CONFIGURATION
-                    </Subtitle>
-                    <OutlinedTextField
-                      direction="column"
-                      label="Prize Name"
-                      variant="outlined"
-                      value={keywordCreate.bonus[index]["auction_prize_name"]}
-                      handleChange={(value: string) => {
-                        keywordCreate.bonus[index]["auction_prize_name"] =
-                          value;
-                        setStateTrigger(!stateTrigger);
-                      }}
-                    />
-                    <Stack spacing={2} direction="row">
-                      <OutlinedTextField
-                        direction="column"
-                        label="Prize Description"
-                        variant="outlined"
-                        value={
-                          keywordCreate.bonus[index]["auction_prize_desc_id"]
-                        }
-                        handleChange={(value: string) => {
-                          keywordCreate.bonus[index]["auction_prize_desc_id"] =
-                            value;
-                          setStateTrigger(!stateTrigger);
-                        }}
-                      />
-                      <OutlinedTextField
-                        direction="column"
-                        label="Prize Description English"
-                        variant="outlined"
-                        value={
-                          keywordCreate.bonus[index]["auction_prize_desc_en"]
-                        }
-                        handleChange={(value: string) => {
-                          keywordCreate.bonus[index]["auction_prize_desc_en"] =
-                            value;
-                          setStateTrigger(!stateTrigger);
-                        }}
-                      />
-                    </Stack>
-                    <Stack spacing={2}>
-                      <Box
-                          style={{
-                            display: 'inline-block',
-                            position: 'relative'
-                          }}
-                      >
-                        <label
-                            htmlFor="preview"
-                        >
-                          {loading && (<CircularProgress style={{
-                            position: 'absolute',
-                            top: '50%',
-                            left: '50%',
-                            marginLeft: 'auto',
-                            marginRight: 'auto'
-                          }}></CircularProgress>)}
-                          <Box
-                              component="img"
-                              position="inherit"
-                              alt="Telkomsel Upload"
-                              src={preview}
-                              style={{
-                                maxWidth: '100%',
-                                width: '100%',
-                                height: '100%',
-                                objectFit: 'cover'
-                              }}
-                          ></Box>
-                        </label>
-                      </Box>
-                      <input
-                          hidden
-                          id="preview"
-                          ref={uploadInputRef}
-                          accept="image/*"
-                          type="file"
-                          onChange={onPreview}
-                          style={{ display: "none" }}
-                      />
-                      <Button
-                        variant="contained"
-                        component="label"
-                        onClick={onUpload}
-                      >
-                        Upload
-                      </Button>
-                    </Stack>
-                  </Stack>
+							{index !== -1 && (
+								<Stack spacing={4}>
+									<Stack spacing={2} direction="row">
+										<OutlinedTextField
+											direction="column"
+											label="Poin Min Bidding"
+											variant="outlined"
+											value={
+												keywordCreate.bonus[index]["auction_poin_min_bidding"]
+											}
+											handleChange={(value: string) => {
+												// Only accept number
+												if (onlyNumber(value)) {
+													keywordCreate.bonus[index][
+														"auction_poin_min_bidding"
+													] = Number(value);
+													setStateTrigger(!stateTrigger);
+												}
+											}}
+											inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
+										/>
+										<OutlinedTextField
+											direction="column"
+											label="Poin Multiplier"
+											variant="outlined"
+											value={
+												keywordCreate.bonus[index]["auction_multiplier_poin"]
+											}
+											handleChange={(value: string) => {
+												// Only accept number
+												if (onlyNumber(value)) {
+													keywordCreate.bonus[index][
+														"auction_multiplier_poin"
+													] = Number(value);
+													setStateTrigger(!stateTrigger);
+												}
+											}}
+										/>
+										<OutlinedTextField
+											direction="column"
+											label="Max Winner in a Phase"
+											variant="outlined"
+											value={
+												keywordCreate.bonus[index]["auction_max_winner_inphase"]
+											}
+											handleChange={(value: string) => {
+												// Only accept number
+												if (onlyNumber(value)) {
+													keywordCreate.bonus[index][
+														"auction_max_winner_inphase"
+													] = Number(value);
+													setStateTrigger(!stateTrigger);
+												}
+											}}
+										/>
+									</Stack>
+									<Stack spacing={2}>
+										<Subtitle color="warning.main">
+											PRIZE CONFIGURATION
+										</Subtitle>
+										<OutlinedTextField
+											direction="column"
+											label="Prize Name"
+											variant="outlined"
+											value={keywordCreate.bonus[index]["auction_prize_name"]}
+											handleChange={(value: string) => {
+												keywordCreate.bonus[index]["auction_prize_name"] =
+													value;
+												setStateTrigger(!stateTrigger);
+											}}
+										/>
+										<Stack spacing={2} direction="row">
+											<OutlinedTextField
+												direction="column"
+												label="Prize Description"
+												variant="outlined"
+												value={
+													keywordCreate.bonus[index]["auction_prize_desc_id"]
+												}
+												handleChange={(value: string) => {
+													keywordCreate.bonus[index]["auction_prize_desc_id"] =
+														value;
+													setStateTrigger(!stateTrigger);
+												}}
+											/>
+											<OutlinedTextField
+												direction="column"
+												label="Prize Description English"
+												variant="outlined"
+												value={
+													keywordCreate.bonus[index]["auction_prize_desc_en"]
+												}
+												handleChange={(value: string) => {
+													keywordCreate.bonus[index]["auction_prize_desc_en"] =
+														value;
+													setStateTrigger(!stateTrigger);
+												}}
+											/>
+										</Stack>
+										<Stack spacing={2}>
+											<Box
+												style={{
+													display: "inline-block",
+													position: "relative"
+												}}
+											>
+												<label htmlFor="preview">
+													{loading && (
+														<CircularProgress
+															style={{
+																position: "absolute",
+																top: "50%",
+																left: "50%",
+																marginLeft: "auto",
+																marginRight: "auto"
+															}}
+														></CircularProgress>
+													)}
+													<Box
+														component="img"
+														position="inherit"
+														alt="Telkomsel Upload"
+														src={preview}
+														style={{
+															maxWidth: "100%",
+															width: "100%",
+															height: "100%",
+															objectFit: "cover"
+														}}
+													></Box>
+												</label>
+											</Box>
+											<input
+												hidden
+												id="preview"
+												ref={uploadInputRef}
+												accept="image/*"
+												type="file"
+												onChange={onPreview}
+												style={{ display: "none" }}
+											/>
+											<Button
+												variant="contained"
+												component="label"
+												onClick={onUpload}
+											>
+												Upload
+											</Button>
+										</Stack>
+									</Stack>
 
-                  {/* Stock Location Management */}
-                  <Stack>
-                    {locationOptions && (
-                      <LocationManagement
-                        bonusType="auction"
-                        keywordCreateState={keywordCreateState}
-                        keywordCreate={keywordCreate}
-                        stateTrigger={stateTrigger}
-                        setStateTrigger={setStateTrigger}
-                      />
-                    )}
-                  </Stack>
-                </Stack>
-              )}
-            </>
-          )}
-        </Stack>
-      </AccordionDetails>
-    </Accordion>
-  );
+									{/* Stock Location Management */}
+									<Stack>
+										{locationOptions && (
+											<LocationManagement
+												bonusType="auction"
+												keywordCreateState={keywordCreateState}
+												keywordCreate={keywordCreate}
+												stateTrigger={stateTrigger}
+												setStateTrigger={setStateTrigger}
+											/>
+										)}
+									</Stack>
+								</Stack>
+							)}
+						</>
+					)}
+				</Stack>
+			</AccordionDetails>
+		</Accordion>
+	);
 };
 
 export default NotificationAuction;
