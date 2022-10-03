@@ -20,7 +20,9 @@ import {
   IKeywordBonusTelcoProductPostpaid,
   IKeywordBonusTelcoProductPrepaid,
   IKeywordBonusVoucher,
-  IKeywordBonusLinkAja,
+  IKeywordBonusLinkAjaMain,
+  IKeywordBonusLinkAjaBonus,
+  IKeywordBonusNgrs,
 } from "./interfaces";
 import { IBonusTypeVoucher } from "./Bonus/Voucher/interface";
 
@@ -165,11 +167,34 @@ export const KeywordBonusVoucher: IKeywordBonusVoucher = {
   redeem_after_verification: false,
 };
 
-export const KeywordBonusLinkAja: IKeywordBonusLinkAja = {
-  nominal: "",
+export const KeywordBonusLinkAjaMain: IKeywordBonusLinkAjaMain = {
+  bonus_type: "linkaja_main",
+  nominal: 0,
+  external_api_config: false,
   location: "",
-  bonus_type: "link_aja",
-  external_api_config: "",
+  location_detail: "",
+  bucket: "",
+  stock_location: [],
+  redeem_after_verification: false,
+};
+
+export const KeywordBonusLinkAjaBonus: IKeywordBonusLinkAjaBonus = {
+  bonus_type: "linkaja_bonus",
+  nominal: 0,
+  external_api_config: false,
+  location: "",
+  location_detail: "",
+  bucket: "",
+  stock_location: [],
+  redeem_after_verification: false,
+};
+
+export const KeywordBonusNgrs: IKeywordBonusNgrs = {
+  bonus_type: "ngrs",
+  nominal: 0,
+  external_api_config: false,
+  location: "",
+  location_detail: "",
   bucket: "",
   stock_location: [],
   redeem_after_verification: false,
@@ -195,15 +220,15 @@ export const KeywordBonusMobileBanking: IKeywordBonusMobileBanking = {
 };
 
 export const KeywordBonusVoid: any = {
-  bonus_type: "void"
+  bonus_type: "void",
 };
 
 export const KeywordBonusVoting: any = {
-  bonus_type: "voting"
+  bonus_type: "voting",
 };
 
 export const KeywordBonusOther: any = {
-  bonus_type: "other"
+  bonus_type: "other",
 };
 
 export const KeywordNotificationAuctionHelper: IKeywordNotificationAuctionHelper[] =

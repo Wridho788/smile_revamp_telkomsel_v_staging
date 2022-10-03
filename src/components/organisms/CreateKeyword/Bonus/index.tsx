@@ -1,6 +1,5 @@
 import * as React from "react";
 
-
 import { Box, Chip, Stack } from "@mui/material";
 import { Select } from "../../../atoms";
 import { useGetBonusTypeQuery } from "../../../../redux/features/lov/lov-api-slice";
@@ -16,7 +15,9 @@ import LuckyDraw from "./LuckyDraw";
 import DirectRedeem from "./DirectRedeem";
 import LoyaltyPoin from "./LoyaltyPoin";
 import Voucher from "./Voucher";
-import LinkAja from "./LinkAja"
+import LinkAjaMain from "./LinkAjaMain";
+import LinkAjaBonus from "./LinkAjaBonus";
+import Ngrs from "./Ngrs";
 import TelcoProductPrepaid from "./TelcoProductPrepaid";
 import TelcoProductPostpaid from "./TelcoProductPostpaid";
 import Donation from "./Donation";
@@ -96,9 +97,8 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
                   <Chip
                     key={value}
                     label={
-                      bonusTypeOptions.data.find(
-                        (e) => e["template"] === value
-                      )?.template
+                      bonusTypeOptions.data.find((e) => e["template"] === value)
+                        ?.template
                     }
                     clickable
                     deleteIcon={
@@ -204,64 +204,88 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
                   );
                 case "telco_postpaid":
                   return (
-                      <Box key={`bonusType__${idx}`}>
-                        <TelcoProductPostpaid
-                            bonusType={bonusType}
-                            bonusTypeId={
-                              _find(
-                                  bonusTypeOptions.data,
-                                  ({ template }) => template === bonusType
-                              )?._id
-                            }
-                            keywordCreateState={keywordCreateState}
-                            keywordCreate={keywordCreate}
-                            stateTrigger={stateTrigger}
-                            setStateTrigger={setStateTrigger}
-                        />
-                      </Box>
+                    <Box key={`bonusType__${idx}`}>
+                      <TelcoProductPostpaid
+                        bonusType={bonusType}
+                        bonusTypeId={
+                          _find(
+                            bonusTypeOptions.data,
+                            ({ template }) => template === bonusType
+                          )?._id
+                        }
+                        keywordCreateState={keywordCreateState}
+                        keywordCreate={keywordCreate}
+                        stateTrigger={stateTrigger}
+                        setStateTrigger={setStateTrigger}
+                      />
+                    </Box>
                   );
                 case "telco_prepaid":
                   return (
-                      <Box key={`bonusType__${idx}`}>
-                        <TelcoProductPrepaid
-                            bonusType={bonusType}
-                            bonusTypeId={
-                              _find(
-                                  bonusTypeOptions.data,
-                                  ({ template }) => template === bonusType
-                              )?._id
-                            }
-                            keywordCreateState={keywordCreateState}
-                            keywordCreate={keywordCreate}
-                            stateTrigger={stateTrigger}
-                            setStateTrigger={setStateTrigger}
-                        />
-                      </Box>
+                    <Box key={`bonusType__${idx}`}>
+                      <TelcoProductPrepaid
+                        bonusType={bonusType}
+                        bonusTypeId={
+                          _find(
+                            bonusTypeOptions.data,
+                            ({ template }) => template === bonusType
+                          )?._id
+                        }
+                        keywordCreateState={keywordCreateState}
+                        keywordCreate={keywordCreate}
+                        stateTrigger={stateTrigger}
+                        setStateTrigger={setStateTrigger}
+                      />
+                    </Box>
                   );
-                  case "link_aja":
-                      return (
-                          <Box key={`bonusType__${idx}`}>
-                              <LinkAja
-                                  bonusType={bonusType}
-                                  keywordCreateState={keywordCreateState}
-                                  keywordCreate={keywordCreate}
-                                  stateTrigger={stateTrigger}
-                                  setStateTrigger={setStateTrigger}
-                              />
-                          </Box>
-                      );
+                case "linkaja_main":
+                  return (
+                    <Box key={`bonusType__${idx}`}>
+                      <LinkAjaMain
+                        bonusType={bonusType}
+                        keywordCreateState={keywordCreateState}
+                        keywordCreate={keywordCreate}
+                        stateTrigger={stateTrigger}
+                        setStateTrigger={setStateTrigger}
+                      />
+                    </Box>
+                  );
+                case "linkaja_bonus":
+                  return (
+                    <Box key={`bonusType__${idx}`}>
+                      <LinkAjaBonus
+                        bonusType={bonusType}
+                        keywordCreateState={keywordCreateState}
+                        keywordCreate={keywordCreate}
+                        stateTrigger={stateTrigger}
+                        setStateTrigger={setStateTrigger}
+                      />
+                    </Box>
+                  );
+                case "ngrs":
+                  return (
+                    <Box key={`bonusType__${idx}`}>
+                      <Ngrs
+                        bonusType={bonusType}
+                        keywordCreateState={keywordCreateState}
+                        keywordCreate={keywordCreate}
+                        stateTrigger={stateTrigger}
+                        setStateTrigger={setStateTrigger}
+                      />
+                    </Box>
+                  );
                 case "discount_voucher":
                   return (
-                      <Box key={`bonusType__${idx}`}>
-                              <Voucher
-                                  bonusType={bonusType}
-                                  keywordCreateState={keywordCreateState}
-                                  keywordCreate={keywordCreate}
-                                  stateTrigger={stateTrigger}
-                                  setStateTrigger={setStateTrigger}
-                              />
-                          </Box>
-                      );
+                    <Box key={`bonusType__${idx}`}>
+                      <Voucher
+                        bonusType={bonusType}
+                        keywordCreateState={keywordCreateState}
+                        keywordCreate={keywordCreate}
+                        stateTrigger={stateTrigger}
+                        setStateTrigger={setStateTrigger}
+                      />
+                    </Box>
+                  );
                 case "donation":
                   return (
                     <Box key={`bonusType__${idx}`}>
@@ -300,57 +324,57 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
                   );
                 case "void":
                   return (
-                      <Box key={`bonusType__${idx}`}>
-                        <Void
-                            bonusType={bonusType}
-                            bonusTypeId={
-                              _find(
-                                  bonusTypeOptions.data,
-                                  ({ set_value }) => set_value === bonusType
-                              )?._id
-                            }
-                            keywordCreateState={keywordCreateState}
-                            keywordCreate={keywordCreate}
-                            stateTrigger={stateTrigger}
-                            setStateTrigger={setStateTrigger}
-                        />
-                      </Box>
+                    <Box key={`bonusType__${idx}`}>
+                      <Void
+                        bonusType={bonusType}
+                        bonusTypeId={
+                          _find(
+                            bonusTypeOptions.data,
+                            ({ set_value }) => set_value === bonusType
+                          )?._id
+                        }
+                        keywordCreateState={keywordCreateState}
+                        keywordCreate={keywordCreate}
+                        stateTrigger={stateTrigger}
+                        setStateTrigger={setStateTrigger}
+                      />
+                    </Box>
                   );
                 case "voting":
                   return (
-                      <Box key={`bonusType__${idx}`}>
-                        <Voting
-                            bonusType={bonusType}
-                            bonusTypeId={
-                              _find(
-                                  bonusTypeOptions.data,
-                                  ({ set_value }) => set_value === bonusType
-                              )?._id
-                            }
-                            keywordCreateState={keywordCreateState}
-                            keywordCreate={keywordCreate}
-                            stateTrigger={stateTrigger}
-                            setStateTrigger={setStateTrigger}
-                        />
-                      </Box>
+                    <Box key={`bonusType__${idx}`}>
+                      <Voting
+                        bonusType={bonusType}
+                        bonusTypeId={
+                          _find(
+                            bonusTypeOptions.data,
+                            ({ set_value }) => set_value === bonusType
+                          )?._id
+                        }
+                        keywordCreateState={keywordCreateState}
+                        keywordCreate={keywordCreate}
+                        stateTrigger={stateTrigger}
+                        setStateTrigger={setStateTrigger}
+                      />
+                    </Box>
                   );
                 case "other":
                   return (
-                      <Box key={`bonusType__${idx}`}>
-                        <Other
-                            bonusType={bonusType}
-                            bonusTypeId={
-                              _find(
-                                  bonusTypeOptions.data,
-                                  ({ set_value }) => set_value === bonusType
-                              )?._id
-                            }
-                            keywordCreateState={keywordCreateState}
-                            keywordCreate={keywordCreate}
-                            stateTrigger={stateTrigger}
-                            setStateTrigger={setStateTrigger}
-                        />
-                      </Box>
+                    <Box key={`bonusType__${idx}`}>
+                      <Other
+                        bonusType={bonusType}
+                        bonusTypeId={
+                          _find(
+                            bonusTypeOptions.data,
+                            ({ set_value }) => set_value === bonusType
+                          )?._id
+                        }
+                        keywordCreateState={keywordCreateState}
+                        keywordCreate={keywordCreate}
+                        stateTrigger={stateTrigger}
+                        setStateTrigger={setStateTrigger}
+                      />
+                    </Box>
                   );
               }
             })}
