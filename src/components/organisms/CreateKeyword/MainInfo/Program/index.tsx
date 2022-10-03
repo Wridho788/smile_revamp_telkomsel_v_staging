@@ -22,6 +22,8 @@ const Program: React.FunctionComponent<IProgramProps> = ({
   stateTrigger,
   setStateTrigger,
 }) => {
+  const programExperienceRef = React.useRef();
+
   const {
     data: programListOptions = { data: [] },
     isFetching: isProgramListFetching,
@@ -30,6 +32,8 @@ const Program: React.FunctionComponent<IProgramProps> = ({
     data: programExperienceOptions = { data: [] },
     isFetching: isProgramExperienceFetching,
   } = useGetProgramExperienceQuery();
+
+  console.log(programExperienceRef);
   return (
     <Box sx={{ px: "2vw" }}>
       <Stack spacing="2vw" px="2vw" py="0.5vw">
@@ -83,57 +87,14 @@ const Program: React.FunctionComponent<IProgramProps> = ({
                 />
               </Stack>
             )}
+
             <Select
-              multiple
               label="Program Experience"
               placeholder="Option"
               options={programExperienceOptions.data}
-              renderValue={(selected: any) => (
-                <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-                  {selected.map((value: any) => {
-                    return (
-                      <Chip
-                        key={value}
-                        label={
-                          programExperienceOptions.data.find(
-                            (e) => e["_id"] === value
-                          )?.set_value
-                        }
-                        clickable
-                        deleteIcon={
-                          <CancelIcon
-                            onMouseDown={(event: any) =>
-                              event.stopPropagation()
-                            }
-                          />
-                        }
-                        onDelete={(e) => {
-                          e.preventDefault();
-                          keywordCreate.eligibility.program_experience =
-                            _without(
-                              [
-                                ...keywordCreateState.eligibility
-                                  .program_experience,
-                              ],
-                              value
-                            );
-                          setStateTrigger(!stateTrigger);
-                        }}
-                        onClick={() => console.log("clicked chip")}
-                      />
-                    );
-                  })}
-                </Box>
-              )}
               value={keywordCreateState.eligibility.program_experience}
-              handleChange={(value: Array<string>) => {
-                if (value.length > 0) {
-                  keywordCreate.eligibility.program_experience = [
-                    value[value.length - 1],
-                  ];
-                } else {
-                  keywordCreate.eligibility.program_experience = value;
-                }
+              handleChange={(value: string) => {
+                keywordCreate.eligibility.program_experience = [value];
                 setStateTrigger(!stateTrigger);
               }}
             />
