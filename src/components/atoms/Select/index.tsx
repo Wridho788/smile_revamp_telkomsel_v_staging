@@ -31,7 +31,6 @@ const Index: React.FunctionComponent<ISelectProps> = ({
   handleRefetch,
   ...props
 }) => {
-
   const [showInput, setShowInput] = useState<boolean>(false);
 
   return (
@@ -40,14 +39,14 @@ const Index: React.FunctionComponent<ISelectProps> = ({
       columns={!label || direction === "column" ? rightColumn : totalColumn}
       alignItems={"center"}
     >
-      {showInput &&
+      {showInput && (
         <ModalAddProgramGroup
           open={showInput}
           handleClose={() => setShowInput(false)}
           handleRefetch={handleRefetch}
           handleChange={handleChange}
         />
-      }
+      )}
       <Grid
         item
         xs={!label ? 0 : direction === "column" ? rightColumn : leftColumn}
@@ -81,9 +80,7 @@ const Index: React.FunctionComponent<ISelectProps> = ({
             MenuProps={{ style: { zIndex: 9999 } }}
             {...props}
           >
-            <MenuItem value="">
-              {placeholder}
-            </MenuItem>
+            <MenuItem value="">{placeholder}</MenuItem>
             {typeof options !== "undefined" &&
               options.map((data: any, idx: number) => (
                 <MenuItem
@@ -94,7 +91,9 @@ const Index: React.FunctionComponent<ISelectProps> = ({
                 </MenuItem>
               ))}
 
-            {label === "Program Group" && <AddProgramGroup handleShow={() => setShowInput(true)} />}
+            {label === "Program Group" && (
+              <AddProgramGroup handleShow={() => setShowInput(true)} />
+            )}
           </Select>
         </FormControl>
       </Grid>

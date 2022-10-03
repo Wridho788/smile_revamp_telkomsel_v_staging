@@ -174,6 +174,7 @@ export interface IKeywordNotificationAuction {
   end_period: Date;
   notif_type: string;
   via: string;
+  keyword_name?: string;
 }
 
 export interface ICreateKeyword {
@@ -182,11 +183,34 @@ export interface ICreateKeyword {
   notification: any[];
 }
 
-export interface IKeywordBonusLinkAja {
-  nominal: string;
-  location: string;
+export interface IKeywordBonusLinkAjaMain {
   bonus_type: string;
-  external_api_config: string;
+  nominal: number;
+  external_api_config: boolean;
+  location: string;
+  location_detail: string;
+  bucket: string;
+  stock_location: any[];
+  redeem_after_verification: boolean;
+}
+
+export interface IKeywordBonusLinkAjaBonus {
+  bonus_type: string;
+  nominal: number;
+  external_api_config: boolean;
+  location: string;
+  location_detail: string;
+  bucket: string;
+  stock_location: any[];
+  redeem_after_verification: boolean;
+}
+
+export interface IKeywordBonusNgrs {
+  bonus_type: string;
+  nominal: number;
+  external_api_config: boolean;
+  location: string;
+  location_detail: string;
   bucket: string;
   stock_location: any[];
   redeem_after_verification: boolean;
