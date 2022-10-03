@@ -104,21 +104,21 @@ export const KeywordBonusLuckyDraw: IKeywordBonusLuckyDraw = {
   lucky_draw_reguler: true,
   lucky_draw_allow_inject_coupon: false,
   lucky_draw_prize: "",
-  
+  redeem_after_verification: false,
   locations: [],
 };
 
 export const KeywordBonusDirectRedeem: IKeywordBonusDirectRedeem = {
   bonus_type: "direct_redeem",
   stock_type: "",
-  
+  redeem_after_verification: false,
   locations: [],
 };
 
 export const KeywordBonusLoyaltyPoin: IKeywordBonusLoyaltyPoin = {
   bonus_type: "loyalty_poin",
   earning_poin: 0,
-  
+  redeem_after_verification: false,
   locations: [],
 };
 
@@ -129,7 +129,7 @@ export const KeywordBonusTelcoProductPostpaid: IKeywordBonusTelcoProductPostpaid
     telco_post_bid: "",
     telco_post_api_config: "False",
     stock_location: [],
-    
+    redeem_after_verification: false,
   };
 
 export const KeywordBonusTelcoProductPrepaid: IKeywordBonusTelcoProductPrepaid =
@@ -139,7 +139,7 @@ export const KeywordBonusTelcoProductPrepaid: IKeywordBonusTelcoProductPrepaid =
     telco_post_bid: "",
     telco_post_api_config: "False",
     stock_location: [],
-    
+    redeem_after_verification: false,
   };
 
 export const KeywordBonusAuction: IKeywordBonusAuction = {
@@ -152,7 +152,7 @@ export const KeywordBonusAuction: IKeywordBonusAuction = {
   auction_max_winner_inphase: 0,
   auction_prize_name: "",
   stock_location: [],
-  
+  redeem_after_verification: false,
 };
 
 export const KeywordBonusVoucher: IKeywordBonusVoucher = {
@@ -162,7 +162,7 @@ export const KeywordBonusVoucher: IKeywordBonusVoucher = {
   voucher_combination: "",
   jumlah_total_voucher: 0,
   stock_location: [],
-  
+  redeem_after_verification: false,
 };
 
 export const KeywordBonusLinkAja: IKeywordBonusLinkAja = {
@@ -172,7 +172,7 @@ export const KeywordBonusLinkAja: IKeywordBonusLinkAja = {
   external_api_config: "",
   bucket: "",
   stock_location: [],
-  
+  redeem_after_verification: false,
 };
 
 export const KeyWordBonusDonation: IKeywordBonusDonation = {
@@ -181,7 +181,7 @@ export const KeyWordBonusDonation: IKeywordBonusDonation = {
   minimum_poin: 0,
   target_poin: 0,
   stock_location: [],
-  
+  redeem_after_verification: false,
 };
 
 export const KeywordBonusMobileBanking: IKeywordBonusMobileBanking = {
@@ -191,38 +191,38 @@ export const KeywordBonusMobileBanking: IKeywordBonusMobileBanking = {
   digit_coupon: "",
   combination_coupon: "",
   stock_location: [],
-  
+  redeem_after_verification: false,
 };
 
 export const KeywordBonusVoid: any = {
-  bonus_type: "void",
+  bonus_type: "void"
 };
 
 export const KeywordBonusVoting: any = {
-  bonus_type: "voting",
+  bonus_type: "voting"
 };
 
 export const KeywordBonusOther: any = {
-  bonus_type: "other",
+  bonus_type: "other"
 };
 
 export const KeywordNotificationAuctionHelper: IKeywordNotificationAuctionHelper[] =
   [
     {
       notification_template: "",
-      follow_period: true,
+      follow_period: false,
     },
     {
       notification_template: "",
-      follow_period: true,
+      follow_period: false,
     },
     {
       notification_template: "",
-      follow_period: true,
+      follow_period: false,
     },
     {
       notification_template: "",
-      follow_period: true,
+      follow_period: false,
     },
   ];
 
@@ -269,19 +269,19 @@ export const KeywordNotificationEligibilityHelper: IKeywordNotificationEligibili
   [
     {
       notification_template: "",
-      follow_period: true,
+      follow_period: false,
     },
     {
       notification_template: "",
-      follow_period: true,
+      follow_period: false,
     },
     {
       notification_template: "",
-      follow_period: true,
+      follow_period: false,
     },
     {
       notification_template: "",
-      follow_period: true,
+      follow_period: false,
     },
   ];
 
@@ -333,19 +333,19 @@ export const KeywordNotificationLuckyDrawHelper: IKeywordNotificationLuckyDrawHe
   [
     {
       notification_template: "",
-      follow_period: true,
+      follow_period: false,
     },
     {
       notification_template: "",
-      follow_period: true,
+      follow_period: false,
     },
     {
       notification_template: "",
-      follow_period: true,
+      follow_period: false,
     },
     {
       notification_template: "",
-      follow_period: true,
+      follow_period: false,
     },
   ];
 
