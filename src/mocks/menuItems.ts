@@ -88,10 +88,5 @@ export const menuItems: Menu[] = [
         hasChild: false,
         icon: Logout,
         path: "/signOut",
-    }, {
-        label: "Notifications",
-        hasChild: false,
-        icon: NotificationImportant,
-        path: "/notifications",
-    },
+    }
 ];
