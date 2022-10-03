@@ -6,52 +6,58 @@ import { IParams } from "../../utils/IGeneral";
 const baseUrl = process.env.REACT_APP_BASE_URL;
 
 export const channelSlice = createApi({
-    reducerPath: 'channelApi',
-    baseQuery: API_HEADER(baseUrl + '/channel'),
-    endpoints(builder) {
-        const responseHandler = (endpoint: string) =>
-            builder.query<IResponse, IParams>({
-                query: (params: IParams) => ({
-                    url: endpoint,
-                    params: params
-                }),
-            });
-        const postHandler = (endpoint: string) =>
-            builder.mutation<{ success: boolean; body: any }, any>({
-                query: (body) => ({
-                    url: endpoint,
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: body
-                }),
-            });
-        const putHandler = (endpoint: string) =>
-            builder.mutation<{ success: boolean; body: any }, any>({
-                query: (body) => ({
-                    url: endpoint,
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: body
-                }),
-            });
-        const deleteHandler = (endpoint: string) =>
-            builder.mutation<{ success: boolean; id: number }, number>({
-                query: (id) => ({
-                    url: endpoint + id + '/delete',
-                    method: 'DELETE',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                }),
-            });
-        return {
-            channelList: responseHandler( baseUrl + '/channel'),
-        };
-    },
+  reducerPath: "channelApi",
+  baseQuery: API_HEADER(baseUrl + "/channel"),
+  endpoints(builder) {
+    const responseHandler = (endpoint: string) =>
+      builder.query<IResponse, IParams>({
+        query: (params: IParams) => ({
+          url: endpoint,
+          params: params,
+        }),
+      });
+    const postHandler = (endpoint: string) =>
+      builder.mutation<{ success: boolean; body: any }, any>({
+        query: (body) => ({
+          url: endpoint,
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: body,
+        }),
+      });
+    const putHandler = (endpoint: string) =>
+      builder.mutation<{ success: boolean; body: any }, any>({
+        query: (body) => ({
+          url: endpoint,
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: body,
+        }),
+      });
+    const deleteHandler = (endpoint: string) =>
+      builder.mutation<{ success: boolean; id: number }, number>({
+        query: (id) => ({
+          url: endpoint + id + "/delete",
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }),
+      });
+    return {
+      channelList: responseHandler(baseUrl + "/channel"),
+      channelListPrime: responseHandler("/prime"),
+    };
+  },
 });
 
-export const { useChannelListQuery } = channelSlice;
+export const {
+  useChannelListQuery,
+  useChannelListPrimeQuery,
+  useLazyChannelListPrimeQuery,
+  useLazyChannelListQuery,
+} = channelSlice;

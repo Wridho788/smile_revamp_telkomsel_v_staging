@@ -77,7 +77,7 @@ const Index: React.FunctionComponent<ISelectProps> = ({
             size="small"
             input={<OutlinedInput />}
             inputProps={{ "aria-label": "Without label" }}
-            MenuProps={{ style: { zIndex: 9 } }}
+            MenuProps={{ style: { zIndex: 9999 } }}
             {...props}
           >
             <MenuItem value="">{placeholder}</MenuItem>

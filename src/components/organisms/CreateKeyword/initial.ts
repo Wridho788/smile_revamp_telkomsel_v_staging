@@ -235,19 +235,19 @@ export const KeywordNotificationAuctionHelper: IKeywordNotificationAuctionHelper
   [
     {
       notification_template: "",
-      follow_period: false,
+      follow_period: true,
     },
     {
       notification_template: "",
-      follow_period: false,
+      follow_period: true,
     },
     {
       notification_template: "",
-      follow_period: false,
+      follow_period: true,
     },
     {
       notification_template: "",
-      follow_period: false,
+      follow_period: true,
     },
   ];
 
@@ -294,19 +294,19 @@ export const KeywordNotificationEligibilityHelper: IKeywordNotificationEligibili
   [
     {
       notification_template: "",
-      follow_period: false,
+      follow_period: true,
     },
     {
       notification_template: "",
-      follow_period: false,
+      follow_period: true,
     },
     {
       notification_template: "",
-      follow_period: false,
+      follow_period: true,
     },
     {
       notification_template: "",
-      follow_period: false,
+      follow_period: true,
     },
   ];
 
@@ -358,19 +358,19 @@ export const KeywordNotificationLuckyDrawHelper: IKeywordNotificationLuckyDrawHe
   [
     {
       notification_template: "",
-      follow_period: false,
+      follow_period: true,
     },
     {
       notification_template: "",
-      follow_period: false,
+      follow_period: true,
     },
     {
       notification_template: "",
-      follow_period: false,
+      follow_period: true,
     },
     {
       notification_template: "",
-      follow_period: false,
+      follow_period: true,
     },
   ];
 
