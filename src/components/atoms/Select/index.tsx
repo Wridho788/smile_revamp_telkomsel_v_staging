@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   FormControl,
   Select,
@@ -12,6 +13,7 @@ import { BodyCopy } from "../Typography";
 import { ISelectProps } from "./types";
 
 import AddProgramGroup from "components/organisms/ProgramGroup/AddProgramGroup";
+import ModalAddProgramGroup from "components/organisms/ProgramGroup/ModalAddProgramGroup";
 
 const Index: React.FunctionComponent<ISelectProps> = ({
   label,
@@ -26,8 +28,11 @@ const Index: React.FunctionComponent<ISelectProps> = ({
   rightColumn = 6,
   direction = "row",
   isRequired = true,
+  handleRefetch,
   ...props
 }) => {
+
+  const [showInput, setShowInput] = useState<boolean>(false);
 
   return (
     <Grid
@@ -35,6 +40,14 @@ const Index: React.FunctionComponent<ISelectProps> = ({
       columns={!label || direction === "column" ? rightColumn : totalColumn}
       alignItems={"center"}
     >
+      {showInput &&
+        <ModalAddProgramGroup
+          open={showInput}
+          handleClose={() => setShowInput(false)}
+          handleRefetch={handleRefetch}
+          handleChange={handleChange}
+        />
+      }
       <Grid
         item
         xs={!label ? 0 : direction === "column" ? rightColumn : leftColumn}
@@ -65,6 +78,7 @@ const Index: React.FunctionComponent<ISelectProps> = ({
             size="small"
             input={<OutlinedInput />}
             inputProps={{ "aria-label": "Without label" }}
+            MenuProps={{ style: { zIndex: 9 } }}
             {...props}
           >
             <MenuItem value="">
@@ -80,7 +94,7 @@ const Index: React.FunctionComponent<ISelectProps> = ({
                 </MenuItem>
               ))}
 
-             {label === "Program Group" && <AddProgramGroup label={label} />}
+            {label === "Program Group" && <AddProgramGroup handleShow={() => setShowInput(true)} />}
           </Select>
         </FormControl>
       </Grid>

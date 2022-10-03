@@ -27,6 +27,7 @@ import {
 	useGetOwnerQuery,
 	useGetPointTypeQuery,
 	useGetProgramGroupQuery,
+	useLazyGetProgramGroupQuery,
 	useLazyGetOwnerQuery
 } from "../../../../redux/features/lov/lov-api-slice";
 import {
@@ -92,7 +93,7 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
 
 	const { data: pointTypeOption = { data: [] } } = useGetPointTypeQuery();
 	const { data: mechanismOption = { data: [] } } = useGetMechanismQuery();
-	const { data: groupOption = { data: [] } } = useGetProgramGroupQuery();
+	const [getGroupOption, { data: groupOption = { data: [] } }] = useLazyGetProgramGroupQuery();
 
 	const [searchInput, setSearchInput] = useState<string>("");
 	const [stateTrigger, setStateTrigger] = React.useState<boolean>(false);
@@ -120,6 +121,7 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
 		(async () => {
 			const authenticatedUserResponse = await getAuthenticatedUser();
 			const ownerOptionResponse = await getOwner();
+			await getGroupOption();
 
 			const locationTypeId: string =
 				authenticatedUserResponse?.data?.account_location.location_detail.type;
@@ -254,6 +256,7 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
 						programData.program_group = value;
 						setStateTrigger(!stateTrigger);
 					}}
+					handleRefetch={() => getGroupOption()}
 				/>
 
 				<OutlinedTextField
