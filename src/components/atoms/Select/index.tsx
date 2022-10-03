@@ -25,10 +25,9 @@ const Index: React.FunctionComponent<ISelectProps> = ({
   leftColumn = 4,
   rightColumn = 6,
   direction = "row",
-  isRequired = true,
+  isRequired = false,
   ...props
 }) => {
-
   return (
     <Grid
       container
@@ -67,9 +66,7 @@ const Index: React.FunctionComponent<ISelectProps> = ({
             inputProps={{ "aria-label": "Without label" }}
             {...props}
           >
-            <MenuItem value="">
-              {placeholder}
-            </MenuItem>
+            <MenuItem value="">{placeholder}</MenuItem>
             {typeof options !== "undefined" &&
               options.map((data: any, idx: number) => (
                 <MenuItem
@@ -80,7 +77,7 @@ const Index: React.FunctionComponent<ISelectProps> = ({
                 </MenuItem>
               ))}
 
-             {label === "Program Group" && <AddProgramGroup label={label} />}
+            {label === "Program Group" && <AddProgramGroup label={label} />}
           </Select>
         </FormControl>
       </Grid>
