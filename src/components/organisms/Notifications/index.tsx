@@ -39,7 +39,7 @@ const NotificationDetail: FC<ModalProps> = ({ open, handleClose, data }) => {
       <Box sx={style} minWidth={'30vw'} maxHeight={'90vh'}>
         {' '}
         <Box px={2}>
-          <H2>{'User Detail'}</H2>
+          <H2>Notifications</H2>
           <H2>{size} unread Notifications</H2>
           <Stack direction='column' mt={1}>
             <Typography sx={fontContent}>

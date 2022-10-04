@@ -12,7 +12,7 @@ import { useTheme } from '@mui/material/styles';
 import { H3, BodyCopy, SmallCopy } from '../../../components';
 import { useNavigate } from 'react-router-dom';
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
-import { NotificationActive } from '../../../assets';
+// import { NotificationActive } from '../../../assets';
 interface SidebarItemProps {
   menu: Menu;
   openMenu: boolean;
@@ -51,18 +51,6 @@ const SidebarItem = ({ menu, openMenu }: SidebarItemProps) => {
         </ListItemIcon>
         <ListItemText
           primary={<SmallCopy>{menu.label}</SmallCopy>}
-          sx={{ opacity: openMenu ? 1 : 0 }}
-        />
-        <ListItemIcon
-          sx={{
-            minWidth: 0,
-            mr: openMenu ? 3 : 'auto',
-            justifyContent: 'center',
-          }}>
-          <img src={NotificationActive} style={{ height: 30 }} />
-        </ListItemIcon>
-        <ListItemText
-          primary={<SmallCopy>Notifications</SmallCopy>}
           sx={{ opacity: openMenu ? 1 : 0 }}
         />
         {menu.hasChild && openMenu ? (

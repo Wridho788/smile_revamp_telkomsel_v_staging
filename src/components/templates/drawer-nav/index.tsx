@@ -123,13 +123,6 @@ const Index: React.FC<LayoutProps> = ({ children }: LayoutProps) => {
           data={accountAuth}
         />
       )}
-      {openNotification && (
-        <Notification
-          open={openNotification}
-          handleClose={handleCloseNotification}
-          data={accountAuth?.first_name}
-        />
-      )}
       <Drawer variant='permanent' open={open} anchor='right'>
         {open === false ? (
           <Toolbar
@@ -168,6 +161,38 @@ const Index: React.FC<LayoutProps> = ({ children }: LayoutProps) => {
           ))}
           <div style={{ height: '50px' }}> </div>
         </List>
+        <Divider />
+        <ListItem
+          disablePadding
+          sx={{
+            top: 10,
+          }}>
+          <ListItemButton
+            sx={{
+              position: 'fixed',
+              bottom: 92,
+              zIndex: 9,
+              width: '100%',
+              backgroundColor: '#FFF',
+              minHeight: 30,
+              justifyContent: open ? 'initial' : 'center',
+              px: 2.5,
+            }}
+            onClick={handleCloseNotification}>
+            <ListItemIcon
+              sx={{
+                minWidth: 0,
+                mr: open ? 3 : 'auto',
+                justifyContent: 'center',
+              }}>
+              <img src={NotificationDisabled} style={{ height: 25 }} />
+            </ListItemIcon>
+            <ListItemText
+              primary={<SmallCopy>Notifications</SmallCopy>}
+              sx={{ opacity: open ? 1 : 0 }}
+            />
+          </ListItemButton>
+        </ListItem>
 
         <IconButton
           style={{
@@ -230,6 +255,14 @@ const Index: React.FC<LayoutProps> = ({ children }: LayoutProps) => {
           </ListItem>
         </Box>
       </Drawer>
+      {openNotification && (
+        <Notification
+          open={openNotification}
+          handleClose={handleCloseNotification}
+          data={accountAuth?.first_name}
+        />
+      )}
+
       <Box component='main' sx={{ flexGrow: 1, p: 3, marginBottom: 40 }}>
         {children}
       </Box>
