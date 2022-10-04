@@ -134,70 +134,6 @@ const KeywordDetail: FC<IKeywordDetailsModalProps> = ({
     });
   };
 
-  // const renderApproveSection = (text: string) => {
-  //   return (
-  //     <>
-  //       {roleAccess ? (
-  //         <>
-  //           <Stack
-  //             direction="row"
-  //             alignItems="center"
-  //             justifyContent="space-between"
-  //             spacing="2vw"
-  //             mt="1vw"
-  //             sx={{ p: 2, backgroundColor: "#E5E5E5", borderRadius: 2 }}
-  //           >
-  //             <Stack direction="row" spacing="1vw">
-  //               <Alert sx={{ margin: 2 }} severity="warning">
-  //                 {text}
-  //               </Alert>
-  //             </Stack>
-  //             <Stack
-  //               direction="row"
-  //               sx={{
-  //                 justifyContent: "space-between",
-  //               }}
-  //               spacing="1vw"
-  //             >
-  //               <Button
-  //                 disabled={isLoadingApprove || isLoadingReject}
-  //                 onClick={approveHandler}
-  //                 variant={"contained"}
-  //                 color="success"
-  //                 sx={{ color: "white" }}
-  //               >
-  //                 Approve
-  //               </Button>
-  //               <Button
-  //                 disabled={isLoadingApprove || isLoadingReject}
-  //                 onClick={rejectHandler}
-  //                 variant={"contained"}
-  //                 color="error"
-  //               >
-  //                 Reject
-  //               </Button>
-  //             </Stack>
-  //           </Stack>
-  //           <OutlinedTextField
-  //             direction="column"
-  //             label=""
-  //             placeholder="Leave comment of your approval action ..."
-  //             variant={"outlined"}
-  //             value={approvalIssue}
-  //             handleChange={setApprovalIssue}
-  //             multiline
-  //             rows={3}
-  //           />
-  //         </>
-  //       ) : (
-  //         <Alert sx={{ margin: 2 }} severity="info">
-  //           {text}
-  //         </Alert>
-  //       )}
-  //     </>
-  //   );
-  // };
-
   const renderApproveSection = (text: string) => {
     return (
       <>
@@ -261,149 +197,292 @@ const KeywordDetail: FC<IKeywordDetailsModalProps> = ({
     );
   };
 
+  // const checkToRenderApprovalSection = () => {
+  //   var approval_status_value: string = "";
+  //   if (data.approval_log && data.approval_log.length > 0) {
+  //     approval_status_value =
+  //       data.approval_log[data.approval_log.length - 1].status[0].set_value;
+  //   }
+  //   if (!data.isHQ && data.created_by) {
+  //     if (userLoginId === data.created_by.superior_local?._id) {
+  //       if (
+  //         (data.approval_log && data.approval_log.length < 1) ||
+  //         approval_status_value === "Rejected by Manager Non HQ"
+  //       ) {
+  //         return (
+  //           <>
+  //             {renderApproveSection(
+  //               `Hi, ${data.created_by.superior_local?.first_name}. We're happy to see you in, This program need your approval`
+  //             )}
+  //           </>
+  //         );
+  //       }
+  //     }
+  //     if (userLoginId === data.created_by.superior_hq?._id) {
+  //       if (
+  //         (data.approval_log &&
+  //           data.approval_log.length > 1 &&
+  //           approval_status_value === "Rejected by Manager HQ") ||
+  //         approval_status_value === "Approved by Manager Non HQ"
+  //       ) {
+  //         return (
+  //           <>
+  //             {renderApproveSection(
+  //               `Hi, ${data.created_by.superior_hq?.first_name}. We're happy to see you in, This program need your approval`
+  //             )}
+  //           </>
+  //         );
+  //       }
+  //     }
+  //   }
+  //
+  //   if (data.isHQ && data.created_by) {
+  //     if (userLoginId === data.created_by.superior_hq?._id) {
+  //       if (
+  //         (data.approval_log &&
+  //           data.approval_log.length > 1 &&
+  //           approval_status_value === "Rejected by Manager HQ") ||
+  //         approval_status_value !== "Approved by Manager HQ"
+  //       ) {
+  //         return (
+  //           <>
+  //             {renderApproveSection(
+  //               `Hi, ${data.created_by.superior_hq?.first_name}. We're happy to see you in, This program need your approval`
+  //             )}
+  //           </>
+  //         );
+  //       }
+  //     }
+  //   }
+  // };
+
   const checkToRenderApprovalSection = () => {
     var approval_status_value: string = "";
     if (data.approval_log && data.approval_log.length > 0) {
       approval_status_value =
-        data.approval_log[data.approval_log.length - 1].status[0].set_value;
+          data.approval_log[data.approval_log.length - 1].status[0].set_value;
     }
     if (!data.isHQ && data.created_by) {
       if (userLoginId === data.created_by.superior_local?._id) {
         if (
-          (data.approval_log && data.approval_log.length < 1) ||
-          approval_status_value === "Rejected by Manager Non HQ"
+            (data.approval_log && data.approval_log.length < 1) ||
+            approval_status_value === "Rejected by Manager Non HQ"
         ) {
           return (
-            <>
-              {renderApproveSection(
-                `Hi, ${data.created_by.superior_local?.first_name}. We're happy to see you in, This program need your approval`
-              )}
-            </>
+              <>
+                {renderApproveSection(
+                    `Hi, ${data.created_by.superior_local?.first_name}. We're happy to see you in, This program need your approval`
+                )}
+              </>
           );
         }
       }
-      if (userLoginId === data.created_by.superior_hq?._id) {
+      if (userLoginId !== data.created_by.superior_local?._id && roleAccess) {
         if (
-          (data.approval_log &&
-            data.approval_log.length > 1 &&
-            approval_status_value === "Rejected by Manager HQ") ||
-          approval_status_value === "Approved by Manager Non HQ"
+            (data.approval_log &&
+                data.approval_log.length > 1 &&
+                approval_status_value === "Rejected by Manager HQ") ||
+            approval_status_value === "Approved by Manager Non HQ"
         ) {
           return (
-            <>
-              {renderApproveSection(
-                `Hi, ${data.created_by.superior_hq?.first_name}. We're happy to see you in, This program need your approval`
-              )}
-            </>
+              <>
+                {renderApproveSection(
+                    `Hi, HQ Manager. We're happy to see you in, This program need your approval`
+                )}
+              </>
           );
         }
       }
     }
 
     if (data.isHQ && data.created_by) {
-      if (userLoginId === data.created_by.superior_hq?._id) {
+      if (userLoginId !== data.created_by.superior_local?._id && roleAccess) {
         if (
-          (data.approval_log &&
-            data.approval_log.length > 1 &&
-            approval_status_value === "Rejected by Manager HQ") ||
-          approval_status_value !== "Approved by Manager HQ"
+            (data.approval_log &&
+                data.approval_log.length > 1 &&
+                approval_status_value === "Rejected by Manager HQ") ||
+            approval_status_value !== "Approved by Manager HQ"
         ) {
           return (
-            <>
-              {renderApproveSection(
-                `Hi, ${data.created_by.superior_hq?.first_name}. We're happy to see you in, This program need your approval`
-              )}
-            </>
+              <>
+                {renderApproveSection(
+                    `Hi, HQ Manager. We're happy to see you in, This program need your approval`
+                )}
+              </>
           );
         }
       }
     }
   };
 
+  // const alertApproveInfo = () => {
+  //   var approval_status_value: string = "";
+  //   if (data.approval_log && data.approval_log.length > 0) {
+  //     approval_status_value =
+  //       data.approval_log[data.approval_log.length - 1].status[0].set_value;
+  //   }
+  //   return (
+  //     <>
+  //       {!data.isHQ && data.approval_log && data.approval_log.length < 1 && (
+  //         <Alert sx={{ margin: 2 }} severity="error">
+  //           Waiting for approval 1 ({data.created_by.superior_local?.first_name}
+  //           ) - <b>This Program is NEW</b>
+  //         </Alert>
+  //       )}
+  //       {!data.isHQ && data.approval_log && data.approval_log.length > 0 && (
+  //         <>
+  //           {approval_status_value === "Rejected by Manager Non HQ" && (
+  //             <Alert sx={{ margin: 2 }} severity="error">
+  //               Waiting for approval 1 (
+  //               {data.created_by.superior_local?.first_name}) -{" "}
+  //               <b>This Program is {approval_status_value}</b>
+  //             </Alert>
+  //           )}
+  //           {approval_status_value === "Approved by Manager Non HQ" ||
+  //             (approval_status_value === "Rejected by Manager HQ" && (
+  //               <Alert sx={{ margin: 2 }} severity="error">
+  //                 Waiting for approval 2 (
+  //                 {data.created_by.superior_hq?.first_name}) -{" "}
+  //                 <b>This Program is {approval_status_value}</b>
+  //                 {approval_status_value === "Rejected by Manager HQ" && (
+  //                   <>
+  //                     <br /> Rejection Reason : <i></i>
+  //                   </>
+  //                 )}
+  //               </Alert>
+  //             ))}
+  //           {approval_status_value === "Approved by Manager Non HQ" && (
+  //             <Alert sx={{ margin: 2 }} severity="success">
+  //               Approved by {data.created_by.superior_local?.first_name} -{" "}
+  //               <b>
+  //                 {" "}
+  //                 Waiting Approval from{" "}
+  //                 {data.created_by.superior_hq?.first_name}{" "}
+  //               </b>
+  //             </Alert>
+  //           )}
+  //           {approval_status_value === "Approved by Manager HQ" && (
+  //             <Alert sx={{ margin: 2 }} severity="success">
+  //               This Program is {approval_status_value}{" "}
+  //               <b>({data.created_by.superior_hq?.first_name})</b>
+  //             </Alert>
+  //           )}
+  //         </>
+  //       )}
+  //
+  //       {/*  Untuk Data HQ  */}
+  //       {data.isHQ && data.approval_log && data.approval_log.length < 1 && (
+  //         <Alert sx={{ margin: 2 }} severity="error">
+  //           Waiting for approval 2 ({data.created_by.superior_hq?.first_name}) -{" "}
+  //           <b>This Program is NEW</b>
+  //         </Alert>
+  //       )}
+  //       {data.isHQ && data.approval_log && data.approval_log.length > 0 && (
+  //         <>
+  //           {approval_status_value === "Rejected by Manager HQ" && (
+  //             <Alert sx={{ margin: 2 }} severity="error">
+  //               Waiting for approval 2 (
+  //               {data.created_by.superior_hq?.first_name}) -{" "}
+  //               <b>This Program is {approval_status_value}</b>
+  //             </Alert>
+  //           )}
+  //           {approval_status_value === "Approved by Manager HQ" && (
+  //             <Alert sx={{ margin: 2 }} severity="success">
+  //               This Program is {approval_status_value}{" "}
+  //               <b>({data.created_by.superior_hq?.first_name})</b>
+  //             </Alert>
+  //           )}
+  //         </>
+  //       )}
+  //     </>
+  //   );
+  // };
+
   const alertApproveInfo = () => {
     var approval_status_value: string = "";
     if (data.approval_log && data.approval_log.length > 0) {
       approval_status_value =
-        data.approval_log[data.approval_log.length - 1].status[0].set_value;
+          data.approval_log[data.approval_log.length - 1].status[0].set_value;
     }
     return (
-      <>
-        {!data.isHQ && data.approval_log && data.approval_log.length < 1 && (
-          <Alert sx={{ margin: 2 }} severity="error">
-            Waiting for approval 1 ({data.created_by.superior_local?.first_name}
-            ) - <b>This Program is NEW</b>
-          </Alert>
-        )}
-        {!data.isHQ && data.approval_log && data.approval_log.length > 0 && (
-          <>
-            {approval_status_value === "Rejected by Manager Non HQ" && (
-              <Alert sx={{ margin: 2 }} severity="error">
-                Waiting for approval 1 (
-                {data.created_by.superior_local?.first_name}) -{" "}
-                <b>This Program is {approval_status_value}</b>
+        <>
+          {!data.isHQ && data.approval_log && data.approval_log.length < 1 && (
+              <Alert sx={{margin: 2}} severity="error">
+                Waiting for approval 1 ({data.created_by.superior_local?.first_name}
+                ) - <b>This Program is NEW</b>
               </Alert>
-            )}
-            {approval_status_value === "Approved by Manager Non HQ" ||
-              (approval_status_value === "Rejected by Manager HQ" && (
-                <Alert sx={{ margin: 2 }} severity="error">
-                  Waiting for approval 2 (
-                  {data.created_by.superior_hq?.first_name}) -{" "}
-                  <b>This Program is {approval_status_value}</b>
-                  {approval_status_value === "Rejected by Manager HQ" && (
-                    <>
-                      <br /> Rejection Reason : <i></i>
-                    </>
-                  )}
-                </Alert>
-              ))}
-            {approval_status_value === "Approved by Manager Non HQ" && (
-              <Alert sx={{ margin: 2 }} severity="success">
-                Approved by {data.created_by.superior_local?.first_name} -{" "}
-                <b>
-                  {" "}
-                  Waiting Approval from{" "}
-                  {data.created_by.superior_hq?.first_name}{" "}
-                </b>
-              </Alert>
-            )}
-            {approval_status_value === "Approved by Manager HQ" && (
-              <Alert sx={{ margin: 2 }} severity="success">
-                This Program is {approval_status_value}{" "}
-                <b>({data.created_by.superior_hq?.first_name})</b>
-              </Alert>
-            )}
-          </>
-        )}
+          )}
+          {!data.isHQ && data.approval_log && data.approval_log.length > 0 && (
+              <>
+                {approval_status_value === "Rejected by Manager Non HQ" && (
+                    <Alert sx={{margin: 2}} severity="error">
+                      Waiting for approval 1 (
+                      {data.created_by.superior_local?.first_name}) -{" "}
+                      <b>This Program is {approval_status_value}</b>
+                    </Alert>
+                )}
+                {approval_status_value === "Approved by Manager Non HQ" ||
+                    (approval_status_value === "Rejected by Manager HQ" && (
+                        <Alert sx={{margin: 2}} severity="error">
+                          Waiting for approval 2
+                          {/*({data.created_by.superior_hq?.first_name}) -{" "}*/}
+                          <b>This Program is {approval_status_value}</b>
+                          {approval_status_value === "Rejected by Manager HQ" && (
+                              <>
+                                <br/> Rejection Reason : <i></i>
+                              </>
+                          )}
+                        </Alert>
+                    ))}
+                {approval_status_value === "Approved by Manager Non HQ" && (
+                    <Alert sx={{margin: 2}} severity="success">
+                      Approved by {data.created_by.superior_local?.first_name} -{" "}
+                      <b>
+                        {" "}
+                        Waiting Approval from HQ
+                        {/*{data.created_by.superior_hq?.first_name}{" "}*/}
+                      </b>
+                    </Alert>
+                )}
+                {approval_status_value === "Approved by Manager HQ" && (
+                    <Alert sx={{margin: 2}} severity="success">
+                      This Program is {approval_status_value}{" "}
+                      {/*<b>({data.created_by.superior_hq?.first_name})</b>*/}
+                    </Alert>
+                )}
+              </>
+          )}
 
-        {/*  Untuk Data HQ  */}
-        {data.isHQ && data.approval_log && data.approval_log.length < 1 && (
-          <Alert sx={{ margin: 2 }} severity="error">
-            Waiting for approval 2 ({data.created_by.superior_hq?.first_name}) -{" "}
-            <b>This Program is NEW</b>
-          </Alert>
-        )}
-        {data.isHQ && data.approval_log && data.approval_log.length > 0 && (
-          <>
-            {approval_status_value === "Rejected by Manager HQ" && (
-              <Alert sx={{ margin: 2 }} severity="error">
-                Waiting for approval 2 (
-                {data.created_by.superior_hq?.first_name}) -{" "}
-                <b>This Program is {approval_status_value}</b>
+          {/*  Untuk Data HQ  */}
+          {data.isHQ && data.approval_log && data.approval_log.length < 1 && (
+              <Alert sx={{margin: 2}} severity="error">
+                Waiting for approval 2
+                {/*<b>This Program is NEW</b>*/}
               </Alert>
-            )}
-            {approval_status_value === "Approved by Manager HQ" && (
-              <Alert sx={{ margin: 2 }} severity="success">
-                This Program is {approval_status_value}{" "}
-                <b>({data.created_by.superior_hq?.first_name})</b>
-              </Alert>
-            )}
-          </>
-        )}
-      </>
+          )}
+          {data.isHQ && data.approval_log && data.approval_log.length > 0 && (
+              <>
+                {approval_status_value === "Rejected by Manager HQ" && (
+                    <Alert sx={{margin: 2}} severity="error">
+                      Waiting for approval 2 - {" "}
+                      {/*({data.created_by.superior_hq?.first_name}) -{" "}*/}
+                      <b>This Program is {approval_status_value}</b>
+                    </Alert>
+                )}
+                {approval_status_value === "Approved by Manager HQ" && (
+                    <Alert sx={{margin: 2}} severity="success">
+                      This Program is {approval_status_value}{" "}
+                      {/*<b>({data.created_by.superior_hq?.first_name})</b>*/}
+                    </Alert>
+                )}
+              </>
+          )}
+        </>
     );
   };
-  // clean keyword program detail
 
+
+  // clean keyword program detail
   const keywordProgramDetail = keywordProgramDetailHelper;
 
   useEffect(() => {
