@@ -28,6 +28,7 @@ import {
 	VOUCHER_TYPE_UPLOAD
 } from "service/helpers/voucher-constant";
 import onlyNumber from "utils/onlyNumber";
+import moment from "moment";
 
 interface INotificationVoucherProps {
 	bonusType: string;
@@ -59,6 +60,16 @@ const Voucher: React.FunctionComponent<INotificationVoucherProps> = ({
 	};
 
 	const [index, setIndex] = useState<number>(-1);
+
+	// Watch for switch
+	// useEffect(() => {
+	// 	const voucherDate = keywordCreate.bonus.find(
+	// 		bonus => bonus?.bonus_type === "discount_voucher"
+	// 	)?.exp_voucher;
+
+	// 	// Do anything with wwitcher
+	// 	setSwitchState(() => );
+	// }, [isFetching]);
 
 	useEffect(() => {
 		// Initial Keyword Bonus Link Aja
@@ -112,7 +123,6 @@ const Voucher: React.FunctionComponent<INotificationVoucherProps> = ({
 		if (value !== VOUCHER_TYPE_GENERATE) {
 			keywordCreate.bonus[index].voucher_combination = "";
 			keywordCreate.bonus[index].voucher_prefix = "";
-			keywordCreate.bonus[index].voucher_prefix = "";
 			keywordCreate.bonus[index].jumlah_total_voucher = 0;
 			setStateTrigger(!stateTrigger);
 		} else {
@@ -160,7 +170,6 @@ const Voucher: React.FunctionComponent<INotificationVoucherProps> = ({
 										/>
 									) : (
 										<OutlinedTextField
-											type={"number"}
 											disabled={switchState}
 											direction="column"
 											label="Voucher Expired Days After Redeem"
@@ -171,8 +180,10 @@ const Voucher: React.FunctionComponent<INotificationVoucherProps> = ({
 													: keywordCreate.bonus[index].exp_voucher
 											}
 											handleChange={(value: string) => {
-												keywordCreate.bonus[index].exp_voucher = value;
-												setStateTrigger(!stateTrigger);
+												if (onlyNumber(value)) {
+													keywordCreate.bonus[index].exp_voucher = value;
+													setStateTrigger(!stateTrigger);
+												}
 											}}
 										/>
 									)}
