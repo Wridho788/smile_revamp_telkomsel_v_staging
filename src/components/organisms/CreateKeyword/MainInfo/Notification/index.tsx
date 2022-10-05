@@ -130,7 +130,8 @@ const Notification: React.FunctionComponent<INotificationProps> = ({
                     disabled={idx !== 0}
                     value={
                       idx === 0
-                        ? keywordNotificationEligibility[idx].keyword_name
+                        ? keywordNotificationEligibility[idx].keyword_name.replace(/[^a-zA-Z0-9]/g, "")
+                        .toUpperCase()
                         : keywordCreateState.eligibility.name
                     }
                     handleChange={(value: string) => {
