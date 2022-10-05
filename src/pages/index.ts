@@ -17,7 +17,7 @@ import ProgramMainInfoUpdate from "./ProgramMainInfoUpdate";
 import ProgramNotificationUpdate from "./ProgramNotificationUpdate";
 import MerchantPartnerManagement from "./MerchantPartnerManagement/partner";
 import MerchantOutletManagement from "./MerchantOutletManagement";
-
+import PICManagement from "./PICManagement";
 export {
   Option,
   MyTelkomsel,
@@ -38,4 +38,5 @@ export {
   ProgramNotificationUpdate,
   MerchantPartnerManagement,
   MerchantOutletManagement,
+  PICManagement
 };

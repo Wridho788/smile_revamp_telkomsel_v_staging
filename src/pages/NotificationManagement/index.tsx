@@ -3,7 +3,7 @@ import {
   Cancel,
   DeleteForeverOutlined,
   DriveFileRenameOutlineOutlined,
-} from "@mui/icons-material";
+} from '@mui/icons-material';
 import {
   Box,
   Button,
@@ -17,11 +17,11 @@ import {
   SelectChangeEvent,
   Stack,
   TextField,
-} from "@mui/material";
-import { Column } from "primereact/column";
-import { DataTable } from "primereact/datatable";
-import { Toolbar } from "primereact/toolbar";
-import React from "react";
+} from '@mui/material';
+import { Column } from 'primereact/column';
+import { DataTable } from 'primereact/datatable';
+import { Toolbar } from 'primereact/toolbar';
+import React from 'react';
 import {
   DrawerNav,
   Gap,
@@ -30,33 +30,33 @@ import {
   PreTitle,
   Select,
   SmallCopy,
-} from "../../components";
-import { IData } from "../../redux/features/notification/interface";
+} from '../../components';
+import { IData } from '../../redux/features/notification/interface';
 import {
   useLazyNotificationTemplateQuery,
   useAddNotificationMutation,
   useUpdateNotificationMutation,
   useDeleteNotificationMutation,
-} from "../../redux/features/notification/notification-api-slice";
+} from '../../redux/features/notification/notification-api-slice';
 import {
   useGetNotifReceiverQuery,
   useGetNotifTypeQuery,
   useGetNotifViaQuery,
-} from "../../redux/features/lov/lov-api-slice";
+} from '../../redux/features/lov/lov-api-slice';
 import {
   createNotification,
   NotifChannelID,
   NotificationInitial,
   NotificationTypeInitial,
   NotifReceiverInitial,
-} from "./initial";
-import Swal from "sweetalert2";
-import { NotificationInitialCreate } from "pages/NotificationManagement/interface";
-import _without from "lodash/without";
-import find from "lodash/find";
-import { useChannelListQuery } from "redux/features/channel/channel-api-slice";
-import { FilterInitial } from "redux/utils/initial-general";
-import Channel from "pages/NotificationManagement/Channel";
+} from './initial';
+import Swal from 'sweetalert2';
+import { NotificationInitialCreate } from 'pages/NotificationManagement/interface';
+import _without from 'lodash/without';
+import find from 'lodash/find';
+import { useChannelListQuery } from 'redux/features/channel/channel-api-slice';
+import { FilterInitial } from 'redux/utils/initial-general';
+import Channel from 'pages/NotificationManagement/Channel';
 
 const NotificationManagement = () => {
   // ==================== local state ====================
@@ -79,16 +79,17 @@ const NotificationManagement = () => {
     sortField: null,
     sortOrder: null,
     filters: {
-      notif_type: { value: "", matchMode: "contains" },
-      notif_name: { value: "", matchMode: "contains" },
-      notif_content: { value: "", matchMode: "contains" },
-      notif_via: { value: "", matchMode: "contains" },
+      notif_type: { value: '', matchMode: 'contains' },
+      notif_name: { value: '', matchMode: 'contains' },
+      notif_content: { value: '', matchMode: 'contains' },
+      notif_via: { value: '', matchMode: 'contains' },
       // receiver: { value: "", matchMode: "on" },
       // channel_id: { value: "", matchMode: "on" },
     },
   });
-  const [initialNotif, setInitialNotif] =
-    React.useState<NotificationInitialCreate>(createNotification);
+  const [initialNotif, setInitialNotif] = React.useState<
+    NotificationInitialCreate
+  >(createNotification);
 
   //================= Fetching Function ===================
   //=======================================================
@@ -108,26 +109,33 @@ const NotificationManagement = () => {
     isError: errorNotificationVia,
   } = useGetNotifViaQuery();
   const { data: notifReceiverData = { data: [] } } = useGetNotifReceiverQuery();
-  const { data: channelIdData = { data: [NotifChannelID] } } =
-    useChannelListQuery(FilterInitial);
+  const {
+    data: channelIdData = { data: [NotifChannelID] },
+  } = useChannelListQuery(FilterInitial);
 
-  const [addNotification, { isLoading: loadingAdd }] =
-    useAddNotificationMutation();
-  const [updateNotification, { isLoading: loadingUpdate }] =
-    useUpdateNotificationMutation();
-  const [deleteNotification, { isLoading: loadingDelete }] =
-    useDeleteNotificationMutation();
+  const [
+    addNotification,
+    { isLoading: loadingAdd },
+  ] = useAddNotificationMutation();
+  const [
+    updateNotification,
+    { isLoading: loadingUpdate },
+  ] = useUpdateNotificationMutation();
+  const [
+    deleteNotification,
+    { isLoading: loadingDelete },
+  ] = useDeleteNotificationMutation();
 
   //================= Spreads Fetching Data ===================
   //===========================================================
   const dataNotificationType = notificationType.data.map((item: any) => {
     let newItem: any = {};
-    newItem["name"] = item.set_value;
+    newItem['name'] = item.set_value;
     return newItem;
   });
   const dataNotificationVia = notificationVia.data.map((item: any) => {
     let newItem: any = {};
-    newItem["name"] = item.set_value;
+    newItem['name'] = item.set_value;
     return newItem;
   });
 
@@ -151,8 +159,8 @@ const NotificationManagement = () => {
       const { data }: any = await getNotificationTemplate({
         skip: 0,
         limit: 10,
-        filter: "{}",
-        sort: "{}",
+        filter: '{}',
+        sort: '{}',
       });
       setNotifications(data.data);
       setTotalRecords(data.total);
@@ -170,7 +178,7 @@ const NotificationManagement = () => {
   };
 
   const onFilter = (event: any) => {
-    event["first"] = 0;
+    event['first'] = 0;
 
     setLazyParams(event);
   };
@@ -189,10 +197,10 @@ const NotificationManagement = () => {
     await addNotification(initialNotif);
     setTriger((prev) => !prev);
     setInitialNotif({
-      notif_type: "",
-      notif_name: "",
-      notif_via: "",
-      notif_content: "",
+      notif_type: '',
+      notif_name: '',
+      notif_via: '',
+      notif_content: '',
       receiver: [],
       channel_id: [],
     });
@@ -224,18 +232,18 @@ const NotificationManagement = () => {
 
   const onDeleteNotification = async (data: typeof notificationDetail) => {
     Swal.fire({
-      title: "Do you want to delete data?",
+      title: 'Do you want to delete data?',
       showDenyButton: true,
       confirmButtonText: `Delete`,
       denyButtonText: `Don't Delete`,
     }).then(async (result) => {
       /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
-        deleteNotification(data ? data._id : "");
-        await Swal.fire("Deleted!", "", "success");
+        deleteNotification(data ? data._id : '');
+        await Swal.fire('Deleted!', '', 'success');
         setTriger((prev) => !prev);
       } else if (result.isDenied) {
-        Swal.fire("Data are not deleted", "", "info");
+        Swal.fire('Data are not deleted', '', 'info');
       }
     });
   };
@@ -246,13 +254,12 @@ const NotificationManagement = () => {
     return (
       <React.Fragment>
         <Button
-          sx={{ minWidth: "100px", backgroundColor: "#7B61FF" }}
+          sx={{ minWidth: '100px', backgroundColor: '#7B61FF' }}
           // icon="pi pi-plus"
-          className="p-button-success mr-2"
-          variant="contained"
+          className='p-button-success mr-2'
+          variant='contained'
           startIcon={<Add />}
-          onClick={() => setOpen({ ...open, add: true })}
-        >
+          onClick={() => setOpen({ ...open, add: true })}>
           New
         </Button>
       </React.Fragment>
@@ -263,7 +270,7 @@ const NotificationManagement = () => {
     const data = rowData.receiver.map((item: any) => item.set_value);
     return (
       <React.Fragment>
-        <span className="image-text">{data.join(",")}</span>
+        <span className='image-text'>{data.join(',')}</span>
       </React.Fragment>
     );
   };
@@ -271,7 +278,7 @@ const NotificationManagement = () => {
     const data = rowData.channel_id.map((item: any) => item.name);
     return (
       <React.Fragment>
-        <span className="image-text">{data.join(",")}</span>
+        <span className='image-text'>{data.join(',')}</span>
       </React.Fragment>
     );
   };
@@ -280,15 +287,13 @@ const NotificationManagement = () => {
     return (
       <React.Fragment>
         <IconButton
-          sx={{ backgroundColor: "#83BB57", color: "#FFF" }}
-          onClick={() => onShowUpdateForm(rowData)}
-        >
+          sx={{ backgroundColor: '#83BB57', color: '#FFF' }}
+          onClick={() => onShowUpdateForm(rowData)}>
           <DriveFileRenameOutlineOutlined />
         </IconButton>
         <IconButton
-          sx={{ backgroundColor: "#ED0226", color: "#FFF" }}
-          onClick={() => onDeleteNotification(rowData)}
-        >
+          sx={{ backgroundColor: '#ED0226', color: '#FFF' }}
+          onClick={() => onDeleteNotification(rowData)}>
           <DeleteForeverOutlined />
         </IconButton>
       </React.Fragment>
@@ -298,23 +303,22 @@ const NotificationManagement = () => {
     <DrawerNav>
       <Box
         sx={{
-          paddingTop: "3vw",
-          paddingLeft: "50px",
-          paddingRight: "50px",
-        }}
-      >
+          paddingTop: '3vw',
+          paddingLeft: '50px',
+          paddingRight: '50px',
+        }}>
         <H2>NOTIFICATION</H2>
         <Gap width={0} height={20} />
         <Box>
           <Paper>
-            <div className="card">
+            <div className='card'>
               <Toolbar left={leftToolbarTemplate} />
               <DataTable
                 value={notifications}
                 lazy
-                filterDisplay="row"
-                responsiveLayout="scroll"
-                dataKey="id"
+                filterDisplay='row'
+                responsiveLayout='scroll'
+                dataKey='id'
                 paginator
                 first={lazyParams.first}
                 rows={10}
@@ -325,68 +329,67 @@ const NotificationManagement = () => {
                 filters={lazyParams.filters}
                 loading={loading}
                 scrollable
-                scrollDirection="both"
-                selectionMode="single"
-                onRowSelect={onRowSelect}
-              >
+                scrollDirection='both'
+                selectionMode='single'
+                onRowSelect={onRowSelect}>
                 <Column
-                  footer="Notification Type"
-                  header="Notification Type"
-                  field="notif_type"
-                  style={{ flexGrow: 1, flexBasis: "250px" }}
+                  footer='Notification Type'
+                  header='Notification Type'
+                  field='notif_type'
+                  style={{ flexGrow: 1, flexBasis: '250px' }}
                   sortable
                   filter
-                  filterPlaceholder="Search by Type"
+                  filterPlaceholder='Search by Type'
                 />
                 <Column
-                  footer="Notification Name"
-                  header="Notification Name"
-                  field="notif_name"
-                  style={{ flexGrow: 1, flexBasis: "250px" }}
+                  footer='Notification Name'
+                  header='Notification Name'
+                  field='notif_name'
+                  style={{ flexGrow: 1, flexBasis: '250px' }}
                   sortable
                   filter
-                  filterPlaceholder="Search by Name"
+                  filterPlaceholder='Search by Name'
                 />
                 <Column
-                  footer="Notification Via"
-                  header="Notification Via"
-                  field="notif_via"
-                  style={{ flexGrow: 1, flexBasis: "250px" }}
+                  footer='Notification Via'
+                  header='Notification Via'
+                  field='notif_via'
+                  style={{ flexGrow: 1, flexBasis: '250px' }}
                   sortable
                   filter
-                  filterPlaceholder="Search by Via"
+                  filterPlaceholder='Search by Via'
                 />
                 <Column
-                  footer="Notification Content"
-                  header="Notification Content"
-                  field="notif_content"
-                  style={{ flexGrow: 1, flexBasis: "250px" }}
+                  footer='Notification Content'
+                  header='Notification Content'
+                  field='notif_content'
+                  style={{ flexGrow: 1, flexBasis: '250px' }}
                   filter
-                  filterPlaceholder="Search by Content"
+                  filterPlaceholder='Search by Content'
                 />
 
                 <Column
-                  footer="Receiver"
-                  header="Receiver"
-                  field="receiver"
-                  style={{ flexGrow: 1, flexBasis: "250px" }}
+                  footer='Receiver'
+                  header='Receiver'
+                  field='receiver'
+                  style={{ flexGrow: 1, flexBasis: '250px' }}
                   body={receiverBodyTemplate}
                   filter
-                  filterPlaceholder="Search by Receiver "
+                  filterPlaceholder='Search by Receiver '
                 />
                 <Column
-                  footer="Channel"
-                  header="Channel"
-                  field="channel_id"
-                  style={{ flexGrow: 1, flexBasis: "250px" }}
+                  footer='Channel'
+                  header='Channel'
+                  field='channel_id'
+                  style={{ flexGrow: 1, flexBasis: '250px' }}
                   body={channelBodyTemplate}
                   filter
-                  filterPlaceholder="Search by Receiver "
+                  filterPlaceholder='Search by Receiver '
                 />
                 <Column
                   body={actionBodyTemplate}
                   exportable={false}
-                  style={{ minWidth: "8rem" }}
+                  style={{ minWidth: '8rem' }}
                 />
               </DataTable>
             </div>
@@ -399,24 +402,23 @@ const NotificationManagement = () => {
       <Dialog
         fullWidth
         open={open.detail}
-        onClose={() => setOpen({ ...open, detail: false })}
-      >
+        onClose={() => setOpen({ ...open, detail: false })}>
         <DialogTitle>Detail Notification</DialogTitle>
         <DialogContent>
           <SmallCopy>
-            Notification Type :{" "}
+            Notification Type :{' '}
             {notificationDetail && notificationDetail.notif_type}
           </SmallCopy>
           <SmallCopy>
-            Notification Name :{" "}
+            Notification Name :{' '}
             {notificationDetail && notificationDetail.notif_name}
           </SmallCopy>
           <SmallCopy>
-            Notification Via :{" "}
+            Notification Via :{' '}
             {notificationDetail && notificationDetail.notif_via}
           </SmallCopy>
           <SmallCopy>
-            Notification Content :{" "}
+            Notification Content :{' '}
             {notificationDetail && notificationDetail.notif_content}
           </SmallCopy>
         </DialogContent>
@@ -427,22 +429,21 @@ const NotificationManagement = () => {
       <Dialog
         fullWidth
         open={open.add}
-        scroll="body"
+        scroll='body'
         onClose={() => setOpen({ ...open, add: false })}
-        sx={{ "& .MuiPaper-root": { overflowY: "initial" } }}
-      >
-        <DialogTitle variant="h5">Add Notification</DialogTitle>
+        sx={{ '& .MuiPaper-root': { overflowY: 'initial' } }}>
+        <DialogTitle variant='h5'>Add Notification</DialogTitle>
         <Gap width={0} height={10} />
         <form onSubmit={onAddNotification}>
           <DialogContent>
-            <Stack sx={{ display: "flex" }} px="3vw">
-              <Box sx={{ display: "flex" }}>
+            <Stack sx={{ display: 'flex' }} px='3vw'>
+              <Box sx={{ display: 'flex' }}>
                 <TextField
-                  size="small"
+                  size='small'
                   fullWidth
-                  label="Notification Name"
+                  label='Notification Name'
                   value={createNotification.notif_name}
-                  name="notif_name"
+                  name='notif_name'
                   onChange={(e: any) => {
                     createNotification.notif_name = e.target.value;
                     setStateTriger(!stateTriger);
@@ -451,10 +452,10 @@ const NotificationManagement = () => {
                 />
               </Box>
               <Gap width={0} height={20} />
-              <Box sx={{ display: "flex" }}>
+              <Box sx={{ display: 'flex' }}>
                 <InputSearchable
                   required
-                  label="Type"
+                  label='Type'
                   options={dataNotificationType}
                   // onChange={(e: any, newValue: any) =>
                   //   setInitialNotif({
@@ -469,7 +470,7 @@ const NotificationManagement = () => {
                 />
                 <Gap width={50} height={0} />
                 <InputSearchable
-                  label="Via"
+                  label='Via'
                   options={dataNotificationVia}
                   // onChange={(e: any, newValue: any) =>
                   //   setInitialNotif({
@@ -484,22 +485,22 @@ const NotificationManagement = () => {
                 />
               </Box>
               <Gap width={0} height={20} />
-              <Box sx={{ display: "flex" }}>
+              <Box sx={{ display: 'flex' }}>
                 <Select
                   multiple
-                  direction="column"
-                  label="Receiver"
-                  placeholder="Option"
+                  direction='column'
+                  label='Receiver'
+                  placeholder='Option'
                   options={notifReceiverData.data}
                   renderValue={(selected: any) => (
-                    <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
                       {selected.map((value: any) => {
                         return (
                           <Chip
                             key={value}
                             label={
                               notifReceiverData.data.find(
-                                (e: any) => e["_id"] === value
+                                (e: any) => e['_id'] === value
                               )?.set_value
                             }
                             clickable
@@ -518,7 +519,7 @@ const NotificationManagement = () => {
                               );
                               setStateTriger(!stateTriger);
                             }}
-                            onClick={() => console.log("clicked chip")}
+                            onClick={() => console.log('clicked chip')}
                           />
                         );
                       })}
@@ -533,14 +534,14 @@ const NotificationManagement = () => {
               </Box>
               <Gap width={0} height={20} />
 
-              <Box sx={{ display: "flex" }}>
+              <Box sx={{ display: 'flex' }}>
                 <TextField
                   fullWidth
-                  id="outlined-multiline-static"
-                  label="Notification Content"
+                  id='outlined-multiline-static'
+                  label='Notification Content'
                   multiline
                   rows={4}
-                  name="notif_content"
+                  name='notif_content'
                   onChange={(e: any) => {
                     createNotification.notif_content = e.target.value;
                     setStateTriger(!stateTriger);
@@ -554,17 +555,17 @@ const NotificationManagement = () => {
             </Stack>
           </DialogContent>
           <DialogActions>
-            <Stack px="3vw">
+            <Stack px='3vw'>
               <Button
                 sx={{
-                  background: "#7B61FF",
-                  color: "#FFF",
-                  "&:hover": {
-                    color: "#7B61FF",
+                  background: '#7B61FF',
+                  color: '#FFF',
+                  '&:hover': {
+                    color: '#7B61FF',
                   },
                 }}
                 autoFocus
-                type="submit"
+                type='submit'
                 // onClick={onAddNotification}
               >
                 Create Notification
@@ -581,20 +582,19 @@ const NotificationManagement = () => {
         fullWidth
         open={open.edit}
         onClose={() => setOpen({ ...open, edit: false })}
-        sx={{ "& .MuiPaper-root": { overflowY: "initial" } }}
-      >
-        <DialogTitle variant="h5">Update Notification</DialogTitle>
+        sx={{ '& .MuiPaper-root': { overflowY: 'initial' } }}>
+        <DialogTitle variant='h5'>Update Notification</DialogTitle>
         <Gap width={0} height={10} />
         <form onSubmit={onUpdateNotification}>
           <DialogContent>
-            <Stack sx={{ display: "flex" }} px="3vw">
-              <Box sx={{ display: "flex" }}>
+            <Stack sx={{ display: 'flex' }} px='3vw'>
+              <Box sx={{ display: 'flex' }}>
                 <TextField
-                  size="small"
+                  size='small'
                   fullWidth
-                  label="Notification Name"
+                  label='Notification Name'
                   value={createNotification.notif_name}
-                  name="notif_name"
+                  name='notif_name'
                   onChange={(e: any) => {
                     createNotification.notif_name = e.target.value;
                     setStateTriger(!stateTriger);
@@ -603,11 +603,11 @@ const NotificationManagement = () => {
                 />
               </Box>
               <Gap width={0} height={20} />
-              <Box sx={{ display: "flex" }}>
+              <Box sx={{ display: 'flex' }}>
                 <InputSearchable
                   value={{ name: initialNotif.notif_type }}
                   required
-                  label="Type"
+                  label='Type'
                   options={dataNotificationType}
                   onChange={(e: any, newValue: any) =>
                     setInitialNotif({
@@ -619,7 +619,7 @@ const NotificationManagement = () => {
                 <Gap width={50} height={0} />
                 <InputSearchable
                   value={{ name: initialNotif.notif_via }}
-                  label="Via"
+                  label='Via'
                   options={dataNotificationVia}
                   onChange={(e: any, newValue: any) =>
                     setInitialNotif({
@@ -630,14 +630,14 @@ const NotificationManagement = () => {
                 />
               </Box>
               <Gap width={0} height={20} />
-              <Box sx={{ display: "flex" }}>
+              <Box sx={{ display: 'flex' }}>
                 <TextField
                   fullWidth
-                  id="outlined-multiline-static"
-                  label="Notification Content"
+                  id='outlined-multiline-static'
+                  label='Notification Content'
                   multiline
                   rows={4}
-                  name="notif_content"
+                  name='notif_content'
                   onChange={(e: any) => {
                     createNotification.notif_content = e.target.value;
                     setStateTriger(!stateTriger);
@@ -650,17 +650,17 @@ const NotificationManagement = () => {
             </Stack>
           </DialogContent>
           <DialogActions>
-            <Stack px="3vw">
+            <Stack px='3vw'>
               <Button
                 sx={{
-                  background: "#7B61FF",
-                  color: "#FFF",
-                  "&:hover": {
-                    color: "#7B61FF",
+                  background: '#7B61FF',
+                  color: '#FFF',
+                  '&:hover': {
+                    color: '#7B61FF',
                   },
                 }}
                 autoFocus
-                type="submit"
+                type='submit'
                 // onClick={onAddNotification}
               >
                 Update Notification
