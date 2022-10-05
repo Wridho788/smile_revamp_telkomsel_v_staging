@@ -67,7 +67,9 @@ const Voucher: React.FunctionComponent<INotificationVoucherProps> = ({
 		);
 
 		if (locationOptions && (index === -1 || index !== -1)) {
-			keywordCreate.bonus.push(KeywordBonusVoucher);
+			if (index === -1) {
+				keywordCreate.bonus.push(KeywordBonusVoucher);
+			}
 			const bonusIdx = keywordCreate.bonus.findIndex(
 				({ bonus_type }) => bonus_type === "discount_voucher"
 			);
@@ -78,13 +80,27 @@ const Voucher: React.FunctionComponent<INotificationVoucherProps> = ({
 					const selectedLocation = locationOptions.find(
 						(e: any) => e["_id"] === location
 					);
-					if (selectedLocation) {
+					if (
+						selectedLocation &&
+						!keywordCreateState.bonus[bonusIdx].stock_location.some(
+							(stockLocation: any) => stockLocation.location_id === location
+						)
+					) {
 						keywordCreateState.bonus[bonusIdx].stock_location.push({
 							name: selectedLocation?.name,
 							location_id: location,
 							stock: 0
 						});
 					}
+
+					// Always Remove if stock location not selected
+					keywordCreateState.bonus[bonusIdx].stock_location =
+						keywordCreateState.bonus[bonusIdx].stock_location.filter(
+							(stockLocation: any) =>
+								keywordCreateState.eligibility.locations?.includes(
+									stockLocation?.location_id
+								)
+						);
 				});
 
 				setStateTrigger(!stateTrigger);
