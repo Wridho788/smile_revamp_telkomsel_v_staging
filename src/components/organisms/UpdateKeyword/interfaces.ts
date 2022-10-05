@@ -198,6 +198,7 @@ export interface IKeywordBonusVoucher {
 	exp_voucher: string;
 	voucher_type: string;
 	voucher_combination: string;
+	voucher_prefix?: string;
 	jumlah_total_voucher: number;
 	stock_location: any[];
 	redeem_after_verification: boolean;
