@@ -8,6 +8,7 @@ import {
   CircularProgress,
   ListItem,
   Typography,
+  Snackbar,
 } from "@mui/material";
 import { OutlinedTextField, Select } from "../../../atoms";
 import {
@@ -26,8 +27,15 @@ import SmallCopy from "../../../atoms/Typography/SmallCopy";
 import H3 from "../../../atoms/Typography/H3";
 import { IProgramNotification } from "../../../../pages/CreateProgram/interface";
 import { useNotificationTemplateQuery } from "redux/features/notification/notification-api-slice";
+import MuiAlert, { AlertProps } from "@mui/material/Alert";
 
 interface INotificationProps {}
+const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
+  props,
+  ref
+) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 const Notification: React.FunctionComponent<
   INotificationProps
@@ -44,6 +52,8 @@ const Notification: React.FunctionComponent<
       sort: "{}",
     });
   const [stateTrigger, setStateTrigger] = React.useState<boolean>(false);
+  const [openAlert, setOpenAlert] = React.useState<boolean>(false);
+  const [notifUndefined, setNotifUndefined] = React.useState<string[]>([]);
   const [adjustField, setAdjustField] = React.useState<any>({
     receiver: "",
     channel_id: "",
@@ -76,19 +86,28 @@ const Notification: React.FunctionComponent<
     }
   }, [programNotificationOption.data]);
 
+  // let notifNull: string[] = [];
   useEffect(() => {
     if (programNotification.length > 0) {
       programNotificationOption.data.map((item: any, index: number) => {
         if (
           item.set_value ===
           notificationTemplateList.find((e) => e === item.set_value)
-        )
+        ) {
           programNotification[index].template_content =
             notificationTemplate.data.filter(
               (e) => e.notif_name === item.set_value
             )[0]?.notif_content;
+        }
+        //  else {
+        //   notifNull.push(item.set_value);
+        // }
       });
+      // if (notifNull.length > 0) {
+      //   setOpenAlert(true);
+      // }
     }
+
     let receiver: any = [];
     let channelID: any = [];
     for (let i = 0; i <= notificationReceiver.length; i++) {
@@ -102,8 +121,22 @@ const Notification: React.FunctionComponent<
       channel_id: channelID.join(", "),
       receiver: receiver.join(", "),
     });
-  }, [programNotification, stateTrigger, notificationTemplate]);
+  }, [programNotification, notificationTemplate]);
 
+  // const handleClose = () => setTimeout(() => setOpenAlert(false), 500);
+  // const OpenSnackbarAlert = (item: string[]) => {
+  //   return (
+  //     <Snackbar open={openAlert} autoHideDuration={6000} onClose={handleClose}>
+  //       <Alert
+  //         // onClose={(handleClose)}
+  //         severity="warning"
+  //         sx={{ width: "100%" }}
+  //       >
+  //         {item.map((data) => data).join(", ")}
+  //       </Alert>
+  //     </Snackbar>
+  //   );
+  // };
   return (
     <>
       {programNotification.length > 0 ? (
@@ -132,32 +165,39 @@ const Notification: React.FunctionComponent<
                     setStateTrigger(!stateTrigger);
                   }}
                 />
-                <Grid container>
-                  <OutlinedTextField
-                    isRequired={false}
-                    disabled
-                    label="Receiver"
-                    variant={"outlined"}
-                    value={adjustField.channel_id}
-                    handleChange={(value: any) => {
-                      programNotification[i].template_content = value;
-                      setStateTrigger(!stateTrigger);
-                    }}
-                  />
-                </Grid>
-                <Grid container>
-                  <OutlinedTextField
-                    isRequired={false}
-                    disabled
-                    label="Receiver"
-                    variant={"outlined"}
-                    value={adjustField.receiver}
-                    handleChange={(value: any) => {
-                      programNotification[i].template_content = value;
-                      setStateTrigger(!stateTrigger);
-                    }}
-                  />
-                </Grid>
+                {item.set_value ===
+                  notificationTemplateList.find(
+                    (e) => e === item.set_value
+                  ) && (
+                  <>
+                    <Grid container>
+                      <OutlinedTextField
+                        isRequired={false}
+                        disabled
+                        label="PIC"
+                        variant={"outlined"}
+                        value={adjustField.channel_id}
+                        handleChange={(value: any) => {
+                          programNotification[i].template_content = value;
+                          setStateTrigger(!stateTrigger);
+                        }}
+                      />
+                    </Grid>
+                    <Grid container>
+                      <OutlinedTextField
+                        isRequired={false}
+                        disabled
+                        label="Receiver"
+                        variant={"outlined"}
+                        value={adjustField.receiver}
+                        handleChange={(value: any) => {
+                          programNotification[i].template_content = value;
+                          setStateTrigger(!stateTrigger);
+                        }}
+                      />
+                    </Grid>
+                  </>
+                )}
                 <Grid container>
                   <OutlinedTextField
                     isRequired={false}
