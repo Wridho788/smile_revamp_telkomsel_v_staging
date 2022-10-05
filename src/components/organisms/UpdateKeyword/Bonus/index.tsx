@@ -25,6 +25,7 @@ import MobileBanking from "./MobileBanking";
 import Void from "./Void";
 import Voting from "./Voting";
 import Other from "./Other";
+import { BONUS_TELKOMSEL_LIST } from "service/helpers/bonus-constant";
 
 interface IBonusProps {}
 
@@ -86,9 +87,6 @@ const Bonus: React.FunctionComponent<IBonusProps> = props => {
 		setKeywordUpdateState(keywordUpdate);
 	}, [keywordBonusHelperState.bonus_type]);
 
-	console.log("HELPER", keywordBonusHelper);
-	console.log("KEYWORD UPDATE", keywordUpdate);
-
 	React.useEffect(() => {
 		console.log(keywordUpdate);
 	}, [keywordUpdate, stateTrigger]);
@@ -140,6 +138,22 @@ const Bonus: React.FunctionComponent<IBonusProps> = props => {
 						)}
 						value={keywordBonusHelperState.bonus_type}
 						handleChange={(value: Array<string>) => {
+							// Check if telkomsel bonus type is already selected
+							const firstSelectedTelkomselBonus =
+								keywordBonusHelper.bonus_type.find(bonusTelkomsel =>
+									BONUS_TELKOMSEL_LIST?.includes(bonusTelkomsel)
+								);
+
+							// Check for last selected
+							const isLastSelectedTelkomselBonus =
+								BONUS_TELKOMSEL_LIST?.includes(value?.[value?.length - 1]) ||
+								false;
+
+							// Check if user already select telkomsel bonus and want to select another telkomsel bonus
+							if (firstSelectedTelkomselBonus && isLastSelectedTelkomselBonus) {
+								return;
+							}
+
 							keywordBonusHelper.bonus_type = value;
 							setStateTrigger(!stateTrigger);
 						}}

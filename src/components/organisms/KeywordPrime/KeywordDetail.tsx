@@ -1618,6 +1618,14 @@ const KeywordDetail: FC<IKeywordDetailsModalProps> = ({
 														</Grid>
 														<Grid item xs={3}>
 															<Typography sx={fontContent}>
+																<b>Voucher Prefix</b>
+															</Typography>
+															<Typography sx={fontContent}>
+																{item.voucher_prefix}
+															</Typography>
+														</Grid>
+														<Grid item xs={3}>
+															<Typography sx={fontContent}>
 																<b>Voucher Count</b>
 															</Typography>
 															<Typography sx={fontContent}>

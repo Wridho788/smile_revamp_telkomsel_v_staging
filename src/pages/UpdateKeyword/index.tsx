@@ -16,6 +16,7 @@ import { UpdateKeywordGeneral } from "../../components/organisms/UpdateKeyword/i
 import { cloneDeep } from "lodash";
 
 const UpdateKeyword = () => {
+	let UpdateKeyword = UpdateKeywordGeneral;
 	const [activeStep, setActiveStep] = React.useState<number>(0);
 	const steps = ["Main Info", "Bonus"];
 	const stepsItem = [<MainInfo />, <Bonus />];
@@ -26,12 +27,12 @@ const UpdateKeyword = () => {
 
 	useEffect(() => {
 		if (data) {
-			UpdateKeywordGeneral.bonus = cloneDeep(data.bonus);
-			UpdateKeywordGeneral.eligibility = cloneDeep(data.eligibility);
-			UpdateKeywordGeneral.notification = cloneDeep(data.notification);
+			UpdateKeyword.bonus = cloneDeep(data.bonus);
+			UpdateKeyword.eligibility = cloneDeep(data.eligibility);
+			UpdateKeyword.notification = cloneDeep(data.notification);
 
 			// TODO Mapping customer_experience to program_experience
-			UpdateKeywordGeneral.eligibility.program_experience = cloneDeep(
+			UpdateKeyword.eligibility.program_experience = cloneDeep(
 				data.customer_experience
 			);
 		}

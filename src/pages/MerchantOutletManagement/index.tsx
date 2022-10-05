@@ -103,20 +103,14 @@ const MerchantOutletManagement = () => {
   const { data: locationTypeList = { data: [OutletInitial] } } =
     useGetLocationTypeQuery();
 
-  const { data: locationList = { data: [LocationInitial] } } =
-    useLocationTemplateQuery({
-      skip: 0,
-      limit: 10,
-      filter: `{"type": "${locationType?._id}"}`,
-      sort: "{}",
-    });
-  const { data: locationBranch = { data: [LocationInitial] } } =
-    useLocationTemplateQuery({
-      skip: 0,
-      limit: 10,
-      filter: `{"type": "62ffc0fc8a01008799e785bf"}`,
-      sort: "{}",
-    });
+  const { data: locationList = [LocationInitial] } = useLocationTemplateQuery({
+    type: locationType?._id,
+  });
+  const { data: locationBranch = [LocationInitial] } = useLocationTemplateQuery(
+    {
+      type: "62ffc0fc8a01008799e785bf",
+    }
+  );
   //================================ Spread Data ===========================
   //========================================================================
   const dataLocationType = locationTypeList.data.map((item: any) => {
@@ -125,13 +119,13 @@ const MerchantOutletManagement = () => {
     newItem["name"] = item.set_value;
     return newItem;
   });
-  const dataLocation = locationList.data.map((item: any) => {
+  const dataLocation = locationList.map((item: any) => {
     let newItem: any = {};
     newItem["_id"] = item._id;
     newItem["name"] = item.name;
     return newItem;
   });
-  const dataBranch = locationBranch.data.map((item: any) => {
+  const dataBranch = locationBranch.map((item: any) => {
     let newItem: any = {};
     newItem["_id"] = item._id;
     newItem["name"] = item.name;

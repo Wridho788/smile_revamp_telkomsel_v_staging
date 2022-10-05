@@ -28,6 +28,7 @@ import {
 	VOUCHER_TYPE_UPLOAD
 } from "service/helpers/voucher-constant";
 import onlyNumber from "utils/onlyNumber";
+import moment from "moment";
 
 interface INotificationVoucherProps {
 	bonusType: string;
@@ -60,6 +61,16 @@ const Voucher: React.FunctionComponent<INotificationVoucherProps> = ({
 
 	const [index, setIndex] = useState<number>(-1);
 
+	// Watch for switch
+	// useEffect(() => {
+	// 	const voucherDate = keywordCreate.bonus.find(
+	// 		bonus => bonus?.bonus_type === "discount_voucher"
+	// 	)?.exp_voucher;
+
+	// 	// Do anything with wwitcher
+	// 	setSwitchState(() => );
+	// }, [isFetching]);
+
 	useEffect(() => {
 		// Initial Keyword Bonus Link Aja
 		const index = keywordCreate.bonus.findIndex(
@@ -67,7 +78,9 @@ const Voucher: React.FunctionComponent<INotificationVoucherProps> = ({
 		);
 
 		if (locationOptions && (index === -1 || index !== -1)) {
-			keywordCreate.bonus.push(KeywordBonusVoucher);
+			if (index === -1) {
+				keywordCreate.bonus.push(KeywordBonusVoucher);
+			}
 			const bonusIdx = keywordCreate.bonus.findIndex(
 				({ bonus_type }) => bonus_type === "discount_voucher"
 			);
@@ -78,13 +91,27 @@ const Voucher: React.FunctionComponent<INotificationVoucherProps> = ({
 					const selectedLocation = locationOptions.find(
 						(e: any) => e["_id"] === location
 					);
-					if (selectedLocation) {
+					if (
+						selectedLocation &&
+						!keywordCreateState.bonus[bonusIdx].stock_location.some(
+							(stockLocation: any) => stockLocation.location_id === location
+						)
+					) {
 						keywordCreateState.bonus[bonusIdx].stock_location.push({
 							name: selectedLocation?.name,
 							location_id: location,
 							stock: 0
 						});
 					}
+
+					// Always Remove if stock location not selected
+					keywordCreateState.bonus[bonusIdx].stock_location =
+						keywordCreateState.bonus[bonusIdx].stock_location.filter(
+							(stockLocation: any) =>
+								keywordCreateState.eligibility.locations?.includes(
+									stockLocation?.location_id
+								)
+						);
 				});
 
 				setStateTrigger(!stateTrigger);
@@ -95,7 +122,6 @@ const Voucher: React.FunctionComponent<INotificationVoucherProps> = ({
 	const onChangeVoucherType = (value: string) => {
 		if (value !== VOUCHER_TYPE_GENERATE) {
 			keywordCreate.bonus[index].voucher_combination = "";
-			keywordCreate.bonus[index].voucher_prefix = "";
 			keywordCreate.bonus[index].voucher_prefix = "";
 			keywordCreate.bonus[index].jumlah_total_voucher = 0;
 			setStateTrigger(!stateTrigger);
@@ -144,7 +170,6 @@ const Voucher: React.FunctionComponent<INotificationVoucherProps> = ({
 										/>
 									) : (
 										<OutlinedTextField
-											type={"number"}
 											disabled={switchState}
 											direction="column"
 											label="Voucher Expired Days After Redeem"
@@ -155,8 +180,10 @@ const Voucher: React.FunctionComponent<INotificationVoucherProps> = ({
 													: keywordCreate.bonus[index].exp_voucher
 											}
 											handleChange={(value: string) => {
-												keywordCreate.bonus[index].exp_voucher = value;
-												setStateTrigger(!stateTrigger);
+												if (onlyNumber(value)) {
+													keywordCreate.bonus[index].exp_voucher = value;
+													setStateTrigger(!stateTrigger);
+												}
 											}}
 										/>
 									)}
