@@ -16,7 +16,7 @@ import { partnerSlice } from "../features/partner/partner-api-slice";
 import { outletSlice } from "../features/outlet/outlet-api-slice";
 import { programPrimedtSlice } from "../features/program-primedt/program-primedt-api-slice";
 import { uploadFIleSlice } from "../upload_file/upload-file-api-slice";
-
+import { picSlice } from "../features/pic/pic-api-slice";
 // Redux Persist
 import {
 	persistStore,
@@ -62,7 +62,8 @@ export const store = configureStore({
 				appConfigSlice.middleware,
 				outletSlice.middleware,
 				programPrimedtSlice.middleware,
-				uploadFIleSlice.middleware
+				uploadFIleSlice.middleware,
+				picSlice.middleware,
 			)
 });
 
