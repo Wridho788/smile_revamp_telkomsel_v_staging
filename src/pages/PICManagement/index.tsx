@@ -205,7 +205,7 @@ const Index = () => {
       </React.Fragment>
     );
   };
-  // edit delete
+  // edit and delete
   const actionBodyTemplate = (rowData: any) => {
     return (
       <React.Fragment>
