@@ -133,7 +133,7 @@ const Keywords: React.FunctionComponent = () => {
         <H2 color={"secondary.dark"}>Keyword</H2>
         <Stack direction="row" alignItems="center" spacing={"1vw"}>
           <IconButton
-            href="/create-keyword/"
+            href="/create-keyword"
             size="small"
             sx={{
               bgcolor: "primary",

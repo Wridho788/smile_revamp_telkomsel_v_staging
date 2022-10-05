@@ -146,7 +146,7 @@ const Programs: React.FunctionComponent = () => {
         <H2 color={"secondary.dark"}>Program</H2>
         <Stack direction="row" alignItems="center" spacing={"1vw"}>
           <IconButton
-            href="/create-program/"
+            href="/create-program"
             size="small"
             sx={{
               bgcolor: "primary",
