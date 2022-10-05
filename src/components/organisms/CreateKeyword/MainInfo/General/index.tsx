@@ -35,6 +35,7 @@ import { parseISO } from "date-fns";
 import { strToInt, thousandSeparator } from "../../../../../utils";
 import TextArea from "components/atoms/TextArea";
 import moment from "moment";
+import Channel from "./Channel";
 
 interface IGeneralProps {
   keywordCreateState: ICreateKeyword;
@@ -703,6 +704,9 @@ const General: React.FunctionComponent<IGeneralProps> = ({
             }}
           />
           {keywordCreateState.eligibility.channel_validation !== false && (
+            <Channel keywordCreate={keywordCreate} />
+          )}
+          {/* {keywordCreateState.eligibility.channel_validation !== false && (
             <Select
               isRequired={false}
               multiple
@@ -716,7 +720,7 @@ const General: React.FunctionComponent<IGeneralProps> = ({
                 setStateTrigger(!stateTrigger);
               }}
             />
-          )}
+          )} */}
           {/* <Select
             multiple
             label="Program Experience"
