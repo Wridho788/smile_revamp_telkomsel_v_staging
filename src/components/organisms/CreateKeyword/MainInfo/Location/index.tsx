@@ -32,6 +32,7 @@ const Location: React.FunctionComponent<ILocationProps> = ({
 	stateTrigger,
 	setStateTrigger
 }) => {
+	const [expanded, setExpanded] = React.useState<boolean>(true);
 	const { data: locationTypeOptions = { data: [] } } =
 		useGetLocationTypeQuery();
 
@@ -69,7 +70,7 @@ const Location: React.FunctionComponent<ILocationProps> = ({
 	}, []);
 
 	return (
-		<Accordion sx={{ p: "1vw" }}>
+		<Accordion expanded={expanded} onChange={()=> setExpanded(!expanded)} sx={{ p: "1vw" }}>
 			<AccordionSummary
 				expandIcon={<ExpandMoreIcon fontSize="large" />}
 				aria-controls="panel1a-content"
