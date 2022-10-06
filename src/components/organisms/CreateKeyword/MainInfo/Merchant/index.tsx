@@ -27,6 +27,7 @@ const Merchant: React.FunctionComponent<IMerchantProps> = ({
   stateTrigger,
   setStateTrigger,
 }) => {
+  const [expanded, setExpanded] = React.useState<boolean>(true);
   const [getMerchantsList] = useLazyMerchantManagementListQuery();
 
   const merchants = merchantsData;
@@ -109,7 +110,7 @@ const Merchant: React.FunctionComponent<IMerchantProps> = ({
   };
 
   return (
-    <Accordion sx={{ p: "1vw" }}>
+    <Accordion expanded={expanded} onChange={()=> setExpanded(!expanded)} sx={{ p: "1vw" }}>
       <AccordionSummary
         expandIcon={<ExpandMoreIcon fontSize="large" />}
         aria-controls="panel1a-content"
