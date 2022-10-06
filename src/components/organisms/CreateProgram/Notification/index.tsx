@@ -42,10 +42,10 @@ const Notification: React.FunctionComponent<
 > = ({}: INotificationProps) => {
   const programNotification = CreateProgramInitial.program_notification;
   const { data: viaOption = { data: [] } } = useGetNotifViaQuery();
-  // const {
-  //   data: programNotificationOption = { data: [] },
-  //   isFetching: isFetchingNotifOption,
-  // } = useGetProgramNotificationQuery();
+  const {
+    data: programNotificationOption = { data: [] },
+    isFetching: isFetchingNotifOption,
+  } = useGetProgramNotificationQuery();
   const {
     data: notificationTemplate = { data: [] },
     isFetching: isFetchingNotifTemplate,
@@ -78,8 +78,7 @@ const Notification: React.FunctionComponent<
   // * assignment programNotification: []
   //
   // ============================================================================================
-  let list: any = [];
-  // programNotificationOption.data;
+  let list = programNotificationOption.data;
   useEffect(() => {
     if (list.length > 0) {
       if (list.length !== programNotification.length) {
@@ -95,9 +94,7 @@ const Notification: React.FunctionComponent<
         }
       }
     }
-    // comment before fixed
-    // }, [programNotificationOption.data]);
-  }, []);
+  }, [programNotificationOption.data]);
 
   // ============================================================================================
   // * assignment notification template content: []
@@ -203,7 +200,7 @@ const Notification: React.FunctionComponent<
     <>
       {notifUndefined.length > 0 && OpenSnackbarAlert(notifUndefined)}
       {programNotification.length > 0 ? (
-        list.map((item: any, i: number) => (
+        programNotificationOption.data.map((item, i) => (
           <Box key={i} display="flex" px="10%" py="1vw">
             <Grid
               key={`rowItem__${i}`}
