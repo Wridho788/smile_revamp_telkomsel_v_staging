@@ -42,10 +42,10 @@ const Notification: React.FunctionComponent<
 > = ({}: INotificationProps) => {
   const programNotification = CreateProgramInitial.program_notification;
   const { data: viaOption = { data: [] } } = useGetNotifViaQuery();
-  const {
-    data: programNotificationOption = { data: [] },
-    isFetching: isFetchingNotifOption,
-  } = useGetProgramNotificationQuery();
+  // const {
+  //   data: programNotificationOption = { data: [] },
+  //   isFetching: isFetchingNotifOption,
+  // } = useGetProgramNotificationQuery();
   const {
     data: notificationTemplate = { data: [] },
     isFetching: isFetchingNotifTemplate,
@@ -78,7 +78,8 @@ const Notification: React.FunctionComponent<
   // * assignment programNotification: []
   //
   // ============================================================================================
-  let list = programNotificationOption.data;
+  let list: any = [];
+  // programNotificationOption.data;
   useEffect(() => {
     if (list.length > 0) {
       if (list.length !== programNotification.length) {
@@ -94,41 +95,43 @@ const Notification: React.FunctionComponent<
         }
       }
     }
-  }, [programNotificationOption.data]);
+    // comment before fixed
+    // }, [programNotificationOption.data]);
+  }, []);
 
   // ============================================================================================
   // * assignment notification template content: []
   //
   // ============================================================================================
-  useEffect(() => {
-    if (programNotification.length > 0) {
-      handleCheckEquivalentNotif(programNotificationOption.data);
-      programNotificationOption.data.map((item: any, index: number) => {
-        if (
-          item.set_value ===
-          notificationTemplateList.find((e) => e === item.set_value)
-        ) {
-          programNotification[index].template_content =
-            notificationTemplate.data.filter(
-              (e) => e.notif_name === item.set_value
-            )[0]?.notif_content;
-        }
-      });
-    }
+  // useEffect(() => {
+  //   if (programNotification.length > 0) {
+  //     handleCheckEquivalentNotif(programNotificationOption.data);
+  //     programNotificationOption.data.map((item: any, index: number) => {
+  //       if (
+  //         item.set_value ===
+  //         notificationTemplateList.find((e) => e === item.set_value)
+  //       ) {
+  //         programNotification[index].template_content =
+  //           notificationTemplate.data.filter(
+  //             (e) => e.notif_name === item.set_value
+  //           )[0]?.notif_content;
+  //       }
+  //     });
+  //   }
 
-    let receiver: any = [];
-    let channelID: any = [];
-    for (let i = 0; i <= notificationReceiver.length; i++) {
-      receiver.push(notificationReceiver[i]);
-    }
-    for (let i = 0; i <= notificationChannel.length; i++) {
-      channelID.push(notificationChannel[i]);
-    }
-    setAdjustField({
-      channel_id: channelID.join(", "),
-      receiver: receiver.join(", "),
-    });
-  }, [programNotification, isFetchingNotifTemplate, isFetchingNotifOption]);
+  //   let receiver: any = [];
+  //   let channelID: any = [];
+  //   for (let i = 0; i <= notificationReceiver.length; i++) {
+  //     receiver.push(notificationReceiver[i]);
+  //   }
+  //   for (let i = 0; i <= notificationChannel.length; i++) {
+  //     channelID.push(notificationChannel[i]);
+  //   }
+  //   setAdjustField({
+  //     channel_id: channelID.join(", "),
+  //     receiver: receiver.join(", "),
+  //   });
+  // }, [programNotification, isFetchingNotifTemplate, isFetchingNotifOption]);
 
   // ============================================================================================
   // * generate alert if notification template not created
@@ -200,7 +203,7 @@ const Notification: React.FunctionComponent<
     <>
       {notifUndefined.length > 0 && OpenSnackbarAlert(notifUndefined)}
       {programNotification.length > 0 ? (
-        programNotificationOption.data.map((item, i) => (
+        list.map((item: any, i: number) => (
           <Box key={i} display="flex" px="10%" py="1vw">
             <Grid
               key={`rowItem__${i}`}
@@ -225,7 +228,7 @@ const Notification: React.FunctionComponent<
                     setStateTrigger(!stateTrigger);
                   }}
                 />
-                {item.set_value ===
+                {/* {item.set_value ===
                   notificationTemplateList.find(
                     (e) => e === item.set_value
                   ) && (
@@ -257,7 +260,7 @@ const Notification: React.FunctionComponent<
                       />
                     </Grid>
                   </>
-                )}
+                )} */}
                 <Grid container>
                   <OutlinedTextField
                     isRequired={false}
