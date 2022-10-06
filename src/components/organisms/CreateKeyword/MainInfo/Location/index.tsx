@@ -88,8 +88,11 @@ const Location: React.FunctionComponent<ILocationProps> = ({
 						value={keywordCreateState.eligibility.eligibility_locations}
 						handleChange={(value: boolean) => {
 							keywordCreate.eligibility.eligibility_locations = value;
+							keywordCreate.eligibility.locations.length = 0;
 							getOwnerDetail({
-								type: accountAuth?.account_location.location_detail.type
+								type:
+									keywordCreateState.eligibility.location_type ||
+									accountAuth?.account_location.location_detail.type
 							});
 							setStateTrigger(!stateTrigger);
 						}}
