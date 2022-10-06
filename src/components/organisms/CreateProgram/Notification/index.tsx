@@ -180,7 +180,7 @@ const Notification: React.FunctionComponent<
         autoHideDuration={6000}
         sx={{
           "&.MuiSnackbar-root": {
-            position: "absolute",
+            position: "fixed",
             top: `${topPosition[index] + 25}px`,
             color: "red",
           },
