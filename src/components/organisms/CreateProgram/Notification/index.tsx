@@ -191,7 +191,7 @@ const Notification: React.FunctionComponent<
                       <OutlinedTextField
                         isRequired={false}
                         disabled
-                        label="PIC"
+                        label="Channel"
                         variant={"outlined"}
                         value={adjustField.channel_id}
                         handleChange={(value: any) => {
@@ -204,7 +204,7 @@ const Notification: React.FunctionComponent<
                       <OutlinedTextField
                         isRequired={false}
                         disabled
-                        label="Receiver"
+                        label="PIC"
                         variant={"outlined"}
                         value={adjustField.receiver}
                         handleChange={(value: any) => {
