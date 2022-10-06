@@ -11,6 +11,7 @@ import {
   Card,
   CardContent,
   List,
+  ListItem,
 } from '@mui/material';
 import { DataGridPro } from '@mui/x-data-grid-pro';
 import { BodyCopy, Gap, SmallCopy, StepperPaper, Subtitle } from '../../atoms';
@@ -30,15 +31,16 @@ const style = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: '80%',
+  width: 800,
   bgcolor: 'background.paper',
   boxShadow: 24,
   p: 4,
 };
 
 const fontContent = {
-  fontSize: 12,
+  fontSize: 15,
   overflowWrap: 'break-word',
+  paddingLeft: 5,
 };
 
 const NotificationDetail: FC<ModalProps> = ({ open, handleClose, data }) => {
@@ -59,34 +61,90 @@ const NotificationDetail: FC<ModalProps> = ({ open, handleClose, data }) => {
         </Box>
         <Gap width={0} height={3} />
         <Box sx={{ paddingTop: '3vw' }}>
-          <Stack spacing={1}>
-            <List>
-              <Card>
-                <Stack direction={'row'} justifyContent={'space-between'}>
-                  <Stack direction='column' mt={1}>
-                    <Grid container columnSpacing={2} rowSpacing={2}>
-                      <Grid item xs={4}>
-                        <Typography sx={fontContent}>
-                          <b>No</b>
-                        </Typography>
-                        <Typography sx={fontContent}>1</Typography>
-                      </Grid>
-                      <Grid item xs={8}>
-                        <Typography sx={fontContent}>
-                          <b>
+          <Stack spacing={2}>
+            <List
+              sx={{
+                width: '100%',
+                height: '100%',
+              }}>
+              <ListItem alignItems='flex-start'>
+                <Card>
+                  <Stack direction={'row'} justifyContent={'space-between'}>
+                    <Stack direction='column' mt={1}>
+                      <Grid container>
+                        <Grid item xs={2} sm={2}>
+                          <Typography sx={fontContent} width={'100%'}>
+                            <b>No</b>
+                          </Typography>
+                          <Typography sx={fontContent}>1</Typography>
+                        </Grid>
+                        <Grid item xs={10} sm={10} lg={10}>
+                          <Typography>
                             Program Kejutan Ramadhan PostPaid need your approval
-                          </b>
-                        </Typography>
-                        <Gap width={0} height={2} />
-                        <Typography sx={fontContent}>3 Hours ago</Typography>
+                          </Typography>
+                          <Gap width={0} height={2} />
+                          <Typography sx={fontContent}>3 Hours ago</Typography>
+                        </Grid>
                       </Grid>
-                    </Grid>
+                    </Stack>
+                    <IconButton>
+                      <Close></Close>
+                    </IconButton>
                   </Stack>
-                  <IconButton>
-                    <Close></Close>
-                  </IconButton>
-                </Stack>
-              </Card>
+                </Card>
+              </ListItem>
+              <ListItem alignItems='flex-start'>
+                <Card>
+                  <Stack direction={'row'} justifyContent={'space-between'}>
+                    <Stack direction='column' mt={1}>
+                      <Grid container>
+                        <Grid item xs={2}>
+                          <Typography sx={fontContent} width={'100%'}>
+                            <b>No</b>
+                          </Typography>
+                          <Typography sx={fontContent}>1</Typography>
+                        </Grid>
+                        <Grid item xs={11} sm={10} lg={2}>
+                          <Typography>
+                            Program Kejutan Ramadhan PostPaid need your approval
+                          </Typography>
+                          <Gap width={0} height={2} />
+                          <Typography sx={fontContent}>3 Hours ago</Typography>
+                        </Grid>
+                      </Grid>
+                    </Stack>
+                    <IconButton>
+                      <Close></Close>
+                    </IconButton>
+                  </Stack>
+                </Card>
+              </ListItem>
+              <ListItem alignItems='flex-start'>
+                <Card>
+                  <Stack direction={'row'} justifyContent={'space-between'}>
+                    <Stack direction='column' mt={1}>
+                      <Grid container>
+                        <Grid item xs={2}>
+                          <Typography sx={fontContent} width={'100%'}>
+                            <b>No</b>
+                          </Typography>
+                          <Typography sx={fontContent}>1</Typography>
+                        </Grid>
+                        <Grid item xs={11} sm={10} lg={2}>
+                          <Typography>
+                            Program Kejutan Ramadhan PostPaid need your approval
+                          </Typography>
+                          <Gap width={0} height={2} />
+                          <Typography sx={fontContent}>3 Hours ago</Typography>
+                        </Grid>
+                      </Grid>
+                    </Stack>
+                    <IconButton>
+                      <Close></Close>
+                    </IconButton>
+                  </Stack>
+                </Card>
+              </ListItem>
             </List>
           </Stack>
         </Box>
