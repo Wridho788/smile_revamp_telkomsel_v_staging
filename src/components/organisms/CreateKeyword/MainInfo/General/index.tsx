@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction } from "react";
+import React, { Dispatch, SetStateAction, useEffect } from "react";
 import { Button, Grid, IconButton, Stack } from "@mui/material";
 import {
   Select,
@@ -36,6 +36,7 @@ import { strToInt, thousandSeparator } from "../../../../../utils";
 import TextArea from "components/atoms/TextArea";
 import moment from "moment";
 import Channel from "./Channel";
+import { useKeywordNameExistingQuery } from "redux/features/keyword/keyword-api-slice";
 
 interface IGeneralProps {
   keywordCreateState: ICreateKeyword;
@@ -62,7 +63,11 @@ const General: React.FunctionComponent<IGeneralProps> = ({
   //   useCustomerBadgeListQuery(FilterInitial);
 
   return (
-    <Accordion expanded={expanded} onChange={()=> setExpanded(!expanded)} sx={{ p: "1vw" }}>
+    <Accordion
+      expanded={expanded}
+      onChange={() => setExpanded(!expanded)}
+      sx={{ p: "1vw" }}
+    >
       <AccordionSummary
         expandIcon={<ExpandMoreIcon fontSize="large" />}
         aria-controls="panel1a-content"
@@ -84,6 +89,7 @@ const General: React.FunctionComponent<IGeneralProps> = ({
               setStateTrigger(!stateTrigger);
             }}
           /> */}
+
           <OutlinedTextField
             label={
               programExperienceOptions.data

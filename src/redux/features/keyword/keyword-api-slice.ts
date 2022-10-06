@@ -1,6 +1,6 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { API_HEADER } from "../../utils/header";
-import { IResponse } from "./interface";
+import { IKeywordNameExistingHandler, IResponse } from "./interface";
 import { IParams } from "../../utils/IGeneral";
 
 const baseUrl = process.env.REACT_APP_BASE_URL;
@@ -95,6 +95,10 @@ export const keywordSlice = createApi({
         }),
         providesTags: ["Keyword"],
       });
+    const keywordNameExistingHandler = (endpoint: string) =>
+      builder.query<IKeywordNameExistingHandler, string>({
+        query: (name: string) => `${endpoint}/${name}/check-existing`,
+      });
     return {
       // all function
       keywordList: responseHandler(baseUrl + "/v1/keyword"),
@@ -135,6 +139,7 @@ export const keywordSlice = createApi({
       keywordGeneralCreate: postHandler(baseUrl + "/v1/keyword"),
       keywordGeneralUpdate: putHandler(baseUrl + "/v1/keyword/", "/edit"),
       keywordGeneralDetail: detailHandler(baseUrl + "/v1/keyword/"),
+      keywordNameExisting: keywordNameExistingHandler(baseUrl + "/v2/keyword"),
 
       // lucky draw
       keywordCoreLuckyDrawList: responseHandler("/lucky_draw"),
@@ -168,4 +173,5 @@ export const {
   useKeywordUploadAuctionMutation,
   useKeywordGeneralDetailQuery,
   useKeywordProgramDetailQuery,
+  useKeywordNameExistingQuery,
 } = keywordSlice;
