@@ -20,7 +20,7 @@ import {
   CreateProgramInitial,
   variableInitial,
 } from "../../../../pages/CreateProgram/programInitial";
-import { AddBox } from "@mui/icons-material";
+import { AddBox, Close } from "@mui/icons-material";
 import BodyCopy from "../../../atoms/Typography/BodyCopy";
 import ListItemButton from "@mui/material/ListItemButton";
 import SmallCopy from "../../../atoms/Typography/SmallCopy";
@@ -42,15 +42,19 @@ const Notification: React.FunctionComponent<
 > = ({}: INotificationProps) => {
   const programNotification = CreateProgramInitial.program_notification;
   const { data: viaOption = { data: [] } } = useGetNotifViaQuery();
-  const { data: programNotificationOption = { data: [] } } =
-    useGetProgramNotificationQuery();
-  const { data: notificationTemplate = { data: [] } } =
-    useNotificationTemplateQuery({
-      skip: 0,
-      limit: 20,
-      filter: "{}",
-      sort: "{}",
-    });
+  const {
+    data: programNotificationOption = { data: [] },
+    isFetching: isFetchingNotifOption,
+  } = useGetProgramNotificationQuery();
+  const {
+    data: notificationTemplate = { data: [] },
+    isFetching: isFetchingNotifTemplate,
+  } = useNotificationTemplateQuery({
+    skip: 0,
+    limit: 20,
+    filter: "{}",
+    sort: "{}",
+  });
   const [stateTrigger, setStateTrigger] = React.useState<boolean>(false);
   const [openAlert, setOpenAlert] = React.useState<boolean>(false);
   const [notifUndefined, setNotifUndefined] = React.useState<string[]>([]);
@@ -59,6 +63,7 @@ const Notification: React.FunctionComponent<
     channel_id: "",
   });
 
+  const notificationTemplateData = notificationTemplate.data;
   const notificationTemplateList = notificationTemplate.data.map(
     (item: any) => item.notif_name
   );
@@ -68,6 +73,11 @@ const Notification: React.FunctionComponent<
   const notificationChannel = notificationTemplate.data.map((item: any) =>
     item.channel_id.map((data: any) => data.name)
   );
+
+  // ============================================================================================
+  // * assignment programNotification: []
+  //
+  // ============================================================================================
   let list = programNotificationOption.data;
   useEffect(() => {
     if (list.length > 0) {
@@ -86,9 +96,13 @@ const Notification: React.FunctionComponent<
     }
   }, [programNotificationOption.data]);
 
-  // let notifNull: string[] = [];
+  // ============================================================================================
+  // * assignment notification template content: []
+  //
+  // ============================================================================================
   useEffect(() => {
     if (programNotification.length > 0) {
+      handleCheckEquivalentNotif(programNotificationOption.data);
       programNotificationOption.data.map((item: any, index: number) => {
         if (
           item.set_value ===
@@ -99,13 +113,7 @@ const Notification: React.FunctionComponent<
               (e) => e.notif_name === item.set_value
             )[0]?.notif_content;
         }
-        //  else {
-        //   notifNull.push(item.set_value);
-        // }
       });
-      // if (notifNull.length > 0) {
-      //   setOpenAlert(true);
-      // }
     }
 
     let receiver: any = [];
@@ -116,32 +124,84 @@ const Notification: React.FunctionComponent<
     for (let i = 0; i <= notificationChannel.length; i++) {
       channelID.push(notificationChannel[i]);
     }
-    // notificationReceiver.map((item, i:number) => )
     setAdjustField({
       channel_id: channelID.join(", "),
       receiver: receiver.join(", "),
     });
-  }, [programNotification, notificationTemplate]);
+  }, [programNotification, isFetchingNotifTemplate, isFetchingNotifOption]);
 
-  // const handleClose = () => setTimeout(() => setOpenAlert(false), 500);
-  // const OpenSnackbarAlert = (item: string[]) => {
-  //   return (
-  //     <Snackbar open={openAlert} autoHideDuration={6000} onClose={handleClose}>
-  //       <Alert
-  //         // onClose={(handleClose)}
-  //         severity="warning"
-  //         sx={{ width: "100%" }}
-  //       >
-  //         {item.map((data) => data).join(", ")}
-  //       </Alert>
-  //     </Snackbar>
-  //   );
-  // };
+  // ============================================================================================
+  // * generate alert if notification template not created
+  //
+  // ============================================================================================
+  let notifNull: string[] = [];
+  const handleCheckEquivalentNotif = async (items: any) => {
+    items.map((item: any, index: number) => {
+      if (notificationTemplateList.some((e) => e === item.set_value)) {
+        console.log("items same same: ", item.set_value);
+      } else {
+        notifNull.push(item.set_value);
+      }
+      //
+    });
+    setNotifUndefined(notifNull);
+    if (notifNull.length > 0) {
+      setOpenAlert(true);
+    }
+  };
+  const handleClose = (
+    event: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpenAlert(false);
+  };
+  const OpenSnackbarAlert = (item: string[]) => {
+    let topPosition = item.map((item, i: number) => i * 50);
+    let autoHideDuration = item.map((item, i: number) => i * 1500);
+    const action = (
+      <React.Fragment>
+        <IconButton
+          size="small"
+          aria-label="close"
+          color="inherit"
+          onClick={handleClose}
+        >
+          <Close fontSize="small" />
+        </IconButton>
+      </React.Fragment>
+    );
+    return item.map((data, index: number) => (
+      <Snackbar
+        open={openAlert}
+        autoHideDuration={6000}
+        sx={{
+          "&.MuiSnackbar-root": {
+            position: "fixed",
+            top: `${topPosition[index] + 25}px`,
+            color: "red",
+          },
+        }}
+        action={action}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        onClose={handleClose}
+      >
+        <Alert onClose={handleClose} severity="warning" sx={{ width: "100%" }}>
+          "We don't see notification config for title {data}, please create on
+          Notification Management with title {data}
+        </Alert>
+      </Snackbar>
+    ));
+  };
   return (
     <>
+      {notifUndefined.length > 0 && OpenSnackbarAlert(notifUndefined)}
       {programNotification.length > 0 ? (
         programNotificationOption.data.map((item, i) => (
-          <Box display="flex" px="10%" py="1vw">
+          <Box key={i} display="flex" px="10%" py="1vw">
             <Grid
               key={`rowItem__${i}`}
               container
