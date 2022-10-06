@@ -102,8 +102,11 @@ const Channel: React.FunctionComponent<IChannelProps> = ({
   const onSelectionChange = (event: any) => {
     const value = event.value;
 
-    notificationCreate.channel_id = value.map((item: any) => item._id);
-    setSelectedChannelState(value);
+    const data = value.map((item: any) =>
+      notificationCreate.channel_id.some((e) => e === item._id)
+    );
+    console.log(data)
+    setSelectedChannelState(data);
   };
 
   return (
