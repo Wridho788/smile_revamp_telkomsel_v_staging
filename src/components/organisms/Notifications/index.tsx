@@ -7,14 +7,17 @@ import {
   Grid,
   IconButton,
   Stack,
+  Paper,
+  Card,
+  CardContent,
+  List,
 } from '@mui/material';
-import Table from '@mui/material/Table';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import TableCell from '@mui/material/TableCell';
-import { Edit } from '@mui/icons-material';
-import { BodyCopy, StepperPaper } from '../../atoms';
+import { DataGridPro } from '@mui/x-data-grid-pro';
+import { BodyCopy, Gap, SmallCopy, StepperPaper, Subtitle } from '../../atoms';
 import { H2 } from 'components';
+import { Column } from 'primereact/column';
+import { DataTable } from 'primereact/datatable';
+import { Close, Edit } from '@mui/icons-material';
 
 interface ModalProps {
   open: any;
@@ -27,7 +30,7 @@ const style = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: '45vw',
+  width: '80%',
   bgcolor: 'background.paper',
   boxShadow: 24,
   p: 4,
@@ -49,40 +52,43 @@ const NotificationDetail: FC<ModalProps> = ({ open, handleClose, data }) => {
       aria-labelledby='keep-mounted-modal-title'
       aria-describedby='keep-mounted-modal-description'
       sx={{ overflow: 'scroll' }}>
-      <Box sx={style} minWidth={'30vw'} maxHeight={'90vh'}>
-        {' '}
-        <Box px={2}>
+      <Box sx={style}>
+        <Box>
           <H2>Notifications</H2>
-          <H2>2 unread Notifications</H2>
-          <Table aria-label='simple table'>
-            <TableRow>
-              <TableCell>
-                <Grid>
-                  <Stack spacing={'1vw'}>
-                    <Grid container columns={12.3}>
-                      <Grid>
-                        <Grid item xs={6}>
-                          <Typography>No</Typography>
-                        </Grid>
-                        <Grid item xs={6}>
-                          <Typography>1</Typography>
-                        </Grid>
+          <BodyCopy>2 Unread Notifications</BodyCopy>
+        </Box>
+        <Gap width={0} height={3} />
+        <Box sx={{ paddingTop: '3vw' }}>
+          <Stack spacing={1}>
+            <List>
+              <Card>
+                <Stack direction={'row'} justifyContent={'space-between'}>
+                  <Stack direction='column' mt={1}>
+                    <Grid container columnSpacing={2} rowSpacing={2}>
+                      <Grid item xs={4}>
+                        <Typography sx={fontContent}>
+                          <b>No</b>
+                        </Typography>
+                        <Typography sx={fontContent}>1</Typography>
                       </Grid>
-                      <Grid item xs={0.3} />
-                      <Grid>
-                        <Grid item xs={6}>
-                          <Typography>Program Kejutan</Typography>
-                        </Grid>
-                        <Grid item xs={6}>
-                          <Typography>2 Hours Ago</Typography>
-                        </Grid>
+                      <Grid item xs={8}>
+                        <Typography sx={fontContent}>
+                          <b>
+                            Program Kejutan Ramadhan PostPaid need your approval
+                          </b>
+                        </Typography>
+                        <Gap width={0} height={2} />
+                        <Typography sx={fontContent}>3 Hours ago</Typography>
                       </Grid>
                     </Grid>
                   </Stack>
-                </Grid>
-              </TableCell>
-            </TableRow>
-          </Table>
+                  <IconButton>
+                    <Close></Close>
+                  </IconButton>
+                </Stack>
+              </Card>
+            </List>
+          </Stack>
         </Box>
       </Box>
     </ModalCustom>
