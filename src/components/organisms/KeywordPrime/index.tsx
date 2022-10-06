@@ -432,6 +432,7 @@ const KeywordPrime = () => {
 						: false
 				}
 				userLoginId={accountAuth ? accountAuth._id : ""}
+				refetchKeyword={loadLazyData}
 			/>
 
 			<Stack direction={"row"} justifyContent={"space-between"}>
