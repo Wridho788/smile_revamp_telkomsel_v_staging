@@ -50,6 +50,7 @@ const General: React.FunctionComponent<IGeneralProps> = ({
   stateTrigger,
   setStateTrigger,
 }) => {
+  const [expanded, setExpanded] = React.useState<boolean>(true);
   const { data: pointTypeOptions = { data: [] } } = useGetPointTypeQuery();
   const { data: programListOptions = { data: [] } } =
     useProgramListQuery(FilterInitial);
@@ -61,7 +62,7 @@ const General: React.FunctionComponent<IGeneralProps> = ({
   //   useCustomerBadgeListQuery(FilterInitial);
 
   return (
-    <Accordion sx={{ p: "1vw" }}>
+    <Accordion expanded={expanded} onChange={()=> setExpanded(!expanded)} sx={{ p: "1vw" }}>
       <AccordionSummary
         expandIcon={<ExpandMoreIcon fontSize="large" />}
         aria-controls="panel1a-content"

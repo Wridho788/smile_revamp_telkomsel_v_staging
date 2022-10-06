@@ -9,22 +9,18 @@ import Merchant from "./Merchant";
 import Segmentation from "./Segmentation";
 import Notification from "./Notification";
 
-interface IMainInfoProps {}
+interface IMainInfoProps { }
 
 const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
   const keywordCreate = CreateKeywordGeneral;
   const [keywordCreateState, setKeywordCreateState] =
     React.useState<ICreateKeyword>(keywordCreate);
 
-  const [stateTrigger, setStateTrigger] = React.useState<boolean>(false);
+  const [stateTrigger, setStateTrigger] = React.useState<boolean>(true);
 
   React.useEffect(() => {
     setKeywordCreateState(keywordCreate);
   }, [keywordCreate]);
-
-  React.useEffect(() => {
-    console.log(keywordCreate);
-  }, [keywordCreate, stateTrigger]);
 
   return (
     <Box display="flex" justifyContent="center" px="5%" py="1vw">
@@ -36,35 +32,42 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = (props) => {
             stateTrigger={stateTrigger}
             setStateTrigger={setStateTrigger}
           />
-          <General
-            keywordCreateState={keywordCreateState}
-            keywordCreate={keywordCreate}
-            stateTrigger={stateTrigger}
-            setStateTrigger={setStateTrigger}
-          />
-          <Location
-            keywordCreateState={keywordCreateState}
-            keywordCreate={keywordCreate}
-            stateTrigger={stateTrigger}
-            setStateTrigger={setStateTrigger}
-          />
-          <Merchant
-            keywordCreate={keywordCreate}
-            stateTrigger={stateTrigger}
-            setStateTrigger={setStateTrigger}
-          />
-          <Segmentation
-            keywordCreateState={keywordCreateState}
-            keywordCreate={keywordCreate}
-            stateTrigger={stateTrigger}
-            setStateTrigger={setStateTrigger}
-          />
-          <Notification
-            keywordCreateState={keywordCreateState}
-            keywordCreate={keywordCreate}
-            stateTrigger={stateTrigger}
-            setStateTrigger={setStateTrigger}
-          />
+
+          {
+            keywordCreate?.eligibility?.program_id !== "" &&
+            keywordCreate?.eligibility?.program_experience?.length > 0 &&
+            <>
+              <General
+                keywordCreateState={keywordCreateState}
+                keywordCreate={keywordCreate}
+                stateTrigger={stateTrigger}
+                setStateTrigger={setStateTrigger}
+              />
+              <Location
+                keywordCreateState={keywordCreateState}
+                keywordCreate={keywordCreate}
+                stateTrigger={stateTrigger}
+                setStateTrigger={setStateTrigger}
+              />
+              <Merchant
+                keywordCreate={keywordCreate}
+                stateTrigger={stateTrigger}
+                setStateTrigger={setStateTrigger}
+              />
+              <Segmentation
+                keywordCreateState={keywordCreateState}
+                keywordCreate={keywordCreate}
+                stateTrigger={stateTrigger}
+                setStateTrigger={setStateTrigger}
+              />
+              <Notification
+                keywordCreateState={keywordCreateState}
+                keywordCreate={keywordCreate}
+                stateTrigger={stateTrigger}
+                setStateTrigger={setStateTrigger}
+              />
+            </>
+          }
         </Stack>
       </Stack>
     </Box>

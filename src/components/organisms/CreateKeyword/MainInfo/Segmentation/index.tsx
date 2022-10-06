@@ -32,6 +32,7 @@ const Segmentation: React.FunctionComponent<ISegmentationProps> = ({
   stateTrigger,
   setStateTrigger,
 }) => {
+  const [expanded, setExpanded] = React.useState<boolean>(true);
   const { data: customerBadgeOptions = { data: [] } } =
     useCustomerBadgeListQuery(FilterInitial);
   const { data: customerTierOptions = { data: [] } } =
@@ -39,7 +40,7 @@ const Segmentation: React.FunctionComponent<ISegmentationProps> = ({
   const { data: customerBrandOptions = { data: [] } } =
     useCustomerBrandListQuery(FilterInitial);
   return (
-    <Accordion sx={{ p: "1vw" }}>
+    <Accordion expanded={expanded} onChange={()=> setExpanded(!expanded)} sx={{ p: "1vw" }}>
       <AccordionSummary
         expandIcon={<ExpandMoreIcon fontSize="large" />}
         aria-controls="panel1a-content"
