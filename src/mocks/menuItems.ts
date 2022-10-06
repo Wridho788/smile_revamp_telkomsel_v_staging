@@ -10,7 +10,7 @@ import {
     StarsOutlined,
     ErrorOutlineOutlined,
     ShareLocationOutlined,
-    Logout, Android
+    Logout, Android, DocumentScannerRounded, DocumentScannerOutlined
 } from "@mui/icons-material";
 
 export interface Menu {
@@ -85,7 +85,7 @@ export const menuItems: Menu[] = [
     {
         label: "PIC Management",
         hasChild: false,
-        icon: Android,
+        icon: DocumentScannerOutlined,
         path: "/pic-management"
     },
     {
