@@ -100,35 +100,35 @@ const Notification: React.FunctionComponent<
   // * assignment notification template content: []
   //
   // ============================================================================================
-  // useEffect(() => {
-  //   if (programNotification.length > 0) {
-  //     handleCheckEquivalentNotif(programNotificationOption.data);
-  //     programNotificationOption.data.map((item: any, index: number) => {
-  //       if (
-  //         item.set_value ===
-  //         notificationTemplateList.find((e) => e === item.set_value)
-  //       ) {
-  //         programNotification[index].template_content =
-  //           notificationTemplate.data.filter(
-  //             (e) => e.notif_name === item.set_value
-  //           )[0]?.notif_content;
-  //       }
-  //     });
-  //   }
+  useEffect(() => {
+    if (programNotification.length > 0) {
+      handleCheckEquivalentNotif(programNotificationOption.data);
+      programNotificationOption.data.map((item: any, index: number) => {
+        if (
+          item.set_value ===
+          notificationTemplateList.find((e) => e === item.set_value)
+        ) {
+          programNotification[index].template_content =
+            notificationTemplate.data.filter(
+              (e) => e.notif_name === item.set_value
+            )[0]?.notif_content;
+        }
+      });
+    }
 
-  //   let receiver: any = [];
-  //   let channelID: any = [];
-  //   for (let i = 0; i <= notificationReceiver.length; i++) {
-  //     receiver.push(notificationReceiver[i]);
-  //   }
-  //   for (let i = 0; i <= notificationChannel.length; i++) {
-  //     channelID.push(notificationChannel[i]);
-  //   }
-  //   setAdjustField({
-  //     channel_id: channelID.join(", "),
-  //     receiver: receiver.join(", "),
-  //   });
-  // }, [programNotification, isFetchingNotifTemplate, isFetchingNotifOption]);
+    let receiver: any = [];
+    let channelID: any = [];
+    for (let i = 0; i <= notificationReceiver.length; i++) {
+      receiver.push(notificationReceiver[i]);
+    }
+    for (let i = 0; i <= notificationChannel.length; i++) {
+      channelID.push(notificationChannel[i]);
+    }
+    setAdjustField({
+      channel_id: channelID.join(", "),
+      receiver: receiver.join(", "),
+    });
+  }, [programNotification, isFetchingNotifTemplate, isFetchingNotifOption]);
 
   // ============================================================================================
   // * generate alert if notification template not created
@@ -225,7 +225,7 @@ const Notification: React.FunctionComponent<
                     setStateTrigger(!stateTrigger);
                   }}
                 />
-                {/* {item.set_value ===
+                {item.set_value ===
                   notificationTemplateList.find(
                     (e) => e === item.set_value
                   ) && (
@@ -257,7 +257,7 @@ const Notification: React.FunctionComponent<
                       />
                     </Grid>
                   </>
-                )} */}
+                )}
                 <Grid container>
                   <OutlinedTextField
                     isRequired={false}
