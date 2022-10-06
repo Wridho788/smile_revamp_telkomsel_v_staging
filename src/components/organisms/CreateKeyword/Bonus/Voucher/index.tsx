@@ -298,15 +298,13 @@ const Voucher: React.FunctionComponent<INotificationVoucherProps> = ({
 
 						{/* Stock Location Management */}
 						<Stack>
-							{keywordCreateState.eligibility.locations?.length > 0 && (
-								<LocationManagement
-									bonusType="discount_voucher"
-									keywordCreateState={keywordCreateState}
-									keywordCreate={keywordCreate}
-									stateTrigger={stateTrigger}
-									setStateTrigger={setStateTrigger}
-								/>
-							)}
+							<LocationManagement
+								bonusType="discount_voucher"
+								keywordCreateState={keywordCreateState}
+								keywordCreate={keywordCreate}
+								stateTrigger={stateTrigger}
+								setStateTrigger={setStateTrigger}
+							/>
 						</Stack>
 					</Stack>
 				)}
