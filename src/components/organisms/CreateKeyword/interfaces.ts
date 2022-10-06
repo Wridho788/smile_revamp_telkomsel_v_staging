@@ -178,6 +178,7 @@ export interface IKeywordNotificationAuction {
 }
 
 export interface ICreateKeyword {
+	is_draft?: boolean;
 	eligibility: IKeywordEligibility;
 	bonus: any[];
 	notification: any[];

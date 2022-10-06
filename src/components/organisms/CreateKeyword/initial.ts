@@ -419,6 +419,7 @@ export const KeywordNotificationLuckyDraw: IKeywordNotificationLuckyDraw[] = [
 ];
 
 export const CreateKeywordGeneral: ICreateKeyword = {
+	is_draft: false,
 	eligibility: KeywordEligibility,
 	bonus: [],
 	notification: [...KeywordNotificationEligibility]
