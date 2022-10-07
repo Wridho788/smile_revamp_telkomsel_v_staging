@@ -34,7 +34,7 @@ import Swal from 'sweetalert2';
 
 const Index = () => {
   // local state
-  const [pics, setPics] = useState<any>();
+  const [pics, setPics] = useState<any>([PicInital]);
   const [totalRecords, setTotalRecords] = useState<any>(0);
   const [lazyParams, setLazyParams] = useState<any>({
     first: 0,
@@ -103,6 +103,14 @@ const Index = () => {
     setInitialPic({ ...initialPic, [e.target.name]: e.target.value });
   };
 
+  const onClearForm = () => {
+    setInitialPic({
+      name: '',
+      msisdn: '',
+      email: '',
+    });
+  };
+
   const onAddPic = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     await addPic(initialPic);
@@ -144,6 +152,7 @@ const Index = () => {
     }
 
     setTriger((prev) => !prev);
+    onClearForm();
     setOpen({ ...open, edit: false });
   };
   const onDeletePic = async (data: typeof picDetail) => {
@@ -178,7 +187,6 @@ const Index = () => {
       const { data }: any = await getPicList({
         lazyEvent: JSON.stringify(lazyParams),
       });
-      console.log(data?.payload, 'data payload');
       setPics(data.payload.data);
       setTotalRecords(data.payload.totalRecords);
       setLoading(false);
@@ -187,7 +195,7 @@ const Index = () => {
 
   useEffect(() => {
     loadLazyData();
-  }, [lazyParams]);
+  }, [lazyParams, triger]);
 
   //  Add
   const leftToolbarTemplate = () => {

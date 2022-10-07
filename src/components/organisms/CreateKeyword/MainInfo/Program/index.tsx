@@ -11,28 +11,28 @@ import _without from "lodash/without";
 import moment from "moment";
 
 interface IProgramProps {
-	keywordCreateState: ICreateKeyword;
-	keywordCreate: ICreateKeyword;
-	stateTrigger: boolean;
-	setStateTrigger: Dispatch<SetStateAction<boolean>>;
+  keywordCreateState: ICreateKeyword;
+  keywordCreate: ICreateKeyword;
+  stateTrigger: boolean;
+  setStateTrigger: Dispatch<SetStateAction<boolean>>;
 }
 
 const Program: React.FunctionComponent<IProgramProps> = ({
-	keywordCreateState,
-	keywordCreate,
-	stateTrigger,
-	setStateTrigger
+  keywordCreateState,
+  keywordCreate,
+  stateTrigger,
+  setStateTrigger,
 }) => {
-	const programExperienceRef = React.useRef();
+  const programExperienceRef = React.useRef();
 
-	const {
-		data: programListOptions = { data: [] },
-		isFetching: isProgramListFetching
-	} = useProgramListQuery(FilterInitial);
-	const {
-		data: programExperienceOptions = { data: [] },
-		isFetching: isProgramExperienceFetching
-	} = useGetProgramExperienceQuery();
+  const {
+    data: programListOptions = { data: [] },
+    isFetching: isProgramListFetching,
+  } = useProgramListQuery(FilterInitial);
+  const {
+    data: programExperienceOptions = { data: [] },
+    isFetching: isProgramExperienceFetching,
+  } = useGetProgramExperienceQuery();
 
 	console.log(programExperienceRef);
 	return (
@@ -94,21 +94,21 @@ const Program: React.FunctionComponent<IProgramProps> = ({
 							</Stack>
 						)}
 
-						<Select
-							label="Program Experience"
-							placeholder="Option"
-							options={programExperienceOptions.data}
-							value={keywordCreateState.eligibility.program_experience}
-							handleChange={(value: string) => {
-								keywordCreate.eligibility.program_experience = [value];
-								setStateTrigger(!stateTrigger);
-							}}
-						/>
-					</>
-				)}
-			</Stack>
-		</Box>
-	);
+            <Select
+              label="Program Experience"
+              placeholder="Option"
+              options={programExperienceOptions.data}
+              value={keywordCreateState.eligibility.program_experience}
+              handleChange={(value: string) => {
+                keywordCreate.eligibility.program_experience = [value];
+                setStateTrigger(!stateTrigger);
+              }}
+            />
+          </>
+        )}
+      </Stack>
+    </Box>
+  );
 };
 
 export default Program;

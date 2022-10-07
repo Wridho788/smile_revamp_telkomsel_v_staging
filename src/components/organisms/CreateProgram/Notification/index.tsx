@@ -9,6 +9,7 @@ import {
   ListItem,
   Typography,
   Snackbar,
+  Alert,
 } from "@mui/material";
 import { OutlinedTextField, Select } from "../../../atoms";
 import {
@@ -20,7 +21,7 @@ import {
   CreateProgramInitial,
   variableInitial,
 } from "../../../../pages/CreateProgram/programInitial";
-import { AddBox } from "@mui/icons-material";
+import { AddBox, Close } from "@mui/icons-material";
 import BodyCopy from "../../../atoms/Typography/BodyCopy";
 import ListItemButton from "@mui/material/ListItemButton";
 import SmallCopy from "../../../atoms/Typography/SmallCopy";
@@ -30,35 +31,34 @@ import { useNotificationTemplateQuery } from "redux/features/notification/notifi
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
 
 interface INotificationProps {}
-const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
-  props,
-  ref
-) {
-  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
-});
 
 const Notification: React.FunctionComponent<
   INotificationProps
 > = ({}: INotificationProps) => {
   const programNotification = CreateProgramInitial.program_notification;
   const { data: viaOption = { data: [] } } = useGetNotifViaQuery();
-  const { data: programNotificationOption = { data: [] } } =
-    useGetProgramNotificationQuery();
-  const { data: notificationTemplate = { data: [] } } =
-    useNotificationTemplateQuery({
-      skip: 0,
-      limit: 20,
-      filter: "{}",
-      sort: "{}",
-    });
+  const {
+    data: programNotificationOption = { data: [] },
+    isFetching: isFetchingNotifOption,
+  } = useGetProgramNotificationQuery();
+  const {
+    data: notificationTemplate = { data: [] },
+    isFetching: isFetchingNotifTemplate,
+  } = useNotificationTemplateQuery({
+    skip: 0,
+    limit: 20,
+    filter: "{}",
+    sort: "{}",
+  });
   const [stateTrigger, setStateTrigger] = React.useState<boolean>(false);
-  const [openAlert, setOpenAlert] = React.useState<boolean>(false);
-  const [notifUndefined, setNotifUndefined] = React.useState<string[]>([]);
+  const [activeAlert, setActiveAlert] = React.useState<string[]>([]);
+
   const [adjustField, setAdjustField] = React.useState<any>({
     receiver: "",
     channel_id: "",
   });
 
+  const notificationTemplateData = notificationTemplate.data;
   const notificationTemplateList = notificationTemplate.data.map(
     (item: any) => item.notif_name
   );
@@ -68,6 +68,11 @@ const Notification: React.FunctionComponent<
   const notificationChannel = notificationTemplate.data.map((item: any) =>
     item.channel_id.map((data: any) => data.name)
   );
+
+  // ============================================================================================
+  // * assignment programNotification: []
+  //
+  // ============================================================================================
   let list = programNotificationOption.data;
   useEffect(() => {
     if (list.length > 0) {
@@ -86,9 +91,13 @@ const Notification: React.FunctionComponent<
     }
   }, [programNotificationOption.data]);
 
-  // let notifNull: string[] = [];
+  // ============================================================================================
+  // * assignment notification template content: []
+  //
+  // ============================================================================================
   useEffect(() => {
     if (programNotification.length > 0) {
+      handleCheckEquivalentNotif(programNotificationOption.data);
       programNotificationOption.data.map((item: any, index: number) => {
         if (
           item.set_value ===
@@ -99,13 +108,7 @@ const Notification: React.FunctionComponent<
               (e) => e.notif_name === item.set_value
             )[0]?.notif_content;
         }
-        //  else {
-        //   notifNull.push(item.set_value);
-        // }
       });
-      // if (notifNull.length > 0) {
-      //   setOpenAlert(true);
-      // }
     }
 
     let receiver: any = [];
@@ -116,32 +119,44 @@ const Notification: React.FunctionComponent<
     for (let i = 0; i <= notificationChannel.length; i++) {
       channelID.push(notificationChannel[i]);
     }
-    // notificationReceiver.map((item, i:number) => )
     setAdjustField({
       channel_id: channelID.join(", "),
       receiver: receiver.join(", "),
     });
-  }, [programNotification, notificationTemplate]);
+  }, [programNotification, isFetchingNotifTemplate, isFetchingNotifOption]);
 
-  // const handleClose = () => setTimeout(() => setOpenAlert(false), 500);
-  // const OpenSnackbarAlert = (item: string[]) => {
-  //   return (
-  //     <Snackbar open={openAlert} autoHideDuration={6000} onClose={handleClose}>
-  //       <Alert
-  //         // onClose={(handleClose)}
-  //         severity="warning"
-  //         sx={{ width: "100%" }}
-  //       >
-  //         {item.map((data) => data).join(", ")}
-  //       </Alert>
-  //     </Snackbar>
-  //   );
-  // };
+  // ============================================================================================
+  // * generate alert if notification template not created
+  //
+  // ============================================================================================
+  let notifNull: string[] = [];
+  const handleCheckEquivalentNotif = async (items: any) => {
+    items.map((item: any, index: number) => {
+      if (notificationTemplateList.some((e) => e === item.set_value)) {
+        console.log("items same same: ", item.set_value);
+      } else {
+        notifNull.push(item.set_value);
+      }
+      //
+    });
+    setActiveAlert(notifNull);
+
+  };
+
+  const OpenSnackbarAlert = (text?: string) => {
+    return (
+      <Alert severity="warning">
+        "We don't see notification config for title {text}, please create on
+        Notification Management with title {text}
+      </Alert>
+    );
+  };
   return (
     <>
+      {/* {notifUndefined.length > 0 && OpenSnackbarAlert(activeAlert)} */}
       {programNotification.length > 0 ? (
         programNotificationOption.data.map((item, i) => (
-          <Box display="flex" px="10%" py="1vw">
+          <Box key={i} display="flex" px="10%" py="1vw">
             <Grid
               key={`rowItem__${i}`}
               container
@@ -149,6 +164,8 @@ const Notification: React.FunctionComponent<
               borderRadius="0.3vw"
               p="3vw"
             >
+              {activeAlert.some((e) => e === item.set_value) &&
+                OpenSnackbarAlert(item.set_value)}
               <Stack spacing={"1vw"} width={"100%"}>
                 <Grid container>
                   <H3 color={"primary"}> {item.set_value}</H3>
@@ -174,7 +191,7 @@ const Notification: React.FunctionComponent<
                       <OutlinedTextField
                         isRequired={false}
                         disabled
-                        label="PIC"
+                        label="Channel"
                         variant={"outlined"}
                         value={adjustField.channel_id}
                         handleChange={(value: any) => {
@@ -187,7 +204,7 @@ const Notification: React.FunctionComponent<
                       <OutlinedTextField
                         isRequired={false}
                         disabled
-                        label="Receiver"
+                        label="PIC"
                         variant={"outlined"}
                         value={adjustField.receiver}
                         handleChange={(value: any) => {

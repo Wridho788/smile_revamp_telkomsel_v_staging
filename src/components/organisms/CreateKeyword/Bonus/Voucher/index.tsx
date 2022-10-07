@@ -77,7 +77,7 @@ const Voucher: React.FunctionComponent<INotificationVoucherProps> = ({
 			({ bonus_type }) => bonus_type === "discount_voucher"
 		);
 
-		if (locationOptions && (index === -1 || index !== -1)) {
+		if (index === -1 || index !== -1) {
 			if (index === -1) {
 				keywordCreate.bonus.push(KeywordBonusVoucher);
 			}
@@ -113,9 +113,14 @@ const Voucher: React.FunctionComponent<INotificationVoucherProps> = ({
 								)
 						);
 				});
-
-				setStateTrigger(!stateTrigger);
 			}
+
+			// Check if eligibility locations is empty
+			if (keywordCreateState.eligibility.locations?.length === 0) {
+				keywordCreateState.bonus[bonusIdx].stock_location.length = 0;
+			}
+
+			setStateTrigger(!stateTrigger);
 		}
 	}, [isFetching]);
 
@@ -293,15 +298,13 @@ const Voucher: React.FunctionComponent<INotificationVoucherProps> = ({
 
 						{/* Stock Location Management */}
 						<Stack>
-							{locationOptions && (
-								<LocationManagement
-									bonusType="discount_voucher"
-									keywordCreateState={keywordCreateState}
-									keywordCreate={keywordCreate}
-									stateTrigger={stateTrigger}
-									setStateTrigger={setStateTrigger}
-								/>
-							)}
+							<LocationManagement
+								bonusType="discount_voucher"
+								keywordCreateState={keywordCreateState}
+								keywordCreate={keywordCreate}
+								stateTrigger={stateTrigger}
+								setStateTrigger={setStateTrigger}
+							/>
 						</Stack>
 					</Stack>
 				)}
