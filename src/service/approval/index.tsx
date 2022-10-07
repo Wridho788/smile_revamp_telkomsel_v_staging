@@ -10,6 +10,24 @@ const useApprovalService = () => {
 			approval_status_value =
 				data.approval_log[data.approval_log.length - 1].status[0].set_value;
 		}
+
+		if(data?.need_review_after_edit){
+			if(data?.isHQ){
+				return (
+					<Alert severity="info" icon={false}>
+						Waiting approval 2 <b>( HQ )</b>
+						<br/> - Requested for Review after rejection
+					</Alert>
+				)
+			}
+			return (
+				<Alert severity="info" icon={false}>
+					Waiting approval 1 <b>( {data.created_by && data.created_by.superior_local?.first_name} )</b>
+					<br/> - Requested for Review after rejection
+				</Alert>
+			)
+		}
+
 		return (
 			<Box
 				sx={{
@@ -99,6 +117,7 @@ const useApprovalService = () => {
 		);
 	};
 
+
 	// Status Approval in Modal Detail
 	const AlertApproveInfo = (data: any) => {
 		var approval_status_value: string = "";
@@ -135,7 +154,7 @@ const useApprovalService = () => {
 						{approval_status_value === "Approved by Manager Non HQ" ||
 							(approval_status_value === "Rejected by Manager HQ" && (
 								<Alert sx={{ margin: 2 }} severity="error">
-									Waiting for approval 2
+									Waiting for approval {!data.need_review_after_edit ? "2" : "1"} - {" "}
 									{/*({data.created_by.superior_hq?.first_name}) -{" "}*/}
 									<b>This Program is {approval_status_value}</b>
 									<br /> Approver Message :{" "}
@@ -188,9 +207,9 @@ const useApprovalService = () => {
 					<>
 						{approval_status_value === "Rejected by Manager HQ" && (
 							<Alert sx={{ margin: 2 }} severity="error">
-								Waiting for approval 2 -{" "}
+								Waiting for approval 2 - {" "}
 								{/*({data.created_by.superior_hq?.first_name}) -{" "}*/}
-								<b>This Program is {approval_status_value}</b>
+								<b>{" "} This Program is {approval_status_value}</b>
 								<br /> Approver Message :{" "}
 								<b>
 									{" "}

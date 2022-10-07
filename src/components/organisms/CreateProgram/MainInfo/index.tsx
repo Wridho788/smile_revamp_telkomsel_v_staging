@@ -237,29 +237,30 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
 	return (
 		<Fragment>
 			<Stack mx={2} spacing={2}>
-				{/*  Draft Switcher */}
 				<Box>
-					<Alert
-						severity="info"
-						color={programData?.is_draft ? "success" : "warning"}
-					>
-						{programData?.is_draft
-							? "Program will be drafted"
-							: "Program will not be drafted"}
+					<Alert icon={false} severity={"info"}>
+						<SwitchCustom
+							color={"info"}
+							checked={programData?.is_draft || false}
+							handleChange={() => {
+								programData.is_draft = !programData.is_draft;
+								setStateTrigger(!stateTrigger);
+							}}
+							label={"Switch this toggle on to save this program as Draft when you finish create !"}
+						/>
 					</Alert>
 				</Box>
-
-				<Box>
-					<SwitchCustom
-						color={"success"}
-						checked={programData?.is_draft || false}
-						handleChange={() => {
-							programData.is_draft = !programData.is_draft;
-							setStateTrigger(!stateTrigger);
-						}}
-						label={"Draft Program"}
-					/>
-				</Box>
+				{
+					programData?.is_draft &&
+					<Box>
+						<Alert
+							severity="info"
+							color={"warning"}
+						>
+							This program will be stored as <b>Draft</b>. Please note that program draft will not request for Approval
+						</Alert>
+					</Box>
+				}
 
 				{/*<OutlinedTextField*/}
 				{/*    label="Program Group"*/}
