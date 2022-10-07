@@ -17,6 +17,7 @@ interface IProps {
 	loading: boolean;
 	onDraftChange?: () => void;
 	isDraftActive?: boolean;
+	roleAccess?:boolean;
 }
 
 interface IListProgramApproval {
@@ -32,7 +33,8 @@ const ProgramFilterProgram: React.FC<IProps> = ({
 	loading,
 	setTrigger,
 	onDraftChange,
-	isDraftActive
+	isDraftActive,
+	roleAccess
 }: IProps) => {
 	const { data: programApprovalList = { data: [InitialProgramApproval] } } =
 		useGetProgramApprovalQuery();
@@ -58,16 +60,19 @@ const ProgramFilterProgram: React.FC<IProps> = ({
 	return (
 		<Dialog open={open} onClose={onClose} fullWidth>
 			<Box sx={{ padding: "20px 20px" }}>
-				<SwitchCustom
-					color={"success"}
-					checked={isDraftActive || false}
-					handleChange={() => {
-						if (onDraftChange) {
-							onDraftChange();
-						}
-					}}
-					label={"Show Draft"}
-				/>
+				{!roleAccess &&
+					<SwitchCustom
+						color={"success"}
+						checked={isDraftActive || false}
+						handleChange={() => {
+							if (onDraftChange) {
+								onDraftChange();
+							}
+						}}
+						label={"Show Draft"}
+					/>
+				}
+
 
 				<Stack
 					direction="row"

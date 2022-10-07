@@ -211,6 +211,10 @@ const ProgramPrimeDt: FC = () => {
 		);
 	};
 
+	const roleAccess = accountAuth && defaultRoleManager
+		? accountAuth.role === defaultRoleManager
+		: false
+
 	return (
 		<>
 			{/* Modal Detail Program */}
@@ -220,11 +224,7 @@ const ProgramPrimeDt: FC = () => {
 					setOpen(false);
 				}}
 				data={item}
-				roleAccess={
-					accountAuth && defaultRoleManager
-						? accountAuth.role === defaultRoleManager
-						: false
-				}
+				roleAccess={roleAccess}
 				isHqLogin={
 					!!(
 						accountAuth &&
@@ -246,6 +246,7 @@ const ProgramPrimeDt: FC = () => {
 				setTrigger={setTrigger}
 				onDraftChange={onDraftChange}
 				isDraftActive={lazyParams?.filters?.is_draft?.value}
+				roleAccess={roleAccess}
 			/>
 
 			{/* Header Action */}

@@ -171,18 +171,18 @@ const ProgramDetailsModal: FC<IProgramDetailsModalProps> = ({
 	const renderApproveSection = (text: string) => {
 		return (
 			<>
-				{roleAccess ? (
+				{roleAccess && (
 					<>
 						<Stack
 							spacing="2vw"
 							ml="1vw"
 							mr="1vw"
-							sx={{ backgroundColor: "#fff", borderRadius: 2 }}
+							sx={{backgroundColor: "#fff", borderRadius: 2}}
 						>
 							<Box>
 								<Alert severity="success">{text}</Alert>
 							</Box>
-							<Stack direction="row" sx={{ flex: 1 }}>
+							<Stack direction="row" sx={{flex: 1}}>
 								<OutlinedTextField
 									isRequired={false}
 									direction="column"
@@ -215,18 +215,15 @@ const ProgramDetailsModal: FC<IProgramDetailsModalProps> = ({
 									onClick={approveHandler}
 									variant={"contained"}
 									color="success"
-									sx={{ color: "white" }}
+									sx={{color: "white"}}
 								>
 									Approve
 								</Button>
 							</Stack>
 						</Stack>
 					</>
-				) : (
-					<Alert sx={{ margin: 2 }} severity="info">
-						{text}
-					</Alert>
-				)}
+				)
+				}
 			</>
 		);
 	};
@@ -236,6 +233,38 @@ const ProgramDetailsModal: FC<IProgramDetailsModalProps> = ({
 		if (data.approval_log && data.approval_log.length > 0) {
 			approval_status_value =
 				data.approval_log[data.approval_log.length - 1].status[0].set_value;
+		}
+		if(data?.need_review_after_edit){
+			if (!data.isHQ && data.created_by){
+				if(userLoginId === data.created_by.superior_local?._id) {
+					return (
+						<>
+							{renderApproveSection(
+								`Hi, ${data.created_by.superior_local?.first_name}. We're happy to see you in, This program need your approval`
+							)}
+						</>
+					);
+				}else{
+					return ""
+				}
+			}else{
+				if (userLoginId !== data.created_by.superior_local?._id && roleAccess) {
+					return (
+						<>
+							{renderApproveSection(
+								`Hi, HQ Manager. We're happy to see you in, This program need your approvalo`
+							)}
+						</>
+					);
+				}
+			}
+		}else{
+			if (
+				(data.approval_log && data.approval_log.length > 0) ||
+				approval_status_value === "Rejected by ManagerHQ" || approval_status_value === "Rejected by Manager Non HQ"
+			){
+				return ""
+			}
 		}
 		if (!data.isHQ && data.created_by) {
 			if (userLoginId === data.created_by.superior_local?._id) {
@@ -390,12 +419,14 @@ const ProgramDetailsModal: FC<IProgramDetailsModalProps> = ({
 								>
 									Program Main Information
 								</Typography>
-								<IconButton
-									href={"/edit-program/main-info/".concat(data._id)}
-									sx={fontContentIcon}
-								>
-									<Edit sx={{ fontSize: 14 }}></Edit>
-								</IconButton>
+								{!roleAccess &&
+									<IconButton
+										href={"/edit-program/main-info/".concat(data._id)}
+										sx={fontContentIcon}
+									>
+										<Edit sx={{fontSize: 14}}></Edit>
+									</IconButton>
+								}
 							</Stack>
 
 							<Stack direction="column" mt={1}>
@@ -509,12 +540,14 @@ const ProgramDetailsModal: FC<IProgramDetailsModalProps> = ({
 								>
 									Program Notification
 								</Typography>
-								<IconButton
-									href={"/edit-program/notification/".concat(data._id)}
-									sx={fontContentIcon}
-								>
-									<Edit sx={{ fontSize: 14 }}></Edit>
-								</IconButton>
+								{!roleAccess &&
+									<IconButton
+										href={"/edit-program/notification/".concat(data._id)}
+										sx={fontContentIcon}
+									>
+										<Edit sx={{fontSize: 14}}></Edit>
+									</IconButton>
+								}
 							</Stack>
 
 							<Stack spacing={2}>
