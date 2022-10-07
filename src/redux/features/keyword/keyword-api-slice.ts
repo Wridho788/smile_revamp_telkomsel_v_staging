@@ -6,166 +6,188 @@ import { IParams } from "../../utils/IGeneral";
 const baseUrl = process.env.REACT_APP_BASE_URL;
 
 export const keywordSlice = createApi({
-  reducerPath: "keywordApi",
-  baseQuery: API_HEADER(baseUrl + "/v2/keyword"),
-  tagTypes: ["Keyword"],
-  endpoints(builder) {
-    const responseHandler = (endpoint: string) =>
-      builder.query<IResponse, IParams>({
-        query: (params: IParams) => ({
-          url: endpoint,
-          params: params,
-        }),
-        providesTags: ["Keyword"],
-      });
-    const detailHandler = (endpoint: string) =>
-      builder.query<any, any>({
-        query: (_id: string) => ({
-          url: endpoint + _id + "/detail",
-        }),
-        providesTags: ["Keyword"],
-      });
-    const approvalHandler = (endpoint: string) =>
-      builder.mutation<{ success: boolean; body: any }, any>({
-        query: (body) => ({
-          url: `/${body._id}/${endpoint}`,
-          method: "PATCH",
-          params: { reason_approve: body.reason_approve },
-        }),
-        invalidatesTags: ["Keyword"],
-      });
-    const rejectionHandler = (endpoint: string) =>
-      builder.mutation<{ success: boolean; body: any }, any>({
-        query: (body) => ({
-          url: `/${body._id}/${endpoint}`,
-          method: "PATCH",
-          params: { reason_reject: body.reason_reject },
-        }),
-        invalidatesTags: ["Keyword"],
-      });
-    const postHandler = (endpoint: string) =>
-      builder.mutation<{ success: boolean; body: any }, any>({
-        query: (body) => ({
-          url: endpoint,
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: body,
-        }),
-      });
-    const putHandler = (
-      endpoint: string,
-      step: string = "",
-      isId: boolean = false
-    ) =>
-      builder.mutation<{ success: boolean; body: any }, any>({
-        query: (body) => ({
-          url: isId ? endpoint + body["_id"] + step || "/edit" : endpoint,
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: body,
-        }),
-      });
-    const deleteHandler = (endpoint: string) =>
-      builder.mutation<{ success: boolean; id: string }, string>({
-        query: (id) => ({
-          url: endpoint + id + "/delete",
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }),
-        invalidatesTags: ["Keyword"],
-      });
-    const postImgHandler = () =>
-      builder.mutation<{}, FormData>({
-        query: (formData) => ({
-          url: "/image-auction",
-          method: "POST",
-          body: formData,
-        }),
-      });
-    const programHandler = () =>
-      builder.query<any[], string>({
-        query: (programId) => ({
-          url: programId,
-        }),
-        providesTags: ["Keyword"],
-      });
-    return {
-      // all function
-      keywordList: responseHandler(baseUrl + "/v1/keyword"),
-      keywordDelete: deleteHandler(baseUrl + "/v1/keyword"),
-      keywordNotificationDelete: deleteHandler("/notification"),
-      keywordApprove: approvalHandler("approve"),
-      keywordReject: rejectionHandler("reject"),
-      keywordListPrime: responseHandler(baseUrl + "/v2/keyword"),
+	reducerPath: "keywordApi",
+	baseQuery: API_HEADER(baseUrl + "/v2/keyword"),
+	tagTypes: ["Keyword"],
+	endpoints(builder) {
+		const responseHandler = (endpoint: string) =>
+			builder.query<IResponse, IParams>({
+				query: (params: IParams) => ({
+					url: endpoint,
+					params: params
+				}),
+				providesTags: ["Keyword"]
+			});
+		const detailHandler = (endpoint: string) =>
+			builder.query<any, any>({
+				query: (_id: string) => ({
+					url: endpoint + _id + "/detail"
+				}),
+				providesTags: ["Keyword"]
+			});
+		const approvalHandler = (endpoint: string) =>
+			builder.mutation<{ success: boolean; body: any }, any>({
+				query: body => ({
+					url: `/${body._id}/${endpoint}`,
+					method: "PATCH",
+					params: { reason_approve: body.reason_approve }
+				}),
+				invalidatesTags: ["Keyword"]
+			});
+		const rejectionHandler = (endpoint: string) =>
+			builder.mutation<{ success: boolean; body: any }, any>({
+				query: body => ({
+					url: `/${body._id}/${endpoint}`,
+					method: "PATCH",
+					params: { reason_reject: body.reason_reject }
+				}),
+				invalidatesTags: ["Keyword"]
+			});
+		const postHandler = (endpoint: string) =>
+			builder.mutation<{ success: boolean; body: any }, any>({
+				query: body => ({
+					url: endpoint,
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json"
+					},
+					body: body
+				})
+			});
+		const putHandler = (
+			endpoint: string,
+			step: string = "",
+			isId: boolean = false
+		) =>
+			builder.mutation<{ success: boolean; body: any }, any>({
+				query: body => ({
+					url: isId ? endpoint + body["_id"] + step || "/edit" : endpoint,
+					method: "PUT",
+					headers: {
+						"Content-Type": "application/json"
+					},
+					body: body
+				})
+			});
+		const deleteHandler = (endpoint: string) =>
+			builder.mutation<{ success: boolean; id: string }, string>({
+				query: id => ({
+					url: endpoint + id + "/delete",
+					method: "DELETE",
+					headers: {
+						"Content-Type": "application/json"
+					}
+				}),
+				invalidatesTags: ["Keyword"]
+			});
+		const postImgHandler = () =>
+			builder.mutation<{}, FormData>({
+				query: formData => ({
+					url: "/image-auction",
+					method: "POST",
+					body: formData
+				})
+			});
+		const programHandler = () =>
+			builder.query<any[], string>({
+				query: programId => ({
+					url: programId
+				}),
+				providesTags: ["Keyword"]
+			});
 
-      // action
-      keywordActionList: responseHandler("/action"),
-      keywordActionCreate: postHandler("/action"),
-      keywordActionUpdate: putHandler("/action"),
-      keywordActionDelete: deleteHandler("/action"),
+		const draftHandler = (endpoint: string) =>
+			builder.mutation<
+				{ success: boolean; body: any },
+				{ _id: string; is_draft: boolean }
+			>({
+				query: payload => ({
+					url: `${endpoint}${payload._id}/edit/draft`,
+					method: "PUT",
+					headers: {
+						"Content-Type": "application/json"
+					},
+					body: {
+						is_draft: payload.is_draft
+					}
+				})
+			});
 
-      // core product
-      keywordCoreProductList: responseHandler("/core_product"),
-      keywordCoreProductCreate: postHandler("/core_product"),
-      keywordCoreProductUpdate: putHandler("/core_product"),
-      keywordCoreProductDelete: deleteHandler("/core_product"),
+		return {
+			// all function
+			keywordList: responseHandler(baseUrl + "/v1/keyword"),
+			keywordDelete: deleteHandler(baseUrl + "/v1/keyword"),
+			keywordNotificationDelete: deleteHandler("/notification"),
+			keywordApprove: approvalHandler("approve"),
+			keywordReject: rejectionHandler("reject"),
+			keywordListPrime: responseHandler(baseUrl + "/v2/keyword"),
 
-      // direct redeem
-      keywordCoreDirectRedeemList: responseHandler("/direct_redeem"),
-      keywordRedeemCreate: postHandler("/redeem"),
-      keywordRedeemUpdate: putHandler("/redeem"),
-      keywordRedeemDelete: deleteHandler("/redeem"),
+			// action
+			keywordActionList: responseHandler("/action"),
+			keywordActionCreate: postHandler("/action"),
+			keywordActionUpdate: putHandler("/action"),
+			keywordActionDelete: deleteHandler("/action"),
 
-      // donation
-      keywordCoreDonationList: responseHandler("/donation"),
+			// core product
+			keywordCoreProductList: responseHandler("/core_product"),
+			keywordCoreProductCreate: postHandler("/core_product"),
+			keywordCoreProductUpdate: putHandler("/core_product"),
+			keywordCoreProductDelete: deleteHandler("/core_product"),
 
-      keywordDonationCreate: postHandler("/donation"),
-      keywordDonationUpdate: putHandler("/donation"),
-      keywordDonationDelete: deleteHandler("/donation"),
+			// direct redeem
+			keywordCoreDirectRedeemList: responseHandler("/direct_redeem"),
+			keywordRedeemCreate: postHandler("/redeem"),
+			keywordRedeemUpdate: putHandler("/redeem"),
+			keywordRedeemDelete: deleteHandler("/redeem"),
 
-      // general
-      keywordGeneralList: responseHandler("/general"),
-      keywordGeneralDelete: deleteHandler("/general/"),
-      keywordGeneralCreate: postHandler(baseUrl + "/v1/keyword"),
-      keywordGeneralUpdate: putHandler(baseUrl + "/v1/keyword/", "/edit"),
-      keywordGeneralDetail: detailHandler(baseUrl + "/v1/keyword/"),
+			// donation
+			keywordCoreDonationList: responseHandler("/donation"),
 
-      // lucky draw
-      keywordCoreLuckyDrawList: responseHandler("/lucky_draw"),
-      keywordLuckyDrawCreate: postHandler("/lucky_draw"),
-      keywordLuckyDrawUpdate: putHandler("/lucky_draw"),
-      keywordLuckyDrawDelete: deleteHandler("/lucky_draw"),
+			keywordDonationCreate: postHandler("/donation"),
+			keywordDonationUpdate: putHandler("/donation"),
+			keywordDonationDelete: deleteHandler("/donation"),
 
-      // post : image/file
-      keywordUploadAuction: postImgHandler(),
+			// general
+			keywordGeneralList: responseHandler("/general"),
+			keywordGeneralDelete: deleteHandler("/general/"),
+			keywordGeneralCreate: postHandler(baseUrl + "/v1/keyword"),
+			keywordGeneralUpdate: putHandler(baseUrl + "/v1/keyword/", "/edit"),
+			keywordGeneralDetail: detailHandler(baseUrl + "/v1/keyword/"),
 
-      // program detail
-      keywordProgramDetail: programHandler(),
-    };
-  },
+			// lucky draw
+			keywordCoreLuckyDrawList: responseHandler("/lucky_draw"),
+			keywordLuckyDrawCreate: postHandler("/lucky_draw"),
+			keywordLuckyDrawUpdate: putHandler("/lucky_draw"),
+			keywordLuckyDrawDelete: deleteHandler("/lucky_draw"),
+
+			// post : image/file
+			keywordUploadAuction: postImgHandler(),
+
+			// program detail
+			keywordProgramDetail: programHandler(),
+
+			// Draft
+			draftKeyword: draftHandler(`${baseUrl}/v2/keyword/`)
+		};
+	}
 });
 
 export const {
-  useKeywordListQuery,
-  useLazyKeywordListQuery,
-  useLazyKeywordListPrimeQuery,
-  useKeywordApproveMutation,
-  useKeywordRejectMutation,
-  useKeywordActionListQuery,
-  useKeywordCoreProductListQuery,
-  useKeywordDeleteMutation,
-  useKeywordGeneralListQuery,
-  useLazyKeywordGeneralListQuery,
-  useKeywordGeneralDeleteMutation,
-  useKeywordGeneralCreateMutation,
-  useKeywordGeneralUpdateMutation,
-  useKeywordUploadAuctionMutation,
-  useKeywordGeneralDetailQuery,
-  useKeywordProgramDetailQuery,
+	useKeywordListQuery,
+	useLazyKeywordListQuery,
+	useLazyKeywordListPrimeQuery,
+	useKeywordApproveMutation,
+	useKeywordRejectMutation,
+	useKeywordActionListQuery,
+	useKeywordCoreProductListQuery,
+	useKeywordDeleteMutation,
+	useKeywordGeneralListQuery,
+	useLazyKeywordGeneralListQuery,
+	useKeywordGeneralDeleteMutation,
+	useKeywordGeneralCreateMutation,
+	useKeywordGeneralUpdateMutation,
+	useKeywordUploadAuctionMutation,
+	useKeywordGeneralDetailQuery,
+	useKeywordProgramDetailQuery,
+	useDraftKeywordMutation
 } = keywordSlice;
