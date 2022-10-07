@@ -237,6 +237,30 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
 	return (
 		<Fragment>
 			<Stack mx={2} spacing={2}>
+				{/*  Draft Switcher */}
+				<Box>
+					<Alert
+						severity="info"
+						color={programData?.is_draft ? "success" : "warning"}
+					>
+						{programData?.is_draft
+							? "Program will be drafted"
+							: "Program will not be drafted"}
+					</Alert>
+				</Box>
+
+				<Box>
+					<SwitchCustom
+						color={"success"}
+						checked={programData?.is_draft || false}
+						handleChange={() => {
+							programData.is_draft = !programData.is_draft;
+							setStateTrigger(!stateTrigger);
+						}}
+						label={"Draft Program"}
+					/>
+				</Box>
+
 				{/*<OutlinedTextField*/}
 				{/*    label="Program Group"*/}
 				{/*    placeholder="Program Group"*/}
@@ -283,8 +307,10 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
 					variant={"outlined"}
 					value={programData.point_registration}
 					handleChange={(value: any) => {
-						programData.point_registration = Number(value);
-						setStateTrigger(!stateTrigger);
+						if (onlyNumber(value)) {
+							programData.point_registration = Number(value);
+							setStateTrigger(!stateTrigger);
+						}
 					}}
 				/>
 				<OutlinedTextField

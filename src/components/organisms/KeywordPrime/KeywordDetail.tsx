@@ -36,6 +36,7 @@ import ImageIcon from "@mui/icons-material/Image";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 import moment from "moment";
 import {
+	useDraftKeywordMutation,
 	useKeywordApproveMutation,
 	useKeywordRejectMutation,
 	useLazyKeywordListPrimeQuery
@@ -79,7 +80,8 @@ const KeywordDetail: FC<IKeywordDetailsModalProps> = ({
 	data,
 	roleAccess,
 	isHqLogin,
-	userLoginId
+	userLoginId,
+	refetchKeyword
 }) => {
 	const { eligibility, notification, bonus } = data;
 	const { data: notifVia } = useGetNotifViaQuery();
@@ -88,6 +90,7 @@ const KeywordDetail: FC<IKeywordDetailsModalProps> = ({
 		useKeywordApproveMutation();
 	const [rejectProgram, { isLoading: isLoadingReject }] =
 		useKeywordRejectMutation();
+	const [draftKeyword] = useDraftKeywordMutation();
 
 	const [reasonApproval, setReasonApproval] = useState("");
 
@@ -100,8 +103,6 @@ const KeywordDetail: FC<IKeywordDetailsModalProps> = ({
 		_id: data._id,
 		reason_reject: reasonApproval
 	};
-
-	console.log("KEYWORD DATA", data);
 
 	const approveHandler = async () => {
 		approveProgram(approveBody).then((res: any) => {
@@ -260,8 +261,43 @@ const KeywordDetail: FC<IKeywordDetailsModalProps> = ({
 	};
 
 	// Call Approval Service
-	const { AlertApproveInfo } = useApprovalService()
+	const { AlertApproveInfo } = useApprovalService();
 
+	const onRemoveFromDraft = (): void => {
+		Swal.fire({
+			icon: "info",
+			title: "Remove keyword from draft?",
+			showDenyButton: true,
+			confirmButtonText: `Yes`,
+			denyButtonText: "No"
+		}).then(res => {
+			// Confirmed
+			if (res.isConfirmed) {
+				draftKeyword({ _id: data?._id, is_draft: false }).then((res: any) => {
+					if (res?.error) {
+						Swal.fire(res.error.data.message, "", "warning");
+					} else {
+						if (res?.data.status === 200) {
+							handleClose();
+
+							Swal.fire("Keyword removed from draft", "", "success").then(
+								() => {
+									if (refetchKeyword) {
+										refetchKeyword();
+									}
+								}
+							);
+						}
+					}
+				});
+			}
+
+			// Denied
+			if (res.isDenied) {
+				Swal.fire("Keyword not removed from draft", "", "info");
+			}
+		});
+	};
 
 	// clean keyword program detail
 	const keywordProgramDetail = keywordProgramDetailHelper;
@@ -291,9 +327,37 @@ const KeywordDetail: FC<IKeywordDetailsModalProps> = ({
 					<H2>{eligibility?.name ?? "Title"}</H2>
 					<BodyCopy>Keyword ID : {data["_id"] ?? "Description"}</BodyCopy>
 				</Box>
-				{/* TODO: Checking status "Approval" of Detail Program */}
-				{AlertApproveInfo(data)}
-				{checkToRenderApprovalSection()}
+				{/* Check if data is drafted */}
+				{data?.is_draft ? (
+					<>
+						<Alert sx={{ margin: 2 }} severity="error">
+							<b>Keyword Drafted</b>
+						</Alert>
+
+						<div
+							style={{
+								width: "100%",
+								justifyContent: "flex-end",
+								textAlign: "right"
+							}}
+						>
+							<Button
+								color="error"
+								variant="contained"
+								size="small"
+								onClick={onRemoveFromDraft}
+							>
+								Remove From Draft
+							</Button>
+						</div>
+					</>
+				) : (
+					<>
+						{/* TODO: Checking status "Approval" of Detail Program */}
+						{AlertApproveInfo(data)}
+						{checkToRenderApprovalSection()}
+					</>
+				)}
 
 				<Grid sx={{ flexGrow: 1 }}>
 					<Grid container direction="column" mt={2} p={2} spacing={"1vw"}>

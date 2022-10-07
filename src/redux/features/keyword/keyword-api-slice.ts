@@ -95,10 +95,29 @@ export const keywordSlice = createApi({
         }),
         providesTags: ["Keyword"],
       });
+
+    const draftHandler = (endpoint: string) =>
+      builder.mutation<
+        { success: boolean; body: any },
+        { _id: string; is_draft: boolean }
+      >({
+        query: (payload) => ({
+          url: `${endpoint}${payload._id}/edit/draft`,
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: {
+            is_draft: payload.is_draft,
+          },
+        }),
+      });
+
     const keywordNameExistingHandler = (endpoint: string) =>
       builder.query<IKeywordNameExistingHandler, string>({
         query: (name: string) => `${endpoint}/${name}/check-existing`,
       });
+
     return {
       // all function
       keywordList: responseHandler(baseUrl + "/v1/keyword"),
@@ -152,6 +171,9 @@ export const keywordSlice = createApi({
 
       // program detail
       keywordProgramDetail: programHandler(),
+
+      // Draft
+      draftKeyword: draftHandler(`${baseUrl}/v2/keyword/`),
     };
   },
 });
@@ -173,6 +195,7 @@ export const {
   useKeywordUploadAuctionMutation,
   useKeywordGeneralDetailQuery,
   useKeywordProgramDetailQuery,
+  useDraftKeywordMutation,
   useKeywordNameExistingQuery,
   useLazyKeywordNameExistingQuery,
 } = keywordSlice;
