@@ -27,8 +27,12 @@ import ProgramDetailsModal from "../Programs/Detail/ProgramDetailsModal";
 import ProgramFilterModal from "../Programs/Filter/ProgramFilterModal";
 import {InitialFilter} from "../Programs/initial";
 import {FilterMatchMode} from "primereact/api";
+import useApprovalService from "../../../service/approval";
 
 const ProgramPrimeDt: FC = () => {
+    //Approval Service
+    const { StatusApprovalRender } = useApprovalService()
+
     const [programs, setPrograms] = useState<any>([ProgramInitial]);
     const [loading, setLoading] = useState<boolean>(false);
     const [totalRecords, setTotalRecords] = useState<number>(0);
@@ -137,9 +141,6 @@ const ProgramPrimeDt: FC = () => {
 
     // Customize Column Render Component
     const NameRender = (rowData: IProgram) => {
-        // return rowData.name.length >= 7
-        // 	? rowData.name.substring(0, 7) + "..."
-        // 	: rowData.name;
         return rowData.name
     };
     const StartPeriodRender = (rowData: IProgram) => {
@@ -177,83 +178,6 @@ const ProgramPrimeDt: FC = () => {
             </Box>
         );
     };
-    const StatusApprovalRender = (rowData: any) => {
-        var approval_status_value: string = ""
-        if (rowData.approval_log && rowData.approval_log.length > 0) {
-            approval_status_value = rowData.approval_log[rowData.approval_log.length - 1].status[0].set_value
-        }
-        return (
-            <Box
-                sx={{
-                    textAlign: "center",
-                    width: "100%",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    alignContent: "center"
-                }}
-            >
-                {
-                    rowData.approval_log && rowData.approval_log.length > 0 &&
-                    <>
-                        {
-                            approval_status_value === "Approved by Manager Non HQ" &&
-                            <Alert severity="warning" icon={false}>
-                                Approved by <b>{rowData.created_by && rowData.created_by.superior_local?.first_name}</b>
-                                <br/>
-                                <Typography variant={"body1"}>Waiting for Approver 2
-                                    {/*<b>({rowData.created_by && rowData.created_by.superior_hq?.first_name})</b>*/}
-                                </Typography>
-                            </Alert>
-                        }
-                        {
-                            approval_status_value === "Rejected by Manager Non HQ" &&
-                            <Alert severity="error" icon={false}>
-                                Rejected by <b>{rowData.created_by && rowData.created_by.superior_local?.first_name}</b>
-                                {/*<br/> <Typography variant={"body1"}>Waiting for Approver*/}
-                                {/*1 <b>({rowData.created_by && rowData.created_by.superior_local?.first_name})</b></Typography>*/}
-                            </Alert>
-                        }
-                        {
-                            approval_status_value === "Rejected by Manager HQ" &&
-                            <Alert severity="error" icon={false}>
-                                Rejected by <b>{rowData.created_by && rowData.created_by.superior_hq?.first_name}</b>
-                                {/*<br/>*/}
-                                {/*/!*<Typography variant={"body1"}>Waiting for Approver 2 <b>( HQ )</b>*!/*/}
-                                {/*/!*    /!*<b>({rowData.created_by && rowData.created_by.superior_hq?.first_name})</b>*!/*!/*/}
-                                {/*/!*</Typography>*!/*/}
-                            </Alert>
-                        }
-                        {
-                            approval_status_value === "Approved by Manager HQ" &&
-                            <Alert severity="success">
-                                {/*<b>Approved by {rowData.created_by && rowData.created_by.superior_hq?.first_name}</b>*/}
-                                <b>Approved by Manager HQ</b>
-                            </Alert>
-                        }
-                    </>
-                }
-
-                {
-                    rowData.approval_log && rowData.approval_log.length < 1 &&
-                    <>
-                        {
-                            !rowData.isHQ ?
-                                <Alert severity="info" icon={false}>
-                                    Waiting approval
-                                    1 <b>{rowData.created_by && rowData.created_by.superior_local?.first_name}</b>
-                                    {/*<br/> <Typography variant={"body1"}>Program is <b>NEW</b></Typography>*/}
-                                </Alert> :
-                                <Alert severity="info" icon={false}>
-                                    Waiting approval 2 <b>( HQ )</b>
-                                    {/*2 <b>{rowData.created_by && rowData.created_by.superior_hq?.first_name}</b>*/}
-                                    {/*<br/> <Typography variant={"body1"}>Program is <b>NEW</b></Typography>*/}
-                                </Alert>
-                        }
-                    </>
-                }
-            </Box>
-        )
-    }
 
     return (
         <>

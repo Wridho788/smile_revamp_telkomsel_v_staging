@@ -9,6 +9,7 @@ import {
   ListItem,
   Typography,
   Snackbar,
+  Alert,
 } from "@mui/material";
 import { OutlinedTextField, Select } from "../../../atoms";
 import {
@@ -30,12 +31,6 @@ import { useNotificationTemplateQuery } from "redux/features/notification/notifi
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
 
 interface INotificationProps {}
-const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
-  props,
-  ref
-) {
-  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
-});
 
 const Notification: React.FunctionComponent<
   INotificationProps
@@ -56,8 +51,8 @@ const Notification: React.FunctionComponent<
     sort: "{}",
   });
   const [stateTrigger, setStateTrigger] = React.useState<boolean>(false);
-  const [openAlert, setOpenAlert] = React.useState<boolean>(false);
-  const [notifUndefined, setNotifUndefined] = React.useState<string[]>([]);
+  const [activeAlert, setActiveAlert] = React.useState<string[]>([]);
+
   const [adjustField, setAdjustField] = React.useState<any>({
     receiver: "",
     channel_id: "",
@@ -144,61 +139,21 @@ const Notification: React.FunctionComponent<
       }
       //
     });
-    setNotifUndefined(notifNull);
-    if (notifNull.length > 0) {
-      setOpenAlert(true);
-    }
-  };
-  const handleClose = (
-    event: React.SyntheticEvent | Event,
-    reason?: string
-  ) => {
-    if (reason === "clickaway") {
-      return;
-    }
+    setActiveAlert(notifNull);
 
-    setOpenAlert(false);
   };
-  const OpenSnackbarAlert = (item: string[]) => {
-    let topPosition = item.map((item, i: number) => i * 50);
-    let autoHideDuration = item.map((item, i: number) => i * 1500);
-    const action = (
-      <React.Fragment>
-        <IconButton
-          size="small"
-          aria-label="close"
-          color="inherit"
-          onClick={handleClose}
-        >
-          <Close fontSize="small" />
-        </IconButton>
-      </React.Fragment>
+
+  const OpenSnackbarAlert = (text?: string) => {
+    return (
+      <Alert severity="warning">
+        "We don't see notification config for title {text}, please create on
+        Notification Management with title {text}
+      </Alert>
     );
-    return item.map((data, index: number) => (
-      <Snackbar
-        open={openAlert}
-        autoHideDuration={6000}
-        sx={{
-          "&.MuiSnackbar-root": {
-            position: "fixed",
-            top: `${topPosition[index] + 25}px`,
-            color: "red",
-          },
-        }}
-        action={action}
-        anchorOrigin={{ vertical: "top", horizontal: "right" }}
-        onClose={handleClose}
-      >
-        <Alert onClose={handleClose} severity="warning" sx={{ width: "100%" }}>
-          "We don't see notification config for title {data}, please create on
-          Notification Management with title {data}
-        </Alert>
-      </Snackbar>
-    ));
   };
   return (
     <>
-      {notifUndefined.length > 0 && OpenSnackbarAlert(notifUndefined)}
+      {/* {notifUndefined.length > 0 && OpenSnackbarAlert(activeAlert)} */}
       {programNotification.length > 0 ? (
         programNotificationOption.data.map((item, i) => (
           <Box key={i} display="flex" px="10%" py="1vw">
@@ -209,6 +164,8 @@ const Notification: React.FunctionComponent<
               borderRadius="0.3vw"
               p="3vw"
             >
+              {activeAlert.some((e) => e === item.set_value) &&
+                OpenSnackbarAlert(item.set_value)}
               <Stack spacing={"1vw"} width={"100%"}>
                 <Grid container>
                   <H3 color={"primary"}> {item.set_value}</H3>
@@ -234,7 +191,7 @@ const Notification: React.FunctionComponent<
                       <OutlinedTextField
                         isRequired={false}
                         disabled
-                        label="PIC"
+                        label="Channel"
                         variant={"outlined"}
                         value={adjustField.channel_id}
                         handleChange={(value: any) => {
@@ -247,7 +204,7 @@ const Notification: React.FunctionComponent<
                       <OutlinedTextField
                         isRequired={false}
                         disabled
-                        label="Receiver"
+                        label="PIC"
                         variant={"outlined"}
                         value={adjustField.receiver}
                         handleChange={(value: any) => {
