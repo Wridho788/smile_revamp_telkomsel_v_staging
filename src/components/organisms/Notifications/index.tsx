@@ -13,7 +13,6 @@ import {
   List,
   ListItem,
 } from '@mui/material';
-import { DataGridPro } from '@mui/x-data-grid-pro';
 import { BodyCopy, Gap, SmallCopy, StepperPaper, Subtitle } from '../../atoms';
 import { H2 } from 'components';
 import { Column } from 'primereact/column';
