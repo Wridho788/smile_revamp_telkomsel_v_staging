@@ -28,6 +28,8 @@ import ProgramFilterModal from "../Programs/Filter/ProgramFilterModal";
 import { InitialFilter } from "../Programs/initial";
 import { FilterMatchMode } from "primereact/api";
 
+import debounce from "lodash/debounce";
+
 const ProgramPrimeDt: FC = () => {
 	const [programs, setPrograms] = useState<any>([ProgramInitial]);
 	const [loading, setLoading] = useState<boolean>(false);
@@ -39,6 +41,7 @@ const ProgramPrimeDt: FC = () => {
 		sortField: "created_at",
 		sortOrder: -1,
 		filters: {
+			is_draft: { value: false, matchMode: "equals" },
 			name: { value: "", matchMode: "contains" },
 			program_experience: {
 				value: InitialFilter.program_experience._id,
@@ -85,16 +88,38 @@ const ProgramPrimeDt: FC = () => {
 	};
 
 	const onPage = (event: any) => {
-		setLazyParams(event);
+		setLazyParams((previousLazyParams: any) => ({
+			...previousLazyParams,
+			...event
+		}));
 	};
 
 	const onSort = (event: any) => {
-		setLazyParams(event);
+		setLazyParams((previousLazyParams: any) => ({
+			...previousLazyParams,
+			...event
+		}));
 	};
 
 	const onFilter = (event: any) => {
 		event["first"] = 0;
-		setLazyParams(event);
+		setLazyParams((previousLazyParams: any) => ({
+			...previousLazyParams,
+			...event
+		}));
+	};
+
+	const onDraftChange = (): void => {
+		setLazyParams((previousLazyParams: any) => ({
+			...previousLazyParams,
+			filters: {
+				...previousLazyParams?.filters,
+				is_draft: {
+					...previousLazyParams?.filters?.is_draft,
+					value: !previousLazyParams?.filters?.is_draft?.value
+				}
+			}
+		}));
 	};
 
 	const onRowSelect = (event: any) => {
@@ -102,7 +127,7 @@ const ProgramPrimeDt: FC = () => {
 	};
 
 	let loadLazyTimeout: any = null;
-	const loadLazyData = () => {
+	const loadLazyData = debounce(() => {
 		setLoading(true);
 
 		if (loadLazyTimeout) clearTimeout(loadLazyTimeout);
@@ -111,6 +136,7 @@ const ProgramPrimeDt: FC = () => {
 				lazyEvent: JSON.stringify({
 					...lazyParams,
 					filters: {
+						...lazyParams.filters,
 						// Filter field
 						program_approval: {
 							value: InitialFilter.program_approval._id,
@@ -124,7 +150,7 @@ const ProgramPrimeDt: FC = () => {
 			setTotalRecords(data.payload.totalRecords);
 			setLoading(false);
 		}, Math.random() * 1000 + 250);
-	};
+	}, 500);
 
 	const [
 		getProgramList,
@@ -316,6 +342,8 @@ const ProgramPrimeDt: FC = () => {
 				filters={InitialFilter}
 				trigger={trigger}
 				setTrigger={setTrigger}
+				onDraftChange={onDraftChange}
+				isDraftActive={lazyParams?.filters?.is_draft?.value}
 			/>
 
 			{/* Header Action */}

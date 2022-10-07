@@ -307,8 +307,10 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
 					variant={"outlined"}
 					value={programData.point_registration}
 					handleChange={(value: any) => {
-						programData.point_registration = Number(value);
-						setStateTrigger(!stateTrigger);
+						if (onlyNumber(value)) {
+							programData.point_registration = Number(value);
+							setStateTrigger(!stateTrigger);
+						}
 					}}
 				/>
 				<OutlinedTextField

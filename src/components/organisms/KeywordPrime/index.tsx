@@ -38,6 +38,7 @@ import { keywordProgramDetailHelper } from "../Programs/Detail/KeywordLink/initi
 import { ProgramDetailInitial } from "../../../pages/CreateProgram/programInitial";
 import FilterKeyword from "./filter";
 import { BodyCopy } from "components/atoms";
+import debounce from "lodash/debounce";
 
 interface IkeywordPrime {
 	bonus: any[];
@@ -64,6 +65,7 @@ const KeywordPrime = () => {
 		sortField: "created_at",
 		sortOrder: -1,
 		filters: {
+			is_draft: { value: false, matchMode: "equals" },
 			"eligibility.name": { value: "", matchMode: FilterMatchMode.CONTAINS },
 
 			// Filter field
@@ -107,20 +109,42 @@ const KeywordPrime = () => {
 	};
 
 	const onPage = (event: any) => {
-		setLazyParams(event);
+		setLazyParams((previousLazyParams: any) => ({
+			...previousLazyParams,
+			...event
+		}));
 	};
 
 	const onSort = (event: any) => {
-		setLazyParams(event);
+		setLazyParams((previousLazyParams: any) => ({
+			...previousLazyParams,
+			...event
+		}));
 	};
 
 	const onFilter = (event: any) => {
 		event["first"] = 0;
-		setLazyParams(event);
+		setLazyParams((previousLazyParams: any) => ({
+			...previousLazyParams,
+			...event
+		}));
 	};
 
 	const onRowSelect = (event: any) => {
 		handleButtonDetail(event.data);
+	};
+
+	const onDraftChange = (): void => {
+		setLazyParams((previousLazyParams: any) => ({
+			...previousLazyParams,
+			filters: {
+				...previousLazyParams?.filters,
+				is_draft: {
+					...previousLazyParams?.filters?.is_draft,
+					value: !previousLazyParams?.filters?.is_draft?.value
+				}
+			}
+		}));
 	};
 
 	const { data: locationTypeOptions = { data: [] } } =
@@ -133,7 +157,7 @@ const KeywordPrime = () => {
 	] = useLazyKeywordListPrimeQuery();
 
 	let loadLazyTimeout: any = null;
-	const loadLazyData = () => {
+	const loadLazyData = debounce(() => {
 		setLoading(true);
 
 		if (loadLazyTimeout) clearTimeout(loadLazyTimeout);
@@ -142,10 +166,7 @@ const KeywordPrime = () => {
 				lazyEvent: JSON.stringify({
 					...lazyParams,
 					filters: {
-						"eligibility.name": {
-							value: "",
-							matchMode: FilterMatchMode.CONTAINS
-						},
+						...lazyParams.filters,
 
 						// Filter field
 						"eligibility.program_experience": {
@@ -163,7 +184,7 @@ const KeywordPrime = () => {
 			setTotalRecords(data.payload.totalRecords);
 			setLoading(false);
 		}, Math.random() * 1000 + 250);
-	};
+	}, 500);
 
 	// ====================== Effect =========================
 	// =======================================================
@@ -410,6 +431,8 @@ const KeywordPrime = () => {
 				filters={InitialFilter}
 				triger={triger}
 				setTriger={setTriger}
+				onDraftChange={onDraftChange}
+				isDraftActive={lazyParams?.filters?.is_draft?.value}
 			/>
 			<KeywordDetailsModal
 				open={open.detail}
