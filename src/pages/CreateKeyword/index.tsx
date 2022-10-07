@@ -4,7 +4,7 @@
 
 import React from "react";
 import { Box } from "@mui/material";
-import { H2, Stepper, StepperPaper } from "../../components";
+import { DrawerNav, H2, Stepper, StepperPaper } from "../../components";
 import { MainInfo, Bonus } from "../../components/organisms/CreateKeyword";
 import { CreateKeywordGeneral } from "components/organisms/CreateKeyword/initial";
 import { ICreateKeyword } from "components/organisms/CreateKeyword/interfaces";
@@ -31,28 +31,30 @@ const CreateKeyword = () => {
   }, [keywordCreate]);
 
   return (
-    <Box
-      sx={{
-        paddingBlock: "3vw",
-        paddingInline: "20vw",
-      }}
-    >
-      <StepperPaper sx={{ paddingTop: "4vw" }}>
-        <H2 textAlign="center" mb="2vw">
-          Create Keyword
-        </H2>
-        <Stepper
-          steps={steps}
-          activeStep={activeStep}
-          setActiveStep={setActiveStep}
-          slug={"insert"}
-          type={"keyword"}
-          keywordCreateState={keywordCreateState}
-        >
-          {stepsItem[activeStep]}
-        </Stepper>
-      </StepperPaper>
-    </Box>
+    <DrawerNav>
+      <Box
+        sx={{
+          paddingBlock: "3vw",
+          paddingInline: "20vw",
+        }}
+      >
+        <StepperPaper sx={{ paddingTop: "4vw" }}>
+          <H2 textAlign="center" mb="2vw">
+            Create Keyword
+          </H2>
+          <Stepper
+            steps={steps}
+            activeStep={activeStep}
+            setActiveStep={setActiveStep}
+            slug={"insert"}
+            type={"keyword"}
+            keywordCreateState={keywordCreateState}
+          >
+            {stepsItem[activeStep]}
+          </Stepper>
+        </StepperPaper>
+      </Box>
+    </DrawerNav>
   );
 };
 

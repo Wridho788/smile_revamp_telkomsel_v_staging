@@ -34,7 +34,6 @@ const Program: React.FunctionComponent<IProgramProps> = ({
     isFetching: isProgramExperienceFetching,
   } = useGetProgramExperienceQuery();
 
-  //   console.log(programExperienceRef);
   return (
     <Box sx={{ px: "2vw" }}>
       <Stack spacing="2vw" px="2vw" py="0.5vw">
