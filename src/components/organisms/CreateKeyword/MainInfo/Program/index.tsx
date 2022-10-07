@@ -34,60 +34,65 @@ const Program: React.FunctionComponent<IProgramProps> = ({
     isFetching: isProgramExperienceFetching,
   } = useGetProgramExperienceQuery();
 
-  return (
-    <Box sx={{ px: "2vw" }}>
-      <Stack spacing="2vw" px="2vw" py="0.5vw">
-        {isProgramListFetching || isProgramExperienceFetching ? (
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              minHeight: "100px",
-            }}
-          >
-            <CircularProgress />
-          </Box>
-        ) : (
-          <>
-            <Select
-              label="Choose Program"
-              placeholder="Option"
-              options={programListOptions.data.filter(
-                (e) =>
-                  e.approval_log?.length > 0 &&
-                  e.approval_log[e.approval_log.length - 1].status?.length >
-                    0 &&
-                  e.approval_log[e.approval_log.length - 1].status[0]
-                    .set_value === "Approved by Manager HQ" &&
-                  moment(e?.end_period).isAfter(moment())
-              )}
-              // options={programListOptions.data}
-              optionLabel="name"
-              value={keywordCreateState.eligibility.program_id}
-              handleChange={(value: string) => {
-                keywordCreate.eligibility.program_id = value;
-                setStateTrigger(!stateTrigger);
-              }}
-            />
-            {keywordCreateState.eligibility.program_id !== "" && (
-              <Stack spacing="1vw">
-                <BodyCopy color="primary" align="center">
-                  {`This Keyword must be follow program [${
-                    programListOptions.data.find(
-                      (e) =>
-                        e["_id"] === keywordCreateState.eligibility.program_id
-                    )?.name
-                  }] Information`}
-                </BodyCopy>
-                <Information
-                  program={programListOptions.data.find(
-                    (e) =>
-                      e["_id"] === keywordCreateState.eligibility.program_id
-                  )}
-                />
-              </Stack>
-            )}
+	console.log(programExperienceRef);
+	return (
+		<Box sx={{ px: "2vw" }}>
+			<Stack spacing="2vw" px="2vw" py="0.5vw">
+				{isProgramListFetching || isProgramExperienceFetching ? (
+					<Box
+						sx={{
+							display: "flex",
+							justifyContent: "center",
+							alignItems: "center",
+							minHeight: "100px"
+						}}
+					>
+						<CircularProgress />
+					</Box>
+				) : (
+					<>
+						<Select
+							label="Choose Program"
+							placeholder="Option"
+							options={programListOptions.data.filter(
+								e =>
+									e.approval_log?.length > 0 &&
+									e.approval_log[e.approval_log.length - 1].status?.length >
+										0 &&
+									e.approval_log[e.approval_log.length - 1].status[0]
+										.set_value === "Approved by Manager HQ" &&
+									moment(e?.end_period).isAfter(moment())
+							)}
+							// options={programListOptions.data}
+							optionLabel="name"
+							value={keywordCreateState.eligibility.program_id}
+							handleChange={(value: string) => {
+								keywordCreate.eligibility.program_id = value;
+								setStateTrigger(!stateTrigger);
+
+								//set default start period and end period
+								let program = programListOptions.data.find(e => e["_id"] === value)
+								keywordCreateState.eligibility.start_period = program?.start_period;
+								keywordCreate.eligibility.end_period = program?.end_period;
+							}}
+						/>
+						{keywordCreateState.eligibility.program_id !== "" && (
+							<Stack spacing="1vw">
+								<BodyCopy color="primary" align="center">
+									{`This Keyword must be follow program [${
+										programListOptions.data.find(
+											e =>
+												e["_id"] === keywordCreateState.eligibility.program_id
+										)?.name
+									}] Information`}
+								</BodyCopy>
+								<Information
+									program={programListOptions.data.find(
+										e => e["_id"] === keywordCreateState.eligibility.program_id
+									)}
+								/>
+							</Stack>
+						)}
 
             <Select
               label="Program Experience"
