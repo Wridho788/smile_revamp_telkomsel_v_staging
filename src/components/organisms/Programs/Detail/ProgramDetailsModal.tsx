@@ -344,7 +344,7 @@ const ProgramDetailsModal: FC<IProgramDetailsModalProps> = ({
                                             <b>Start Period</b>
                                         </Typography>
                                         <Typography sx={fontContent}>
-                                            {Moment(data.start_period).format("YYYY-MM-DD")}
+                                            {Moment(data.start_period).format("YYYY-MM-DD LT")}
                                         </Typography>
                                     </Grid>
                                     <Grid item xs={4}>
@@ -352,7 +352,7 @@ const ProgramDetailsModal: FC<IProgramDetailsModalProps> = ({
                                             <b>End Period</b>
                                         </Typography>
                                         <Typography sx={fontContent}>
-                                            {Moment(data.end_period).format("YYYY-MM-DD")}
+                                            {Moment(data.end_period).format("YYYY-MM-DD LT")}
                                         </Typography>
                                     </Grid>
                                     <Grid item zeroMinWidth xs={4}>
@@ -408,7 +408,7 @@ const ProgramDetailsModal: FC<IProgramDetailsModalProps> = ({
                                             <b>Threshold Alarm Exp</b>
                                         </Typography>
                                         <Typography sx={fontContent}>
-                                            {data.threshold_alarm_expired}
+                                            {data.threshold_alarm_expired > 0 ? `H-${data.threshold_alarm_expired}`: data.threshold_alarm_expired}
                                         </Typography>
                                     </Grid>
                                     <Grid item xs={8}>
@@ -416,7 +416,7 @@ const ProgramDetailsModal: FC<IProgramDetailsModalProps> = ({
                                             <b>Threshold Alarm Quota</b>
                                         </Typography>
                                         <Typography sx={fontContent}>
-                                            {data.threshold_alarm_voucher}
+                                            {data.threshold_alarm_voucher} %
                                         </Typography>
                                     </Grid>
                                     <Grid item xs={4}>
