@@ -255,6 +255,13 @@ export interface IKeywordBonusMobileBanking {
 	redeem_after_verification: boolean;
 }
 
+export interface IKeywordBonusVoting {
+	bonus_type: string;
+	target_redeemer: number;
+	stock_location: any[];
+	redeem_after_verification: boolean;
+}
+
 // export interface IKeywordBonus {
 //   bonus_type: string;
 //   location: string;

@@ -39,6 +39,7 @@ import { ProgramDetailInitial } from "../../../pages/CreateProgram/programInitia
 import FilterKeyword from "./filter";
 import { BodyCopy } from "components/atoms";
 import debounce from "lodash/debounce";
+import useApprovalService from "../../../service/approval";
 
 interface IkeywordPrime {
 	bonus: any[];
@@ -79,6 +80,9 @@ const KeywordPrime = () => {
 			}
 		}
 	});
+
+	// Approval Service
+	const { StatusApprovalRender } = useApprovalService();
 
 	// Role Access Authentication Check
 	const { data: appConfig } = useAppConfigQuery();
@@ -243,173 +247,6 @@ const KeywordPrime = () => {
 			if (value?._id === location_type) location = value?.set_value;
 		});
 		return <span>{location}</span>;
-	};
-
-	// const StatusApprovalRender = (rowData: any) => {
-	//   var approval_status_value: string = ""
-	//   if (rowData.approval_log && rowData.approval_log.length > 0) {
-	//     approval_status_value = rowData.approval_log[rowData.approval_log.length - 1].status[0].set_value
-	//   }
-	//   return (
-	//       <Box
-	//           sx={{
-	//             textAlign: "center",
-	//             width: "100%",
-	//             justifyContent: "center",
-	//             alignItems: "center",
-	//             alignContent: "center"
-	//           }}
-	//       >
-	//         {
-	//             rowData.approval_log && rowData.approval_log.length > 0 &&
-	//             <>
-	//               {
-	//                   approval_status_value === "Approved by Manager Non HQ" &&
-	//                   <Alert severity="warning" icon={false}>
-	//                     Approved by <b>{rowData.created_by && rowData.created_by.superior_local?.first_name}</b>
-	//                     <br/> <Typography variant={"body1"}>Waiting for Approver 2 <b>({rowData.created_by && rowData.created_by.superior_hq?.first_name})</b></Typography>
-	//                   </Alert>
-	//               }
-	//               {
-	//                   approval_status_value === "Rejected by Manager Non HQ" &&
-	//                   <Alert severity="error" icon={false}>
-	//                     Rejected by <b>{rowData.created_by && rowData.created_by.superior_local?.first_name}</b>
-	//                     <br/> <Typography variant={"body1"}>Waiting for Approver 1 <b>({rowData.created_by && rowData.created_by.superior_local?.first_name})</b></Typography>
-	//                   </Alert>
-	//               }
-	//               {
-	//                   approval_status_value === "Rejected by Manager HQ" &&
-	//                   <Alert severity="error" icon={false}>
-	//                     Rejected by <b>{rowData.created_by && rowData.created_by.superior_hq?.first_name}</b>
-	//                     <br/> <Typography variant={"body1"}>Waiting for Approver 2 <b>({rowData.created_by && rowData.created_by.superior_hq?.first_name})</b></Typography>
-	//                   </Alert>
-	//               }
-	//               {
-	//                   approval_status_value === "Approved by Manager HQ" &&
-	//                   <Alert severity="success">
-	//                     <b>Approved by {rowData.created_by && rowData.created_by.superior_hq?.first_name}</b>
-	//                   </Alert>
-	//               }
-	//             </>
-	//
-	//         }
-	//         {
-	//             rowData.approval_log && rowData.approval_log.length < 1 &&
-	//             <>
-	//               {
-	//                 rowData.isHQ ?
-	//                     <Alert severity="warning" icon={false}>
-	//                       <b>Waiting Approver 2 {rowData.created_by && rowData.created_by.superior_hq?.first_name}</b>
-	//                     </Alert> :
-	//                     <Alert severity="warning" icon={false}>
-	//                       <b>Waiting Approver 1 {rowData.created_by && rowData.created_by.superior_local?.first_name}</b>
-	//                     </Alert>
-	//               }
-	//             </>
-	//         }
-	//       </Box>
-	//   );
-	// };
-
-	const StatusApprovalRender = (rowData: any) => {
-		var approval_status_value: string = "";
-		if (rowData.approval_log && rowData.approval_log.length > 0) {
-			approval_status_value =
-				rowData.approval_log[rowData.approval_log.length - 1].status[0]
-					.set_value;
-		}
-		return (
-			<Box
-				sx={{
-					textAlign: "center",
-					width: "100%",
-					justifyContent: "center",
-					alignItems: "center",
-					alignContent: "center"
-				}}
-			>
-				{/* Check if status is draft */}
-				{rowData?.is_draft && (
-					<Alert severity="error" icon={false}>
-						Drafted
-					</Alert>
-				)}
-
-				{!rowData?.is_draft &&
-					rowData.approval_log &&
-					rowData.approval_log.length > 0 && (
-						<>
-							{approval_status_value === "Approved by Manager Non HQ" && (
-								<Alert severity="warning" icon={false}>
-									Approved by{" "}
-									<b>
-										{rowData.created_by &&
-											rowData.created_by.superior_local?.first_name}
-									</b>
-									<br />
-									<Typography variant={"body1"}>
-										Waiting for Approver 2
-										{/*<b>({rowData.created_by && rowData.created_by.superior_hq?.first_name})</b>*/}
-									</Typography>
-								</Alert>
-							)}
-							{approval_status_value === "Rejected by Manager Non HQ" && (
-								<Alert severity="error" icon={false}>
-									Rejected by{" "}
-									<b>
-										{rowData.created_by &&
-											rowData.created_by.superior_local?.first_name}
-									</b>
-									{/*<br/> <Typography variant={"body1"}>Waiting for Approver*/}
-									{/*1 <b>({rowData.created_by && rowData.created_by.superior_local?.first_name})</b></Typography>*/}
-								</Alert>
-							)}
-							{approval_status_value === "Rejected by Manager HQ" && (
-								<Alert severity="error" icon={false}>
-									Rejected by{" "}
-									<b>
-										{rowData.created_by &&
-											rowData.created_by.superior_hq?.first_name}
-									</b>
-									{/*<br/>*/}
-									{/*/!*<Typography variant={"body1"}>Waiting for Approver 2 <b>( HQ )</b>*!/*/}
-									{/*/!*    /!*<b>({rowData.created_by && rowData.created_by.superior_hq?.first_name})</b>*!/*!/*/}
-									{/*/!*</Typography>*!/*/}
-								</Alert>
-							)}
-							{approval_status_value === "Approved by Manager HQ" && (
-								<Alert severity="success">
-									{/*<b>Approved by {rowData.created_by && rowData.created_by.superior_hq?.first_name}</b>*/}
-									<b>Approved by Manager HQ</b>
-								</Alert>
-							)}
-						</>
-					)}
-
-				{!rowData?.is_draft &&
-					rowData.approval_log &&
-					rowData.approval_log.length < 1 && (
-						<>
-							{!rowData.isHQ ? (
-								<Alert severity="info" icon={false}>
-									Waiting approval 1{" "}
-									<b>
-										{rowData.created_by &&
-											rowData.created_by.superior_local?.first_name}
-									</b>
-									{/*<br/> <Typography variant={"body1"}>Program is <b>NEW</b></Typography>*/}
-								</Alert>
-							) : (
-								<Alert severity="info" icon={false}>
-									Waiting approval 2 <b>( HQ )</b>
-									{/*2 <b>{rowData.created_by && rowData.created_by.superior_hq?.first_name}</b>*/}
-									{/*<br/> <Typography variant={"body1"}>Program is <b>NEW</b></Typography>*/}
-								</Alert>
-							)}
-						</>
-					)}
-			</Box>
-		);
 	};
 
 	useEffect(() => {
