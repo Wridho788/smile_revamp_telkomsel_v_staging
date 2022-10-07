@@ -22,6 +22,7 @@ import {
   useKeywordGeneralCreateMutation,
   useKeywordGeneralUpdateMutation,
   useKeywordNameExistingQuery,
+  useLazyKeywordNameExistingQuery,
 } from "../../../redux/features/keyword/keyword-api-slice";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -135,10 +136,7 @@ export default function HorizontalLinearStepper({
   const [createKeywordGeneral] = useKeywordGeneralCreateMutation();
   const [updateKeywordGeneral] = useKeywordGeneralUpdateMutation();
   const [skipped, setSkipped] = React.useState<Set<number>>(new Set<number>());
-  const {
-    data: keywordNameExisting = { message: "" },
-    isFetching: isFetchingKeywordNameExisting,
-  } = useKeywordNameExistingQuery(keywordCreateState?.eligibility?.name ?? "");
+  const [getKeywordNameExisting] = useLazyKeywordNameExistingQuery();
   useEffect(() => {}, [isLoading]);
   const [open, setOpen] = useState(true);
 
@@ -212,7 +210,6 @@ export default function HorizontalLinearStepper({
               });
             break;
         }
-        // window.location.href = "/keyword";
       }
       setIsLoading(false);
     }
@@ -222,16 +219,18 @@ export default function HorizontalLinearStepper({
       newSkipped = new Set(newSkipped.values());
       newSkipped.delete(activeStep);
     }
-    if (!isFetchingKeywordNameExisting) {
-      if (
-        activeStep === 0 &&
-        type === "keyword" &&
-        keywordNameExisting.message !== "YOU CAN USE THIS KEYWORD NAME"
-      ) {
-        Swal.fire("Failed!", `${keywordNameExisting.message}`, "error");
-      } else {
-        setActiveStep((prevActiveStep: number) => prevActiveStep + 1);
-      }
+    if (activeStep === 0 && type === "keyword") {
+      await getKeywordNameExisting(
+        keywordCreateState?.eligibility?.name ?? ""
+      ).then((res) => {
+        if (res.data?.message === "YOU CAN USE THIS KEYWORD NAME") {
+          setActiveStep((prevActiveStep: number) => prevActiveStep + 1);
+        } else {
+          Swal.fire("Failed!", `${res.data?.message}`, "error");
+        }
+      });
+    } else {
+      setActiveStep((prevActiveStep: number) => prevActiveStep + 1);
     }
 
     setSkipped(newSkipped);

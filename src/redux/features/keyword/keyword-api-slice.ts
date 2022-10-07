@@ -174,4 +174,5 @@ export const {
   useKeywordGeneralDetailQuery,
   useKeywordProgramDetailQuery,
   useKeywordNameExistingQuery,
+  useLazyKeywordNameExistingQuery,
 } = keywordSlice;
