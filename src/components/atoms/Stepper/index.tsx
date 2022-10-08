@@ -30,6 +30,8 @@ import Swal from "sweetalert2";
 import { CreateProgramInitial } from "../../../pages/CreateProgram/programInitial";
 import { useForm } from "react-hook-form";
 import { ICreateKeyword } from "components/organisms/CreateKeyword/interfaces";
+import { useAppDispatch } from "service/hooks";
+import { SET_KEYWORD_VALIDATION } from "redux/features/keyword/create-keyword-validation-slice";
 
 const ColorlibConnector = styled(StepConnector)(({ theme }) => ({
   [`&.${stepConnectorClasses.alternativeLabel}`]: {
@@ -130,6 +132,7 @@ export default function HorizontalLinearStepper({
   keywordCreateState?: ICreateKeyword;
 }) {
   const nav = useNavigate();
+  const dispatch = useAppDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const [createProgram] = useCreateProgramMutation();
   const [updateProgram] = useUpdateProgramMutation();
@@ -139,7 +142,6 @@ export default function HorizontalLinearStepper({
   const [getKeywordNameExisting] = useLazyKeywordNameExistingQuery();
   useEffect(() => {}, [isLoading]);
   const [open, setOpen] = useState(true);
-
   const isStepOptional = (step: number) => {
     return optionalStep ? step === optionalStep : false;
   };
@@ -224,9 +226,27 @@ export default function HorizontalLinearStepper({
         keywordCreateState?.eligibility?.name ?? ""
       ).then((res) => {
         if (res.data?.message === "YOU CAN USE THIS KEYWORD NAME") {
+          dispatch(
+            SET_KEYWORD_VALIDATION({
+              keywordName: "",
+            })
+          );
           setActiveStep((prevActiveStep: number) => prevActiveStep + 1);
+          window.scrollTo(0, 0);
         } else {
-          Swal.fire("Failed!", `${res.data?.message}`, "error");
+          dispatch(
+            SET_KEYWORD_VALIDATION({
+              keywordName: `${res.data?.message.toLowerCase()}`,
+            })
+          );
+          Swal.fire({
+            icon: "error",
+            title: "Failed!",
+            text: `${res.data?.message}`,
+            didClose: () => {
+              window.scrollTo(0, 750);
+            },
+          });
         }
       });
     } else {

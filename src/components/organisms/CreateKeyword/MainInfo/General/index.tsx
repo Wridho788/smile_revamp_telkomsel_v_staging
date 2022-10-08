@@ -37,6 +37,9 @@ import TextArea from "components/atoms/TextArea";
 import moment from "moment";
 import Channel from "./Channel";
 import { useKeywordNameExistingQuery } from "redux/features/keyword/keyword-api-slice";
+import { useAppDispatch, useAppSelector } from "service/hooks";
+import { SET_KEYWORD_VALIDATION } from "redux/features/keyword/create-keyword-validation-slice";
+import Swal from "sweetalert2";
 
 interface IGeneralProps {
   keywordCreateState: ICreateKeyword;
@@ -51,6 +54,7 @@ const General: React.FunctionComponent<IGeneralProps> = ({
   stateTrigger,
   setStateTrigger,
 }) => {
+  const dispatch = useAppDispatch();
   const [expanded, setExpanded] = React.useState<boolean>(true);
   const { data: pointTypeOptions = { data: [] } } = useGetPointTypeQuery();
   const { data: programListOptions = { data: [] } } =
@@ -59,11 +63,15 @@ const General: React.FunctionComponent<IGeneralProps> = ({
     useChannelListQuery(FilterInitial);
   const { data: programExperienceOptions = { data: [] } } =
     useGetProgramExperienceQuery();
+  const keywordName = useAppSelector(
+    (state) => state.createKeywordValidationSlice.keywordName
+  );
   // const { data: customerBadgeOptions = { data: [] } } =
   //   useCustomerBadgeListQuery(FilterInitial);
 
   return (
     <Accordion
+      id="createKeywordGeneralMainInfo"
       expanded={expanded}
       onChange={() => setExpanded(!expanded)}
       sx={{ p: "1vw" }}
@@ -102,6 +110,8 @@ const General: React.FunctionComponent<IGeneralProps> = ({
                 ? "Keyword Bid Name"
                 : "Keyword Redeem Name"
             }
+            error={keywordName === "" ? false : true}
+            helperText={keywordName === "" ? "" : keywordName}
             placeholder="Merdeka2000"
             variant="outlined"
             inputProps={{ maxLength: 16 }}
