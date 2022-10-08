@@ -22,7 +22,8 @@ import {
 	IKeywordBonusVoucher,
 	IKeywordBonusLinkAjaMain,
 	IKeywordBonusLinkAjaBonus,
-	IKeywordBonusNgrs
+	IKeywordBonusNgrs,
+	IKeywordBonusVoting
 } from "./interfaces";
 import { IBonusTypeVoucher } from "./Bonus/Voucher/interface";
 
@@ -224,8 +225,11 @@ export const KeywordBonusVoid: any = {
 	bonus_type: "void"
 };
 
-export const KeywordBonusVoting: any = {
-	bonus_type: "voting"
+export const KeywordBonusVoting: IKeywordBonusVoting = {
+	bonus_type: "voting",
+	target_redeemer: 0,
+	stock_location: [],
+	redeem_after_verification: false
 };
 
 export const KeywordBonusOther: any = {
@@ -419,6 +423,7 @@ export const KeywordNotificationLuckyDraw: IKeywordNotificationLuckyDraw[] = [
 ];
 
 export const CreateKeywordGeneral: ICreateKeyword = {
+	is_draft: false,
 	eligibility: KeywordEligibility,
 	bonus: [],
 	notification: [...KeywordNotificationEligibility]

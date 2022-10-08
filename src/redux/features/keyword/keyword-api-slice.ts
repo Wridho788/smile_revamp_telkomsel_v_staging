@@ -1,6 +1,6 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { API_HEADER } from "../../utils/header";
-import { IResponse } from "./interface";
+import { IKeywordNameExistingHandler, IResponse } from "./interface";
 import { IParams } from "../../utils/IGeneral";
 
 const baseUrl = process.env.REACT_APP_BASE_URL;
@@ -95,6 +95,29 @@ export const keywordSlice = createApi({
         }),
         providesTags: ["Keyword"],
       });
+
+    const draftHandler = (endpoint: string) =>
+      builder.mutation<
+        { success: boolean; body: any },
+        { _id: string; is_draft: boolean }
+      >({
+        query: (payload) => ({
+          url: `${endpoint}${payload._id}/edit/draft`,
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: {
+            is_draft: payload.is_draft,
+          },
+        }),
+      });
+
+    const keywordNameExistingHandler = (endpoint: string) =>
+      builder.query<IKeywordNameExistingHandler, string>({
+        query: (name: string) => `${endpoint}/${name}/check-existing`,
+      });
+
     return {
       // all function
       keywordList: responseHandler(baseUrl + "/v1/keyword"),
@@ -135,6 +158,7 @@ export const keywordSlice = createApi({
       keywordGeneralCreate: postHandler(baseUrl + "/v1/keyword"),
       keywordGeneralUpdate: putHandler(baseUrl + "/v1/keyword/", "/edit"),
       keywordGeneralDetail: detailHandler(baseUrl + "/v1/keyword/"),
+      keywordNameExisting: keywordNameExistingHandler(baseUrl + "/v2/keyword"),
 
       // lucky draw
       keywordCoreLuckyDrawList: responseHandler("/lucky_draw"),
@@ -147,6 +171,9 @@ export const keywordSlice = createApi({
 
       // program detail
       keywordProgramDetail: programHandler(),
+
+      // Draft
+      draftKeyword: draftHandler(`${baseUrl}/v2/keyword/`),
     };
   },
 });
@@ -168,4 +195,7 @@ export const {
   useKeywordUploadAuctionMutation,
   useKeywordGeneralDetailQuery,
   useKeywordProgramDetailQuery,
+  useDraftKeywordMutation,
+  useKeywordNameExistingQuery,
+  useLazyKeywordNameExistingQuery,
 } = keywordSlice;

@@ -87,6 +87,22 @@ export const programSlice = createApi({
 					}
 				})
 			});
+		const draftHandler = (endpoint: string) =>
+			builder.mutation<
+				{ success: boolean; body: any },
+				{ _id: string; is_draft: boolean }
+			>({
+				query: payload => ({
+					url: `${endpoint}${payload._id}/edit/draft`,
+					method: "PUT",
+					headers: {
+						"Content-Type": "application/json"
+					},
+					body: {
+						is_draft: payload.is_draft
+					}
+				})
+			});
 		return {
 			// get
 			programList: responseHandler(baseUrl + "/v2/program"),
@@ -125,7 +141,10 @@ export const programSlice = createApi({
 			deleteProgram: deleteHandler(baseUrl + "/v2/program/"),
 			deleteProgramSegmentation: deleteHandler(
 				baseUrl + "/v2/program/segmentation/"
-			)
+			),
+
+			// Draft
+			draftProgram: draftHandler(`${baseUrl}/v2/program/`)
 		};
 	}
 });
@@ -148,5 +167,6 @@ export const {
 	useUpdateProgramMainInfoMutation,
 	useUpdateProgramNotificationMutation,
 	useLazyProgramSegmentationListQuery,
-	useCreatePicManagementMutation
+	useCreatePicManagementMutation,
+	useDraftProgramMutation
 } = programSlice;

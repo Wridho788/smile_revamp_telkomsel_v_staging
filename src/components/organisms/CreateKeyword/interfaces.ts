@@ -178,6 +178,7 @@ export interface IKeywordNotificationAuction {
 }
 
 export interface ICreateKeyword {
+	is_draft?: boolean;
 	eligibility: IKeywordEligibility;
 	bonus: any[];
 	notification: any[];
@@ -251,6 +252,13 @@ export interface IKeywordBonusMobileBanking {
 		location: string;
 		stock: number;
 	}[];
+	redeem_after_verification: boolean;
+}
+
+export interface IKeywordBonusVoting {
+	bonus_type: string;
+	target_redeemer: number;
+	stock_location: any[];
 	redeem_after_verification: boolean;
 }
 
