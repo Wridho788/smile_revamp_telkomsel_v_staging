@@ -53,11 +53,6 @@ const Notification: React.FunctionComponent<
   const [stateTrigger, setStateTrigger] = React.useState<boolean>(false);
   const [activeAlert, setActiveAlert] = React.useState<string[]>([]);
 
-  const [adjustField, setAdjustField] = React.useState<any>({
-    receiver: "",
-    channel_id: "",
-  });
-
   const notificationTemplateData = notificationTemplate.data;
   const notificationTemplateList = notificationTemplate.data.map(
     (item: any) => item.notif_name
@@ -65,6 +60,7 @@ const Notification: React.FunctionComponent<
   const notificationReceiver = notificationTemplate.data.map((item: any) =>
     item.receiver.map((data: any) => data.set_value)
   );
+  console.log(notificationTemplateData);
   const notificationChannel = notificationTemplate.data.map((item: any) =>
     item.channel_id.map((data: any) => data.name)
   );
@@ -110,19 +106,6 @@ const Notification: React.FunctionComponent<
         }
       });
     }
-
-    let receiver: any = [];
-    let channelID: any = [];
-    for (let i = 0; i <= notificationReceiver.length; i++) {
-      receiver.push(notificationReceiver[i]);
-    }
-    for (let i = 0; i <= notificationChannel.length; i++) {
-      channelID.push(notificationChannel[i]);
-    }
-    setAdjustField({
-      channel_id: channelID.join(", "),
-      receiver: receiver.join(", "),
-    });
   }, [programNotification, isFetchingNotifTemplate, isFetchingNotifOption]);
 
   // ============================================================================================
@@ -140,7 +123,6 @@ const Notification: React.FunctionComponent<
       //
     });
     setActiveAlert(notifNull);
-
   };
 
   const OpenSnackbarAlert = (text?: string) => {
@@ -155,116 +137,135 @@ const Notification: React.FunctionComponent<
     <>
       {/* {notifUndefined.length > 0 && OpenSnackbarAlert(activeAlert)} */}
       {programNotification.length > 0 ? (
-        programNotificationOption.data.map((item, i) => (
-          <Box key={i} display="flex" px="10%" py="1vw">
-            <Grid
-              key={`rowItem__${i}`}
-              container
-              border="0.1vw solid rgba(0, 0, 0, 0.1)"
-              borderRadius="0.3vw"
-              p="3vw"
-            >
-              {activeAlert.some((e) => e === item.set_value) &&
-                OpenSnackbarAlert(item.set_value)}
-              <Stack spacing={"1vw"} width={"100%"}>
-                <Grid container>
-                  <H3 color={"primary"}> {item.set_value}</H3>
-                </Grid>
-                <Select
-                  isRequired={false}
-                  variant={"outlined"}
-                  label="Via"
-                  placeholder="Option"
-                  options={viaOption.data}
-                  value={programNotification[i].via}
-                  handleChange={(value: any) => {
-                    programNotification[i].via = value;
-                    setStateTrigger(!stateTrigger);
-                  }}
-                />
-                {item.set_value ===
-                  notificationTemplateList.find(
-                    (e) => e === item.set_value
-                  ) && (
-                  <>
-                    <Grid container>
-                      <OutlinedTextField
-                        isRequired={false}
-                        disabled
-                        label="Channel"
-                        variant={"outlined"}
-                        value={adjustField.channel_id}
-                        handleChange={(value: any) => {
-                          programNotification[i].template_content = value;
-                          setStateTrigger(!stateTrigger);
-                        }}
-                      />
-                    </Grid>
-                    <Grid container>
-                      <OutlinedTextField
-                        isRequired={false}
-                        disabled
-                        label="PIC"
-                        variant={"outlined"}
-                        value={adjustField.receiver}
-                        handleChange={(value: any) => {
-                          programNotification[i].template_content = value;
-                          setStateTrigger(!stateTrigger);
-                        }}
-                      />
-                    </Grid>
-                  </>
-                )}
-                <Grid container>
-                  <OutlinedTextField
-                    isRequired={false}
-                    multiline
-                    rows={4}
-                    label="Template Content"
-                    placeholder="Template Content"
-                    variant={"outlined"}
-                    value={programNotification[i].template_content}
-                    handleChange={(value: any) => {
-                      programNotification[i].template_content = value;
+        programNotificationOption.data.map((item: any, i: number) => {
+          // ============================================================================================
+          // * defined channel & PIC if have
+          //
+          // ============================================================================================
+          const channelFiltered = notificationTemplateData
+            .filter((data: any) => data.notif_name === item.set_value)
+            .map((e) => e.channel_id)[0];
+          const PICFiltered = notificationTemplateData
+            .filter((data: any) => data.notif_name === item.set_value)
+            .map((e) => e.receiver)[0];
 
+          return (
+            <Box key={i} display="flex" px="10%" py="1vw">
+              <Grid
+                key={`rowItem__${i}`}
+                container
+                border="0.1vw solid rgba(0, 0, 0, 0.1)"
+                borderRadius="0.3vw"
+                p="3vw"
+              >
+                {activeAlert.some((e) => e === item.set_value) &&
+                  OpenSnackbarAlert(item.set_value)}
+                <Stack spacing={"1vw"} width={"100%"}>
+                  <Grid container>
+                    <H3 color={"primary"}> {item.set_value}</H3>
+                  </Grid>
+                  <Select
+                    isRequired={false}
+                    variant={"outlined"}
+                    label="Via"
+                    placeholder="Option"
+                    options={viaOption.data}
+                    value={programNotification[i].via}
+                    handleChange={(value: any) => {
+                      programNotification[i].via = value;
                       setStateTrigger(!stateTrigger);
                     }}
                   />
-                </Grid>
+                  {item.set_value ===
+                    notificationTemplateList.find(
+                      (e) => e === item.set_value
+                    ) && (
+                    <>
+                      {/* <Grid container>
+                        <OutlinedTextField
+                          isRequired={false}
+                          disabled
+                          label="Channel"
+                          variant={"outlined"}
+                          value={
+                            channelFiltered &&
+                            channelFiltered.map((e) => e.name).join(",")
+                          }
+                          handleChange={(value: any) => {
+                            programNotification[i].template_content = value;
+                            setStateTrigger(!stateTrigger);
+                          }}
+                        />
+                      </Grid> */}
+                      <Grid container>
+                        <OutlinedTextField
+                          isRequired={false}
+                          disabled
+                          label="PIC"
+                          variant={"outlined"}
+                          value={
+                            PICFiltered &&
+                            PICFiltered.map((e) => e.set_value).join(",")
+                          }
+                          handleChange={(value: any) => {
+                            programNotification[i].template_content = value;
+                            setStateTrigger(!stateTrigger);
+                          }}
+                        />
+                      </Grid>
+                    </>
+                  )}
+                  <Grid container>
+                    <OutlinedTextField
+                      isRequired={false}
+                      multiline
+                      rows={4}
+                      label="Template Content"
+                      placeholder="Template Content"
+                      variant={"outlined"}
+                      value={programNotification[i].template_content}
+                      handleChange={(value: any) => {
+                        programNotification[i].template_content = value;
 
-                <Grid container columns={11}>
-                  <Grid item xs={4}>
-                    <BodyCopy>Variable</BodyCopy>
-                    <SmallCopy fontSize={10} color={"orange"}>
-                      You can add this variable when editing template content
-                    </SmallCopy>
+                        setStateTrigger(!stateTrigger);
+                      }}
+                    />
                   </Grid>
-                  <Grid item xs={7}>
-                    <Grid container columns={12}>
-                      {variableInitial.map((item) => (
-                        <Grid>
-                          <ListItem disablePadding>
-                            <ListItemButton
-                              onClick={() => {
-                                programNotification[
-                                  i
-                                ].template_content = `${programNotification[i].template_content} ${item}`;
-                                setStateTrigger(!stateTrigger);
-                              }}
-                            >
-                              <AddBox color={"primary"} />
-                              <BodyCopy>{item}</BodyCopy>
-                            </ListItemButton>
-                          </ListItem>
-                        </Grid>
-                      ))}
+
+                  <Grid container columns={11}>
+                    <Grid item xs={4}>
+                      <BodyCopy>Variable</BodyCopy>
+                      <SmallCopy fontSize={10} color={"orange"}>
+                        You can add this variable when editing template content
+                      </SmallCopy>
+                    </Grid>
+                    <Grid item xs={7}>
+                      <Grid container columns={12}>
+                        {variableInitial.map((item) => (
+                          <Grid>
+                            <ListItem disablePadding>
+                              <ListItemButton
+                                onClick={() => {
+                                  programNotification[
+                                    i
+                                  ].template_content = `${programNotification[i].template_content} ${item}`;
+                                  setStateTrigger(!stateTrigger);
+                                }}
+                              >
+                                <AddBox color={"primary"} />
+                                <BodyCopy>{item}</BodyCopy>
+                              </ListItemButton>
+                            </ListItem>
+                          </Grid>
+                        ))}
+                      </Grid>
                     </Grid>
                   </Grid>
-                </Grid>
-              </Stack>
-            </Grid>
-          </Box>
-        ))
+                </Stack>
+              </Grid>
+            </Box>
+          );
+        })
       ) : (
         <>
           <Box
