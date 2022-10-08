@@ -130,7 +130,7 @@ const ProgramDetailsModal: FC<IProgramDetailsModalProps> = ({
 	}, [data.program_owner]);
 
 	// Call Approval Service
-	const { AlertApproveInfo } = useApprovalService();
+	const { AlertApproveInfo, CheckToRenderApprovalSection } = useApprovalService();
 
 	const approveHandler = async () => {
 		approveProgram(approveBody).then((res: any) => {
@@ -380,31 +380,15 @@ const ProgramDetailsModal: FC<IProgramDetailsModalProps> = ({
 				{data?.is_draft ? (
 					<>
 						<Alert sx={{ margin: 2 }} severity="error">
-							<b>Program Drafted</b>
+							This program is stored as Draft, Click <b style={{cursor:'pointer'}} onClick={onRemoveFromDraft}>Here</b> to remove it from draft and request for Approval
 						</Alert>
-
-						<div
-							style={{
-								width: "100%",
-								justifyContent: "flex-end",
-								textAlign: "right"
-							}}
-						>
-							<Button
-								color="error"
-								variant="contained"
-								size="small"
-								onClick={onRemoveFromDraft}
-							>
-								Remove From Draft
-							</Button>
-						</div>
 					</>
 				) : (
 					<>
 						{/* TODO: Checking status "Approval" of Detail Program */}
 						{AlertApproveInfo(data)}
-						{checkToRenderApprovalSection()}
+						{/*{checkToRenderApprovalSection()}*/}
+						{CheckToRenderApprovalSection(data, renderApproveSection, userLoginId, roleAccess)}
 					</>
 				)}
 
