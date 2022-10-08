@@ -4,95 +4,116 @@ import { Box, Button, Dialog, Stack } from "@mui/material";
 
 import { InitialFilter, InitialProgramApproval } from "../initial";
 
-import {
-    useGetProgramApprovalQuery,
-} from "redux/features/lov/lov-api-slice";
+import { useGetProgramApprovalQuery } from "redux/features/lov/lov-api-slice";
 import { cloneDeep } from "lodash";
+import SwitchCustom from "atomic/components/atoms/Switch";
 
 interface IProps {
-    open: boolean;
-    onClose: () => void;
-    filters: typeof InitialFilter;
-    trigger: boolean;
-    setTrigger: React.Dispatch<React.SetStateAction<boolean>>;
-    loading: boolean;
+	open: boolean;
+	onClose: () => void;
+	filters: typeof InitialFilter;
+	trigger: boolean;
+	setTrigger: React.Dispatch<React.SetStateAction<boolean>>;
+	loading: boolean;
+	onDraftChange?: () => void;
+	isDraftActive?: boolean;
+	roleAccess?:boolean;
 }
 
 interface IListProgramApproval {
-    _id: string;
-    name: string;
+	_id: string;
+	name: string;
 }
 
 const ProgramFilterProgram: React.FC<IProps> = ({
-                                      open,
-                                      onClose,
-                                      filters = InitialFilter,
-                                      trigger,
-                                      loading,
-                                      setTrigger,
-                                  }: IProps) => {
+	open,
+	onClose,
+	filters = InitialFilter,
+	trigger,
+	loading,
+	setTrigger,
+	onDraftChange,
+	isDraftActive,
+	roleAccess
+}: IProps) => {
+	const { data: programApprovalList = { data: [InitialProgramApproval] } } =
+		useGetProgramApprovalQuery();
 
-    const { data: programApprovalList = { data: [InitialProgramApproval] } } =
-        useGetProgramApprovalQuery();
+	const listProgramApproval = programApprovalList.data
+		.map((item: any) => {
+			let newItem: any = {};
+			newItem["_id"] = item._id;
+			newItem["name"] = item.set_value;
+			return newItem;
+		})
+		?.filter(approvalList => approvalList?.name !== "Draft");
 
-    const listProgramApproval = programApprovalList.data.map((item: any) => {
-        let newItem: any = {};
-        newItem["_id"] = item._id;
-        newItem["name"] = item.set_value;
-        return newItem;
-    });
+	const onSelectApproved = async (data: IListProgramApproval) => {
+		InitialFilter.program_approval = cloneDeep(data);
+		setTrigger(!trigger);
+	};
 
-    const onSelectApproved = async (data: IListProgramApproval) => {
-        InitialFilter.program_approval = cloneDeep(data);
-        setTrigger(!trigger);
-    };
+	React.useEffect(() => {
+		filters = InitialFilter;
+	}, [trigger]);
 
-    React.useEffect(() => {
-        filters = InitialFilter;
-    }, [trigger]);
+	return (
+		<Dialog open={open} onClose={onClose} fullWidth>
+			<Box sx={{ padding: "20px 20px" }}>
+				{!roleAccess &&
+					<SwitchCustom
+						color={"success"}
+						checked={isDraftActive || false}
+						handleChange={() => {
+							if (onDraftChange) {
+								onDraftChange();
+							}
+						}}
+						label={"Show Draft"}
+					/>
+				}
 
-    return (
-        <Dialog open={open} onClose={onClose} fullWidth>
-            <Box sx={{ padding: "20px 20px" }}>
-                <Stack
-                    direction="row"
-                    spacing="1vw"
-                    sx={{
-                        overflowX: "scroll",
-                        "-webkit-overflow-scrolling": "touch",
-                        padding: "20px"
-                    }}
-                >
-                    {[{ _id: "", name: "All Status" }, ...listProgramApproval].map(
-                        (item: IListProgramApproval) => (
-                            <Button
-                                disabled={loading}
-                                key={item._id}
-                                onClick={() => onSelectApproved(item)}
-                                sx={{
-                                    fontSize: 10,
-                                    width: "100%",
-                                    minWidth: "fit-content",
-                                    whiteSpace: "noWrap",
-                                    marginRight: "5px",
-                                    backgroundColor:
-                                        InitialFilter.program_approval._id === item._id
-                                            ? "#001A41"
-                                            : "",
-                                    color:
-                                        InitialFilter.program_approval._id === item._id
-                                            ? "#FFF"
-                                            : "#001A41",
-                                }}
-                            >
-                                {item.name}
-                            </Button>
-                        )
-                    )}
-                </Stack>
-            </Box>
-        </Dialog>
-    );
+
+				<Stack
+					direction="row"
+					spacing="1vw"
+					sx={{
+						overflowX: "scroll",
+						"-webkit-overflow-scrolling": "touch",
+						padding: "20px"
+					}}
+				>
+					{/* List Approval */}
+					{[{ _id: "", name: "All Status" }, ...listProgramApproval].map(
+						(item: IListProgramApproval) => (
+							<Button
+								disabled={loading}
+								key={item._id}
+								onClick={() => onSelectApproved(item)}
+								sx={{
+									fontSize: 10,
+									width: "100%",
+									minWidth: "fit-content",
+									whiteSpace: "noWrap",
+									marginRight: "5px",
+									backgroundColor:
+										InitialFilter.program_approval._id === item._id
+											? "#001A41"
+											: "",
+									color:
+										InitialFilter.program_approval._id === item._id
+											? "#FFF"
+											: "#001A41"
+								}}
+							>
+								{item.name}
+							</Button>
+						)
+					)}
+				</Stack>
+			</Box>
+		</Dialog>
+	);
 };
 
 export default ProgramFilterProgram;

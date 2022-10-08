@@ -9,6 +9,9 @@ import { persistor, store } from "./redux/app/store";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 
+// Style
+import "./Global.css";
+
 // styling for primereact UI
 import "primereact/resources/themes/lara-light-indigo/theme.css"; //theme
 import "primereact/resources/primereact.min.css"; //core css

@@ -23,7 +23,7 @@ const Program: React.FunctionComponent<IProgramProps> = ({
   stateTrigger,
   setStateTrigger,
 }) => {
-  const programExperienceRef = React.useRef();
+  //   const programExperienceRef = React.useRef();
 
   const {
     data: programListOptions = { data: [] },
@@ -34,6 +34,7 @@ const Program: React.FunctionComponent<IProgramProps> = ({
     isFetching: isProgramExperienceFetching,
   } = useGetProgramExperienceQuery();
 
+  // console.log(programExperienceRef);
   return (
     <Box sx={{ px: "2vw" }}>
       <Stack spacing="2vw" px="2vw" py="0.5vw">
@@ -68,6 +69,14 @@ const Program: React.FunctionComponent<IProgramProps> = ({
               handleChange={(value: string) => {
                 keywordCreate.eligibility.program_id = value;
                 setStateTrigger(!stateTrigger);
+
+                //set default start period and end period
+                let program = programListOptions.data.find(
+                  (e) => e["_id"] === value
+                );
+                keywordCreateState.eligibility.start_period =
+                  program?.start_period;
+                keywordCreate.eligibility.end_period = program?.end_period;
               }}
             />
             {keywordCreateState.eligibility.program_id !== "" && (

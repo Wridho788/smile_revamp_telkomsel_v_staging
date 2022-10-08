@@ -94,30 +94,35 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
           renderValue={(selected: any) => (
             <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
               {selected.map((value: any) => {
-                return (
-                  <Chip
-                    key={value}
-                    label={
-                      bonusTypeOptions.data.find((e) => e["template"] === value)
-                        ?.template
-                    }
-                    clickable
-                    deleteIcon={
-                      <CancelIcon
-                        onMouseDown={(event: any) => event.stopPropagation()}
-                      />
-                    }
-                    onDelete={(e) => {
-                      e.preventDefault();
-                      keywordBonusHelper.bonus_type = _without(
-                        [...keywordBonusHelper.bonus_type],
-                        value
-                      );
-                      setStateTrigger(!stateTrigger);
-                    }}
-                    onClick={() => console.log("clicked chip")}
-                  />
-                );
+                if (value === "") {
+                  return null;
+                } else {
+                  return (
+                    <Chip
+                      key={value}
+                      label={
+                        bonusTypeOptions.data.find(
+                          (e) => e["template"] === value
+                        )?.template
+                      }
+                      clickable
+                      deleteIcon={
+                        <CancelIcon
+                          onMouseDown={(event: any) => event.stopPropagation()}
+                        />
+                      }
+                      onDelete={(e) => {
+                        e.preventDefault();
+                        keywordBonusHelper.bonus_type = _without(
+                          [...keywordBonusHelper.bonus_type],
+                          value
+                        );
+                        setStateTrigger(!stateTrigger);
+                      }}
+                      onClick={() => console.log("clicked chip")}
+                    />
+                  );
+                }
               })}
             </Box>
           )}

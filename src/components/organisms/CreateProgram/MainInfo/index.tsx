@@ -237,6 +237,31 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
 	return (
 		<Fragment>
 			<Stack mx={2} spacing={2}>
+				<Box>
+					<Alert icon={false} severity={"info"}>
+						<SwitchCustom
+							color={"info"}
+							checked={programData?.is_draft || false}
+							handleChange={() => {
+								programData.is_draft = !programData.is_draft;
+								setStateTrigger(!stateTrigger);
+							}}
+							label={"Switch this toggle on to save this program as Draft when you finish create !"}
+						/>
+					</Alert>
+				</Box>
+				{
+					programData?.is_draft &&
+					<Box>
+						<Alert
+							severity="info"
+							color={"warning"}
+						>
+							This program will be stored as <b>Draft</b>. Please note that program draft will not request for Approval
+						</Alert>
+					</Box>
+				}
+
 				{/*<OutlinedTextField*/}
 				{/*    label="Program Group"*/}
 				{/*    placeholder="Program Group"*/}
@@ -283,8 +308,10 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
 					variant={"outlined"}
 					value={programData.point_registration}
 					handleChange={(value: any) => {
-						programData.point_registration = Number(value);
-						setStateTrigger(!stateTrigger);
+						if (onlyNumber(value)) {
+							programData.point_registration = Number(value);
+							setStateTrigger(!stateTrigger);
+						}
 					}}
 				/>
 				<OutlinedTextField
