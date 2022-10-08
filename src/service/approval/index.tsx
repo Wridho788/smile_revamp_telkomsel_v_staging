@@ -40,8 +40,8 @@ const useApprovalService = () => {
 			>
 				{/* Check if status is draft */}
 				{data?.is_draft && (
-					<Alert severity="error" icon={false}>
-						Drafted
+					<Alert severity="error">
+						DRAFT
 					</Alert>
 				)}
 
@@ -151,11 +151,24 @@ const useApprovalService = () => {
 								</b>
 							</Alert>
 						)}
-						{approval_status_value === "Approved by Manager Non HQ" ||
-							(approval_status_value === "Rejected by Manager HQ" && (
+						{/*{approval_status_value === "Approved by Manager Non HQ"&& (*/}
+						{/*		<Alert sx={{ margin: 2 }} severity="error">*/}
+						{/*			Waiting for approval 2 - {" "}*/}
+						{/*			/!*({data.created_by.superior_hq?.first_name}) -{" "}*!/*/}
+						{/*			<b>This Program is {approval_status_value}</b>*/}
+						{/*			<br /> Approver Message :{" "}*/}
+						{/*			<b>*/}
+						{/*				{" "}*/}
+						{/*				{approval_reason_value ??*/}
+						{/*					"No Message Sent from Approver"}{" "}*/}
+						{/*			</b>*/}
+						{/*		</Alert>*/}
+						{/*	)}*/}
+
+						{approval_status_value === "Rejected by Manager HQ" && (
 								<Alert sx={{ margin: 2 }} severity="error">
-									Waiting for approval {!data.need_review_after_edit ? "2" : "1"} - {" "}
-									{/*({data.created_by.superior_hq?.first_name}) -{" "}*/}
+									Waiting for approval 1 - {" "}
+									({data.created_by.superior_local?.first_name}) -{" "}
 									<b>This Program is {approval_status_value}</b>
 									<br /> Approver Message :{" "}
 									<b>
@@ -164,7 +177,8 @@ const useApprovalService = () => {
 											"No Message Sent from Approver"}{" "}
 									</b>
 								</Alert>
-							))}
+							)}
+
 						{approval_status_value === "Approved by Manager Non HQ" && (
 							<Alert sx={{ margin: 2 }} severity="success">
 								Approved by {data.created_by.superior_local?.first_name} -{" "}
@@ -236,9 +250,104 @@ const useApprovalService = () => {
 		);
 	};
 
+	// Logic before render Approval Section
+	const CheckToRenderApprovalSection = (data:any, renderApproveSection:(a:any) => void, userLoginId:string, roleAccess:boolean) => {
+		var approval_status_value: string = "";
+		if (data.approval_log && data.approval_log.length > 0) {
+			approval_status_value =
+				data.approval_log[data.approval_log.length - 1].status[0].set_value;
+		}
+		if(data?.need_review_after_edit){
+			if (!data.isHQ && data.created_by){
+				if(userLoginId === data.created_by.superior_local?._id) {
+					return (
+						<>
+							{renderApproveSection(
+								`Hi, ${data.created_by.superior_local?.first_name}. We're happy to see you in, This program need your approval`
+							)}
+						</>
+					);
+				}else{
+					return ""
+				}
+			}else{
+				if (userLoginId !== data.created_by.superior_local?._id && roleAccess) {
+					return (
+						<>
+							{renderApproveSection(
+								`Hi, HQ Manager. We're happy to see you in, This program need your approvalo`
+							)}
+						</>
+					);
+				}
+			}
+		}
+		else{
+			if (
+				(data.approval_log && data.approval_log.length > 0) &&
+				approval_status_value === "Rejected by Manager HQ" || approval_status_value === "Rejected by Manager Non HQ"
+			){
+				return ""
+			}
+		}
+		if (!data.isHQ && data.created_by) {
+			if (userLoginId === data.created_by.superior_local?._id) {
+				if (
+					(data.approval_log && data.approval_log.length < 1) ||
+					approval_status_value === "Rejected by Manager Non HQ"
+				) {
+					return (
+						<>
+							{renderApproveSection(
+								`Hi, ${data.created_by.superior_local?.first_name}. We're happy to see you in, This program need your approval`
+							)}
+						</>
+					);
+				}
+			}
+			if (userLoginId !== data.created_by.superior_local?._id && roleAccess) {
+				if (
+					(data.approval_log &&
+						data.approval_log.length > 1 &&
+						approval_status_value === "Rejected by Manager HQ") ||
+					approval_status_value === "Approved by Manager Non HQ"
+				) {
+					return (
+						<>
+							{renderApproveSection(
+								`Hi, HQ Manager. We're happy to see you in, This program need your approval`
+							)}
+						</>
+					);
+				}
+			}
+		}
+
+		if (data.isHQ && data.created_by) {
+			if (userLoginId !== data.created_by.superior_local?._id && roleAccess) {
+				if (
+					(data.approval_log &&
+						data.approval_log.length > 1 &&
+						approval_status_value === "Rejected by Manager HQ") ||
+					approval_status_value !== "Approved by Manager HQ"
+				) {
+					return (
+						<>
+							{renderApproveSection(
+								`Hi, HQ Manager. We're happy to see you in, This program need your approval`
+							)}
+						</>
+					);
+				}
+			}
+		}
+	};
+
 	return {
 		StatusApprovalRender,
-		AlertApproveInfo
+		AlertApproveInfo,
+		CheckToRenderApprovalSection
+
 	};
 };
 
