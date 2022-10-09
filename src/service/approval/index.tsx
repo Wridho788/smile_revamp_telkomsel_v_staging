@@ -198,7 +198,7 @@ const useApprovalService = () => {
 						)}
 						{approval_status_value === "Approved by Manager HQ" && (
 							<Alert sx={{ margin: 2 }} severity="success">
-								This Program is {approval_status_value}{" "}
+								This Program is approved by Manager Non HQ <b>({data.created_by.superior_local?.first_name})</b> and {approval_status_value}{" "}
 								{/*<b>({data.created_by.superior_hq?.first_name})</b>*/}
 								<br /> Approver Message :{" "}
 								<b>

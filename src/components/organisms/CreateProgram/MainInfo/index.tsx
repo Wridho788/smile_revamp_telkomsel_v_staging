@@ -383,7 +383,7 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
 				{!customizeOwner && (
 					<Box>
 						<Alert severity="info" color={"success"}>
-							The owner area of this program supposed to be{" "}
+							The program owner of this program supposed to be{" "}
 							<b>
 								[{locationTypeName}] - [{locationDetailName}]
 							</b>
