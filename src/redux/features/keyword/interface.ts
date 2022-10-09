@@ -128,3 +128,7 @@ export interface IKeywordNameExistingHandler {
   message: string;
   statusCode: number;
 }
+
+export interface ICreateKeywordValidation {
+  keywordName: string;
+}
