@@ -16,6 +16,7 @@ import { ExpandLess, ExpandMore } from '@mui/icons-material';
 interface SidebarItemProps {
   menu: Menu;
   openMenu: boolean;
+  expandMenu: any;
 }
 
 const SidebarItem = ({ menu, openMenu, expandMenu }: SidebarItemProps) => {
@@ -26,7 +27,7 @@ const SidebarItem = ({ menu, openMenu, expandMenu }: SidebarItemProps) => {
   React.useEffect(() => {
     if (!menuOpen) {
       // setOpenList(true);
-      setMenuOpen(expendMenu);
+      setMenuOpen(expandMenu);
     } else {
       console.log('open menu false', openMenu);
     }

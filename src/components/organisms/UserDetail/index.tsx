@@ -45,14 +45,14 @@ const UserDetail: FC<ModalProps> = ({ open, handleClose, data }) => {
                     <H2>{"User Detail"}</H2>
                     <Stack direction="column" mt={1}>
                         <Grid container columnSpacing={2} rowSpacing={2}>
-                            <Grid item sm={6} >
-                                <Typography sx={fontContent}>
-                                    <b>Username</b>
-                                </Typography>
-                                <Typography sx={fontContent}>
-                                    {username}
-                                </Typography>
-                            </Grid>
+                            {/*<Grid item sm={6} >*/}
+                            {/*    <Typography sx={fontContent}>*/}
+                            {/*        <b>Username</b>*/}
+                            {/*    </Typography>*/}
+                            {/*    <Typography sx={fontContent}>*/}
+                            {/*        {username}*/}
+                            {/*    </Typography>*/}
+                            {/*</Grid>*/}
                             <Grid item sm={6} >
                                 <Typography sx={fontContent}>
                                     <b>Level</b>

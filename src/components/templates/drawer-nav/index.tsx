@@ -143,7 +143,7 @@ const Index: React.FC<LayoutProps> = ({ children }: LayoutProps) => {
               key={`menuItems__menu__${index}`}
               menu={menu}
               openMenu={open}
-              expendMenu={open}
+              expandMenu={open}
             />
           ))}
           <div style={{ height: '50px' }}> </div>

@@ -176,10 +176,10 @@ const SingleData: React.FunctionComponent<ISegmentationProps> = () => {
                                             }}
                                             handleChange={(e: string) => {
                                                 setWhitelistMsisdn(e)
-                                                const tes = ["12", "13", "52"]
+                                                const tes = ["12", "13", "52", "11"]
                                                 if (e.length === 2) {
                                                     if (!tes.includes(e)) {
-                                                        alert('Two numbers in front must be 12, 13, or 52 formatted')
+                                                        alert('Two numbers in front must be 11, 12, 13, or 52 formatted')
                                                         setWhitelistMsisdn('')
                                                         return
                                                     }
