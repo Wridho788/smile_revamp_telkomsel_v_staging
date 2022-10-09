@@ -7,7 +7,10 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 import { Alert } from "@mui/material";
-import { NotificationInitialCreate } from "pages/NotificationManagement/interface";
+import {
+  NotificationInitialCreate,
+  NotificationInitialUpdate,
+} from "pages/NotificationManagement/interface";
 import {
   channelsData,
   totalRecordsData,
@@ -18,13 +21,21 @@ import { useLazyChannelListPrimeQuery } from "redux/features/channel/channel-api
 import { Subtitle } from "components";
 
 interface IChannelProps {
-  notificationCreate: NotificationInitialCreate;
+  notificationCreate: NotificationInitialUpdate;
   //   stateTrigger: boolean;
   //   setStateTrigger: Dispatch<SetStateAction<boolean>>;
 }
 
+const initial = {
+  notif_type: "",
+  notif_name: "",
+  notif_via: "",
+  notif_content: "",
+  receiver: [],
+  channel_id: [],
+};
 const Channel: React.FunctionComponent<IChannelProps> = ({
-  notificationCreate,
+  notificationCreate = initial,
   //   stateTrigger,
   //   setStateTrigger,
 }) => {
@@ -53,9 +64,9 @@ const Channel: React.FunctionComponent<IChannelProps> = ({
     setTotalRecordsState(totalRecords);
   }, [channelTrigger, totalRecords]);
 
-  useEffect(() => {
-    setSelectedChannelState(selectedChannel);
-  }, [channelTrigger, selectedChannel]);
+  // useEffect(() => {
+  //   setSelectedChannelState(selectedChannel);
+  // }, [channelTrigger, selectedChannel]);
 
   useEffect(() => {
     setLazyParamsState(lazyParams);
@@ -81,6 +92,25 @@ const Channel: React.FunctionComponent<IChannelProps> = ({
       });
       channels.data = data.payload.data;
       totalRecords.data = data.payload.totalRecords;
+      // setSelectedChannelState(
+      //   data.payload.data.filter(
+      //     (data) => data._id === notificationCreate.channel_id
+      //   )
+      // );
+
+      let selected: any = [];
+      data.payload.data.map((data: any, i: number) => {
+        console.log(notificationCreate?.channel_id[i]);
+        if (notificationCreate.channel_id.some((e) => e === data._id)) {
+          selectedChannelData.data.push(data);
+        } else {
+          console.log("false");
+        }
+      });
+
+      // console.log(selected);
+      // setSelectedChannelState(selected);
+
       setChannelTrigger(!channelTrigger);
       setLoading(false);
     }, Math.random() * 1000 + 250);
@@ -102,11 +132,9 @@ const Channel: React.FunctionComponent<IChannelProps> = ({
   const onSelectionChange = (event: any) => {
     const value = event.value;
 
-    const data = value.map((item: any) =>
-      notificationCreate.channel_id.some((e) => e === item._id)
-    );
-    console.log(data)
-    setSelectedChannelState(data);
+    notificationCreate.channel_id = value.map((item: any) => item._id);
+    selectedChannelData.data = value;
+    setSelectedChannelState(value);
   };
 
   return (
@@ -165,10 +193,10 @@ const Channel: React.FunctionComponent<IChannelProps> = ({
             filterPlaceholder="Search by Name"
           />
         </DataTable>
-        {selectedChannelState.name !== "" && (
+        {selectedChannelData.data.length > 0 && (
           <Alert severity="success" sx={{ mt: "1vw" }}>
             Selected Channel : "
-            {selectedChannelState.map((item: any) => item.name).join(",")}"
+            {selectedChannelData.data.map((item: any) => item.name).join(",")}"
           </Alert>
         )}
       </AccordionDetails>

@@ -2,6 +2,7 @@ import {
   IChannelID,
   INotifReceiver,
   NotificationInitialCreate,
+  NotificationInitialUpdate,
 } from "pages/NotificationManagement/interface";
 import { IData } from "../../redux/features/notification/interface";
 
@@ -56,7 +57,7 @@ export const totalRecordsData = {
   data: 0,
 };
 
-export const selectedChannelData = {
+export const selectedChannelData: { data: any[] } = {
   data: [],
 };
 export const lazyParamsData = {
@@ -81,4 +82,14 @@ export const createNotification: NotificationInitialCreate = {
   notif_content: "",
   receiver: [],
   channel_id: [],
+};
+export const editNotification: { data: NotificationInitialUpdate } = {
+  data: {
+    notif_type: "",
+    notif_name: "",
+    notif_via: "",
+    notif_content: "",
+    receiver: [],
+    channel_id: [],
+  },
 };

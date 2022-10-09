@@ -45,6 +45,7 @@ import {
 } from "../../redux/features/lov/lov-api-slice";
 import {
   createNotification,
+  editNotification,
   NotifChannelID,
   NotificationInitial,
   NotificationTypeInitial,
@@ -203,21 +204,23 @@ const NotificationManagement = () => {
     setOpen({ ...open, add: false });
   };
 
-  const onShowUpdateForm = async (data: typeof NotificationInitial) => {
+  const onShowUpdateForm = async (data: any) => {
     setOpen({ ...open, edit: true });
     setNotificationDetail(data);
-    const receiver = data ? data?.receiver?.map((item) => item._id) : [];
-    const channel_id = data ? data?.receiver?.map((item) => item._id) : [];
-    setInitialNotif({
+    const receiver = data ? data?.receiver?.map((item: any) => item._id) : [];
+    const channel_id = data
+      ? data?.channel_id?.map((item: any) => item._id)
+      : [];
+    const dataUpdate = {
       notif_type: data.notif_type,
       notif_name: data.notif_name,
       notif_via: data.notif_via,
       notif_content: data.notif_content,
-      receiver,
-      channel_id,
-    } as any);
+      receiver: receiver ? receiver : [],
+      channel_id: channel_id ? channel_id : [],
+    };
 
-    console.log(initialNotif);
+    editNotification.data = dataUpdate;
   };
   const onShowDeleteDialog = async (data: typeof NotificationInitial) => {
     setOpen({ ...open, delete: true });
@@ -227,12 +230,12 @@ const NotificationManagement = () => {
     e.preventDefault();
     const data = {
       _id: notificationDetail?._id,
-      notif_type: initialNotif?.notif_type,
-      notif_name: initialNotif?.notif_name,
-      notif_via: initialNotif?.notif_via,
-      notif_content: initialNotif?.notif_content,
-      receiver: initialNotif?.receiver,
-      channel_id: initialNotif?.channel_id,
+      notif_type: editNotification?.data?.notif_type,
+      notif_name: editNotification?.data?.notif_name,
+      notif_via: editNotification?.data?.notif_via,
+      notif_content: editNotification?.data?.notif_content,
+      receiver: editNotification?.data?.receiver,
+      channel_id: editNotification?.data?.channel_id,
     };
     await updateNotification(data);
     setTriger((prev) => !prev);
@@ -257,8 +260,6 @@ const NotificationManagement = () => {
       }
     });
   };
-
-  console.log(initialNotif);
   //============================== Templating for Prime Datatable =================================
   //===============================================================================================
   const leftToolbarTemplate = () => {
@@ -313,6 +314,8 @@ const NotificationManagement = () => {
       </React.Fragment>
     );
   };
+
+  console.log(initialNotif);
   return (
     <DrawerNav>
       <Box
@@ -612,13 +615,14 @@ const NotificationManagement = () => {
                   size="small"
                   fullWidth
                   label="Notification Name"
-                  value={initialNotif.notif_name}
+                  value={editNotification.data.notif_name}
                   name="notif_name"
                   onChange={(e: any) => {
-                    setInitialNotif({
-                      ...initialNotif,
-                      notif_name: e.target.value,
-                    });
+                    // setInitialNotif({
+                    //   ...initialNotif,
+                    //   notif_name: e.target.value,
+                    // });
+                    editNotification.data.notif_name = e.target.value;
                     setStateTriger(!stateTriger);
                   }}
                   required
@@ -627,27 +631,29 @@ const NotificationManagement = () => {
               <Gap width={0} height={20} />
               <Box sx={{ display: "flex" }}>
                 <InputSearchable
-                  value={{ name: initialNotif.notif_type }}
+                  value={{ name: editNotification.data.notif_type }}
                   required
                   label="Type"
                   options={dataNotificationType}
                   onChange={(e: any, newValue: any) =>
-                    setInitialNotif({
-                      ...initialNotif,
-                      notif_type: newValue.name,
-                    })
+                    // setInitialNotif({
+                    //   ...initialNotif,
+                    //   notif_type: newValue.name,
+                    // })
+                    (editNotification.data.notif_type = newValue.name)
                   }
                 />
                 <Gap width={50} height={0} />
                 <InputSearchable
-                  value={{ name: initialNotif.notif_via }}
+                  value={{ name: editNotification.data.notif_via }}
                   label="Via"
                   options={dataNotificationVia}
                   onChange={(e: any, newValue: any) =>
-                    setInitialNotif({
-                      ...initialNotif,
-                      notif_via: newValue.name,
-                    })
+                    // setInitialNotif({
+                    //   ...initialNotif,
+                    //   notif_via: newValue.name,
+                    // })
+                    (editNotification.data.notif_via = newValue.name)
                   }
                 />
               </Box>
@@ -680,10 +686,18 @@ const NotificationManagement = () => {
                             }
                             onDelete={(e) => {
                               e.preventDefault();
-                              initialNotif.receiver = _without(
-                                [...initialNotif.receiver],
-                                value
-                              );
+                              // initialNotif.receiver = _without(
+                              //   [...initialNotif.receiver],
+                              //   value
+                              // );
+                              editNotification.data.receiver =
+                                typeof editNotification.data.receiver ===
+                                "object"
+                                  ? _without(
+                                      [...editNotification.data.receiver],
+                                      value
+                                    )
+                                  : [];
                               setStateTriger(!stateTriger);
                             }}
                             onClick={() => console.log("clicked chip")}
@@ -692,12 +706,13 @@ const NotificationManagement = () => {
                       })}
                     </Box>
                   )}
-                  value={initialNotif.receiver}
+                  value={editNotification.data.receiver}
                   handleChange={(value: Array<string>) => {
-                    setInitialNotif({
-                      ...initialNotif,
-                      receiver: value,
-                    });
+                    // setInitialNotif({
+                    //   ...initialNotif,
+                    //   receiver: value,
+                    // });
+                    editNotification.data.receiver = value;
                     setStateTriger(!stateTriger);
                   }}
                 />
@@ -712,18 +727,19 @@ const NotificationManagement = () => {
                   rows={4}
                   name="notif_content"
                   onChange={(e: any) => {
-                    setInitialNotif({
-                      ...initialNotif,
-                      notif_content: e.target.value,
-                    });
+                    // setInitialNotif({
+                    //   ...initialNotif,
+                    //   notif_content: e.target.value,
+                    // });
+                    editNotification.data.notif_content = e.target.value;
                     setStateTriger(!stateTriger);
                   }}
-                  value={initialNotif.notif_content}
+                  value={editNotification.data.notif_content}
                   required
                 />
               </Box>
               {/* <Gap width={0} height={20} /> */}
-              <Channel notificationCreate={initialNotif} />
+              <Channel notificationCreate={editNotification.data} />
             </Stack>
           </DialogContent>
           <DialogActions>
