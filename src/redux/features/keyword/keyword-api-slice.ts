@@ -168,4 +168,6 @@ export const {
   useKeywordUploadAuctionMutation,
   useKeywordGeneralDetailQuery,
   useKeywordProgramDetailQuery,
+  useKeywordNameExistingQuery,
+  useLazyKeywordNameExistingQuery,
 } = keywordSlice;

@@ -19,8 +19,10 @@ import {CircularProgress, Snackbar} from "@mui/material";
 import {CreateKeywordInitial} from "../../../pages/CreateKeyword/initial";
 import {CreateKeywordGeneral} from "../../organisms/CreateKeyword/initial";
 import {
-    useKeywordGeneralCreateMutation,
-    useKeywordGeneralUpdateMutation
+  useKeywordGeneralCreateMutation,
+  useKeywordGeneralUpdateMutation,
+  useKeywordNameExistingQuery,
+  useLazyKeywordNameExistingQuery,
 } from "../../../redux/features/keyword/keyword-api-slice";
 import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
@@ -124,19 +126,16 @@ export default function HorizontalLinearStepper({
     type?: string;
     messageErrorHandler?: any;
 }) {
-    const nav = useNavigate();
-    const [isLoading, setIsLoading] = useState(false);
-    const [createProgram] = useCreateProgramMutation();
-    const [updateProgram] = useUpdateProgramMutation();
-    const [createKeywordGeneral] = useKeywordGeneralCreateMutation();
-    const [updateKeywordGeneral] = useKeywordGeneralUpdateMutation();
-    const [skipped, setSkipped] = React.useState<Set<number>>(new Set<number>());
-    useEffect(() => {
-    }, [isLoading]);
-    const [open, setOpen] = useState(true);
-    const isStepOptional = (step: number) => {
-        return optionalStep ? step === optionalStep : false;
-    };
+  const nav = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
+  const [createProgram] = useCreateProgramMutation();
+  const [updateProgram] = useUpdateProgramMutation();
+  const [createKeywordGeneral] = useKeywordGeneralCreateMutation();
+  const [updateKeywordGeneral] = useKeywordGeneralUpdateMutation();
+  const [skipped, setSkipped] = React.useState<Set<number>>(new Set<number>());
+  const [getKeywordNameExisting] = useLazyKeywordNameExistingQuery();
+  useEffect(() => {}, [isLoading]);
+  const [open, setOpen] = useState(true);
 
     const isStepSkipped = (step: number) => {
         return skipped.has(step);
@@ -217,10 +216,28 @@ export default function HorizontalLinearStepper({
             newSkipped = new Set(newSkipped.values());
             newSkipped.delete(activeStep);
         }
+      }
+      setIsLoading(false);
+    }
 
-        setActiveStep((prevActiveStep: number) => prevActiveStep + 1);
-        setSkipped(newSkipped);
-    };
+    let newSkipped = skipped;
+    if (isStepSkipped(activeStep)) {
+      newSkipped = new Set(newSkipped.values());
+      newSkipped.delete(activeStep);
+    }
+    if (activeStep === 0 && type === "keyword") {
+      await getKeywordNameExisting(
+        keywordCreateState?.eligibility?.name ?? ""
+      ).then((res) => {
+        if (res.data?.message === "YOU CAN USE THIS KEYWORD NAME") {
+          setActiveStep((prevActiveStep: number) => prevActiveStep + 1);
+        } else {
+          Swal.fire("Failed!", `${res.data?.message}`, "error");
+        }
+      });
+    } else {
+      setActiveStep((prevActiveStep: number) => prevActiveStep + 1);
+    }
 
     const handleBack = () => {
         setActiveStep((prevActiveStep: number) => prevActiveStep - 1);
