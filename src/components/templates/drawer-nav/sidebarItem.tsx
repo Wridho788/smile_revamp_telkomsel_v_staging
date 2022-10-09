@@ -18,7 +18,7 @@ interface SidebarItemProps {
   openMenu: boolean;
 }
 
-const SidebarItem = ({ menu, openMenu, menuOpen }: SidebarItemProps) => {
+const SidebarItem = ({ menu, openMenu, expandMenu }: SidebarItemProps) => {
   const router = useNavigate();
   const theme = useTheme();
   let [openList, setOpenList] = React.useState<boolean>(false);
@@ -26,7 +26,7 @@ const SidebarItem = ({ menu, openMenu, menuOpen }: SidebarItemProps) => {
   React.useEffect(() => {
     if (!menuOpen) {
       // setOpenList(true);
-      setMenuOpen(true);
+      setMenuOpen(expendMenu);
     } else {
       console.log('open menu false', openMenu);
     }
