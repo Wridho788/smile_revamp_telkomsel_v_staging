@@ -130,5 +130,6 @@ export interface IKeywordNameExistingHandler {
 }
 
 export interface ICreateKeywordValidation {
-  keywordName: string;
+  keywordName?: string;
+  keywordNameEligibility?: string;
 }

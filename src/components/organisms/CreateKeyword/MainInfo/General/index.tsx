@@ -16,7 +16,10 @@ import {
 } from "../../../../../redux/features/lov/lov-api-slice";
 import { FilterInitial } from "../../../../../redux/utils/initial-general";
 import { useChannelListQuery } from "../../../../../redux/features/channel/channel-api-slice";
-import { ICreateKeyword } from "../../interfaces";
+import {
+  ICreateKeyword,
+  IKeywordNotificationEligibility,
+} from "../../interfaces";
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import DeleteIcon from "@mui/icons-material/Delete";
 import {
@@ -40,6 +43,7 @@ import { useKeywordNameExistingQuery } from "redux/features/keyword/keyword-api-
 import { useAppDispatch, useAppSelector } from "service/hooks";
 import { SET_KEYWORD_VALIDATION } from "redux/features/keyword/create-keyword-validation-slice";
 import Swal from "sweetalert2";
+import { KeywordNotificationEligibility } from "../../initial";
 
 interface IGeneralProps {
   keywordCreateState: ICreateKeyword;
@@ -66,6 +70,8 @@ const General: React.FunctionComponent<IGeneralProps> = ({
   const keywordName = useAppSelector(
     (state) => state.createKeywordValidationSlice.keywordName
   );
+  const keywordNotificationEligibility: IKeywordNotificationEligibility[] =
+    KeywordNotificationEligibility;
   // const { data: customerBadgeOptions = { data: [] } } =
   //   useCustomerBadgeListQuery(FilterInitial);
 
@@ -118,6 +124,15 @@ const General: React.FunctionComponent<IGeneralProps> = ({
             value={keywordCreateState.eligibility.name}
             handleChange={(value: string) => {
               keywordCreate.eligibility.name = value
+                .replace(/[^a-zA-Z0-9]/g, "")
+                .toUpperCase();
+              keywordNotificationEligibility[1].keyword_name = value
+                .replace(/[^a-zA-Z0-9]/g, "")
+                .toUpperCase();
+              keywordNotificationEligibility[2].keyword_name = value
+                .replace(/[^a-zA-Z0-9]/g, "")
+                .toUpperCase();
+              keywordNotificationEligibility[3].keyword_name = value
                 .replace(/[^a-zA-Z0-9]/g, "")
                 .toUpperCase();
               setStateTrigger(!stateTrigger);
