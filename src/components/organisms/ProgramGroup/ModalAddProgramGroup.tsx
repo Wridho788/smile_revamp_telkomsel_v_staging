@@ -5,6 +5,7 @@ import { H2 } from "../../../components";
 import Swal from "sweetalert2";
 import LoadingButton from '@mui/lab/LoadingButton';
 import { useCreateProgramGroupMutation } from "redux/features/lov/lov-api-slice";
+import { options } from '../../../mocks/options';
 
 const style = {
     position: "absolute" as "absolute",
@@ -23,31 +24,38 @@ interface ModalAddProgramProps {
     handleClose?: any;
     handleRefetch?: any;
     handleChange?: any;
+    options?: any[];
 }
 
-const ModalAddProgramGroup: FC<ModalAddProgramProps> = ({ open, handleClose, handleRefetch, handleChange }) => {
+const ModalAddProgramGroup: FC<ModalAddProgramProps> = ({ open, handleClose, handleRefetch, handleChange, options }) => {
     const [createProgramGroup] = useCreateProgramGroupMutation();
     const [name, setName] = useState<string>("");
     const [errorMsg, setErrorMsg] = useState<string>("");
     const [loading, setLoading] = useState<boolean>(false);
 
     const handleCreateProgramGroup = async () => {
-        if(name !== ""){
-            setLoading(true);
-            await createProgramGroup({ group_name: name }).then((res: any) => {
-                if (res?.data?.status === 200) {
-                    handleRefetch();
-                    handleClose()
-                    Swal.fire("Success!", `${res?.data?.message}`, "success");
-                    handleChange(res?.data?.payload?._id);
+        if (name !== "") {
+            if (typeof options !== "undefined") {
+                let findName = options.find((data: any) => data?.group_name === name)
+                if (typeof findName !== "undefined") {
+                    setErrorMsg("Progran group name is already exist!")
                 } else {
-                    Swal.fire('Error!', '', 'error');
+                    setLoading(true);
+                    await createProgramGroup({ group_name: name }).then((res: any) => {
+                        if (res?.data?.status === 200) {
+                            handleRefetch();
+                            handleClose()
+                            Swal.fire("Success!", `${res?.data?.message}`, "success");
+                            handleChange(res?.data?.payload?._id);
+                        } else {
+                            Swal.fire('Error!', '', 'error');
+                        }
+                    })
                 }
-            })
-        }else{
+            }
+        } else {
             setErrorMsg("Please fill out this field!")
         }
-        
     }
 
     return (
@@ -75,7 +83,7 @@ const ModalAddProgramGroup: FC<ModalAddProgramProps> = ({ open, handleClose, han
                         onChange={(event: any) => setName(event.target.value)}
                     />
 
-                    {errorMsg !== "" && <div style={{paddingTop: "5px", color: "red", fontStyle: "italic", fontSize: "0.75rem"}}>{errorMsg}</div>}
+                    {errorMsg !== "" && <div style={{ paddingTop: "5px", color: "red", fontStyle: "italic", fontSize: "0.75rem" }}>{errorMsg}</div>}
                 </Box>
 
                 <Box pt={5} style={{ width: "100%", display: "flex", justifyContent: "end" }}>

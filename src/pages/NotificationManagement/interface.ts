@@ -7,6 +7,15 @@ export interface NotificationInitialCreate {
   channel_id: string[];
 }
 
+export interface NotificationInitialUpdate {
+  notif_type: string;
+  notif_name: string;
+  notif_via: string;
+  notif_content: string;
+  receiver: string[];
+  channel_id: string[];
+}
+
 export interface INotifReceiver {
   _id: string;
   group_name: string;
