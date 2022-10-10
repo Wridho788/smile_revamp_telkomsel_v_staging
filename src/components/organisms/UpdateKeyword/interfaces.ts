@@ -60,6 +60,7 @@ export interface IKeywordEligibility {
 	file: string;
 	segmentation_employee_numbers: boolean;
 	keyword_shift: IKeywordEligibilityKeywordShift[];
+	approval_log?: any[];
 }
 
 export interface IKeywordBonusHelper {

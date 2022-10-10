@@ -52,6 +52,7 @@ import Swal from "sweetalert2";
 import pick from "lodash/pick";
 import onlyNumber from "utils/onlyNumber";
 import SwitchCustom from "atomic/components/atoms/Switch";
+import omit from "lodash/omit";
 
 const MainInfo: React.FunctionComponent = () => {
 	const { _id } = useParams();
@@ -88,7 +89,8 @@ const MainInfo: React.FunctionComponent = () => {
 					"alarm_pic",
 					"threshold_alarm_expired",
 					"threshold_alarm_voucher",
-					"is_draft"
+					"is_draft",
+					"approval_log"
 				]),
 				_id: data?._id,
 				name: data?.name || "",
@@ -104,7 +106,8 @@ const MainInfo: React.FunctionComponent = () => {
 				program_time_zone: data?.program_time_zone || "",
 				threshold_alarm_expired: data?.threshold_alarm_expired || 0,
 				threshold_alarm_voucher: data?.threshold_alarm_voucher || 0,
-				is_draft: data?.is_draft || false
+				is_draft: data?.is_draft || false,
+				approval_log: data?.approval_log || []
 			}));
 		})();
 
@@ -145,17 +148,19 @@ const MainInfo: React.FunctionComponent = () => {
 		}).then(res => {
 			// Confirmed
 			if (res.isConfirmed) {
-				updateProgramMainInfo(programDetail).then((res: any) => {
-					if (res?.error) {
-						Swal.fire(res.error.data.message, "", "warning");
-					} else {
-						if (res?.data.status === 200) {
-							Swal.fire("Updated Program Data!", "", "success").then(() => {
-								navigate("/program-management");
-							});
+				updateProgramMainInfo(omit(programDetail, ["approval_log"])).then(
+					(res: any) => {
+						if (res?.error) {
+							Swal.fire(res.error.data.message, "", "warning");
+						} else {
+							if (res?.data.status === 200) {
+								Swal.fire("Updated Program Data!", "", "success").then(() => {
+									navigate("/program-management");
+								});
+							}
 						}
 					}
-				});
+				);
 			}
 
 			// Denied
@@ -215,36 +220,51 @@ const MainInfo: React.FunctionComponent = () => {
 							>
 								<Stack spacing="1vw" width="100%">
 									{/* Draft Switcher */}
-									<Box>
-										<Alert icon={false} severity={"info"}>
-											<SwitchCustom
-												color={"info"}
-												checked={programDetail?.is_draft || false}
-												handleChange={() => {
-													draftProgram({
-														_id: programDetail?._id,
-														is_draft: !programDetail?.is_draft
-													});
+									{[
+										"Rejected by Manager HQ",
+										"Rejected by Manager Non HQ"
+									].includes(
+										programDetail?.approval_log?.[
+											programDetail?.approval_log?.length - 1
+										]?.status[0]?.set_value
+									) ? (
+										<>
+											<Box>
+												<Alert icon={false} severity={"info"}>
+													<SwitchCustom
+														color={"info"}
+														checked={programDetail?.is_draft || false}
+														handleChange={() => {
+															draftProgram({
+																_id: programDetail?._id,
+																is_draft: !programDetail?.is_draft
+															});
 
-													onChangeProgramDetail(
-														"is_draft",
-														!programDetail?.is_draft
-													);
-												}}
-												label={
-													"Switch this toggle on to save this program as Draft when you finish update!"
-												}
-											/>
-										</Alert>
-									</Box>
-									{programDetail?.is_draft && (
-										<Box>
-											<Alert severity="info" color={"warning"}>
-												This program will be stored as <b>Draft</b>. Please note
-												that program draft will not request for Approval
-											</Alert>
-										</Box>
+															onChangeProgramDetail(
+																"is_draft",
+																!programDetail?.is_draft
+															);
+														}}
+														label={
+															"Switch this toggle on to save this program as Draft when you finish update!"
+														}
+													/>
+												</Alert>
+											</Box>
+											{programDetail?.is_draft && (
+												<Box>
+													<Alert severity="info" color={"warning"}>
+														This program will be stored as <b>Draft</b>. Please
+														note that program draft will not request for
+														Approval
+													</Alert>
+												</Box>
+											)}
+										</>
+									) : (
+										<></>
 									)}
+
 									{/* End Draft Switcher */}
 
 									{/* Program Group Not Found */}

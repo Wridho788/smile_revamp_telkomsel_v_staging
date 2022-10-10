@@ -38,31 +38,41 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = props => {
 			<Stack spacing="1vw" width="100%">
 				<Stack spacing="1vw" px="4vw">
 					{/*  Draft Switcher */}
-					<Box>
-						<Alert
-							severity="info"
-							color={keywordUpdate?.is_draft ? "success" : "warning"}
-						>
-							{keywordUpdate?.is_draft
-								? "Keyword will be drafted"
-								: "Keyword will not be drafted"}
-						</Alert>
-					</Box>
-					<Box>
-						<SwitchCustom
-							color={"success"}
-							checked={keywordUpdate?.is_draft || false}
-							handleChange={() => {
-								if (_id) {
-									draftKeyword({ _id, is_draft: !keywordUpdate.is_draft });
-								}
+					{["Rejected by Manager HQ", "Rejected by Manager Non HQ"].includes(
+						keywordUpdateState?.eligibility?.approval_log?.[
+							keywordUpdateState?.eligibility?.approval_log?.length - 1
+						]?.status[0]?.set_value
+					) ? (
+						<>
+							<Box>
+								<Alert
+									severity="info"
+									color={keywordUpdate?.is_draft ? "success" : "warning"}
+								>
+									{keywordUpdate?.is_draft
+										? "Keyword will be drafted"
+										: "Keyword will not be drafted"}
+								</Alert>
+							</Box>
+							<Box>
+								<SwitchCustom
+									color={"success"}
+									checked={keywordUpdate?.is_draft || false}
+									handleChange={() => {
+										if (_id) {
+											draftKeyword({ _id, is_draft: !keywordUpdate.is_draft });
+										}
 
-								keywordUpdate.is_draft = !keywordUpdate.is_draft;
-								setStateTrigger(!stateTrigger);
-							}}
-							label={"Draft Keyword"}
-						/>
-					</Box>
+										keywordUpdate.is_draft = !keywordUpdate.is_draft;
+										setStateTrigger(!stateTrigger);
+									}}
+									label={"Draft Keyword"}
+								/>
+							</Box>
+						</>
+					) : (
+						<></>
+					)}
 
 					<Program
 						keywordCreateState={keywordUpdateState}
