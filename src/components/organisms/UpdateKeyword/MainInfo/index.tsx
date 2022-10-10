@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Box, Stack } from "@mui/material";
+import { Alert, Box, Stack } from "@mui/material";
 import { UpdateKeywordGeneral } from "../initial";
 import { IUpdateKeyword } from "../interfaces";
 import Program from "./Program";
@@ -8,6 +8,7 @@ import Location from "./Location";
 import Merchant from "./Merchant";
 import Segmentation from "./Segmentation";
 import Notification from "./Notification";
+import SwitchCustom from "atomic/components/atoms/Switch";
 
 interface IMainInfoProps {}
 
@@ -31,6 +32,29 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = props => {
 		<Box display="flex" justifyContent="center" px="5%" py="1vw">
 			<Stack spacing="1vw" width="100%">
 				<Stack spacing="1vw" px="4vw">
+					{/*  Draft Switcher */}
+					<Box>
+						<Alert
+							severity="info"
+							color={keywordUpdate?.is_draft ? "success" : "warning"}
+						>
+							{keywordUpdate?.is_draft
+								? "Keyword will be drafted"
+								: "Keyword will not be drafted"}
+						</Alert>
+					</Box>
+					<Box>
+						<SwitchCustom
+							color={"success"}
+							checked={keywordUpdate?.is_draft || false}
+							handleChange={() => {
+								keywordUpdate.is_draft = !keywordUpdate.is_draft;
+								setStateTrigger(!stateTrigger);
+							}}
+							label={"Draft Keyword"}
+						/>
+					</Box>
+
 					<Program
 						keywordCreateState={keywordUpdateState}
 						keywordCreate={keywordUpdate}
