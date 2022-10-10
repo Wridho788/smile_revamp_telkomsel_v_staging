@@ -8,16 +8,16 @@ import {
   Grid,
   Box,
   Autocomplete,
-  TextField
+  TextField,
 } from "@mui/material";
 import * as React from "react";
 import { BodyCopy } from "../Typography";
 import { ISelectProps } from "./types";
-import AddIcon from '@mui/icons-material/Add';
+import AddIcon from "@mui/icons-material/Add";
 
 import AddProgramGroup from "components/organisms/ProgramGroup/AddProgramGroup";
 import ModalAddProgramGroup from "components/organisms/ProgramGroup/ModalAddProgramGroup";
-import { options } from '../../../mocks/options';
+import { options } from "../../../mocks/options";
 
 const Index: React.FunctionComponent<ISelectProps> = ({
   label,
@@ -36,7 +36,7 @@ const Index: React.FunctionComponent<ISelectProps> = ({
   ...props
 }) => {
   const [showInput, setShowInput] = useState<boolean>(false);
-  
+
   return (
     <Grid
       container
@@ -75,15 +75,23 @@ const Index: React.FunctionComponent<ISelectProps> = ({
           <Autocomplete
             id="country-select-demo"
             size="small"
-            sx={label === "Program Group" ? { width: "90%" }: { width: "100%" } }
+            sx={
+              label === "Program Group" ? { width: "90%" } : { width: "100%" }
+            }
             options={options || []}
             getOptionLabel={(option: any) => option[optionLabel]}
             renderOption={(props, option) => (
-              <Box component="li" sx={{ '& > img': { mr: 2, flexShrink: 0 } }} {...props}>
+              <Box
+                component="li"
+                sx={{ "& > img": { mr: 2, flexShrink: 0 } }}
+                {...props}
+              >
                 {option.group_name}
               </Box>
             )}
-            onChange={(event: any, value: any) => handleChange(value[optionValue])}
+            onChange={(event: any, value: any) =>
+              handleChange(value[optionValue])
+            }
             renderInput={(params) => (
               <TextField
                 {...params}
@@ -94,14 +102,14 @@ const Index: React.FunctionComponent<ISelectProps> = ({
               />
             )}
           />
-          {label === "Program Group" &&
+          {label === "Program Group" && (
             <div
               style={{ padding: "0.5rem", cursor: "pointer" }}
               onClick={() => setShowInput(true)}
             >
               <AddIcon />
             </div>
-          }
+          )}
         </div>
       </Grid>
     </Grid>

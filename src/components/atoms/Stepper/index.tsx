@@ -222,17 +222,44 @@ export default function HorizontalLinearStepper({
       newSkipped.delete(activeStep);
     }
     if (activeStep === 0 && type === "keyword") {
+      // General Keyword Name Validation
       await getKeywordNameExisting(
         keywordCreateState?.eligibility?.name ?? ""
-      ).then((res) => {
+      ).then(async (res) => {
         if (res.data?.message === "YOU CAN USE THIS KEYWORD NAME") {
           dispatch(
             SET_KEYWORD_VALIDATION({
               keywordName: "",
             })
           );
-          setActiveStep((prevActiveStep: number) => prevActiveStep + 1);
-          window.scrollTo(0, 0);
+          // Notification Keyword Name Validation
+          await getKeywordNameExisting(
+            keywordCreateState?.notification[0]?.keyword_name ?? ""
+          ).then((res) => {
+            if (res.data?.message === "YOU CAN USE THIS KEYWORD NAME") {
+              dispatch(
+                SET_KEYWORD_VALIDATION({
+                  keywordNameEligibility: "",
+                })
+              );
+              setActiveStep((prevActiveStep: number) => prevActiveStep + 1);
+              window.scrollTo(0, 0);
+            } else {
+              dispatch(
+                SET_KEYWORD_VALIDATION({
+                  keywordNameEligibility: `${res.data?.message.toLowerCase()}`,
+                })
+              );
+              Swal.fire({
+                icon: "error",
+                title: "Failed!",
+                text: `${res.data?.message}`,
+                didClose: () => {
+                  window.scrollTo(0, 3400);
+                },
+              });
+            }
+          });
         } else {
           dispatch(
             SET_KEYWORD_VALIDATION({
