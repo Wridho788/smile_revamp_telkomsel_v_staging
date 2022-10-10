@@ -77,21 +77,21 @@ export interface IKeywordBonusLuckyDraw {
 	lucky_draw_reguler: boolean;
 	lucky_draw_allow_inject_coupon: boolean;
 	lucky_draw_prize: string;
-	redeem_after_verification: boolean;
+	
 	locations: any[];
 }
 
 export interface IKeywordBonusDirectRedeem {
 	bonus_type: string;
 	stock_type: string;
-	redeem_after_verification: boolean;
+	
 	locations: any[];
 }
 
 export interface IKeywordBonusLoyaltyPoin {
 	bonus_type: string;
 	earning_poin: number;
-	redeem_after_verification: boolean;
+	
 	locations: any[];
 }
 
@@ -134,7 +134,7 @@ export interface IKeywordBonusTelcoProductPostpaid {
 	telco_post_bid: string;
 	telco_post_api_config: string;
 	stock_location: any[];
-	redeem_after_verification: boolean;
+	
 }
 
 // Bonus Type "Telco Product Postpaid"
@@ -144,7 +144,7 @@ export interface IKeywordBonusTelcoProductPrepaid {
 	telco_post_bid: string;
 	telco_post_api_config: string;
 	stock_location: any[];
-	redeem_after_verification: boolean;
+	
 }
 
 // Bonus Type "Auction"
@@ -158,7 +158,7 @@ export interface IKeywordBonusAuction {
 	auction_max_winner_inphase: number;
 	auction_prize_name: string;
 	stock_location: any[];
-	redeem_after_verification: boolean;
+	
 }
 
 export interface IKeywordNotificationAuctionHelper {
@@ -192,7 +192,7 @@ export interface IKeywordBonusLinkAjaMain {
 	location_detail: string;
 	bucket: string;
 	stock_location: any[];
-	redeem_after_verification: boolean;
+	
 }
 
 export interface IKeywordBonusLinkAjaBonus {
@@ -203,7 +203,7 @@ export interface IKeywordBonusLinkAjaBonus {
 	location_detail: string;
 	bucket: string;
 	stock_location: any[];
-	redeem_after_verification: boolean;
+	
 }
 
 export interface IKeywordBonusNgrs {
@@ -214,7 +214,7 @@ export interface IKeywordBonusNgrs {
 	location_detail: string;
 	bucket: string;
 	stock_location: any[];
-	redeem_after_verification: boolean;
+	
 }
 
 export interface IKeywordBonusVoucher {
@@ -225,7 +225,7 @@ export interface IKeywordBonusVoucher {
 	jumlah_total_voucher: number;
 	stock_location: any[];
 	voucher_prefix?: string;
-	redeem_after_verification: boolean;
+	
 }
 
 export interface IKeywordBonusDonation {
@@ -238,7 +238,7 @@ export interface IKeywordBonusDonation {
 		location: string;
 		stock: number;
 	}[];
-	redeem_after_verification: boolean;
+	
 }
 
 export interface IKeywordBonusMobileBanking {
@@ -252,14 +252,14 @@ export interface IKeywordBonusMobileBanking {
 		location: string;
 		stock: number;
 	}[];
-	redeem_after_verification: boolean;
+	
 }
 
 export interface IKeywordBonusVoting {
 	bonus_type: string;
 	target_redeemer: number;
 	stock_location: any[];
-	redeem_after_verification: boolean;
+	
 }
 
 // export interface IKeywordBonus {

@@ -462,7 +462,7 @@ const NotificationLuckyDraw: React.FunctionComponent<
                     <SmallCopy>Allow Inject Coupon</SmallCopy>
                   </Stack>
                 </Grid>
-                <Grid item xs={1}>
+                {/* <Grid item xs={1}>
                   <Stack
                     direction="row"
                     justifyContent="center"
@@ -482,7 +482,7 @@ const NotificationLuckyDraw: React.FunctionComponent<
                     />
                     <SmallCopy>Redeem After Verification</SmallCopy>
                   </Stack>
-                </Grid>
+                </Grid> */}
               </Grid>
 
               {/* Stock Location Management */}
