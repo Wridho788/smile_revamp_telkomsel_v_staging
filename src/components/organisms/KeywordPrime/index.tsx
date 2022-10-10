@@ -24,7 +24,7 @@ import {
 	InitialFilter,
 	InitialKeywordApproval as InitialProgramExperience
 } from "./initial";
-import { useLazyKeywordListPrimeQuery } from "../../../redux/features/keyword/keyword-api-slice";
+import { useLazyKeywordListPrimeQuery, useLazyKeywordGeneralDetailQuery } from "../../../redux/features/keyword/keyword-api-slice";
 import {
 	useGetProgramExperienceQuery,
 	useGetLocationTypeQuery
@@ -40,6 +40,7 @@ import FilterKeyword from "./filter";
 import { BodyCopy } from "components/atoms";
 import debounce from "lodash/debounce";
 import useApprovalService from "../../../service/approval";
+import Swal from "sweetalert2"
 
 interface IkeywordPrime {
 	bonus: any[];
@@ -89,27 +90,33 @@ const KeywordPrime = () => {
 	const defaultRoleManager: any =
 		appConfig !== undefined
 			? appConfig.find(item => item["param_key"] === "DEFAULT_ROLE_MANAGER")[
-					"param_value"
-			  ]
+			"param_value"
+			]
 			: undefined;
 	const defaultRoleManagerHQ =
 		appConfig !== undefined
 			? appConfig.find(item => item["param_key"] === "DEFAULT_LOCATION_HQ")[
-					"param_value"
-			  ]
+			"param_value"
+			]
 			: undefined;
 
 	const { data: accountAuth } = useAccountAuthenticateQuery();
 
 	// Detail Keyword
+	const [getDetailKeyword] = useLazyKeywordGeneralDetailQuery();
 	const [item, setItem] = useState([]);
 	const [open, setOpen] = useState({
 		detail: false,
 		filter: false
 	});
 	const handleButtonDetail = async (item: any) => {
-		setItem(item);
-		setOpen({ ...open, detail: true });
+		const { data } = await getDetailKeyword(item?._id);
+		if (data) {
+			setItem(data || item);
+			setOpen({ ...open, detail: true });
+		} else {
+			Swal.fire('Error!', 'Something went wrong', 'error');
+		}
 	};
 
 	const onPage = (event: any) => {
@@ -286,7 +293,7 @@ const KeywordPrime = () => {
 				}
 				isHqLogin={
 					accountAuth &&
-					accountAuth.account_location.location_detail.type ===
+						accountAuth.account_location.location_detail.type ===
 						defaultRoleManagerHQ
 						? true
 						: false
