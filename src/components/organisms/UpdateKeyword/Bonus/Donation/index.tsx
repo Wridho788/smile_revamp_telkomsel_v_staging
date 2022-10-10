@@ -1,7 +1,7 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Stack, Grid } from "@mui/material";
 import { OutlinedTextField, Select, Subtitle } from "components/atoms";
-import { IUpdateKeyword } from "../../interfaces";
+import { ICreateKeyword } from "../../interfaces";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
@@ -14,8 +14,8 @@ import { useLazyGetLovListQuery } from "redux/features/lov/lov-api-slice";
 interface INotificationLuckyDrawProps {
 	bonusType: string;
 	bonusTypeId: any;
-	keywordCreateState: IUpdateKeyword;
-	keywordCreate: IUpdateKeyword;
+	keywordCreateState: ICreateKeyword;
+	keywordCreate: ICreateKeyword;
 	stateTrigger: boolean;
 	setStateTrigger: Dispatch<SetStateAction<boolean>>;
 }
@@ -70,6 +70,8 @@ const NotificationLuckyDraw: React.FunctionComponent<
 			}
 		}
 	}, [isFetching]);
+
+	console.log("LOV LIST", lovList);
 
 	return (
 		<Accordion sx={{ p: "1vw" }}>

@@ -38,5 +38,5 @@ export {
   ProgramNotificationUpdate,
   MerchantPartnerManagement,
   MerchantOutletManagement,
-  PICManagement
+  PICManagement,
 };

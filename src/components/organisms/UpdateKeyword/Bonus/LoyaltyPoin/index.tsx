@@ -5,7 +5,7 @@ import {
   Subtitle,
   SmallCopy,
 } from "../../../../atoms";
-import { IUpdateKeyword } from "../../interfaces";
+import { ICreateKeyword } from "../../interfaces";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
@@ -17,8 +17,8 @@ import LocationManagement from "../LocationManagement";
 interface ILoyaltyPoinProps {
   bonusType: string;
   bonusTypeId: any;
-  keywordCreateState: IUpdateKeyword;
-  keywordCreate: IUpdateKeyword;
+  keywordCreateState: ICreateKeyword;
+  keywordCreate: ICreateKeyword;
   stateTrigger: boolean;
   setStateTrigger: Dispatch<SetStateAction<boolean>>;
 }

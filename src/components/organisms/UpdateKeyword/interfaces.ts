@@ -177,17 +177,41 @@ export interface IKeywordNotificationAuction {
 	keyword_name?: string;
 }
 
-export interface IUpdateKeyword {
+export interface ICreateKeyword {
+	is_draft?: boolean;
 	eligibility: IKeywordEligibility;
 	bonus: any[];
 	notification: any[];
 }
 
-export interface IKeywordBonusLinkAja {
-	nominal: string;
-	location: string;
+export interface IKeywordBonusLinkAjaMain {
 	bonus_type: string;
-	external_api_config: string;
+	nominal: number;
+	external_api_config: boolean;
+	location: string;
+	location_detail: string;
+	bucket: string;
+	stock_location: any[];
+	redeem_after_verification: boolean;
+}
+
+export interface IKeywordBonusLinkAjaBonus {
+	bonus_type: string;
+	nominal: number;
+	external_api_config: boolean;
+	location: string;
+	location_detail: string;
+	bucket: string;
+	stock_location: any[];
+	redeem_after_verification: boolean;
+}
+
+export interface IKeywordBonusNgrs {
+	bonus_type: string;
+	nominal: number;
+	external_api_config: boolean;
+	location: string;
+	location_detail: string;
 	bucket: string;
 	stock_location: any[];
 	redeem_after_verification: boolean;
@@ -198,9 +222,9 @@ export interface IKeywordBonusVoucher {
 	exp_voucher: string;
 	voucher_type: string;
 	voucher_combination: string;
-	voucher_prefix?: string;
 	jumlah_total_voucher: number;
 	stock_location: any[];
+	voucher_prefix?: string;
 	redeem_after_verification: boolean;
 }
 
@@ -228,6 +252,13 @@ export interface IKeywordBonusMobileBanking {
 		location: string;
 		stock: number;
 	}[];
+	redeem_after_verification: boolean;
+}
+
+export interface IKeywordBonusVoting {
+	bonus_type: string;
+	target_redeemer: number;
+	stock_location: any[];
 	redeem_after_verification: boolean;
 }
 

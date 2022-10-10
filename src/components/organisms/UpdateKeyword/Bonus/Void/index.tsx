@@ -4,19 +4,19 @@ import {
     Subtitle,
 } from "../../../../atoms";
 
-import { IUpdateKeyword } from "../../interfaces";
+import { ICreateKeyword } from "../../interfaces";
 
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
-// import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 import { KeywordBonusVoid } from "../../initial";
 
 interface INotificationVoidProps {
     bonusType: string;
     bonusTypeId: any;
-    keywordCreateState: IUpdateKeyword;
-    keywordCreate: IUpdateKeyword;
+    keywordCreateState: ICreateKeyword;
+    keywordCreate: ICreateKeyword;
     stateTrigger: boolean;
     setStateTrigger: Dispatch<SetStateAction<boolean>>;
 }
