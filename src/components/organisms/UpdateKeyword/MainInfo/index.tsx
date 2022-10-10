@@ -9,6 +9,8 @@ import Merchant from "./Merchant";
 import Segmentation from "./Segmentation";
 import Notification from "./Notification";
 import SwitchCustom from "atomic/components/atoms/Switch";
+import { useDraftKeywordMutation } from "redux/features/keyword/keyword-api-slice";
+import { useParams } from "react-router-dom";
 
 interface IMainInfoProps {}
 
@@ -27,6 +29,9 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = props => {
 	React.useEffect(() => {
 		console.log(keywordUpdate);
 	}, [keywordUpdate, stateTrigger]);
+
+	const { _id } = useParams();
+	const [draftKeyword] = useDraftKeywordMutation();
 
 	return (
 		<Box display="flex" justifyContent="center" px="5%" py="1vw">
@@ -48,6 +53,10 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = props => {
 							color={"success"}
 							checked={keywordUpdate?.is_draft || false}
 							handleChange={() => {
+								if (_id) {
+									draftKeyword({ _id, is_draft: !keywordUpdate.is_draft });
+								}
+
 								keywordUpdate.is_draft = !keywordUpdate.is_draft;
 								setStateTrigger(!stateTrigger);
 							}}

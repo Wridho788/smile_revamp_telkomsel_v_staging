@@ -27,6 +27,7 @@ import { Close } from "@mui/icons-material";
 
 // import { KeywordAuctionProvider } from "../../../../app/context/KeywordAuction/Provider";
 import {
+	useDraftProgramMutation,
 	useLazyDetailProgramQuery,
 	useUpdateProgramMainInfoMutation
 } from "../../../../redux/features/program/program-api-slice";
@@ -114,6 +115,7 @@ const MainInfo: React.FunctionComponent = () => {
 	const { data: pointTypeOption = { data: [] } } = useGetPointTypeQuery();
 	const { data: mechanismOption = { data: [] } } = useGetMechanismQuery();
 	const { data: ownerOption = { data: [] } } = useGetLocationTypeQuery();
+	const [draftProgram] = useDraftProgramMutation();
 
 	const [getOwnerDetail, { data: ownerDetailOption }] =
 		useLocationRebaseMutation();
@@ -219,6 +221,11 @@ const MainInfo: React.FunctionComponent = () => {
 												color={"info"}
 												checked={programDetail?.is_draft || false}
 												handleChange={() => {
+													draftProgram({
+														_id: programDetail?._id,
+														is_draft: !programDetail?.is_draft
+													});
+
 													onChangeProgramDetail(
 														"is_draft",
 														!programDetail?.is_draft
