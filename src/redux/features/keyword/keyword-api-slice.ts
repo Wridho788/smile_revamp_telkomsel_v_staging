@@ -194,6 +194,7 @@ export const {
   useKeywordGeneralUpdateMutation,
   useKeywordUploadAuctionMutation,
   useKeywordGeneralDetailQuery,
+  useLazyKeywordGeneralDetailQuery,
   useKeywordProgramDetailQuery,
   useDraftKeywordMutation,
   useKeywordNameExistingQuery,
