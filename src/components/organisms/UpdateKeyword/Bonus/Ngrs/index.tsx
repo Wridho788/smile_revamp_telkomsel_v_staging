@@ -46,6 +46,7 @@ const Ngrs: React.FunctionComponent<INotificationNgrsProps> = ({
     const index = keywordCreate.bonus.findIndex(
       ({ bonus_type }) => bonus_type === "ngrs"
     );
+    // setIndex(index);
 
     if (
       (locationOptions && index === -1) ||

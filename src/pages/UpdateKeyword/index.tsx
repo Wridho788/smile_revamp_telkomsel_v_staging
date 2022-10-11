@@ -3,13 +3,21 @@
  * **/
 
 import React from "react";
-import { Box } from "@mui/material";
+import { Box, CircularProgress } from "@mui/material";
 import { DrawerNav, H2, Stepper, StepperPaper } from "../../components";
 import { MainInfo, Bonus } from "../../components/organisms/UpdateKeyword";
-import { CreateKeywordGeneral } from "components/organisms/UpdateKeyword/initial";
+import {
+  CreateKeywordGeneral,
+  KeywordBonusHelper,
+} from "components/organisms/UpdateKeyword/initial";
 import { ICreateKeyword } from "components/organisms/UpdateKeyword/interfaces";
+import { useParams } from "react-router-dom";
+import usePayloadToInitial from "components/organisms/UpdateKeyword/hooks/usePayloadToInitial";
 
 const CreateKeyword = () => {
+  const { _id } = useParams();
+  const [isPayload, setIsPayload] = React.useState<boolean>(false);
+  const { onPayloadToInitial } = usePayloadToInitial();
   const keywordCreate = CreateKeywordGeneral;
   const [keywordCreateState, setKeywordCreateState] =
     React.useState<ICreateKeyword>(keywordCreate);
@@ -27,11 +35,15 @@ const CreateKeyword = () => {
   ];
 
   React.useEffect(() => {
+    if (_id && !isPayload) {
+      onPayloadToInitial(_id, setIsPayload);
+    }
+  }, [_id, isPayload, onPayloadToInitial]);
+
+  React.useEffect(() => {
     setKeywordCreateState(keywordCreate);
   }, [keywordCreate]);
-
-  console.log(keywordCreateState);
-
+  console.log(KeywordBonusHelper.bonus_type);
   return (
     <DrawerNav>
       <Box
@@ -44,16 +56,29 @@ const CreateKeyword = () => {
           <H2 textAlign="center" mb="2vw">
             Update Keyword
           </H2>
-          <Stepper
-            steps={steps}
-            activeStep={activeStep}
-            setActiveStep={setActiveStep}
-            slug={"insert"}
-            type={"keyword"}
-            keywordCreateState={keywordCreateState}
-          >
-            {stepsItem[activeStep]}
-          </Stepper>
+          {!isPayload ? (
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                minHeight: "50vh",
+              }}
+            >
+              <CircularProgress />
+            </Box>
+          ) : (
+            <Stepper
+              steps={steps}
+              activeStep={activeStep}
+              setActiveStep={setActiveStep}
+              slug={"update"}
+              type={"keyword"}
+              keywordCreateState={keywordCreateState}
+            >
+              {stepsItem[activeStep]}
+            </Stepper>
+          )}
         </StepperPaper>
       </Box>
     </DrawerNav>

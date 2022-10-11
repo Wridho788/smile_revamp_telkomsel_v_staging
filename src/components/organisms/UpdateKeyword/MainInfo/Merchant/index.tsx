@@ -38,8 +38,9 @@ const Merchant: React.FunctionComponent<IMerchantProps> = ({
 
   const [merchantsState, setMerchantsState] = useState(merchants);
   const [totalRecordsState, setTotalRecordsState] = useState(totalRecords);
-  const [selectedMerchantState, setSelectedMerchantState] =
-    useState<any>(selectedMerchant);
+  const [selectedMerchantState, setSelectedMerchantState] = useState<any>(
+    keywordCreate.eligibility.merchant_info
+  );
   const [lazyParamsState, setLazyParamsState] = useState<any>(lazyParams);
   const [merchantTrigger, setMerchantTrigger] = useState(false);
   const [lazyParamsTrigger, setLazyParamsTrigger] = useState(false);
@@ -53,9 +54,9 @@ const Merchant: React.FunctionComponent<IMerchantProps> = ({
     setTotalRecordsState(totalRecords);
   }, [merchantTrigger, totalRecords]);
 
-  useEffect(() => {
-    setSelectedMerchantState(selectedMerchant);
-  }, [merchantTrigger, selectedMerchant]);
+  // useEffect(() => {
+  //   setSelectedMerchantState(selectedMerchant);
+  // }, [merchantTrigger, selectedMerchant]);
 
   useEffect(() => {
     setLazyParamsState(lazyParams);
@@ -101,16 +102,20 @@ const Merchant: React.FunctionComponent<IMerchantProps> = ({
   };
   const onSelectionChange = (event: any) => {
     const value = event.value;
-    value === null
-      ? (keywordCreate.eligibility.merchant = "")
-      : (keywordCreate.eligibility.merchant = value["_id"]);
-    selectedMerchant.data = value;
-    setStateTrigger(!stateTrigger);
-    setMerchantTrigger(!merchantTrigger);
+    // value === null
+    //   ? (keywordCreate.eligibility.merchant = "")
+    //   : (keywordCreate.eligibility.merchant = value["_id"]);
+    keywordCreate.eligibility.merchant = value["_id"];
+    keywordCreate.eligibility.merchant_info = value;
+    setSelectedMerchantState(value);
   };
 
   return (
-    <Accordion expanded={expanded} onChange={()=> setExpanded(!expanded)} sx={{ p: "1vw" }}>
+    <Accordion
+      expanded={expanded}
+      onChange={() => setExpanded(!expanded)}
+      sx={{ p: "1vw" }}
+    >
       <AccordionSummary
         expandIcon={<ExpandMoreIcon fontSize="large" />}
         aria-controls="panel1a-content"
@@ -137,7 +142,7 @@ const Merchant: React.FunctionComponent<IMerchantProps> = ({
           sortOrder={lazyParamsState.data.sortOrder}
           onFilter={onFilter}
           loading={loading}
-          selection={selectedMerchantState.data}
+          selection={selectedMerchantState}
           onSelectionChange={onSelectionChange}
           filters={lazyParamsState.data.filters}
         >
@@ -169,7 +174,7 @@ const Merchant: React.FunctionComponent<IMerchantProps> = ({
         </DataTable>
         {selectedMerchantState.data !== null && (
           <Alert severity="success" sx={{ mt: "1vw" }}>
-            Selected Merchant : "{selectedMerchantState.data.merchant_name}"
+            Selected Merchant : "{selectedMerchantState.merchant_name}"
           </Alert>
         )}
       </AccordionDetails>

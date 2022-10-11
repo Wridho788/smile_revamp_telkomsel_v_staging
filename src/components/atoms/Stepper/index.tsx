@@ -18,6 +18,7 @@ import {
 import { CircularProgress, Snackbar } from "@mui/material";
 import { CreateKeywordInitial } from "../../../pages/CreateKeyword/initial";
 import { CreateKeywordGeneral } from "../../organisms/CreateKeyword/initial";
+import { CreateKeywordGeneral as UpdateKeywordGeneral } from "../../organisms/UpdateKeyword/initial";
 import {
   useKeywordGeneralCreateMutation,
   useKeywordGeneralUpdateMutation,
@@ -193,7 +194,7 @@ export default function HorizontalLinearStepper({
             break;
           case "update":
             // Change the initial or "CreateKeywordGeneral"
-            await updateKeywordGeneral(CreateKeywordGeneral)
+            await updateKeywordGeneral(UpdateKeywordGeneral)
               .then((res: any) => {
                 if (res.data) {
                   Swal.fire("Success!", "Keyword has been updated!", "success");
@@ -221,7 +222,7 @@ export default function HorizontalLinearStepper({
       newSkipped = new Set(newSkipped.values());
       newSkipped.delete(activeStep);
     }
-    if (activeStep === 0 && type === "keyword") {
+    if (activeStep === 0 && type === "keyword" && slug === "insert") {
       // General Keyword Name Validation
       await getKeywordNameExisting(
         keywordCreateState?.eligibility?.name ?? ""

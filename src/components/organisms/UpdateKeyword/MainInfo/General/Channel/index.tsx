@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Dispatch, SetStateAction } from "react";
+import React, { useState, useEffect } from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import Accordion from "@mui/material/Accordion";
@@ -11,7 +11,6 @@ import {
   channelsData,
   totalRecordsData,
   lazyParamsData,
-  selectedChannelData,
 } from "pages/NotificationManagement/initial";
 import { useLazyChannelListPrimeQuery } from "redux/features/channel/channel-api-slice";
 import { Subtitle } from "components";
@@ -19,27 +18,20 @@ import { ICreateKeyword } from "components/organisms/UpdateKeyword/interfaces";
 
 interface IChannelProps {
   keywordCreate: ICreateKeyword;
-  //   stateTrigger: boolean;
-  //   setStateTrigger: Dispatch<SetStateAction<boolean>>;
 }
 
-const Channel: React.FunctionComponent<IChannelProps> = ({
-  keywordCreate,
-  //   stateTrigger,
-  //   setStateTrigger,
-}) => {
+const Channel: React.FunctionComponent<IChannelProps> = ({ keywordCreate }) => {
   const [getChannelID] = useLazyChannelListPrimeQuery();
 
   const channels = channelsData;
   const totalRecords = totalRecordsData;
-  const selectedChannel = selectedChannelData.data;
   const lazyParams = lazyParamsData;
-  // const loading = loadingData;
 
   const [channelsState, setChannelsState] = useState(channels);
   const [totalRecordsState, setTotalRecordsState] = useState(totalRecords);
-  const [selectedChannelState, setSelectedChannelState] =
-    useState<any>(selectedChannel);
+  const [selectedChannelState, setSelectedChannelState] = useState<any>(
+    keywordCreate.eligibility.channel_validation_list_info
+  );
   const [lazyParamsState, setLazyParamsState] = useState<any>(lazyParams);
   const [channelTrigger, setChannelTrigger] = useState(false);
   const [lazyParamsTrigger, setLazyParamsTrigger] = useState(false);
@@ -52,10 +44,6 @@ const Channel: React.FunctionComponent<IChannelProps> = ({
   useEffect(() => {
     setTotalRecordsState(totalRecords);
   }, [channelTrigger, totalRecords]);
-
-  useEffect(() => {
-    setSelectedChannelState(selectedChannel);
-  }, [channelTrigger, selectedChannel]);
 
   useEffect(() => {
     setLazyParamsState(lazyParams);
@@ -105,6 +93,7 @@ const Channel: React.FunctionComponent<IChannelProps> = ({
     keywordCreate.eligibility.channel_validation_list = value.map(
       (item: any) => item._id
     );
+    keywordCreate.eligibility.channel_validation_list_info = value;
     setSelectedChannelState(value);
   };
 
@@ -164,10 +153,13 @@ const Channel: React.FunctionComponent<IChannelProps> = ({
             filterPlaceholder="Search by Name"
           />
         </DataTable>
-        {selectedChannelState.name !== "" && (
+        {keywordCreate.eligibility.channel_validation_list_info.length > 0 && (
           <Alert severity="success" sx={{ mt: "1vw" }}>
             Selected Channel : "
-            {selectedChannelState.map((item: any) => item.name).join(",")}"
+            {keywordCreate.eligibility.channel_validation_list_info
+              .map((item: any) => item.name)
+              .join(",")}
+            "
           </Alert>
         )}
       </AccordionDetails>
