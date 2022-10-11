@@ -132,7 +132,8 @@ const ProgramDetailsModal: FC<IProgramDetailsModalProps> = ({
 	}, [data.program_owner]);
 
 	// Call Approval Service
-	const { AlertApproveInfo, CheckToRenderApprovalSection } = useApprovalService();
+	const { AlertApproveInfo, CheckToRenderApprovalSection } =
+		useApprovalService();
 
 	const approveHandler = async () => {
 		approveProgram(approveBody).then((res: any) => {
@@ -179,12 +180,12 @@ const ProgramDetailsModal: FC<IProgramDetailsModalProps> = ({
 							spacing="2vw"
 							ml="1vw"
 							mr="1vw"
-							sx={{backgroundColor: "#fff", borderRadius: 2}}
+							sx={{ backgroundColor: "#fff", borderRadius: 2 }}
 						>
 							<Box>
 								<Alert severity="success">{text}</Alert>
 							</Box>
-							<Stack direction="row" sx={{flex: 1}}>
+							<Stack direction="row" sx={{ flex: 1 }}>
 								<OutlinedTextField
 									isRequired={false}
 									direction="column"
@@ -217,15 +218,14 @@ const ProgramDetailsModal: FC<IProgramDetailsModalProps> = ({
 									onClick={approveHandler}
 									variant={"contained"}
 									color="success"
-									sx={{color: "white"}}
+									sx={{ color: "white" }}
 								>
 									Approve
 								</Button>
 							</Stack>
 						</Stack>
 					</>
-				)
-				}
+				)}
 			</>
 		);
 	};
@@ -236,9 +236,9 @@ const ProgramDetailsModal: FC<IProgramDetailsModalProps> = ({
 			approval_status_value =
 				data.approval_log[data.approval_log.length - 1].status[0].set_value;
 		}
-		if(data?.need_review_after_edit){
-			if (!data.isHQ && data.created_by){
-				if(userLoginId === data.created_by.superior_local?._id) {
+		if (data?.need_review_after_edit) {
+			if (!data.isHQ && data.created_by) {
+				if (userLoginId === data.created_by.superior_local?._id) {
 					return (
 						<>
 							{renderApproveSection(
@@ -246,10 +246,10 @@ const ProgramDetailsModal: FC<IProgramDetailsModalProps> = ({
 							)}
 						</>
 					);
-				}else{
-					return ""
+				} else {
+					return "";
 				}
-			}else{
+			} else {
 				if (userLoginId !== data.created_by.superior_local?._id && roleAccess) {
 					return (
 						<>
@@ -260,12 +260,13 @@ const ProgramDetailsModal: FC<IProgramDetailsModalProps> = ({
 					);
 				}
 			}
-		}else{
+		} else {
 			if (
 				(data.approval_log && data.approval_log.length > 0) ||
-				approval_status_value === "Rejected by ManagerHQ" || approval_status_value === "Rejected by Manager Non HQ"
-			){
-				return ""
+				approval_status_value === "Rejected by Manager HQ" ||
+				approval_status_value === "Rejected by Manager Non HQ"
+			) {
+				return "";
 			}
 		}
 		if (!data.isHQ && data.created_by) {
@@ -382,7 +383,11 @@ const ProgramDetailsModal: FC<IProgramDetailsModalProps> = ({
 				{data?.is_draft ? (
 					<>
 						<Alert sx={{ margin: 2 }} severity="error">
-							This program is stored as Draft, Click <b style={{cursor:'pointer'}} onClick={onRemoveFromDraft}>Here</b> to remove it from draft and request for Approval
+							This program is stored as Draft, Click{" "}
+							<b style={{ cursor: "pointer" }} onClick={onRemoveFromDraft}>
+								Here
+							</b>{" "}
+							to remove it from draft and request for Approval
 						</Alert>
 					</>
 				) : (
@@ -390,7 +395,12 @@ const ProgramDetailsModal: FC<IProgramDetailsModalProps> = ({
 						{/* TODO: Checking status "Approval" of Detail Program */}
 						{AlertApproveInfo(data)}
 						{/*{checkToRenderApprovalSection()}*/}
-						{CheckToRenderApprovalSection(data, renderApproveSection, userLoginId, roleAccess)}
+						{CheckToRenderApprovalSection(
+							data,
+							renderApproveSection,
+							userLoginId,
+							roleAccess
+						)}
 					</>
 				)}
 
@@ -405,15 +415,15 @@ const ProgramDetailsModal: FC<IProgramDetailsModalProps> = ({
 								>
 									Program Main Information
 								</Typography>
-								{!roleAccess &&
+								{!roleAccess && (
 									<IconButton
 										// href={"/edit-program/main-info/".concat(data._id)}
 										sx={fontContentIcon}
 										onClick={() => {router("/edit-program/main-info/".concat(data._id))}}
 									>
-										<Edit sx={{fontSize: 14}}></Edit>
+										<Edit sx={{ fontSize: 14 }}></Edit>
 									</IconButton>
-								}
+								)}
 							</Stack>
 
 							<Stack direction="column" mt={1}>
@@ -527,14 +537,14 @@ const ProgramDetailsModal: FC<IProgramDetailsModalProps> = ({
 								>
 									Program Notification
 								</Typography>
-								{!roleAccess &&
+								{!roleAccess && (
 									<IconButton
 										href={"/edit-program/notification/".concat(data._id)}
 										sx={fontContentIcon}
 									>
-										<Edit sx={{fontSize: 14}}></Edit>
+										<Edit sx={{ fontSize: 14 }}></Edit>
 									</IconButton>
-								}
+								)}
 							</Stack>
 
 							<Stack spacing={2}>

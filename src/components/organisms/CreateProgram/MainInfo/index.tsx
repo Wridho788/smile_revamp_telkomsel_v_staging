@@ -249,21 +249,20 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
 								programData.is_draft = !programData.is_draft;
 								setStateTrigger(!stateTrigger);
 							}}
-							label={"Switch this toggle on to save this program as Draft when you finish create !"}
+							label={
+								"Switch this toggle on to save this program as Draft when you finish create !"
+							}
 						/>
 					</Alert>
 				</Box>
-				{
-					programData?.is_draft &&
+				{programData?.is_draft && (
 					<Box>
-						<Alert
-							severity="info"
-							color={"warning"}
-						>
-							This program will be stored as <b>Draft</b>. Please note that program draft will not request for Approval
+						<Alert severity="info" color={"warning"}>
+							This program will be stored as <b>Draft</b>. Please note that
+							program draft will not request for Approval
 						</Alert>
 					</Box>
-				}
+				)}
 
 				{/*<OutlinedTextField*/}
 				{/*    label="Program Group"*/}
