@@ -1,10 +1,26 @@
-import React, { Dispatch, SetStateAction } from "react";
-import { Box, Chip, CircularProgress, Stack } from "@mui/material";
-import { BodyCopy, H2, Select, SmallCopy } from "../../../../atoms";
+import React, { Dispatch, SetStateAction, useState, useEffect } from "react";
+
+import {
+	Autocomplete,
+	Box,
+	Chip,
+	CircularProgress,
+	Stack
+} from "@mui/material";
+import {
+	BodyCopy,
+	H2,
+	OutlinedTextField,
+	Select,
+	SmallCopy
+} from "../../../../atoms";
 import { useGetProgramExperienceQuery } from "../../../../../redux/features/lov/lov-api-slice";
 import { FilterInitial } from "../../../../../redux/utils/initial-general";
 import { IUpdateKeyword } from "../../interfaces";
-import { useProgramListQuery } from "../../../../../redux/features/program/program-api-slice";
+import {
+	useProgramListQuery,
+	useDetailProgramQuery
+} from "../../../../../redux/features/program/program-api-slice";
 import Information from "./Information";
 import CancelIcon from "@mui/icons-material/Cancel";
 import _without from "lodash/without";
@@ -23,27 +39,90 @@ const Program: React.FunctionComponent<IProgramProps> = ({
 	stateTrigger,
 	setStateTrigger
 }) => {
+	const [programListLimit, setProgramListLimit] = useState<number>(100);
 	const {
 		data: programListOptions = { data: [] },
-		isFetching: isFetchingProgram
-	} = useProgramListQuery(FilterInitial);
+		isFetching: isFetchingProgram,
+		isLoading: isProgramListLoading,
+		refetch: refetchProgramList
+	} = useProgramListQuery({ ...FilterInitial, limit: programListLimit });
 	const {
 		data: programExperienceOptions = { data: [] },
 		isFetching: isFetchingProgramExperience
 	} = useGetProgramExperienceQuery();
+	const { data: programDetail, isLoading: isProgramDetailLoading } =
+		useDetailProgramQuery(keywordCreateState.eligibility.program_id);
+
+	useEffect(() => {
+		if (programListLimit !== 100) {
+			refetchProgramList();
+		}
+	}, [programListLimit, refetchProgramList]);
 
 	return (
 		<Box sx={{ px: "2vw" }}>
-			{!isFetchingProgram && !isFetchingProgramExperience ? (
+			{!isProgramListLoading &&
+			!isFetchingProgramExperience &&
+			!isProgramDetailLoading ? (
 				<Stack spacing="2vw" px="2vw" py="0.5vw">
-					<Select
+					<Autocomplete
+						disablePortal
+						getOptionLabel={option => option.name}
+						options={[
+							programDetail,
+							...programListOptions.data.filter(
+								e =>
+									e.approval_log?.length > 0 &&
+									e.approval_log[e.approval_log.length - 1].status?.length >
+										0 &&
+									e.approval_log[e.approval_log.length - 1].status[0]
+										.set_value === "Approved by Manager HQ" &&
+									moment(e?.end_period).isAfter(moment()) &&
+									e?._id !== keywordCreateState.eligibility.program_id
+							)
+						]}
+						value={programDetail}
+						disableClearable
+						isOptionEqualToValue={(option, value) => {
+							return option?._id === value?._id;
+						}}
+						onChange={(_, value) => {
+							if (value) {
+								keywordCreate.eligibility.program_id = value?._id;
+								setStateTrigger(!stateTrigger);
+							}
+						}}
+						ListboxProps={{
+							onScroll: (event: React.SyntheticEvent) => {
+								const listboxNode = event.currentTarget;
+
+								if (
+									Math.round(
+										listboxNode.scrollTop + listboxNode.clientHeight
+									) === Math.round(listboxNode.scrollHeight)
+								) {
+									setProgramListLimit(
+										previousProgramListLimit => previousProgramListLimit + 10
+									);
+								}
+							}
+						}}
+						renderInput={params => (
+							<OutlinedTextField
+								{...params}
+								isRequired
+								label="Choose Program"
+								placeholder="Choose Program"
+								variant="outlined"
+							/>
+						)}
+					/>
+
+					{/* <Select
 						label="Choose Program"
 						placeholder="Option"
 						options={[
-							programListOptions.data.find(
-								program =>
-									program?._id === keywordCreateState.eligibility.program_id
-							),
+							programDetail,
 							...programListOptions.data.filter(
 								e =>
 									e.approval_log?.length > 0 &&
@@ -61,7 +140,8 @@ const Program: React.FunctionComponent<IProgramProps> = ({
 							keywordCreate.eligibility.program_id = value;
 							setStateTrigger(!stateTrigger);
 						}}
-					/>
+					/> */}
+
 					{keywordCreateState.eligibility.program_id !== "" && (
 						<Stack spacing="1vw">
 							<BodyCopy color="primary" align="center">

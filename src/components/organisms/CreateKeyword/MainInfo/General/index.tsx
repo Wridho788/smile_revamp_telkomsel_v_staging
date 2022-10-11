@@ -728,7 +728,17 @@ const General: React.FunctionComponent<IGeneralProps> = ({
 								<Autocomplete
 									disablePortal
 									getOptionLabel={option => option.name}
-									options={programListOptions?.data || []}
+									options={[
+										...programListOptions.data.filter(
+											e =>
+												e.approval_log?.length > 0 &&
+												e.approval_log[e.approval_log.length - 1].status
+													?.length > 0 &&
+												e.approval_log[e.approval_log.length - 1].status[0]
+													.set_value === "Approved by Manager HQ" &&
+												moment(e?.end_period).isAfter(moment())
+										)
+									]}
 									disableClearable
 									value={
 										keywordCreateState.eligibility.multiwhitelist_program ||
