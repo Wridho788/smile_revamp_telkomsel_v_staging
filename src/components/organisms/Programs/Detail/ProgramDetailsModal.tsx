@@ -47,6 +47,7 @@ import {
 	useLocationRebaseMutation
 } from "../../../../redux/features/location/location-api-slice";
 import useApprovalService from "../../../../service/approval";
+import {useNavigate} from "react-router-dom";
 
 const style = {
 	position: "absolute" as "absolute",
@@ -86,6 +87,7 @@ const ProgramDetailsModal: FC<IProgramDetailsModalProps> = ({
 	refetchProgram,
 	userLoginId
 }) => {
+	const router = useNavigate();
 	const [approveProgram, { isLoading: isLoadingApprove }] =
 		useApproveProgramMutation();
 	const [rejectProgram, { isLoading: isLoadingReject }] =
@@ -415,8 +417,9 @@ const ProgramDetailsModal: FC<IProgramDetailsModalProps> = ({
 								</Typography>
 								{!roleAccess && (
 									<IconButton
-										href={"/edit-program/main-info/".concat(data._id)}
+										// href={"/edit-program/main-info/".concat(data._id)}
 										sx={fontContentIcon}
+										onClick={() => {router("/edit-program/main-info/".concat(data._id))}}
 									>
 										<Edit sx={{ fontSize: 14 }}></Edit>
 									</IconButton>
