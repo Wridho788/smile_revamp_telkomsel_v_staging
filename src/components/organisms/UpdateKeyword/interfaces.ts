@@ -62,6 +62,7 @@ export interface IKeywordEligibility {
   file: string;
   segmentation_employee_numbers: boolean;
   keyword_shift: IKeywordEligibilityKeywordShift[];
+  approval_log?: any[];
 }
 
 export interface IKeywordBonusHelper {
@@ -181,6 +182,7 @@ export interface IKeywordNotificationAuction {
 
 export interface ICreateKeyword {
   is_draft?: boolean;
+  approval_log?: any[];
   eligibility: IKeywordEligibility;
   bonus: any[];
   notification: any[];

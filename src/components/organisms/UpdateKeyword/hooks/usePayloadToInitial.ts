@@ -13,6 +13,7 @@ const usePayloadToInitial = () => {
     ) => {
       await getKeywordDetail(_id).then((res) => {
         if (res.isSuccess === true) {
+          keywordCreate.approval_log = [...res.data.approval_log];
           keywordCreate.eligibility = { ...res.data.eligibility };
           keywordCreate.bonus = [...res.data.bonus];
           keywordCreate.notification = [...res.data.notification];
@@ -23,7 +24,7 @@ const usePayloadToInitial = () => {
         }
       });
     },
-    [getKeywordDetail, keywordCreate]
+    [getKeywordDetail, keywordBonusHelper, keywordCreate]
   );
 
   return { onPayloadToInitial: handlePayloadToInitial };
