@@ -17,7 +17,7 @@ interface IProps {
 	triger: boolean;
 	setTriger: React.Dispatch<React.SetStateAction<boolean>>;
 	loading: boolean;
-	onDraftChange?: () => void;
+	onDraftChange?: (value: boolean) => void;
 	isDraftActive?: boolean;
 }
 
@@ -80,9 +80,9 @@ const Filter: React.FC<IProps> = ({
 				<SwitchCustom
 					color={"success"}
 					checked={isDraftActive || false}
-					handleChange={() => {
+					handleChange={(value: boolean) => {
 						if (onDraftChange) {
-							onDraftChange();
+							onDraftChange(value);
 						}
 					}}
 					label={"Show Draft"}
