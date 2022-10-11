@@ -39,8 +39,8 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = props => {
 				<Stack spacing="1vw" px="4vw">
 					{/*  Draft Switcher */}
 					{["Rejected by Manager HQ", "Rejected by Manager Non HQ"].includes(
-						keywordUpdateState?.eligibility?.approval_log?.[
-							keywordUpdateState?.eligibility?.approval_log?.length - 1
+						keywordUpdateState?.approval_log?.[
+							keywordUpdateState?.approval_log?.length - 1
 						]?.status[0]?.set_value
 					) ? (
 						<>

@@ -27,6 +27,7 @@ const UpdateKeyword = () => {
 
 	useEffect(() => {
 		if (data) {
+			UpdateKeyword.approval_log = cloneDeep(data?.approval_log || []);
 			UpdateKeyword.bonus = cloneDeep(data.bonus);
 			UpdateKeyword.eligibility = cloneDeep(data.eligibility);
 			UpdateKeyword.notification = cloneDeep(data.notification);

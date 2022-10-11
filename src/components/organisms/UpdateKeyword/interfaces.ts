@@ -180,6 +180,7 @@ export interface IKeywordNotificationAuction {
 
 export interface IUpdateKeyword {
 	is_draft?: boolean;
+	approval_log?: any[];
 	eligibility: IKeywordEligibility;
 	bonus: any[];
 	notification: any[];
