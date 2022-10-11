@@ -405,8 +405,9 @@ const ProgramDetailsModal: FC<IProgramDetailsModalProps> = ({
 								</Typography>
 								{!roleAccess &&
 									<IconButton
-										href={"/edit-program/main-info/".concat(data._id)}
+										// href={"/edit-program/main-info/".concat(data._id)}
 										sx={fontContentIcon}
+										onClick={() => {router("/edit-program/main-info/".concat(data._id))}}
 									>
 										<Edit sx={{fontSize: 14}}></Edit>
 									</IconButton>
