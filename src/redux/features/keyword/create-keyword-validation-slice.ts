@@ -6,6 +6,7 @@ import { ICreateKeywordValidation } from "./interface";
 
 const initialState: ICreateKeywordValidation = {
   keywordName: "",
+  keywordNameEligibility: "",
 };
 
 export const createKeywordValidationSlice = createSlice({
@@ -16,7 +17,9 @@ export const createKeywordValidationSlice = createSlice({
       state,
       { payload }: PayloadAction<ICreateKeywordValidation>
     ) => {
-      state.keywordName = payload.keywordName;
+      state.keywordName = payload.keywordName ?? state.keywordName;
+      state.keywordNameEligibility =
+        payload.keywordNameEligibility ?? state.keywordNameEligibility;
     },
   },
 });

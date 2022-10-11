@@ -27,6 +27,7 @@ import {
   KeywordNotificationEligibilityHelper,
   KeywordNotificationEligibility,
 } from "../../initial";
+import { useAppSelector } from "service/hooks";
 
 interface INotificationProps {
   keywordCreateState: ICreateKeyword;
@@ -72,6 +73,9 @@ const Notification: React.FunctionComponent<INotificationProps> = ({
   ] = useState<IKeywordNotificationEligibility[]>(
     keywordNotificationEligibility
   );
+  const keywordName = useAppSelector(
+    (state) => state.createKeywordValidationSlice.keywordNameEligibility
+  );
 
   useEffect(() => {
     getKeywordNotification("ELIGIBILITY_VERIFICATION");
@@ -88,7 +92,11 @@ const Notification: React.FunctionComponent<INotificationProps> = ({
   }, [keywordNotificationEligibility, stateTrigger]);
 
   return (
-    <Accordion expanded={expanded} onChange={()=> setExpanded(!expanded)} sx={{ p: "1vw" }}>
+    <Accordion
+      expanded={expanded}
+      onChange={() => setExpanded(!expanded)}
+      sx={{ p: "1vw" }}
+    >
       <AccordionSummary
         expandIcon={<ExpandMoreIcon fontSize="large" />}
         aria-controls="panel1a-content"
@@ -128,13 +136,14 @@ const Notification: React.FunctionComponent<INotificationProps> = ({
                     direction="column"
                     label="Keyword Name"
                     variant="outlined"
-                    disabled={idx !== 0}
-                    value={
-                      idx === 0
-                        ? keywordNotificationEligibility[idx].keyword_name.replace(/[^a-zA-Z0-9]/g, "")
-                        .toUpperCase()
-                        : keywordCreateState.eligibility.name
+                    error={
+                      idx === 0 ? (keywordName === "" ? false : true) : false
                     }
+                    helperText={
+                      idx === 0 ? (keywordName === "" ? "" : keywordName) : ""
+                    }
+                    disabled={idx !== 0}
+                    value={keywordNotificationEligibility[idx].keyword_name}
                     handleChange={(value: string) => {
                       keywordNotificationEligibility[idx].keyword_name = value
                         .replace(/[^a-zA-Z0-9]/g, "")

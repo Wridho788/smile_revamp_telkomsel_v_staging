@@ -30,6 +30,8 @@ const CreateKeyword = () => {
     setKeywordCreateState(keywordCreate);
   }, [keywordCreate]);
 
+  console.log(keywordCreateState);
+
   return (
     <DrawerNav>
       <Box
