@@ -78,7 +78,7 @@ const General: React.FunctionComponent<IGeneralProps> = ({
     KeywordNotificationEligibility;
   // const { data: customerBadgeOptions = { data: [] } } =
   //   useCustomerBadgeListQuery(FilterInitial);
-  console.log(keywordCreateState);
+  // console.log(keywordCreateState);
 
   return (
     <Accordion

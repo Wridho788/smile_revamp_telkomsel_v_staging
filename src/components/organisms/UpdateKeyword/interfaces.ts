@@ -9,24 +9,21 @@ export interface IKeywordEligibilityKeywordShift {
 
 export interface IKeywordEligibility {
   name: string;
-  start_period: any;
-  end_period: any;
+  start_period: string;
+  end_period: string;
   keyword_type: string;
   point_type: string;
   poin_value: string;
   poin_redeemed: number;
   channel_validation: boolean;
-  channel_validation_list: string[];
-  channel_validation_list_info: any[];
+  channel_validation_list: any[];
   program_id: string;
   eligibility_locations: boolean;
-  location_type: string;
-  locations: string[];
+  locations: any[];
   program_title_expose: string;
-  program_experience: string[];
+  program_experience: any[];
   program_bersubsidi: boolean;
   merchant: string;
-  merchant_info: any;
   merchandise_keyword: boolean;
   keyword_schedule: string;
   total_budget: number;
@@ -39,14 +36,14 @@ export interface IKeywordEligibility {
   for_new_redeemer: boolean;
   max_mode: string;
   max_redeem_counter: number;
-  segmentation_customer_tier: string[];
+  segmentation_customer_tier: any[];
   segmentation_customer_los_operator: string;
   segmentation_customer_los: number;
-  segmentation_customer_los_min: number;
   segmentation_customer_los_max: number;
+  segmentation_customer_los_min: number;
   segmentation_customer_type: string;
-  segmentation_customer_most_redeem: string[];
-  segmentation_customer_brand: string[];
+  segmentation_customer_most_redeem: any[];
+  segmentation_customer_brand: any[];
   segmentation_customer_prepaid_registration: boolean;
   segmentation_customer_kyc_completeness: boolean;
   segmentation_customer_poin_balance_operator: string;
@@ -61,8 +58,9 @@ export interface IKeywordEligibility {
   segmentation_customer_preferences_bcp: string;
   file: string;
   segmentation_employee_numbers: boolean;
+  eligibility_location: boolean;
+  location_type: string;
   keyword_shift: IKeywordEligibilityKeywordShift[];
-  approval_log?: any[];
 }
 
 export interface IKeywordBonusHelper {
@@ -108,8 +106,8 @@ export interface IKeywordNotificationEligibility {
   keyword_name: string;
   code_identifier: string;
   notification_content: string;
-  start_period: Date;
-  end_period: Date;
+  start_period: Date | string;
+  end_period: Date | string;
   notif_type: string;
   via: string;
 }
@@ -124,8 +122,8 @@ export interface IKeywordNotificationLuckyDraw {
   keyword_name: string;
   code_identifier: string;
   notification_content: string;
-  start_period: Date;
-  end_period: Date;
+  start_period: Date | string;
+  end_period: Date | string;
   notif_type: string;
   via: string;
 }
@@ -173,8 +171,8 @@ export interface IKeywordNotificationAuction {
   bonus_type_id: string;
   code_identifier: string;
   notification_content: string;
-  start_period: Date;
-  end_period: Date;
+  start_period: Date | string;
+  end_period: Date | string;
   notif_type: string;
   via: string;
   keyword_name?: string;
@@ -182,11 +180,11 @@ export interface IKeywordNotificationAuction {
 
 export interface ICreateKeyword {
   _id: string;
-  is_draft?: boolean;
-  approval_log?: any[];
   eligibility: IKeywordEligibility;
   bonus: any[];
   notification: any[];
+  is_draft?: boolean;
+  need_review_after_edit?: boolean;
 }
 
 export interface IKeywordBonusLinkAjaMain {

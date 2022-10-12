@@ -29,9 +29,8 @@ const Channel: React.FunctionComponent<IChannelProps> = ({ keywordCreate }) => {
 
   const [channelsState, setChannelsState] = useState(channels);
   const [totalRecordsState, setTotalRecordsState] = useState(totalRecords);
-  const [selectedChannelState, setSelectedChannelState] = useState<any>(
-    keywordCreate.eligibility.channel_validation_list_info
-  );
+  const [selectedChannelState, setSelectedChannelState] = useState<any>();
+  // keywordCreate.eligibility.channel_validation_list_info
   const [lazyParamsState, setLazyParamsState] = useState<any>(lazyParams);
   const [channelTrigger, setChannelTrigger] = useState(false);
   const [lazyParamsTrigger, setLazyParamsTrigger] = useState(false);
@@ -93,7 +92,7 @@ const Channel: React.FunctionComponent<IChannelProps> = ({ keywordCreate }) => {
     keywordCreate.eligibility.channel_validation_list = value.map(
       (item: any) => item._id
     );
-    keywordCreate.eligibility.channel_validation_list_info = value;
+    // keywordCreate.eligibility.channel_validation_list_info = value;
     setSelectedChannelState(value);
   };
 
@@ -153,13 +152,10 @@ const Channel: React.FunctionComponent<IChannelProps> = ({ keywordCreate }) => {
             filterPlaceholder="Search by Name"
           />
         </DataTable>
-        {keywordCreate.eligibility.channel_validation_list_info.length > 0 && (
+        {selectedChannelState !== undefined && (
           <Alert severity="success" sx={{ mt: "1vw" }}>
             Selected Channel : "
-            {keywordCreate.eligibility.channel_validation_list_info
-              .map((item: any) => item.name)
-              .join(",")}
-            "
+            {selectedChannelState.data.map((item: any) => item.name).join(",")}"
           </Alert>
         )}
       </AccordionDetails>

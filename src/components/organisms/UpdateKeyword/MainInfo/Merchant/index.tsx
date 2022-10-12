@@ -38,9 +38,8 @@ const Merchant: React.FunctionComponent<IMerchantProps> = ({
 
   const [merchantsState, setMerchantsState] = useState(merchants);
   const [totalRecordsState, setTotalRecordsState] = useState(totalRecords);
-  const [selectedMerchantState, setSelectedMerchantState] = useState<any>(
-    keywordCreate.eligibility.merchant_info
-  );
+  const [selectedMerchantState, setSelectedMerchantState] = useState<any>();
+  // keywordCreate.eligibility.merchant_info
   const [lazyParamsState, setLazyParamsState] = useState<any>(lazyParams);
   const [merchantTrigger, setMerchantTrigger] = useState(false);
   const [lazyParamsTrigger, setLazyParamsTrigger] = useState(false);
@@ -106,7 +105,7 @@ const Merchant: React.FunctionComponent<IMerchantProps> = ({
     //   ? (keywordCreate.eligibility.merchant = "")
     //   : (keywordCreate.eligibility.merchant = value["_id"]);
     keywordCreate.eligibility.merchant = value["_id"];
-    keywordCreate.eligibility.merchant_info = value;
+    // keywordCreate.eligibility.merchant_info = value;
     setSelectedMerchantState(value);
   };
 
@@ -172,7 +171,7 @@ const Merchant: React.FunctionComponent<IMerchantProps> = ({
             filterPlaceholder="Search by NPWP"
           />
         </DataTable>
-        {selectedMerchantState.data !== null && (
+        {selectedMerchantState !== undefined && (
           <Alert severity="success" sx={{ mt: "1vw" }}>
             Selected Merchant : "{selectedMerchantState.merchant_name}"
           </Alert>
