@@ -1,17 +1,17 @@
 import {
-	Close,
-	AccountBalance,
-	Equalizer,
-	PeopleAlt,
-	PersonSearch,
-	Storefront,
-	Redeem,
-	BrightnessLow,
-	StarsOutlined,
-	ErrorOutlineOutlined,
-	ShareLocationOutlined,
-	Logout,
-	PersonPin,
+    Close,
+    AccountBalance,
+    Equalizer,
+    PeopleAlt,
+    PersonSearch,
+    Storefront,
+    Redeem,
+    BrightnessLow,
+    StarsOutlined,
+    ErrorOutlineOutlined,
+    ShareLocationOutlined,
+    Logout, PersonPin,
+    DonutLargeOutlined,
 	NotificationImportant
 } from "@mui/icons-material";
 import { Avatar } from "@mui/material";
@@ -73,30 +73,53 @@ export const menuItems: Menu[] = [
 		]
 	},
 
-	{
-		label: "Notification Management",
-		hasChild: false,
-		icon: ErrorOutlineOutlined,
-		path: "/notification-management"
-	},
-	{
-		label: "Location Management",
-		hasChild: false,
-		icon: ShareLocationOutlined,
-		path: "/location-management"
-	},
-	{
-		label: "PIC Management",
-		hasChild: false,
-		icon: PersonPin,
-		path: "/pic-management"
-	},
-	{
-		label: "Sign Out",
-		hasChild: false,
-		icon: Logout,
-		path: "/signOut"
-	},
+    {
+        label: "LOV",
+        hasChild: true,
+        icon: DonutLargeOutlined,
+        child: [
+            {
+                label: "Channel Management",
+                path: "/channel-management",
+                alias: ["/channel-management"],
+            },
+            {
+                label: "Customer Brand Management",
+                path: "/",
+                alias: ["/"],
+            },
+            {
+                label: "Tier Management",
+                path: "/",
+                alias: ["/"],
+            },
+        ],
+    },
+
+    {
+        label: "Notification Management",
+        hasChild: false,
+        icon: ErrorOutlineOutlined,
+        path: "/notification-management",
+    },
+    {
+        label: "Location Management",
+        hasChild: false,
+        icon: ShareLocationOutlined,
+        path: "/location-management",
+    },
+    {
+        label: "PIC Management",
+        hasChild: false,
+        icon: PersonPin,
+        path: "/pic-management"
+    },
+    {
+        label: "Sign Out",
+        hasChild: false,
+        icon: Logout,
+        path: "/signOut",
+    },
 	{
 		label: "Notifications",
 		hasChild: false,
