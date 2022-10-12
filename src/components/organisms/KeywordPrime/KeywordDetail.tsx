@@ -486,20 +486,20 @@ const KeywordDetail: FC<IKeywordDetailsModalProps> = ({
 													</TableRow>
 												</TableHead>
 												<TableBody>
-													{eligibility?.channel_validation_list.map(
-														(item: string, index: number) => (
+													{eligibility?.channel_validation_list_info?.map(
+														(item: any, index: number) => (
 															<TableRow
 																key={index}
 																sx={{
 																	"&:last-child td, &:last-child th": {
-																		border: 0
-																	}
+																		border: 0,
+																	},
 																}}
 															>
 																<TableCell component="th" scope="row">
 																	{index + 1}
 																</TableCell>
-																<TableCell align="right">{item}</TableCell>
+																<TableCell >{item?.name}</TableCell>
 															</TableRow>
 														)
 													)}
@@ -534,20 +534,20 @@ const KeywordDetail: FC<IKeywordDetailsModalProps> = ({
 													</TableRow>
 												</TableHead>
 												<TableBody>
-													{eligibility?.locations.map(
-														(item: string, index: number) => (
+													{eligibility?.locations_info?.map(
+														(item: any, index: number) => (
 															<TableRow
 																key={index}
 																sx={{
 																	"&:last-child td, &:last-child th": {
-																		border: 0
-																	}
+																		border: 0,
+																	},
 																}}
 															>
 																<TableCell component="th" scope="row">
 																	{index + 1}
 																</TableCell>
-																<TableCell align="right">{item}</TableCell>
+																<TableCell >{item?.name}</TableCell>
 															</TableRow>
 														)
 													)}
@@ -582,25 +582,25 @@ const KeywordDetail: FC<IKeywordDetailsModalProps> = ({
 													</TableRow>
 												</TableHead>
 												<TableBody>
-													{/* {eligibility?.channel_validation_list.map(
-                            (item: string, index: number) => ( */}
-													<TableRow
-														// key={index}
-														sx={{
-															"&:last-child td, &:last-child th": {
-																border: 0
-															}
-														}}
-													>
-														<TableCell component="th" scope="row">
-															{/* {index + 1} */}
-														</TableCell>
-														<TableCell align="right">
-															{eligibility?.merchant}
-														</TableCell>
-													</TableRow>
-													{/* )
-                          )} */}
+													{eligibility?.merchant_info.map(
+														(item: any, index: number) => (
+															<TableRow
+																key={index}
+																sx={{
+																	"&:last-child td, &:last-child th": {
+																		border: 0,
+																	},
+																}}
+															>
+																<TableCell component="th" scope="row">
+																	{index + 1}
+																</TableCell>
+																<TableCell >
+																	{item?.merchant_name}
+																</TableCell>
+															</TableRow>
+														)
+													)}
 												</TableBody>
 											</Table>
 										</TableContainer>
@@ -627,8 +627,8 @@ const KeywordDetail: FC<IKeywordDetailsModalProps> = ({
 											<b>Customer Tier</b>
 										</Typography>
 										<Typography sx={fontContent}>
-											{eligibility?.segmentation_customer_tier?.map(
-												(item: any) => item
+											{eligibility?.segmentation_customer_tier_info?.map(
+												(item: any) => (<div>{item?.name}</div>)
 											)}
 										</Typography>
 									</Grid>
@@ -637,8 +637,8 @@ const KeywordDetail: FC<IKeywordDetailsModalProps> = ({
 											<b>Customer Brand</b>
 										</Typography>
 										<Typography sx={fontContent}>
-											{eligibility?.segmentation_customer_brand?.map(
-												(item: any) => item
+											{eligibility?.segmentation_customer_brand_info?.map(
+												(item: any) => (<div>{item?.name}</div>)
 											)}
 										</Typography>
 									</Grid>
@@ -647,8 +647,8 @@ const KeywordDetail: FC<IKeywordDetailsModalProps> = ({
 											<b>Customer Badge</b>
 										</Typography>
 										<Typography sx={fontContent}>
-											{eligibility?.segmentation_customer_brand?.map(
-												(item: any) => item
+											{eligibility?.segmentation_customer_brand_info?.map(
+												(item: any) => (<div>{item?.name}</div>)
 											)}
 										</Typography>
 									</Grid>
@@ -657,8 +657,8 @@ const KeywordDetail: FC<IKeywordDetailsModalProps> = ({
 											<b>Customer Most Redeem</b>
 										</Typography>
 										<Typography sx={fontContent}>
-											{eligibility?.segmentation_customer_most_redeem.map(
-												(item: any) => item
+											{eligibility?.segmentation_customer_most_redeem_info.map(
+												(item: any) => (<div>{item?.name}</div>)
 											)}
 										</Typography>
 									</Grid>
@@ -866,7 +866,7 @@ const KeywordDetail: FC<IKeywordDetailsModalProps> = ({
 														label="Notification Template"
 														options={codeIdentifier}
 														value={codeIdentifier[0]}
-														onChange={() => {}}
+														onChange={() => { }}
 														disabled
 													/>
 													<Gap width={0} height={15} />
@@ -888,7 +888,7 @@ const KeywordDetail: FC<IKeywordDetailsModalProps> = ({
 														label="Notification Via"
 														options={notificationVia}
 														value={notificationVia[0]}
-														onChange={() => {}}
+														onChange={() => { }}
 														disabled
 													/>
 													<Gap width={0} height={15} />

@@ -1,35 +1,37 @@
-import * as React from "react";
-import Box from "@mui/material/Box";
-import Stepper from "@mui/material/Stepper";
-import Step from "@mui/material/Step";
-import StepLabel from "@mui/material/StepLabel";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
-import { BodyCopy } from "../Typography";
-import { styled } from "@mui/material/styles";
+import * as React from 'react';
+import Box from '@mui/material/Box';
+import Stepper from '@mui/material/Stepper';
+import Step from '@mui/material/Step';
+import StepLabel from '@mui/material/StepLabel';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import { BodyCopy } from '../Typography';
+import { styled } from '@mui/material/styles';
 import StepConnector, {
   stepConnectorClasses,
-} from "@mui/material/StepConnector";
-import { StepIconProps } from "@mui/material/StepIcon";
+} from '@mui/material/StepConnector';
+import { StepIconProps } from '@mui/material/StepIcon';
 import {
   useCreateProgramMutation,
   useUpdateProgramMutation,
-} from "../../../redux/features/program/program-api-slice";
-import { CircularProgress, Snackbar } from "@mui/material";
-import { CreateKeywordInitial } from "../../../pages/CreateKeyword/initial";
-import { CreateKeywordGeneral } from "../../organisms/CreateKeyword/initial";
+} from '../../../redux/features/program/program-api-slice';
+import { CircularProgress, Snackbar } from '@mui/material';
+import { CreateKeywordInitial } from '../../../pages/CreateKeyword/initial';
+import { CreateKeywordGeneral } from '../../organisms/CreateKeyword/initial';
 import {
   useKeywordGeneralCreateMutation,
   useKeywordGeneralUpdateMutation,
   useKeywordNameExistingQuery,
   useLazyKeywordNameExistingQuery,
-} from "../../../redux/features/keyword/keyword-api-slice";
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import Swal from "sweetalert2";
-import { CreateProgramInitial } from "../../../pages/CreateProgram/programInitial";
-import { useForm } from "react-hook-form";
-import { ICreateKeyword } from "components/organisms/CreateKeyword/interfaces";
+} from '../../../redux/features/keyword/keyword-api-slice';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
+import { CreateProgramInitial } from '../../../pages/CreateProgram/programInitial';
+import { useForm } from 'react-hook-form';
+import { ICreateKeyword } from 'components/organisms/CreateKeyword/interfaces';
+import { useAppDispatch } from 'service/hooks';
+import { SET_KEYWORD_VALIDATION } from 'redux/features/keyword/create-keyword-validation-slice';
 
 const ColorlibConnector = styled(StepConnector)(({ theme }) => ({
   [`&.${stepConnectorClasses.alternativeLabel}`]: {
@@ -53,33 +55,33 @@ const ColorlibConnector = styled(StepConnector)(({ theme }) => ({
   },
 }));
 
-const ColorlibStepIconRoot = styled("div")<{
+const ColorlibStepIconRoot = styled('div')<{
   ownerState: { completed?: boolean; active?: boolean };
 }>(({ theme, ownerState }) => ({
   backgroundColor: theme.palette.background.paper,
   zIndex: 1,
-  color: "rgba(0, 26, 65, 0.2)",
-  fontFamily: "sans-serif",
+  color: 'rgba(0, 26, 65, 0.2)',
+  fontFamily: 'sans-serif',
   fontSize: 24,
-  fontWeight: "bold",
+  fontWeight: 'bold',
   width: 70,
   height: 70,
-  display: "flex",
-  border: "5px solid",
+  display: 'flex',
+  border: '5px solid',
   borderColor: theme.palette.secondary.main,
-  borderRadius: "50%",
-  justifyContent: "center",
-  alignItems: "center",
+  borderRadius: '50%',
+  justifyContent: 'center',
+  alignItems: 'center',
   ...(ownerState.active && {
     color: theme.palette.background.paper,
     backgroundColor: theme.palette.secondary.dark,
-    border: "5px solid",
+    border: '5px solid',
     borderColor: theme.palette.secondary.dark,
   }),
   ...(ownerState.completed && {
     color: theme.palette.background.paper,
     backgroundColor: theme.palette.secondary.dark,
-    border: "5px solid",
+    border: '5px solid',
     borderColor: theme.palette.secondary.dark,
   }),
 }));
@@ -92,17 +94,16 @@ function ColorlibStepIcon(props: StepIconProps) {
     // 1: <SettingsIcon />,
     // 2: <GroupAddIcon />,
     // 3: <VideoLabelIcon />,
-    1: "1",
-    2: "2",
-    3: "3",
-    4: "4",
+    1: '1',
+    2: '2',
+    3: '3',
+    4: '4',
   };
 
   return (
     <ColorlibStepIconRoot
       ownerState={{ completed, active }}
-      className={className}
-    >
+      className={className}>
       {icons[String(props.icon)]}
     </ColorlibStepIconRoot>
   );
@@ -130,6 +131,7 @@ export default function HorizontalLinearStepper({
   keywordCreateState?: ICreateKeyword;
 }) {
   const nav = useNavigate();
+  const dispatch = useAppDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const [createProgram] = useCreateProgramMutation();
   const [updateProgram] = useUpdateProgramMutation();
@@ -139,7 +141,6 @@ export default function HorizontalLinearStepper({
   const [getKeywordNameExisting] = useLazyKeywordNameExistingQuery();
   useEffect(() => {}, [isLoading]);
   const [open, setOpen] = useState(true);
-
   const isStepOptional = (step: number) => {
     return optionalStep ? step === optionalStep : false;
   };
@@ -150,22 +151,22 @@ export default function HorizontalLinearStepper({
   const handleNext = async () => {
     if (activeStep === steps.length - 1) {
       setIsLoading(true);
-      if (type === "program") {
-        slug === "insert"
+      if (type === 'program') {
+        slug === 'insert'
           ? await createProgram(CreateProgramInitial).then((res: any) => {
               console.log(res);
               if (res.error) {
                 messageErrorHandler(res.error.data.message);
               } else {
-                Swal.fire("Success!", "Program has been created!", "success");
-                console.log("res : ");
+                Swal.fire('Success!', 'Program has been created!', 'success');
+                console.log('res : ');
                 nav(`/edit-program/segmentation/${res.data.payload._id}`);
               }
             })
           : await updateProgram(CreateProgramInitial);
-      } else if (type === "keyword") {
+      } else if (type === 'keyword') {
         switch (slug) {
-          case "insert":
+          case 'insert':
             await createKeywordGeneral({
               ...CreateKeywordGeneral,
               notification: CreateKeywordGeneral.notification.filter(
@@ -174,39 +175,39 @@ export default function HorizontalLinearStepper({
             })
               .then((res: any) => {
                 if (res.data) {
-                  Swal.fire("Success!", "Keyword has been created!", "success");
-                  console.log("data : ", res.data);
+                  Swal.fire('Success!', 'Keyword has been created!', 'success');
+                  console.log('data : ', res.data);
                 }
                 if (res.error) {
-                  Swal.fire("Failed!", "Keyword hasn't been created!", "error");
-                  console.log("error : ", res.error);
+                  Swal.fire('Failed!', "Keyword hasn't been created!", 'error');
+                  console.log('error : ', res.error);
                 }
               })
               .catch((err) => {
                 console.error(err);
               })
               .finally(() => {
-                nav("/keyword-management");
+                nav('/keyword-management');
               });
             break;
-          case "update":
+          case 'update':
             // Change the initial or "CreateKeywordGeneral"
             await updateKeywordGeneral(CreateKeywordGeneral)
               .then((res: any) => {
                 if (res.data) {
-                  Swal.fire("Success!", "Keyword has been updated!", "success");
-                  console.log("data : ", res.data);
+                  Swal.fire('Success!', 'Keyword has been updated!', 'success');
+                  console.log('data : ', res.data);
                 }
                 if (res.error) {
-                  Swal.fire("Failed!", "Keyword hasn't been updated!", "error");
-                  console.log("error : ", res.error);
+                  Swal.fire('Failed!', "Keyword hasn't been updated!", 'error');
+                  console.log('error : ', res.error);
                 }
               })
               .catch((err) => {
                 console.error(err);
               })
               .finally(() => {
-                nav("/keyword-management");
+                nav('/keyword-management');
               });
             break;
         }
@@ -219,14 +220,59 @@ export default function HorizontalLinearStepper({
       newSkipped = new Set(newSkipped.values());
       newSkipped.delete(activeStep);
     }
-    if (activeStep === 0 && type === "keyword") {
+    if (activeStep === 0 && type === 'keyword') {
+      // General Keyword Name Validation
       await getKeywordNameExisting(
-        keywordCreateState?.eligibility?.name ?? ""
-      ).then((res) => {
-        if (res.data?.message === "YOU CAN USE THIS KEYWORD NAME") {
-          setActiveStep((prevActiveStep: number) => prevActiveStep + 1);
+        keywordCreateState?.eligibility?.name ?? ''
+      ).then(async (res) => {
+        if (res.data?.message === 'YOU CAN USE THIS KEYWORD NAME') {
+          dispatch(
+            SET_KEYWORD_VALIDATION({
+              keywordName: '',
+            })
+          );
+          // Notification Keyword Name Validation
+          await getKeywordNameExisting(
+            keywordCreateState?.notification[0]?.keyword_name ?? ''
+          ).then((res) => {
+            if (res.data?.message === 'YOU CAN USE THIS KEYWORD NAME') {
+              dispatch(
+                SET_KEYWORD_VALIDATION({
+                  keywordNameEligibility: '',
+                })
+              );
+              setActiveStep((prevActiveStep: number) => prevActiveStep + 1);
+              window.scrollTo(0, 0);
+            } else {
+              dispatch(
+                SET_KEYWORD_VALIDATION({
+                  keywordNameEligibility: `${res.data?.message.toLowerCase()}`,
+                })
+              );
+              Swal.fire({
+                icon: 'error',
+                title: 'Failed!',
+                text: `${res.data?.message}`,
+                didClose: () => {
+                  window.scrollTo(0, 3400);
+                },
+              });
+            }
+          });
         } else {
-          Swal.fire("Failed!", `${res.data?.message}`, "error");
+          dispatch(
+            SET_KEYWORD_VALIDATION({
+              keywordName: `${res.data?.message.toLowerCase()}`,
+            })
+          );
+          Swal.fire({
+            icon: 'error',
+            title: 'Failed!',
+            text: `${res.data?.message}`,
+            didClose: () => {
+              window.scrollTo(0, 750);
+            },
+          });
         }
       });
     } else {
@@ -256,22 +302,21 @@ export default function HorizontalLinearStepper({
   };
 
   const handleShowList = () => {
-    window.location.href = "/program-management";
+    window.location.href = '/program-management';
   };
 
   const { handleSubmit } = useForm();
   return (
     <form onSubmit={handleSubmit(handleNext)}>
-      <Box sx={{ width: "100%" }}>
+      <Box sx={{ width: '100%' }}>
         {isLoading && (
           <Box
             sx={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              minHeight: "100vh",
-            }}
-          >
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              minHeight: '100vh',
+            }}>
             <CircularProgress />
           </Box>
         )}
@@ -280,8 +325,7 @@ export default function HorizontalLinearStepper({
             alternativeLabel
             activeStep={activeStep}
             connector={<ColorlibConnector />}
-            sx={{ mb: "3vw" }}
-          >
+            sx={{ mb: '3vw' }}>
             {steps.map((label: any, index: any) => {
               const stepProps: { completed?: boolean } = {};
               const labelProps: {
@@ -289,7 +333,7 @@ export default function HorizontalLinearStepper({
               } = {};
               if (isStepOptional(index)) {
                 labelProps.optional = (
-                  <Typography variant="caption">Optional</Typography>
+                  <Typography variant='caption'>Optional</Typography>
                 );
               }
               if (isStepSkipped(index)) {
@@ -299,8 +343,7 @@ export default function HorizontalLinearStepper({
                 <Step key={label} {...stepProps}>
                   <StepLabel
                     StepIconComponent={ColorlibStepIcon}
-                    {...labelProps}
-                  >
+                    {...labelProps}>
                     <BodyCopy>{label}</BodyCopy>
                   </StepLabel>
                 </Step>
@@ -310,74 +353,71 @@ export default function HorizontalLinearStepper({
         </Box>
         {activeStep === steps.length ? (
           <React.Fragment>
-            <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
-              <Box sx={{ flex: "1 1 auto" }} />
+            <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
+              <Box sx={{ flex: '1 1 auto' }} />
               <Button onClick={handleBack}>Back</Button>
             </Box>
           </React.Fragment>
         ) : (
           <React.Fragment>
             <Box>{children}</Box>
-            <Box sx={{ display: "flex", flexDirection: "row", mt: "3vw" }}>
+            <Box sx={{ display: 'flex', flexDirection: 'row', mt: '3vw' }}>
               <Button
                 disabled={activeStep === 0 ? true : isLoading ? true : false}
                 onClick={handleBack}
-                color="inherit"
+                color='inherit'
                 sx={{
-                  width: "50%",
-                  borderTop: "3px solid",
-                  borderRight: "1.5px solid",
-                  borderColor: "secondary.main",
+                  width: '50%',
+                  borderTop: '3px solid',
+                  borderRight: '1.5px solid',
+                  borderColor: 'secondary.main',
                   borderRadius: 0,
-                  paddingBlock: "1vw",
-                }}
-              >
+                  paddingBlock: '1vw',
+                }}>
                 Back
               </Button>
-              <Box sx={{ flex: "1 1 auto" }} />
+              <Box sx={{ flex: '1 1 auto' }} />
               {isStepOptional(activeStep) && (
-                <Button color="inherit" onClick={handleSkip} sx={{ mr: 1 }}>
+                <Button color='inherit' onClick={handleSkip} sx={{ mr: 1 }}>
                   Skip
                 </Button>
               )}
               {isLoading ? (
                 <Button
-                  type={"submit"}
-                  color="primary"
+                  type={'submit'}
+                  color='primary'
                   disabled
                   sx={{
-                    width: "50%",
-                    borderTop: "3px solid",
-                    borderLeft: "1.5px solid",
-                    borderColor: "secondary.main",
+                    width: '50%',
+                    borderTop: '3px solid',
+                    borderLeft: '1.5px solid',
+                    borderColor: 'secondary.main',
                     borderRadius: 0,
-                    paddingBlock: "1vw",
-                  }}
-                >
+                    paddingBlock: '1vw',
+                  }}>
                   {activeStep === steps.length - 1
-                    ? slug === "insert"
-                      ? "Loading ..."
-                      : "Update"
-                    : "Next"}
+                    ? slug === 'insert'
+                      ? 'Loading ...'
+                      : 'Update'
+                    : 'Next'}
                 </Button>
               ) : (
                 <Button
-                  type={"submit"}
-                  color="primary"
+                  type={'submit'}
+                  color='primary'
                   sx={{
-                    width: "50%",
-                    borderTop: "3px solid",
-                    borderLeft: "1.5px solid",
-                    borderColor: "secondary.main",
+                    width: '50%',
+                    borderTop: '3px solid',
+                    borderLeft: '1.5px solid',
+                    borderColor: 'secondary.main',
                     borderRadius: 0,
-                    paddingBlock: "1vw",
-                  }}
-                >
+                    paddingBlock: '1vw',
+                  }}>
                   {activeStep === steps.length - 1
-                    ? slug === "insert"
-                      ? "Create"
-                      : "Update"
-                    : "Next"}
+                    ? slug === 'insert'
+                      ? 'Create'
+                      : 'Update'
+                    : 'Next'}
                 </Button>
               )}
             </Box>

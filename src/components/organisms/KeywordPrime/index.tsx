@@ -24,7 +24,10 @@ import {
 	InitialFilter,
 	InitialKeywordApproval as InitialProgramExperience
 } from "./initial";
-import { useLazyKeywordListPrimeQuery } from "../../../redux/features/keyword/keyword-api-slice";
+import {
+	useLazyKeywordListPrimeQuery,
+	useLazyKeywordGeneralDetailQuery
+} from "../../../redux/features/keyword/keyword-api-slice";
 import {
 	useGetProgramExperienceQuery,
 	useGetLocationTypeQuery
@@ -40,6 +43,7 @@ import FilterKeyword from "./filter";
 import { BodyCopy } from "components/atoms";
 import debounce from "lodash/debounce";
 import useApprovalService from "../../../service/approval";
+import Swal from "sweetalert2";
 
 interface IkeywordPrime {
 	bonus: any[];
@@ -66,7 +70,6 @@ const KeywordPrime = () => {
 		sortField: "created_at",
 		sortOrder: -1,
 		filters: {
-			is_draft: { value: false, matchMode: "equals" },
 			"eligibility.name": { value: "", matchMode: FilterMatchMode.CONTAINS },
 
 			// Filter field
@@ -102,14 +105,20 @@ const KeywordPrime = () => {
 	const { data: accountAuth } = useAccountAuthenticateQuery();
 
 	// Detail Keyword
+	const [getDetailKeyword] = useLazyKeywordGeneralDetailQuery();
 	const [item, setItem] = useState([]);
 	const [open, setOpen] = useState({
 		detail: false,
 		filter: false
 	});
 	const handleButtonDetail = async (item: any) => {
-		setItem(item);
-		setOpen({ ...open, detail: true });
+		const { data } = await getDetailKeyword(item?._id);
+		if (data) {
+			setItem(data || item);
+			setOpen({ ...open, detail: true });
+		} else {
+			Swal.fire("Error!", "Something went wrong", "error");
+		}
 	};
 
 	const onPage = (event: any) => {
@@ -138,17 +147,30 @@ const KeywordPrime = () => {
 		handleButtonDetail(event.data);
 	};
 
-	const onDraftChange = (): void => {
-		setLazyParams((previousLazyParams: any) => ({
-			...previousLazyParams,
-			filters: {
-				...previousLazyParams?.filters,
-				is_draft: {
-					...previousLazyParams?.filters?.is_draft,
-					value: !previousLazyParams?.filters?.is_draft?.value
-				}
+	const onDraftChange = (value: boolean): void => {
+		setLazyParams((previousLazyParams: any) => {
+			if (!value) {
+				delete previousLazyParams.filters.is_draft;
+				return {
+					...previousLazyParams,
+					filters: {
+						...previousLazyParams?.filters
+					}
+				};
+			} else {
+				return {
+					...previousLazyParams,
+					filters: {
+						...previousLazyParams?.filters,
+						is_draft: {
+							...previousLazyParams?.filters?.is_draft,
+							value: true,
+							matchMode: "equals"
+						}
+					}
+				};
 			}
-		}));
+		});
 	};
 
 	const { data: locationTypeOptions = { data: [] } } =

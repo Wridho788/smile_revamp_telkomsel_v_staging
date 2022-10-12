@@ -10,11 +10,14 @@ import {
 	InputAdornment,
 	Stack,
 	Tooltip,
-	Typography
+	Typography,
+	Autocomplete,
+	TextField
 } from "@mui/material";
 import * as React from "react";
 import {
 	Select,
+	SelectSearchable,
 	OutlinedTextField,
 	ResponsiveDateTimePicker,
 	BodyCopy
@@ -246,21 +249,20 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
 								programData.is_draft = !programData.is_draft;
 								setStateTrigger(!stateTrigger);
 							}}
-							label={"Switch this toggle on to save this program as Draft when you finish create !"}
+							label={
+								"Switch this toggle on to save this program as Draft when you finish create !"
+							}
 						/>
 					</Alert>
 				</Box>
-				{
-					programData?.is_draft &&
+				{programData?.is_draft && (
 					<Box>
-						<Alert
-							severity="info"
-							color={"warning"}
-						>
-							This program will be stored as <b>Draft</b>. Please note that program draft will not request for Approval
+						<Alert severity="info" color={"warning"}>
+							This program will be stored as <b>Draft</b>. Please note that
+							program draft will not request for Approval
 						</Alert>
 					</Box>
-				}
+				)}
 
 				{/*<OutlinedTextField*/}
 				{/*    label="Program Group"*/}
@@ -273,11 +275,11 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
 				{/*    }}*/}
 				{/*/>*/}
 
-				<Select
+				<SelectSearchable
 					label="Program Group"
 					isRequired={false}
 					placeholder="Option"
-					options={groupOption.data}
+					options={groupOption?.data}
 					optionLabel="group_name"
 					value={programData.program_group}
 					handleChange={(value: any) => {
@@ -380,7 +382,7 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
 				{!customizeOwner && (
 					<Box>
 						<Alert severity="info" color={"success"}>
-							The owner area of this program supposed to be{" "}
+							The program owner of this program supposed to be{" "}
 							<b>
 								[{locationTypeName}] - [{locationDetailName}]
 							</b>
