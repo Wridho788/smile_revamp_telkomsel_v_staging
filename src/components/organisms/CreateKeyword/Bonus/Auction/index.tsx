@@ -42,6 +42,7 @@ import { useLocationTemplateQuery } from "../../../../../redux/features/location
 import { useKeywordUploadAuctionMutation } from "../../../../../redux/features/keyword/keyword-api-slice";
 import LocationManagement from "../LocationManagement";
 import Swal from "sweetalert2";
+import onlyNumber from "utils/onlyNumber";
 
 interface INotificationAuctionProps {
   bonusType: string;
@@ -93,7 +94,7 @@ const NotificationAuction: React.FunctionComponent<
       const temp = URL.createObjectURL(uploadInputRef.current?.files[0]);
       setPreview(temp);
     }
-  }
+  };
 
   const { data: viaOptions = { data: [] } } = useGetNotifViaQuery();
   const { data: templateOptions = { data: [] } } =
@@ -137,7 +138,10 @@ const NotificationAuction: React.FunctionComponent<
       ({ bonus_type }) => bonus_type === "auction"
     );
 
-    if ((locationOptions && index === -1) || !keywordCreate.eligibility.eligibility_locations) {
+    if (
+      (locationOptions && index === -1) ||
+      !keywordCreate.eligibility.eligibility_locations
+    ) {
       keywordCreate.bonus.push(KeywordBonusAuction);
       const bonusIdx = keywordCreate.bonus.findIndex(
         ({ bonus_type }) => bonus_type === "auction"
@@ -207,6 +211,11 @@ const NotificationAuction: React.FunctionComponent<
                 keywordNotificationAuction[idx].code_identifier = _["_id"];
                 keywordNotificationAuction[idx].bonus_type_id = bonusTypeId;
 
+                // Check if notification is Keyword Status Per Product
+                const isKeyWordStatusPerProduct = _.set_value?.includes(
+                  "Keyword Status Per Product"
+                );
+
                 return (
                   <Stack
                     key={idx}
@@ -217,14 +226,26 @@ const NotificationAuction: React.FunctionComponent<
                   >
                     <Subtitle color="warning.main">{_.set_value}</Subtitle>
                     <OutlinedTextField
-                      isRequired={false}
-                      disabled={true}
+                      isRequired={isKeyWordStatusPerProduct}
+                      disabled={!isKeyWordStatusPerProduct}
                       direction="column"
                       label="Keyword Name"
                       variant="outlined"
-                      value={keywordCreateState.eligibility.name}
+                      value={
+                        isKeyWordStatusPerProduct
+                          ? keywordNotificationAuction[idx]?.keyword_name
+                              ?.replace(/[^a-zA-Z0-9]/g, "")
+                              .toUpperCase()
+                          : keywordCreateState.eligibility.name
+                      }
                       handleChange={(value: string) => {
-                        keywordCreate.eligibility.name = value;
+                        if (isKeyWordStatusPerProduct) {
+                          keywordNotificationAuction[idx].keyword_name = value
+                            .replace(/[^a-zA-Z0-9]/g, "")
+                            .toUpperCase();
+                        } else {
+                          keywordCreate.eligibility.name = value;
+                        }
                         setStateTrigger(!stateTrigger);
                       }}
                     />
@@ -422,10 +443,15 @@ const NotificationAuction: React.FunctionComponent<
                         keywordCreate.bonus[index]["auction_poin_min_bidding"]
                       }
                       handleChange={(value: string) => {
-                        keywordCreate.bonus[index]["auction_poin_min_bidding"] =
-                          Number(value);
-                        setStateTrigger(!stateTrigger);
+                        // Only accept number
+                        if (onlyNumber(value)) {
+                          keywordCreate.bonus[index][
+                            "auction_poin_min_bidding"
+                          ] = Number(value);
+                          setStateTrigger(!stateTrigger);
+                        }
                       }}
+                      inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
                     />
                     <OutlinedTextField
                       direction="column"
@@ -435,9 +461,13 @@ const NotificationAuction: React.FunctionComponent<
                         keywordCreate.bonus[index]["auction_multiplier_poin"]
                       }
                       handleChange={(value: string) => {
-                        keywordCreate.bonus[index]["auction_multiplier_poin"] =
-                          Number(value);
-                        setStateTrigger(!stateTrigger);
+                        // Only accept number
+                        if (onlyNumber(value)) {
+                          keywordCreate.bonus[index][
+                            "auction_multiplier_poin"
+                          ] = Number(value);
+                          setStateTrigger(!stateTrigger);
+                        }
                       }}
                     />
                     <OutlinedTextField
@@ -448,10 +478,13 @@ const NotificationAuction: React.FunctionComponent<
                         keywordCreate.bonus[index]["auction_max_winner_inphase"]
                       }
                       handleChange={(value: string) => {
-                        keywordCreate.bonus[index][
-                          "auction_max_winner_inphase"
-                        ] = Number(value);
-                        setStateTrigger(!stateTrigger);
+                        // Only accept number
+                        if (onlyNumber(value)) {
+                          keywordCreate.bonus[index][
+                            "auction_max_winner_inphase"
+                          ] = Number(value);
+                          setStateTrigger(!stateTrigger);
+                        }
                       }}
                     />
                   </Stack>
@@ -500,43 +533,45 @@ const NotificationAuction: React.FunctionComponent<
                     </Stack>
                     <Stack spacing={2}>
                       <Box
-                          style={{
-                            display: 'inline-block',
-                            position: 'relative'
-                          }}
+                        style={{
+                          display: "inline-block",
+                          position: "relative",
+                        }}
                       >
-                        <label
-                            htmlFor="preview"
-                        >
-                          {loading && (<CircularProgress style={{
-                            position: 'absolute',
-                            top: '50%',
-                            left: '50%',
-                            marginLeft: 'auto',
-                            marginRight: 'auto'
-                          }}></CircularProgress>)}
-                          <Box
-                              component="img"
-                              position="inherit"
-                              alt="Telkomsel Upload"
-                              src={preview}
+                        <label htmlFor="preview">
+                          {loading && (
+                            <CircularProgress
                               style={{
-                                maxWidth: '100%',
-                                width: '100%',
-                                height: '100%',
-                                objectFit: 'cover'
+                                position: "absolute",
+                                top: "50%",
+                                left: "50%",
+                                marginLeft: "auto",
+                                marginRight: "auto",
                               }}
+                            ></CircularProgress>
+                          )}
+                          <Box
+                            component="img"
+                            position="inherit"
+                            alt="Telkomsel Upload"
+                            src={preview}
+                            style={{
+                              maxWidth: "100%",
+                              width: "100%",
+                              height: "100%",
+                              objectFit: "cover",
+                            }}
                           ></Box>
                         </label>
                       </Box>
                       <input
-                          hidden
-                          id="preview"
-                          ref={uploadInputRef}
-                          accept="image/*"
-                          type="file"
-                          onChange={onPreview}
-                          style={{ display: "none" }}
+                        hidden
+                        id="preview"
+                        ref={uploadInputRef}
+                        accept="image/*"
+                        type="file"
+                        onChange={onPreview}
+                        style={{ display: "none" }}
                       />
                       <Button
                         variant="contained"

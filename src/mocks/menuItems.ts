@@ -10,9 +10,9 @@ import {
     StarsOutlined,
     ErrorOutlineOutlined,
     ShareLocationOutlined,
-    Logout,
-    NotificationImportant
+    Logout, PersonPin
 } from "@mui/icons-material";
+import { Avatar } from "@mui/material";
 
 export interface Menu {
     label: string;
@@ -82,6 +82,12 @@ export const menuItems: Menu[] = [
         hasChild: false,
         icon: ShareLocationOutlined,
         path: "/location-management",
+    },
+    {
+        label: "PIC Management",
+        hasChild: false,
+        icon: PersonPin,
+        path: "/pic-management"
     },
     {
         label: "Sign Out",

@@ -18,8 +18,6 @@ import {
   LogoTsel,
   TelkomselLabel,
   UserIcon,
-  NotificationActive,
-  NotificationDisabled,
 } from '../../../assets';
 import { menuItems } from '../../../mocks/menuItems';
 import SidebarItem from './sidebarItem';
@@ -27,7 +25,6 @@ import { SmallCopy } from '../../atoms';
 import { useLazyAccountAuthenticateQuery } from '../../../redux/features/account/account-api-slice';
 import { useEffect, useState } from 'react';
 import UserDetail from 'components/organisms/UserDetail';
-import Notification from 'components/organisms/Notifications';
 
 const drawerWidth = 300;
 const drawerHeight = '70%';
@@ -67,15 +64,6 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   ...theme.mixins.toolbar,
 }));
 
-const DrawerFooter = styled('div')(({ theme }) => ({
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  padding: theme.spacing(0, 1),
-  // necessary for content to be below app bar
-  ...theme.mixins.toolbar,
-}));
-
 const Drawer = styled(MuiDrawer, {
   shouldForwardProp: (prop) => prop !== 'open',
 })(({ theme, open }) => ({
@@ -101,9 +89,7 @@ const Index: React.FC<LayoutProps> = ({ children }: LayoutProps) => {
   // const [open, setOpen] = React.useState<boolean>(false);
   let [open, setOpenList] = useState<boolean>(false);
   const [openUserDetail, setOpenUserDetail] = useState<boolean>(false);
-  const [openNotification, setOpenNotification] = useState<boolean>(false);
   const handleCloseUserDetail = () => setOpenUserDetail(!openUserDetail);
-  const handleCloseNotification = () => setOpenNotification(!openNotification);
   const [
     getAuthenticatedUser,
     { data: accountAuth },
@@ -157,43 +143,11 @@ const Index: React.FC<LayoutProps> = ({ children }: LayoutProps) => {
               key={`menuItems__menu__${index}`}
               menu={menu}
               openMenu={open}
+              expandMenu={open}
             />
           ))}
           <div style={{ height: '50px' }}> </div>
         </List>
-        <Divider />
-        <ListItem
-          disablePadding
-          sx={{
-            top: 10,
-          }}>
-          <ListItemButton
-            sx={{
-              position: 'fixed',
-              bottom: 92,
-              zIndex: 9,
-              width: '100%',
-              backgroundColor: '#FFF',
-              minHeight: 30,
-              justifyContent: open ? 'initial' : 'center',
-              px: 2.5,
-            }}
-            onClick={handleCloseNotification}>
-            <ListItemIcon
-              sx={{
-                minWidth: 0,
-                mr: open ? 3 : 'auto',
-                justifyContent: 'center',
-              }}>
-              <img src={NotificationDisabled} style={{ height: 25 }} />
-            </ListItemIcon>
-            <ListItemText
-              primary={<SmallCopy>Notifications</SmallCopy>}
-              sx={{ opacity: open ? 1 : 0 }}
-            />
-          </ListItemButton>
-        </ListItem>
-
         <IconButton
           style={{
             position: 'fixed', //Here is the trick
@@ -255,14 +209,6 @@ const Index: React.FC<LayoutProps> = ({ children }: LayoutProps) => {
           </ListItem>
         </Box>
       </Drawer>
-      {openNotification && (
-        <Notification
-          open={openNotification}
-          handleClose={handleCloseNotification}
-          data={accountAuth?.first_name}
-        />
-      )}
-
       <Box component='main' sx={{ flexGrow: 1, p: 3, marginBottom: 40 }}>
         {children}
       </Box>

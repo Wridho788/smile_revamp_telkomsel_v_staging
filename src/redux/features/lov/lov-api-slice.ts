@@ -43,7 +43,7 @@ export const lovSlice = createApi({
 		return {
 			getLovList: builder.query<IResponse, IParams>({
 				query: (params: IParams) => ({
-					url: baseUrl + "/lov",
+					url: baseUrl + "/v1/lov",
 					params: params
 				})
 			}),
@@ -83,6 +83,7 @@ export const lovSlice = createApi({
 
 export const {
 	useGetLovListQuery,
+	useLazyGetLovListQuery,
 	useGetBonusTypeQuery,
 	useGetCustomerTypeQuery,
 	useGetKeywordTypeQuery,
@@ -101,6 +102,7 @@ export const {
 	useGetProgramExperienceQuery,
 	useGetDetailLovMutation,
 	useGetProgramGroupQuery,
+	useLazyGetProgramGroupQuery,
 	useGetKeywordNotificationQuery,
 	useLazyGetKeywordNotificationQuery,
 	useGetKeywordApprovalQuery,

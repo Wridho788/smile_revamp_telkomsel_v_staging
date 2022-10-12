@@ -24,16 +24,16 @@ export interface IKeywordBonus {
 }
 
 export interface IkeywordPrime {
-  bonus: any[],
-  created_at: string,
-  created_by: any,
-  deleted_at: null,
-  eligibility: any,
-  keyword_approval: string,
-  notification: any[],
-  updated_at: string,
-  __v: number,
-  _id: string
+  bonus: any[];
+  created_at: string;
+  created_by: any;
+  deleted_at: null;
+  eligibility: any;
+  keyword_approval: string;
+  notification: any[];
+  updated_at: string;
+  __v: number;
+  _id: string;
 }
 export interface IDetail {
   name: string;
@@ -121,4 +121,15 @@ export interface IGetKeywordData {
   updated_at: string;
   __v: number;
   _id: string;
+}
+
+export interface IKeywordNameExistingHandler {
+  transaction_classify: string;
+  message: string;
+  statusCode: number;
+}
+
+export interface ICreateKeywordValidation {
+  keywordName?: string;
+  keywordNameEligibility?: string;
 }

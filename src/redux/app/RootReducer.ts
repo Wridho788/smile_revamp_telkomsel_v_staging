@@ -14,25 +14,28 @@ import { partnerSlice } from "../features/partner/partner-api-slice";
 import { outletSlice } from "../features/outlet/outlet-api-slice";
 import { programPrimedtSlice } from "../features/program-primedt/program-primedt-api-slice";
 import { uploadFIleSlice } from "../upload_file/upload-file-api-slice";
-
+import { picSlice } from "../features/pic/pic-api-slice";
 // Store
 import auth from "../features/auth/auth-store-slice";
+import createKeywordValidationSlice from "redux/features/keyword/create-keyword-validation-slice";
 
 export const rootReducer = combineReducers({
-	auth,
-	[lovSlice.reducerPath]: lovSlice.reducer,
-	[notificationSlice.reducerPath]: notificationSlice.reducer,
-	[customerSlice.reducerPath]: customerSlice.reducer,
-	[locationSlice.reducerPath]: locationSlice.reducer,
-	[programSlice.reducerPath]: programSlice.reducer,
-	[keywordSlice.reducerPath]: keywordSlice.reducer,
-	[merchantSlice.reducerPath]: merchantSlice.reducer,
-	[channelSlice.reducerPath]: channelSlice.reducer,
-	[accountSlice.reducerPath]: accountSlice.reducer,
-	[productSlice.reducerPath]: productSlice.reducer,
-	[appConfigSlice.reducerPath]: appConfigSlice.reducer,
-	[partnerSlice.reducerPath]: partnerSlice.reducer,
-	[outletSlice.reducerPath]: outletSlice.reducer,
-	[programPrimedtSlice.reducerPath]: programPrimedtSlice.reducer,
-	[uploadFIleSlice.reducerPath]: uploadFIleSlice.reducer
+  auth,
+  createKeywordValidationSlice,
+  [lovSlice.reducerPath]: lovSlice.reducer,
+  [notificationSlice.reducerPath]: notificationSlice.reducer,
+  [customerSlice.reducerPath]: customerSlice.reducer,
+  [locationSlice.reducerPath]: locationSlice.reducer,
+  [programSlice.reducerPath]: programSlice.reducer,
+  [keywordSlice.reducerPath]: keywordSlice.reducer,
+  [merchantSlice.reducerPath]: merchantSlice.reducer,
+  [channelSlice.reducerPath]: channelSlice.reducer,
+  [accountSlice.reducerPath]: accountSlice.reducer,
+  [productSlice.reducerPath]: productSlice.reducer,
+  [appConfigSlice.reducerPath]: appConfigSlice.reducer,
+  [partnerSlice.reducerPath]: partnerSlice.reducer,
+  [outletSlice.reducerPath]: outletSlice.reducer,
+  [programPrimedtSlice.reducerPath]: programPrimedtSlice.reducer,
+  [uploadFIleSlice.reducerPath]: uploadFIleSlice.reducer,
+  [picSlice.reducerPath]: picSlice.reducer,
 });

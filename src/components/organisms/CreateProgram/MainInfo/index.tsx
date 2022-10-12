@@ -10,11 +10,14 @@ import {
 	InputAdornment,
 	Stack,
 	Tooltip,
-	Typography
+	Typography,
+	Autocomplete,
+	TextField
 } from "@mui/material";
 import * as React from "react";
 import {
 	Select,
+	SelectSearchable,
 	OutlinedTextField,
 	ResponsiveDateTimePicker,
 	BodyCopy
@@ -27,6 +30,7 @@ import {
 	useGetOwnerQuery,
 	useGetPointTypeQuery,
 	useGetProgramGroupQuery,
+	useLazyGetProgramGroupQuery,
 	useLazyGetOwnerQuery
 } from "../../../../redux/features/lov/lov-api-slice";
 import {
@@ -69,6 +73,7 @@ import CachedIcon from "@mui/icons-material/Cached";
 import SwitchCustom from "../../../../atomic/components/atoms/Switch";
 import BulkData from "../Segmentation/BulkData";
 import SingleData from "../Segmentation/SingleData";
+import onlyNumber from "utils/onlyNumber";
 
 interface IMainInfoProps {
 	slug: string;
@@ -92,7 +97,8 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
 
 	const { data: pointTypeOption = { data: [] } } = useGetPointTypeQuery();
 	const { data: mechanismOption = { data: [] } } = useGetMechanismQuery();
-	const { data: groupOption = { data: [] } } = useGetProgramGroupQuery();
+	const [getGroupOption, { data: groupOption = { data: [] } }] =
+		useLazyGetProgramGroupQuery();
 
 	const [searchInput, setSearchInput] = useState<string>("");
 	const [stateTrigger, setStateTrigger] = React.useState<boolean>(false);
@@ -120,6 +126,7 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
 		(async () => {
 			const authenticatedUserResponse = await getAuthenticatedUser();
 			const ownerOptionResponse = await getOwner();
+			await getGroupOption();
 
 			const locationTypeId: string =
 				authenticatedUserResponse?.data?.account_location.location_detail.type;
@@ -233,6 +240,30 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
 	return (
 		<Fragment>
 			<Stack mx={2} spacing={2}>
+				<Box>
+					<Alert icon={false} severity={"info"}>
+						<SwitchCustom
+							color={"info"}
+							checked={programData?.is_draft || false}
+							handleChange={() => {
+								programData.is_draft = !programData.is_draft;
+								setStateTrigger(!stateTrigger);
+							}}
+							label={
+								"Switch this toggle on to save this program as Draft when you finish create !"
+							}
+						/>
+					</Alert>
+				</Box>
+				{programData?.is_draft && (
+					<Box>
+						<Alert severity="info" color={"warning"}>
+							This program will be stored as <b>Draft</b>. Please note that
+							program draft will not request for Approval
+						</Alert>
+					</Box>
+				)}
+
 				{/*<OutlinedTextField*/}
 				{/*    label="Program Group"*/}
 				{/*    placeholder="Program Group"*/}
@@ -244,16 +275,18 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
 				{/*    }}*/}
 				{/*/>*/}
 
-				<Select
+				<SelectSearchable
 					label="Program Group"
+					isRequired={false}
 					placeholder="Option"
-					options={groupOption.data}
+					options={groupOption?.data}
 					optionLabel="group_name"
 					value={programData.program_group}
 					handleChange={(value: any) => {
 						programData.program_group = value;
 						setStateTrigger(!stateTrigger);
 					}}
+					handleRefetch={() => getGroupOption()}
 				/>
 
 				<OutlinedTextField
@@ -263,7 +296,9 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
 					variant={"outlined"}
 					value={programData.keyword_registration}
 					handleChange={(value: any) => {
-						programData.keyword_registration = value;
+						programData.keyword_registration = value
+							.replace(/[^a-zA-Z0-9]/g, "")
+							.toUpperCase();
 						setStateTrigger(!stateTrigger);
 					}}
 				/>
@@ -275,8 +310,10 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
 					variant={"outlined"}
 					value={programData.point_registration}
 					handleChange={(value: any) => {
-						programData.point_registration = Number(value);
-						setStateTrigger(!stateTrigger);
+						if (onlyNumber(value)) {
+							programData.point_registration = Number(value);
+							setStateTrigger(!stateTrigger);
+						}
 					}}
 				/>
 				<OutlinedTextField
@@ -345,7 +382,7 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
 				{!customizeOwner && (
 					<Box>
 						<Alert severity="info" color={"success"}>
-							The owner area of this program supposed to be{" "}
+							The program owner of this program supposed to be{" "}
 							<b>
 								[{locationTypeName}] - [{locationDetailName}]
 							</b>
@@ -442,8 +479,10 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
 					placeholder="Threshold Quota"
 					value={programData.threshold_alarm_voucher}
 					handleChange={(value: any) => {
-						programData.threshold_alarm_voucher = Number(value);
-						setStateTrigger(!stateTrigger);
+						if (onlyNumber(value)) {
+							programData.threshold_alarm_voucher = Number(value);
+							setStateTrigger(!stateTrigger);
+						}
 					}}
 					variant={"outlined"}
 				/>

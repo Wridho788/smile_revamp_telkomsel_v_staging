@@ -1,4 +1,4 @@
-import React, { FC, MouseEvent } from 'react';
+import React, { FC, MouseEvent, useEffect } from 'react';
 import { Menu } from '../../../mocks/menuItems';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
@@ -12,17 +12,25 @@ import { useTheme } from '@mui/material/styles';
 import { H3, BodyCopy, SmallCopy } from '../../../components';
 import { useNavigate } from 'react-router-dom';
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
-// import { NotificationActive } from '../../../assets';
 interface SidebarItemProps {
   menu: Menu;
   openMenu: boolean;
+  expandMenu: any;
 }
 
-const SidebarItem = ({ menu, openMenu }: SidebarItemProps) => {
+const SidebarItem = ({ menu, openMenu, expandMenu }: SidebarItemProps) => {
   const router = useNavigate();
   const theme = useTheme();
   let [openList, setOpenList] = React.useState<boolean>(false);
-
+  let [menuOpen, setMenuOpen] = React.useState<boolean>(false);
+  React.useEffect(() => {
+    if (!menuOpen) {
+      // setOpenList(true);
+      setMenuOpen(expandMenu);
+    } else {
+      console.log('open menu false', openMenu);
+    }
+  });
   return (
     <ListItem disablePadding sx={{ display: 'block' }}>
       <ListItemButton

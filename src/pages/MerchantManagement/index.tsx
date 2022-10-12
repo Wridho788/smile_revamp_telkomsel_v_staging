@@ -151,10 +151,9 @@ const MerchantManagement = () => {
     });
   const { data: locationTypeList = { data: [PartnerInitial] } } =
     useGetLocationTypeQuery();
-  const { data: locationList = { data: [LocationInitial] } } =
-    useLocationTemplateQuery({
-      type: locationType,
-    });
+  const { data: locationList = [LocationInitial] } = useLocationTemplateQuery({
+    type: locationType,
+  });
   const { data: picRole = { data: [RoleInitial] } } = useAccountRoleQuery({
     skip: 0,
     limit: 10,
@@ -202,7 +201,7 @@ const MerchantManagement = () => {
     newItem["name"] = item.set_value;
     return newItem;
   });
-  const dataLocation = locationList.data.map((item: any) => {
+  const dataLocation = locationList.map((item: any) => {
     let newItem: any = {};
     newItem["_id"] = item._id;
     newItem["name"] = item.name;

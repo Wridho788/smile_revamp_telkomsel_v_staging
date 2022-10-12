@@ -23,7 +23,8 @@ interface IKeywordDetailsModalProps extends ModalProps {
 	roleAccess: boolean;
 	data: any;
 	isHqLogin?: boolean;
-	userLoginId:string;
+	userLoginId: string;
+	refetchKeyword?: () => void;
 }
 
 interface IPicManagemenrModalProps extends ModalProps {

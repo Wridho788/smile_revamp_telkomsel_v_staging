@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction } from "react";
+import React, { Dispatch, SetStateAction, useEffect } from "react";
 import { Button, Grid, IconButton, Stack } from "@mui/material";
 import {
   Select,
@@ -16,7 +16,10 @@ import {
 } from "../../../../../redux/features/lov/lov-api-slice";
 import { FilterInitial } from "../../../../../redux/utils/initial-general";
 import { useChannelListQuery } from "../../../../../redux/features/channel/channel-api-slice";
-import { ICreateKeyword } from "../../interfaces";
+import {
+  ICreateKeyword,
+  IKeywordNotificationEligibility,
+} from "../../interfaces";
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import DeleteIcon from "@mui/icons-material/Delete";
 import {
@@ -34,6 +37,13 @@ import InputAdornment from "@mui/material/InputAdornment";
 import { parseISO } from "date-fns";
 import { strToInt, thousandSeparator } from "../../../../../utils";
 import TextArea from "components/atoms/TextArea";
+import moment from "moment";
+import Channel from "./Channel";
+import { useKeywordNameExistingQuery } from "redux/features/keyword/keyword-api-slice";
+import { useAppDispatch, useAppSelector } from "service/hooks";
+import { SET_KEYWORD_VALIDATION } from "redux/features/keyword/create-keyword-validation-slice";
+import Swal from "sweetalert2";
+import { KeywordNotificationEligibility } from "../../initial";
 
 interface IGeneralProps {
   keywordCreateState: ICreateKeyword;
@@ -48,6 +58,8 @@ const General: React.FunctionComponent<IGeneralProps> = ({
   stateTrigger,
   setStateTrigger,
 }) => {
+  const dispatch = useAppDispatch();
+  const [expanded, setExpanded] = React.useState<boolean>(true);
   const { data: pointTypeOptions = { data: [] } } = useGetPointTypeQuery();
   const { data: programListOptions = { data: [] } } =
     useProgramListQuery(FilterInitial);
@@ -55,11 +67,21 @@ const General: React.FunctionComponent<IGeneralProps> = ({
     useChannelListQuery(FilterInitial);
   const { data: programExperienceOptions = { data: [] } } =
     useGetProgramExperienceQuery();
+  const keywordName = useAppSelector(
+    (state) => state.createKeywordValidationSlice.keywordName
+  );
+  const keywordNotificationEligibility: IKeywordNotificationEligibility[] =
+    KeywordNotificationEligibility;
   // const { data: customerBadgeOptions = { data: [] } } =
   //   useCustomerBadgeListQuery(FilterInitial);
 
   return (
-    <Accordion sx={{ p: "1vw" }}>
+    <Accordion
+      id="createKeywordGeneralMainInfo"
+      expanded={expanded}
+      onChange={() => setExpanded(!expanded)}
+      sx={{ p: "1vw" }}
+    >
       <AccordionSummary
         expandIcon={<ExpandMoreIcon fontSize="large" />}
         aria-controls="panel1a-content"
@@ -81,25 +103,38 @@ const General: React.FunctionComponent<IGeneralProps> = ({
               setStateTrigger(!stateTrigger);
             }}
           /> */}
+
           <OutlinedTextField
             label={
-              programExperienceOptions.data.find(
-                (e) =>
-                  e["_id"] ===
-                  keywordCreateState.eligibility.program_experience[0]
-              )?.set_value === "Auction"
+              programExperienceOptions.data
+                .find(
+                  (e) =>
+                    e["_id"] ===
+                    keywordCreateState.eligibility.program_experience[0]
+                )
+                ?.set_value?.includes("Auction")
                 ? "Keyword Bid Name"
                 : "Keyword Redeem Name"
             }
+            error={keywordName === "" ? false : true}
+            helperText={keywordName === "" ? "" : keywordName}
             placeholder="Merdeka2000"
             variant="outlined"
             inputProps={{ maxLength: 16 }}
             value={keywordCreateState.eligibility.name}
             handleChange={(value: string) => {
-              keywordCreate.eligibility.name = value.replace(
-                /[^a-zA-Z0-9]/g,
-                ""
-              );
+              keywordCreate.eligibility.name = value
+                .replace(/[^a-zA-Z0-9]/g, "")
+                .toUpperCase();
+              keywordNotificationEligibility[1].keyword_name = value
+                .replace(/[^a-zA-Z0-9]/g, "")
+                .toUpperCase();
+              keywordNotificationEligibility[2].keyword_name = value
+                .replace(/[^a-zA-Z0-9]/g, "")
+                .toUpperCase();
+              keywordNotificationEligibility[3].keyword_name = value
+                .replace(/[^a-zA-Z0-9]/g, "")
+                .toUpperCase();
               setStateTrigger(!stateTrigger);
             }}
           />
@@ -169,10 +204,13 @@ const General: React.FunctionComponent<IGeneralProps> = ({
               setStateTrigger(!stateTrigger);
             }}
           />
-          {programExperienceOptions.data.find(
-            (e) =>
-              e["_id"] === keywordCreateState.eligibility.program_experience[0]
-          )?.set_value !== "Auction" && (
+          {!programExperienceOptions.data
+            .find(
+              (e) =>
+                e["_id"] ===
+                keywordCreateState.eligibility.program_experience[0]
+            )
+            ?.set_value?.includes("Auction") && (
             <OutlinedTextField
               type="number"
               label="POIN Redeemed"
@@ -185,10 +223,13 @@ const General: React.FunctionComponent<IGeneralProps> = ({
               }}
             />
           )}
-          {programExperienceOptions.data.find(
-            (e) =>
-              e["_id"] === keywordCreateState.eligibility.program_experience[0]
-          )?.set_value !== "Auction" && (
+          {!programExperienceOptions.data
+            .find(
+              (e) =>
+                e["_id"] ===
+                keywordCreateState.eligibility.program_experience[0]
+            )
+            ?.set_value?.includes("Auction") && (
             <Select
               isRequired={false}
               label="Max Mode"
@@ -212,10 +253,13 @@ const General: React.FunctionComponent<IGeneralProps> = ({
               setStateTrigger(!stateTrigger);
             }}
           />
-          {programExperienceOptions.data.find(
-            (e) =>
-              e["_id"] === keywordCreateState.eligibility.program_experience[0]
-          )?.set_value !== "Auction" && (
+          {!programExperienceOptions.data
+            .find(
+              (e) =>
+                e["_id"] ===
+                keywordCreateState.eligibility.program_experience[0]
+            )
+            ?.set_value?.includes("Auction") && (
             <Select
               label="Merchandise Keyword"
               placeholder="Option"
@@ -252,11 +296,13 @@ const General: React.FunctionComponent<IGeneralProps> = ({
           )}
           <Select
             label={
-              programExperienceOptions.data.find(
-                (e) =>
-                  e["_id"] ===
-                  keywordCreateState.eligibility.program_experience[0]
-              )?.set_value === "Auction"
+              programExperienceOptions.data
+                .find(
+                  (e) =>
+                    e["_id"] ===
+                    keywordCreateState.eligibility.program_experience[0]
+                )
+                ?.set_value?.includes("Auction")
                 ? "Auction Phase"
                 : "Keyword Schedule"
             }
@@ -638,10 +684,13 @@ const General: React.FunctionComponent<IGeneralProps> = ({
               setStateTrigger(!stateTrigger);
             }}
           />
-          {programExperienceOptions.data.find(
-            (e) =>
-              e["_id"] === keywordCreateState.eligibility.program_experience[0]
-          )?.set_value !== "Auction" && (
+          {!programExperienceOptions.data
+            .find(
+              (e) =>
+                e["_id"] ===
+                keywordCreateState.eligibility.program_experience[0]
+            )
+            ?.set_value?.includes("Auction") && (
             <Select
               isRequired={false}
               label="Multiwhitelist"
@@ -654,10 +703,13 @@ const General: React.FunctionComponent<IGeneralProps> = ({
               }}
             />
           )}
-          {programExperienceOptions.data.find(
-            (e) =>
-              e["_id"] === keywordCreateState.eligibility.program_experience[0]
-          )?.set_value !== "Auction" &&
+          {!programExperienceOptions.data
+            .find(
+              (e) =>
+                e["_id"] ===
+                keywordCreateState.eligibility.program_experience[0]
+            )
+            ?.set_value?.includes("Auction") &&
             keywordCreateState.eligibility.multiwhitelist !== false && (
               <Select
                 isRequired={false}
@@ -684,6 +736,9 @@ const General: React.FunctionComponent<IGeneralProps> = ({
             }}
           />
           {keywordCreateState.eligibility.channel_validation !== false && (
+            <Channel keywordCreate={keywordCreate} />
+          )}
+          {/* {keywordCreateState.eligibility.channel_validation !== false && (
             <Select
               isRequired={false}
               multiple
@@ -697,7 +752,7 @@ const General: React.FunctionComponent<IGeneralProps> = ({
                 setStateTrigger(!stateTrigger);
               }}
             />
-          )}
+          )} */}
           {/* <Select
             multiple
             label="Program Experience"

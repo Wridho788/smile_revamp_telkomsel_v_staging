@@ -27,8 +27,13 @@ import ProgramDetailsModal from "../Programs/Detail/ProgramDetailsModal";
 import ProgramFilterModal from "../Programs/Filter/ProgramFilterModal";
 import { InitialFilter } from "../Programs/initial";
 import { FilterMatchMode } from "primereact/api";
+import useApprovalService from "../../../service/approval";
+import debounce from "lodash/debounce";
 
 const ProgramPrimeDt: FC = () => {
+	//Approval Service
+	const { StatusApprovalRender } = useApprovalService();
+
 	const [programs, setPrograms] = useState<any>([ProgramInitial]);
 	const [loading, setLoading] = useState<boolean>(false);
 	const [totalRecords, setTotalRecords] = useState<number>(0);
@@ -56,14 +61,14 @@ const ProgramPrimeDt: FC = () => {
 	const defaultRoleManager =
 		appConfig !== undefined
 			? appConfig.find(item => item["param_key"] === "DEFAULT_ROLE_MANAGER")[
-			"param_value"
-			]
+					"param_value"
+			  ]
 			: undefined;
 	const defaultRoleManagerHQ =
 		appConfig !== undefined
 			? appConfig.find(item => item["param_key"] === "DEFAULT_LOCATION_HQ")[
-			"param_value"
-			]
+					"param_value"
+			  ]
 			: undefined;
 
 	const { data: accountAuth } = useAccountAuthenticateQuery();
@@ -85,16 +90,51 @@ const ProgramPrimeDt: FC = () => {
 	};
 
 	const onPage = (event: any) => {
-		setLazyParams(event);
+		setLazyParams((previousLazyParams: any) => ({
+			...previousLazyParams,
+			...event
+		}));
 	};
 
 	const onSort = (event: any) => {
-		setLazyParams(event);
+		setLazyParams((previousLazyParams: any) => ({
+			...previousLazyParams,
+			...event
+		}));
 	};
 
 	const onFilter = (event: any) => {
 		event["first"] = 0;
-		setLazyParams(event);
+		setLazyParams((previousLazyParams: any) => ({
+			...previousLazyParams,
+			...event
+		}));
+	};
+
+	const onDraftChange = (value: boolean): void => {
+		setLazyParams((previousLazyParams: any) => {
+			if (!value) {
+				delete previousLazyParams.filters.is_draft;
+				return {
+					...previousLazyParams,
+					filters: {
+						...previousLazyParams?.filters
+					}
+				};
+			} else {
+				return {
+					...previousLazyParams,
+					filters: {
+						...previousLazyParams?.filters,
+						is_draft: {
+							...previousLazyParams?.filters?.is_draft,
+							value: true,
+							matchMode: "equals"
+						}
+					}
+				};
+			}
+		});
 	};
 
 	const onRowSelect = (event: any) => {
@@ -102,7 +142,7 @@ const ProgramPrimeDt: FC = () => {
 	};
 
 	let loadLazyTimeout: any = null;
-	const loadLazyData = () => {
+	const loadLazyData = debounce(() => {
 		setLoading(true);
 
 		if (loadLazyTimeout) clearTimeout(loadLazyTimeout);
@@ -111,6 +151,7 @@ const ProgramPrimeDt: FC = () => {
 				lazyEvent: JSON.stringify({
 					...lazyParams,
 					filters: {
+						...lazyParams.filters,
 						// Filter field
 						program_approval: {
 							value: InitialFilter.program_approval._id,
@@ -124,7 +165,7 @@ const ProgramPrimeDt: FC = () => {
 			setTotalRecords(data.payload.totalRecords);
 			setLoading(false);
 		}, Math.random() * 1000 + 250);
-	};
+	}, 500);
 
 	const [
 		getProgramList,
@@ -137,9 +178,10 @@ const ProgramPrimeDt: FC = () => {
 
 	// Customize Column Render Component
 	const NameRender = (rowData: IProgram) => {
-		return rowData.name.length >= 7
-			? rowData.name.substring(0, 7) + "..."
-			: rowData.name;
+		// return rowData.name.length >= 7
+		// 	? rowData.name.substring(0, 7) + "..."
+		// 	: rowData.name;
+		return rowData.name;
 	};
 	const StartPeriodRender = (rowData: IProgram) => {
 		return <span>{moment(rowData.start_period).format("MMMM DD, YYYY")}</span>;
@@ -151,7 +193,11 @@ const ProgramPrimeDt: FC = () => {
 		return <span>{moment(rowData?.created_at).format("MMMM DD, YYYY")}</span>;
 	};
 	const CreateByRender = (rowData: IProgram) => {
-		return <span>{rowData?.created_by?.first_name} {rowData?.created_by?.last_name}</span>;
+		return (
+			<span>
+				{rowData?.created_by?.first_name} {rowData?.created_by?.last_name}
+			</span>
+		);
 	};
 	const RoleCreatorRender = (rowData: IProgram) => {
 		return <span>{rowData?.created_by?.role_detail?.name}</span>;
@@ -176,73 +222,11 @@ const ProgramPrimeDt: FC = () => {
 			</Box>
 		);
 	};
-	const StatusApprovalRender = (rowData: any) => {
-		var approval_status_value: string = ""
-		if (rowData.approval_log && rowData.approval_log.length > 0) {
-			approval_status_value = rowData.approval_log[rowData.approval_log.length - 1].status[0].set_value
-		}
-		return (
-			<Box
-				sx={{
-					textAlign: "center",
-					width: "100%",
-					justifyContent: "center",
-					alignItems: "center",
-					alignContent: "center"
-				}}
-			>
-				{
-					rowData.approval_log && rowData.approval_log.length > 0 &&
-					<>
-						{
-							approval_status_value === "Approved by Manager Non HQ" &&
-							<Alert severity="warning" icon={false}>
-								Approved by <b>{rowData.created_by && rowData.created_by.superior_local?.first_name}</b>
-								<br /> <Typography variant={"body1"}>Waiting for Approver 2 <b>({rowData.created_by && rowData.created_by.superior_hq?.first_name})</b></Typography>
-							</Alert>
-						}
-						{
-							approval_status_value === "Rejected by Manager Non HQ" &&
-							<Alert severity="error" icon={false}>
-								Rejected by <b>{rowData.created_by && rowData.created_by.superior_local?.first_name}</b>
-								<br /> <Typography variant={"body1"}>Waiting for Approver 1 <b>({rowData.created_by && rowData.created_by.superior_local?.first_name})</b></Typography>
-							</Alert>
-						}
-						{
-							approval_status_value === "Rejected by Manager HQ" &&
-							<Alert severity="error" icon={false}>
-								Rejected by <b>{rowData.created_by && rowData.created_by.superior_hq?.first_name}</b>
-								<br /> <Typography variant={"body1"}>Waiting for Approver 2 <b>({rowData.created_by && rowData.created_by.superior_hq?.first_name})</b></Typography>
-							</Alert>
-						}
-						{
-							approval_status_value === "Approved by Manager HQ" &&
-							<Alert severity="success">
-								<b>Approved by {rowData.created_by && rowData.created_by.superior_hq?.first_name}</b>
-							</Alert>
-						}
-					</>
-				}
 
-				{
-					rowData.approval_log && rowData.approval_log.length < 1 &&
-					<>
-						{
-							!rowData.isHQ ?
-								<Alert severity="info" icon={false}>
-									Waiting approval 1 <b>{rowData.created_by && rowData.created_by.superior_local?.first_name}</b>
-									<br /> <Typography variant={"body1"}>Program is <b>NEW</b></Typography>
-								</Alert> :
-								<Alert severity="info" icon={false}>
-									Waiting approval 2 <b>{rowData.created_by && rowData.created_by.superior_hq?.first_name}</b>
-									<br /> <Typography variant={"body1"}>Program is <b>NEW</b></Typography>
-								</Alert>
-						}
-					</>
-				}
-			</Box>
-		)
-	}
+	const roleAccess =
+		accountAuth && defaultRoleManager
+			? accountAuth.role === defaultRoleManager
+			: false;
 
 	return (
 		<>
@@ -253,16 +237,12 @@ const ProgramPrimeDt: FC = () => {
 					setOpen(false);
 				}}
 				data={item}
-				roleAccess={
-					accountAuth && defaultRoleManager
-						? accountAuth.role === defaultRoleManager
-						: false
-				}
+				roleAccess={roleAccess}
 				isHqLogin={
 					!!(
 						accountAuth &&
 						accountAuth.account_location.location_detail.type ===
-						defaultRoleManagerHQ
+							defaultRoleManagerHQ
 					)
 				}
 				userLoginId={accountAuth ? accountAuth._id : ""}
@@ -277,6 +257,9 @@ const ProgramPrimeDt: FC = () => {
 				filters={InitialFilter}
 				trigger={trigger}
 				setTrigger={setTrigger}
+				onDraftChange={onDraftChange}
+				isDraftActive={lazyParams?.filters?.is_draft?.value}
+				roleAccess={roleAccess}
 			/>
 
 			{/* Header Action */}
@@ -410,6 +393,19 @@ const ProgramPrimeDt: FC = () => {
 										filterPlaceholder="Search"
 									/>
 									<Column
+										style={{
+											flexGrow: 1,
+											flexBasis: "250px",
+											textAlign: "center",
+											alignItems: "center"
+										}}
+										field="program_time_zone"
+										header="STATUS"
+										sortable
+										body={StatusApprovalRender}
+										filterPlaceholder="Search"
+									/>
+									<Column
 										style={{ flexGrow: 1, flexBasis: "250px" }}
 										field="role_create"
 										header="ROLE CREATOR"
@@ -431,20 +427,6 @@ const ProgramPrimeDt: FC = () => {
 										header="THRESHOLD VOUCHER"
 										sortable
 										body={ThresholdAlarmVoucherRender}
-										filterPlaceholder="Search"
-									/>
-
-									<Column
-										style={{
-											flexGrow: 1,
-											flexBasis: "250px",
-											textAlign: "center",
-											alignItems: "center"
-										}}
-										field="program_time_zone"
-										header="STATUS"
-										sortable
-										body={StatusApprovalRender}
 										filterPlaceholder="Search"
 									/>
 								</DataTable>
