@@ -8,9 +8,12 @@ import { Box, Button, CircularProgress, Paper, Stack } from "@mui/material";
 
 import Swal from "sweetalert2";
 
-import { IAuthSignIn } from "../../redux/features/auth/interface";
+import { IAuthSignIn, IData } from "../../redux/features/auth/interface";
 
-import { useSignInMutation } from "../../redux/features/auth/auth-api-slice";
+import {
+	useSignInMutation,
+	useOauthLoginMutation
+} from "../../redux/features/auth/auth-api-slice";
 
 // Custom Hooks
 import { useAppDispatch } from "../../service/hooks";
@@ -27,39 +30,58 @@ const Auth: React.FunctionComponent = () => {
 	const onHandleUsername = (value: string) => setUsername(value);
 	const onHandlePassword = (value: string) => setPassword(value);
 
+	const [oauthLogin] = useOauthLoginMutation();
 	const [signIn] = useSignInMutation();
+
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 
 	const navigate = useNavigate();
 
-	const onSubmit = () => {
+	const onSubmit = async () => {
 		setIsLoading(true);
 
-		const data: IAuthSignIn = {
-			username,
-			password,
-			client_id: env.REACT_APP_CLIENT_ID,
-			client_secret: env.REACT_APP_CLIENT_SECRET
-		};
+		try {
+			const data: IAuthSignIn = {
+				username,
+				password,
+				client_id: env.REACT_APP_CLIENT_ID,
+				client_secret: env.REACT_APP_CLIENT_SECRET
+			};
 
-		// For while type "any"
-		signIn(data).then((res: any) => {
-			if (res?.data) {
-				// Store token to redux
-				dispatch(AUTH_SET_TOKEN(res.data));
+			const oauthResponse = await oauthLogin().unwrap();
 
-				navigate("/");
-				setIsLoading(false);
-			} else if (res.error) {
-				if (typeof res.error.data.message === "string") {
-					Swal.fire(res.error.data.message, "", "warning");
-				} else {
-					Swal.fire(res.error.data.message[0].message, "", "warning");
-				}
+			// For while type "any"
+			const loginResponse = await signIn({
+				...data,
+				coreToken: oauthResponse?.payload?.access_token
+			}).unwrap();
+
+			// Store token to redux
+			dispatch(AUTH_SET_TOKEN(loginResponse));
+
+			navigate("/");
+		} catch (err: any) {
+			console.log("ERROR", err);
+
+			if (typeof err?.data?.message === "string") {
+				Swal.fire(err?.data?.message, "", "error");
 			} else {
-				Swal.fire(`Error`, "", "warning");
+				if (typeof err?.data?.error?.message === "string") {
+					Swal.fire(err?.data?.error?.message, "", "warning");
+				} else {
+					Swal.fire(err?.data?.message?.[0], "", "warning");
+				}
 			}
-		});
+		} finally {
+			setIsLoading(false);
+		}
+	};
+
+	const onSuccess = (response: any) => {
+		console.log("SUCCESS", response);
+	};
+	const onFailure = (response: any) => {
+		console.error("ERROR", response);
 	};
 
 	return (

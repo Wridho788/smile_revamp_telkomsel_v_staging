@@ -55,6 +55,10 @@ export const API_HEADER = (
 						refresh_token: rootState.auth.refresh_token,
 						client_id: process.env.REACT_APP_CLIENT_ID,
 						client_secret: process.env.REACT_APP_CLIENT_SECRET
+					},
+					headers: {
+						"Content-Type": "application/json",
+						Authorization: `Bearer ${rootState.auth.access_token}`
 					}
 				},
 				api,
