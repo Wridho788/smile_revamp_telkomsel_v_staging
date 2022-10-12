@@ -30,7 +30,7 @@ export const channelSlice = createApi({
     const putHandler = (endpoint: string) =>
       builder.mutation<{ success: boolean; body: any }, any>({
         query: (body) => ({
-          url: endpoint,
+          url: endpoint + body["_id"] + "/edit",
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
@@ -51,7 +51,10 @@ export const channelSlice = createApi({
     return {
       channelList: responseHandler(baseUrl + "/channel"),
       channelListPrime: responseHandler("/prime"),
-      deleteChannel: deleteHandler(baseUrl + "/channel/")
+      deleteChannel: deleteHandler(baseUrl + "/channel/"),
+      createChannel: postHandler(baseUrl + "/channel"),
+      updateChannel: putHandler(baseUrl + "/channel/")
+
     };
   },
 });
@@ -61,5 +64,7 @@ export const {
   useChannelListPrimeQuery,
   useLazyChannelListPrimeQuery,
   useLazyChannelListQuery,
-  useDeleteChannelMutation
+  useDeleteChannelMutation,
+  useCreateChannelMutation,
+  useUpdateChannelMutation
 } = channelSlice;

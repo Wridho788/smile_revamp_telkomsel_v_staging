@@ -1,17 +1,11 @@
 import { useEffect, useState, Fragment } from 'react';
-import {
-    Box, Button, Dialog,
-    DialogActions,
-    DialogContent,
-    DialogTitle, Paper, IconButton, Stack,
-    TextField,
-} from "@mui/material";
-import { DrawerNav, Gap, H2, SmallCopy, BodyCopy } from "../../components";
 import { DataTable } from "primereact/datatable";
 import { Toolbar } from "primereact/toolbar";
 import { Column } from "primereact/column";
-import { useLazyChannelListPrimeQuery, useDeleteChannelMutation } from "../../redux/features/channel/channel-api-slice"
+import { DrawerNav, Gap, H2, SmallCopy, BodyCopy } from "../../components";
 import { Add, DeleteForeverOutlined, DriveFileRenameOutlineOutlined } from '@mui/icons-material';
+import { useLazyChannelListPrimeQuery, useDeleteChannelMutation, useCreateChannelMutation, useUpdateChannelMutation } from "../../redux/features/channel/channel-api-slice"
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Paper, IconButton, Stack, TextField } from "@mui/material";
 
 import Swal from 'sweetalert2';
 import moment from "moment";
@@ -57,6 +51,8 @@ const Index = () => {
     const onPage = (event: any) => setLazyParams(event);
     const [getChannelList, { data: channelData }] = useLazyChannelListPrimeQuery();
     const [deleteChannel, { isLoading: loadingDelete }] = useDeleteChannelMutation();
+    const [addChannel, { isLoading: loadingAdd }] = useCreateChannelMutation();
+    const [updateChannel, { isLoading: loadingUpdate }] = useUpdateChannelMutation();
 
     // handler
     const onRowSelect = (event: any) => {
@@ -68,7 +64,68 @@ const Index = () => {
         setOpen({ ...open, edit: true });
         setChannelDetail(data);
         setInitialChannel(data);
-      };
+    };
+
+    const onAddChannel = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        try {
+            await addChannel(initialChannel);
+            setTriger((prev) => !prev);
+            setOpen({ ...open, add: false });
+            setInitialChannel({
+                name: '',
+                code: '',
+                ip: '',
+                description: ''
+            });
+            Swal.fire({
+                icon: 'success',
+                title: 'Success...',
+                text: 'Channel success created.',
+            });
+            loadLazyData();
+        } catch {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Create channel is failed',
+            });
+        }
+    };
+
+    const onUpdateChannel = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        try {
+            let data = {
+                _id: channelDetail?._id,
+                name: initialChannel?.name,
+                code: initialChannel?.code,
+                ip: initialChannel?.ip,
+                description: initialChannel?.description
+            }
+            await updateChannel(data);
+            setTriger((prev) => !prev);
+            setOpen({ ...open, edit: false });
+            setInitialChannel({
+                name: '',
+                code: '',
+                ip: '',
+                description: ''
+            });
+            Swal.fire({
+                icon: 'success',
+                title: 'Success...',
+                text: 'Channel success updated.',
+            });
+            loadLazyData();
+        } catch {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Update channel is failed',
+            });
+        }
+    };
 
     const onDeleteChannel = async (data: any) => {
         Swal.fire({
@@ -114,7 +171,6 @@ const Index = () => {
             <Fragment>
                 <Button
                     sx={{ minWidth: '100px', backgroundColor: '#7B61FF' }}
-                    // icon="pi pi-plus"
                     className='p-button-success mr-2'
                     variant='contained'
                     startIcon={<Add />}
@@ -239,7 +295,7 @@ const Index = () => {
                 onClose={() => setOpen({ ...open, add: false })}>
                 <DialogTitle variant='h5'>Add Channel</DialogTitle>
                 <Gap width={0} height={10} />
-                <form >
+                <form onSubmit={onAddChannel} >
                     <DialogContent>
                         <Stack sx={{ display: 'flex' }} px='3vw'>
                             <Box sx={{ display: 'flex' }}>
@@ -247,37 +303,45 @@ const Index = () => {
                                     size='small'
                                     fullWidth
                                     label='Channel Name'
-                                    value={channelDetail?.name}
+                                    value={initialChannel?.name}
                                     name='name'
                                     onChange={onChange}
                                     required
                                 />
+                            </Box>
+                            <Gap width={0} height={20} />
+                            <Box sx={{ display: 'flex' }}>
                                 <TextField
                                     size='small'
                                     fullWidth
                                     label='Channel Code'
-                                    value={channelDetail?.code}
-                                    name='name'
+                                    value={initialChannel?.code}
+                                    name='code'
                                     onChange={onChange}
                                     required
                                 />
+                            </Box>
+                            <Gap width={0} height={20} />
+                            <Box sx={{ display: 'flex' }}>
                                 <TextField
                                     size='small'
                                     fullWidth
                                     label='Channel IP'
-                                    value={channelDetail?.ip}
-                                    name='name'
+                                    value={initialChannel?.ip}
+                                    name='ip'
                                     onChange={onChange}
                                     required
                                 />
+                            </Box>
+                            <Gap width={0} height={20} />
+                            <Box sx={{ display: 'flex' }}>
                                 <TextField
                                     size='small'
                                     fullWidth
                                     label='Description'
-                                    value={channelDetail?.description}
-                                    name='name'
+                                    value={initialChannel?.description}
+                                    name='description'
                                     onChange={onChange}
-                                    required
                                 />
                             </Box>
                             <Gap width={0} height={20} />
@@ -310,7 +374,7 @@ const Index = () => {
                 onClose={() => setOpen({ ...open, edit: false })}>
                 <DialogTitle variant='h5'>Edit Channel</DialogTitle>
                 <Gap width={0} height={10} />
-                <form >
+                <form onSubmit={onUpdateChannel} >
                     <DialogContent>
                         <Stack sx={{ display: 'flex' }} px='3vw'>
                             <Box sx={{ display: 'flex' }}>
@@ -318,37 +382,45 @@ const Index = () => {
                                     size='small'
                                     fullWidth
                                     label='Channel Name'
-                                    value={channelDetail?.name}
+                                    value={initialChannel?.name}
                                     name='name'
                                     onChange={onChange}
                                     required
                                 />
+                            </Box>
+                            <Gap width={0} height={20} />
+                            <Box sx={{ display: 'flex' }}>
                                 <TextField
                                     size='small'
                                     fullWidth
                                     label='Channel Code'
-                                    value={channelDetail?.code}
-                                    name='name'
+                                    value={initialChannel?.code}
+                                    name='code'
                                     onChange={onChange}
                                     required
                                 />
+                            </Box>
+                            <Gap width={0} height={20} />
+                            <Box sx={{ display: 'flex' }}>
                                 <TextField
                                     size='small'
                                     fullWidth
                                     label='Channel IP'
-                                    value={channelDetail?.ip}
-                                    name='name'
+                                    value={initialChannel?.ip}
+                                    name='ip'
                                     onChange={onChange}
                                     required
                                 />
+                            </Box>
+                            <Gap width={0} height={20} />
+                            <Box sx={{ display: 'flex' }}>
                                 <TextField
                                     size='small'
                                     fullWidth
                                     label='Description'
-                                    value={channelDetail?.description}
-                                    name='name'
+                                    value={initialChannel?.description}
+                                    name='description'
                                     onChange={onChange}
-                                    required
                                 />
                             </Box>
                             <Gap width={0} height={20} />
