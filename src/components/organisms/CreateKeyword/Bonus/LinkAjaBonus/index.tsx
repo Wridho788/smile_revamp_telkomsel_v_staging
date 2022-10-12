@@ -12,7 +12,7 @@ import {
   useLocationTemplateQuery,
 } from "../../../../../redux/features/location/location-api-slice";
 import { KeywordBonusLinkAjaBonus } from "../../initial";
-import { BooleanOptions } from "components/organisms/UpdateKeyword/options";
+import { BooleanOptions } from "components/organisms/CreateKeyword/options";
 import { useGetLocationTypeQuery } from "redux/features/lov/lov-api-slice";
 import { useAccountAuthenticateQuery } from "redux/features/account/account-api-slice";
 

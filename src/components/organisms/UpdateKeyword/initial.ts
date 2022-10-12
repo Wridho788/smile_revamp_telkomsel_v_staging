@@ -1,404 +1,435 @@
 import {
-	IKeywordEligibilityKeywordShift,
-	IKeywordEligibility,
-	IUpdateKeyword,
-	IKeywordEligibilityLocationHelper,
-	IKeywordBonusHelper,
-	IKeywordNotificationEligibilityHelper,
-	IKeywordNotificationLuckyDrawHelper,
-	IKeywordBonusLuckyDraw,
-	IKeywordNotificationEligibility,
-	IKeywordBonusLuckyDrawLocation,
-	IKeywordNotificationLuckyDraw,
-	IKeywordBonusAuction,
-	IKeywordNotificationAuction,
-	IKeywordNotificationAuctionHelper,
-	IKeywordBonusDirectRedeem,
-	IKeywordBonusDonation,
-	IKeywordBonusMobileBanking,
-	IKeywordBonusLoyaltyPoin,
-	IKeywordBonusTelcoProductPostpaid,
-	IKeywordBonusTelcoProductPrepaid,
-	IKeywordBonusVoucher,
-	IKeywordBonusLinkAja
+  IKeywordEligibilityKeywordShift,
+  IKeywordEligibility,
+  ICreateKeyword,
+  IKeywordEligibilityLocationHelper,
+  IKeywordBonusHelper,
+  IKeywordNotificationEligibilityHelper,
+  IKeywordNotificationLuckyDrawHelper,
+  IKeywordBonusLuckyDraw,
+  IKeywordNotificationEligibility,
+  IKeywordBonusLuckyDrawLocation,
+  IKeywordNotificationLuckyDraw,
+  IKeywordBonusAuction,
+  IKeywordNotificationAuction,
+  IKeywordNotificationAuctionHelper,
+  IKeywordBonusDirectRedeem,
+  IKeywordBonusDonation,
+  IKeywordBonusMobileBanking,
+  IKeywordBonusLoyaltyPoin,
+  IKeywordBonusTelcoProductPostpaid,
+  IKeywordBonusTelcoProductPrepaid,
+  IKeywordBonusVoucher,
+  IKeywordBonusLinkAjaMain,
+  IKeywordBonusLinkAjaBonus,
+  IKeywordBonusNgrs,
+  IKeywordBonusVoting,
 } from "./interfaces";
 import { IBonusTypeVoucher } from "./Bonus/Voucher/interface";
 
 export const KeywordEligibilityLocationHelper: IKeywordEligibilityLocationHelper =
-	{
-		location_type: ""
-	};
+  {
+    location_type: "",
+  };
 
 const KeywordEligibilityKeywordShift: IKeywordEligibilityKeywordShift = {
-	from: new Date(),
-	to: new Date()
+  from: new Date(),
+  to: new Date(),
 };
 
 export const KeywordEligibility: IKeywordEligibility = {
-	name: "",
-	start_period: "",
-	end_period: "",
-	keyword_type: "",
-	point_type: "",
-	poin_value: "",
-	poin_redeemed: 0,
-	channel_validation: false,
-	channel_validation_list: [],
-	program_id: "",
-	eligibility_locations: false,
-	location_type: "",
-	locations: [],
-	program_title_expose: "",
-	program_experience: [],
-	program_bersubsidi: false,
-	merchant: "",
-	merchandise_keyword: false,
-	keyword_schedule: "",
-	total_budget: 0,
-	customer_value: 0,
-	multiwhitelist: false,
-	multiwhitelist_program: "",
-	enable_sms_masking: false,
-	sms_masking: "",
-	timezone: "",
-	for_new_redeemer: false,
-	max_mode: "",
-	max_redeem_counter: 0,
-	segmentation_customer_tier: [],
-	segmentation_customer_los_operator: "",
-	segmentation_customer_los: 0,
-	segmentation_customer_los_max: 0,
-	segmentation_customer_los_min: 0,
-	segmentation_customer_type: "",
-	segmentation_customer_most_redeem: [],
-	segmentation_customer_brand: [],
-	segmentation_customer_prepaid_registration: false,
-	segmentation_customer_kyc_completeness: false,
-	segmentation_customer_poin_balance_operator: "",
-	segmentation_customer_poin_balance: 0,
-	segmentation_customer_poin_balance_min: 0,
-	segmentation_customer_poin_balance_max: 0,
-	segmentation_customer_preference: "",
-	segmentation_customer_arpu_operator: "",
-	segmentation_customer_arpu: 0,
-	segmentation_customer_arpu_min: 0,
-	segmentation_customer_arpu_max: 0,
-	segmentation_customer_preferences_bcp: "",
-	file: "",
-	segmentation_employee_numbers: false,
-	keyword_shift: [KeywordEligibilityKeywordShift]
+  name: "",
+  start_period: "",
+  end_period: "",
+  keyword_type: "",
+  point_type: "",
+  poin_value: "",
+  poin_redeemed: 0,
+  channel_validation: false,
+  channel_validation_list: [],
+  channel_validation_list_info: [],
+  program_id: "",
+  eligibility_locations: false,
+  location_type: "",
+  locations: [],
+  program_title_expose: "",
+  program_experience: [],
+  program_bersubsidi: false,
+  merchant: "",
+  merchant_info: "",
+  merchandise_keyword: false,
+  keyword_schedule: "",
+  total_budget: 0,
+  customer_value: 0,
+  multiwhitelist: false,
+  multiwhitelist_program: "",
+  enable_sms_masking: false,
+  sms_masking: "",
+  timezone: "",
+  for_new_redeemer: false,
+  max_mode: "",
+  max_redeem_counter: 0,
+  segmentation_customer_tier: [],
+  segmentation_customer_los_operator: "",
+  segmentation_customer_los: 0,
+  segmentation_customer_los_max: 0,
+  segmentation_customer_los_min: 0,
+  segmentation_customer_type: "",
+  segmentation_customer_most_redeem: [],
+  segmentation_customer_brand: [],
+  segmentation_customer_prepaid_registration: false,
+  segmentation_customer_kyc_completeness: false,
+  segmentation_customer_poin_balance_operator: "",
+  segmentation_customer_poin_balance: 0,
+  segmentation_customer_poin_balance_min: 0,
+  segmentation_customer_poin_balance_max: 0,
+  segmentation_customer_preference: "",
+  segmentation_customer_arpu_operator: "",
+  segmentation_customer_arpu: 0,
+  segmentation_customer_arpu_min: 0,
+  segmentation_customer_arpu_max: 0,
+  segmentation_customer_preferences_bcp: "",
+  file: "",
+  segmentation_employee_numbers: false,
+  keyword_shift: [KeywordEligibilityKeywordShift],
 };
 
 export const KeywordBonusHelper: IKeywordBonusHelper = {
-	bonus_type: [],
-	bonus_type_id: []
+  bonus_type: [],
+  bonus_type_id: [],
 };
 
 export const KeywordBonusLuckyDrawLocation: IKeywordBonusLuckyDrawLocation = {
-	location_id: "",
-	stock: 0
+  location_id: "",
+  stock: 0,
 };
 
 export const KeywordBonusLuckyDraw: IKeywordBonusLuckyDraw = {
-	bonus_type: "lucky_draw",
-	lucky_draw_reguler: true,
-	lucky_draw_allow_inject_coupon: false,
-	lucky_draw_prize: "",
-	redeem_after_verification: false,
-	locations: []
+  bonus_type: "lucky_draw",
+  lucky_draw_reguler: true,
+  lucky_draw_allow_inject_coupon: false,
+  lucky_draw_prize: "",
+  redeem_after_verification: false,
+  locations: [],
 };
 
 export const KeywordBonusDirectRedeem: IKeywordBonusDirectRedeem = {
-	bonus_type: "direct_redeem",
-	stock_type: "",
-	redeem_after_verification: false,
-	locations: []
+  bonus_type: "direct_redeem",
+  stock_type: "",
+  redeem_after_verification: false,
+  locations: [],
 };
 
 export const KeywordBonusLoyaltyPoin: IKeywordBonusLoyaltyPoin = {
-	bonus_type: "loyalty_poin",
-	earning_poin: 0,
-	redeem_after_verification: false,
-	locations: []
+  bonus_type: "loyalty_poin",
+  earning_poin: 0,
+  redeem_after_verification: false,
+  locations: [],
 };
 
 export const KeywordBonusTelcoProductPostpaid: IKeywordBonusTelcoProductPostpaid =
-	{
-		bonus_type: "telco_postpaid",
-		telco_post_product_name: "",
-		telco_post_bid: "",
-		telco_post_api_config: "False",
-		stock_location: [],
-		redeem_after_verification: false
-	};
+  {
+    bonus_type: "telco_postpaid",
+    telco_post_product_name: "",
+    telco_post_bid: "",
+    telco_post_api_config: "False",
+    stock_location: [],
+    redeem_after_verification: false,
+  };
 
 export const KeywordBonusTelcoProductPrepaid: IKeywordBonusTelcoProductPrepaid =
-	{
-		bonus_type: "telco_prepaid",
-		telco_post_product_name: "",
-		telco_post_bid: "",
-		telco_post_api_config: "False",
-		stock_location: [],
-		redeem_after_verification: false
-	};
+  {
+    bonus_type: "telco_prepaid",
+    telco_post_product_name: "",
+    telco_post_bid: "",
+    telco_post_api_config: "False",
+    stock_location: [],
+    redeem_after_verification: false,
+  };
 
 export const KeywordBonusAuction: IKeywordBonusAuction = {
-	bonus_type: "auction",
-	auction_prize_desc_id: "",
-	auction_prize_desc_en: "",
-	auction_prize_image: "",
-	auction_poin_min_bidding: 0,
-	auction_multiplier_poin: 0,
-	auction_max_winner_inphase: 0,
-	auction_prize_name: "",
-	stock_location: [],
-	redeem_after_verification: false
+  bonus_type: "auction",
+  auction_prize_desc_id: "",
+  auction_prize_desc_en: "",
+  auction_prize_image: "",
+  auction_poin_min_bidding: 0,
+  auction_multiplier_poin: 0,
+  auction_max_winner_inphase: 0,
+  auction_prize_name: "",
+  stock_location: [],
+  redeem_after_verification: false,
 };
 
 export const KeywordBonusVoucher: IKeywordBonusVoucher = {
-	bonus_type: "discount_voucher",
-	exp_voucher: "",
-	voucher_type: "",
-	voucher_combination: "",
-	jumlah_total_voucher: 0,
-	stock_location: [],
-	voucher_prefix: "",
-	redeem_after_verification: false
+  bonus_type: "discount_voucher",
+  exp_voucher: "",
+  voucher_type: "",
+  voucher_combination: "",
+  jumlah_total_voucher: 0,
+  stock_location: [],
+  voucher_prefix: "",
+  redeem_after_verification: false,
 };
 
-export const KeywordBonusLinkAja: IKeywordBonusLinkAja = {
-	nominal: "",
-	location: "",
-	bonus_type: "link_aja",
-	external_api_config: "",
-	bucket: "",
-	stock_location: [],
-	redeem_after_verification: false
+export const KeywordBonusLinkAjaMain: IKeywordBonusLinkAjaMain = {
+  bonus_type: "linkaja_main",
+  nominal: 0,
+  external_api_config: false,
+  location: "",
+  location_detail: "",
+  bucket: "",
+  stock_location: [],
+  redeem_after_verification: false,
+};
+
+export const KeywordBonusLinkAjaBonus: IKeywordBonusLinkAjaBonus = {
+  bonus_type: "linkaja_bonus",
+  nominal: 0,
+  external_api_config: false,
+  location: "",
+  location_detail: "",
+  bucket: "",
+  stock_location: [],
+  redeem_after_verification: false,
+};
+
+export const KeywordBonusNgrs: IKeywordBonusNgrs = {
+  bonus_type: "ngrs",
+  nominal: 0,
+  external_api_config: false,
+  location: "",
+  location_detail: "",
+  bucket: "",
+  stock_location: [],
+  redeem_after_verification: false,
 };
 
 export const KeyWordBonusDonation: IKeywordBonusDonation = {
-	bonus_type: "donation",
-	donation_category: "",
-	minimum_poin: 0,
-	target_poin: 0,
-	stock_location: [],
-	redeem_after_verification: false
+  bonus_type: "donation",
+  donation_category: "",
+  minimum_poin: 0,
+  target_poin: 0,
+  stock_location: [],
+  redeem_after_verification: false,
 };
 
 export const KeywordBonusMobileBanking: IKeywordBonusMobileBanking = {
-	bonus_type: "mbp",
-	bank: "",
-	ip_address: "",
-	digit_coupon: "",
-	combination_coupon: "",
-	stock_location: [],
-	redeem_after_verification: false
+  bonus_type: "mbp",
+  bank: "",
+  ip_address: "",
+  digit_coupon: "",
+  combination_coupon: "",
+  stock_location: [],
+  redeem_after_verification: false,
 };
 
 export const KeywordBonusVoid: any = {
-	bonus_type: "void"
+  bonus_type: "void",
 };
 
-export const KeywordBonusVoting: any = {
-	bonus_type: "voting",
-	target_redeemer: 0
+export const KeywordBonusVoting: IKeywordBonusVoting = {
+  bonus_type: "voting",
+  target_redeemer: 0,
+  stock_location: [],
+  redeem_after_verification: false,
 };
 
 export const KeywordBonusOther: any = {
-	bonus_type: "other"
+  bonus_type: "other",
 };
 
 export const KeywordNotificationAuctionHelper: IKeywordNotificationAuctionHelper[] =
-	[
-		{
-			notification_template: "",
-			follow_period: false
-		},
-		{
-			notification_template: "",
-			follow_period: false
-		},
-		{
-			notification_template: "",
-			follow_period: false
-		},
-		{
-			notification_template: "",
-			follow_period: false
-		}
-	];
+  [
+    {
+      notification_template: "",
+      follow_period: true,
+    },
+    {
+      notification_template: "",
+      follow_period: true,
+    },
+    {
+      notification_template: "",
+      follow_period: true,
+    },
+    {
+      notification_template: "",
+      follow_period: true,
+    },
+  ];
 
 export const KeywordNotificationAuction: IKeywordNotificationAuction[] = [
-	{
-		bonus_type_id: "",
-		code_identifier: "",
-		notification_content: "",
-		start_period: new Date(),
-		end_period: new Date(),
-		notif_type: "",
-		via: ""
-	},
-	{
-		bonus_type_id: "",
-		code_identifier: "",
-		notification_content: "",
-		start_period: new Date(),
-		end_period: new Date(),
-		notif_type: "",
-		via: ""
-	},
-	{
-		bonus_type_id: "",
-		code_identifier: "",
-		notification_content: "",
-		start_period: new Date(),
-		end_period: new Date(),
-		notif_type: "",
-		via: ""
-	},
-	{
-		bonus_type_id: "",
-		code_identifier: "",
-		notification_content: "",
-		start_period: new Date(),
-		end_period: new Date(),
-		notif_type: "",
-		via: ""
-	}
+  {
+    bonus_type_id: "",
+    code_identifier: "",
+    notification_content: "",
+    start_period: new Date(),
+    end_period: new Date(),
+    notif_type: "",
+    via: "",
+  },
+  {
+    bonus_type_id: "",
+    code_identifier: "",
+    notification_content: "",
+    start_period: new Date(),
+    end_period: new Date(),
+    notif_type: "",
+    via: "",
+  },
+  {
+    bonus_type_id: "",
+    code_identifier: "",
+    notification_content: "",
+    start_period: new Date(),
+    end_period: new Date(),
+    notif_type: "",
+    via: "",
+  },
+  {
+    bonus_type_id: "",
+    code_identifier: "",
+    notification_content: "",
+    start_period: new Date(),
+    end_period: new Date(),
+    notif_type: "",
+    via: "",
+  },
 ];
 
 export const KeywordNotificationEligibilityHelper: IKeywordNotificationEligibilityHelper[] =
-	[
-		{
-			notification_template: "",
-			follow_period: false
-		},
-		{
-			notification_template: "",
-			follow_period: false
-		},
-		{
-			notification_template: "",
-			follow_period: false
-		},
-		{
-			notification_template: "",
-			follow_period: false
-		}
-	];
+  [
+    {
+      notification_template: "",
+      follow_period: true,
+    },
+    {
+      notification_template: "",
+      follow_period: true,
+    },
+    {
+      notification_template: "",
+      follow_period: true,
+    },
+    {
+      notification_template: "",
+      follow_period: true,
+    },
+  ];
 
 export const KeywordNotificationEligibility: IKeywordNotificationEligibility[] =
-	[
-		{
-			bonus_type_id: "",
-			keyword_name: "",
-			code_identifier: "",
-			notification_content: "",
-			start_period: new Date(),
-			end_period: new Date(),
-			notif_type: "",
-			via: ""
-		},
-		{
-			bonus_type_id: "",
-			keyword_name: "",
-			code_identifier: "",
-			notification_content: "",
-			start_period: new Date(),
-			end_period: new Date(),
-			notif_type: "",
-			via: ""
-		},
-		{
-			bonus_type_id: "",
-			keyword_name: "",
-			code_identifier: "",
-			notification_content: "",
-			start_period: new Date(),
-			end_period: new Date(),
-			notif_type: "",
-			via: ""
-		},
-		{
-			bonus_type_id: "",
-			keyword_name: "",
-			code_identifier: "",
-			notification_content: "",
-			start_period: new Date(),
-			end_period: new Date(),
-			notif_type: "",
-			via: ""
-		}
-	];
+  [
+    {
+      bonus_type_id: "",
+      keyword_name: "",
+      code_identifier: "",
+      notification_content: "",
+      start_period: new Date(),
+      end_period: new Date(),
+      notif_type: "",
+      via: "",
+    },
+    {
+      bonus_type_id: "",
+      keyword_name: "",
+      code_identifier: "",
+      notification_content: "",
+      start_period: new Date(),
+      end_period: new Date(),
+      notif_type: "",
+      via: "",
+    },
+    {
+      bonus_type_id: "",
+      keyword_name: "",
+      code_identifier: "",
+      notification_content: "",
+      start_period: new Date(),
+      end_period: new Date(),
+      notif_type: "",
+      via: "",
+    },
+    {
+      bonus_type_id: "",
+      keyword_name: "",
+      code_identifier: "",
+      notification_content: "",
+      start_period: new Date(),
+      end_period: new Date(),
+      notif_type: "",
+      via: "",
+    },
+  ];
 
 export const KeywordNotificationLuckyDrawHelper: IKeywordNotificationLuckyDrawHelper[] =
-	[
-		{
-			notification_template: "",
-			follow_period: false
-		},
-		{
-			notification_template: "",
-			follow_period: false
-		},
-		{
-			notification_template: "",
-			follow_period: false
-		},
-		{
-			notification_template: "",
-			follow_period: false
-		}
-	];
+  [
+    {
+      notification_template: "",
+      follow_period: true,
+    },
+    {
+      notification_template: "",
+      follow_period: true,
+    },
+    {
+      notification_template: "",
+      follow_period: true,
+    },
+    {
+      notification_template: "",
+      follow_period: true,
+    },
+  ];
 
 export const KeywordNotificationLuckyDraw: IKeywordNotificationLuckyDraw[] = [
-	{
-		bonus_type_id: "",
-		keyword_name: "",
-		code_identifier: "",
-		notification_content: "",
-		start_period: new Date(),
-		end_period: new Date(),
-		notif_type: "",
-		via: ""
-	},
-	{
-		bonus_type_id: "",
-		keyword_name: "",
-		code_identifier: "",
-		notification_content: "",
-		start_period: new Date(),
-		end_period: new Date(),
-		notif_type: "",
-		via: ""
-	},
-	{
-		bonus_type_id: "",
-		keyword_name: "",
-		code_identifier: "",
-		notification_content: "",
-		start_period: new Date(),
-		end_period: new Date(),
-		notif_type: "",
-		via: ""
-	},
-	{
-		bonus_type_id: "",
-		keyword_name: "",
-		code_identifier: "",
-		notification_content: "",
-		start_period: new Date(),
-		end_period: new Date(),
-		notif_type: "",
-		via: ""
-	}
+  {
+    bonus_type_id: "",
+    keyword_name: "",
+    code_identifier: "",
+    notification_content: "",
+    start_period: new Date(),
+    end_period: new Date(),
+    notif_type: "",
+    via: "",
+  },
+  {
+    bonus_type_id: "",
+    keyword_name: "",
+    code_identifier: "",
+    notification_content: "",
+    start_period: new Date(),
+    end_period: new Date(),
+    notif_type: "",
+    via: "",
+  },
+  {
+    bonus_type_id: "",
+    keyword_name: "",
+    code_identifier: "",
+    notification_content: "",
+    start_period: new Date(),
+    end_period: new Date(),
+    notif_type: "",
+    via: "",
+  },
+  {
+    bonus_type_id: "",
+    keyword_name: "",
+    code_identifier: "",
+    notification_content: "",
+    start_period: new Date(),
+    end_period: new Date(),
+    notif_type: "",
+    via: "",
+  },
 ];
 
-export const UpdateKeywordGeneral: IUpdateKeyword = {
-	approval_log: [],
-	eligibility: KeywordEligibility,
-	bonus: [],
-	notification: [...KeywordNotificationEligibility]
+export const CreateKeywordGeneral: ICreateKeyword = {
+  _id: "",
+  approval_log: [],
+  eligibility: KeywordEligibility,
+  bonus: [],
+  notification: [...KeywordNotificationEligibility],
 };
 
 export const KeywordFirstStep: boolean = false;

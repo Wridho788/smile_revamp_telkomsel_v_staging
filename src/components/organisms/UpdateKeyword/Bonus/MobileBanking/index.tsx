@@ -5,9 +5,9 @@ import {
   Subtitle,
 
 } from "components/atoms";
-// import { FilterInitial } from "redux/utils/initial-general";
+import { FilterInitial } from "redux/utils/initial-general";
 import {
-  IUpdateKeyword,
+  ICreateKeyword,
 
 } from "../../interfaces";
 import Accordion from "@mui/material/Accordion";
@@ -23,8 +23,8 @@ import LocationManagement from "../LocationManagement";
 interface IMobileBankingProps {
   bonusType: string;
   bonusTypeId: any;
-  keywordCreateState: IUpdateKeyword;
-  keywordCreate: IUpdateKeyword;
+  keywordCreateState: ICreateKeyword;
+  keywordCreate: ICreateKeyword;
   stateTrigger: boolean;
   setStateTrigger: Dispatch<SetStateAction<boolean>>;
 }

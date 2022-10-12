@@ -9,7 +9,7 @@ import {
 } from "../../../../atoms";
 import { FilterInitial } from "../../../../../redux/utils/initial-general";
 import {
-  IUpdateKeyword,
+  ICreateKeyword,
   IKeywordNotificationEligibility,
   IKeywordNotificationEligibilityHelper,
 } from "../../interfaces";
@@ -27,10 +27,11 @@ import {
   KeywordNotificationEligibilityHelper,
   KeywordNotificationEligibility,
 } from "../../initial";
+import { useAppSelector } from "service/hooks";
 
 interface INotificationProps {
-  keywordCreateState: IUpdateKeyword;
-  keywordCreate: IUpdateKeyword;
+  keywordCreateState: ICreateKeyword;
+  keywordCreate: ICreateKeyword;
   stateTrigger: boolean;
   setStateTrigger: Dispatch<SetStateAction<boolean>>;
 }
@@ -41,6 +42,7 @@ const Notification: React.FunctionComponent<INotificationProps> = ({
   stateTrigger,
   setStateTrigger,
 }) => {
+  const [expanded, setExpanded] = React.useState<boolean>(true);
   const { data: viaOptions = { data: [] } } = useGetNotifViaQuery();
   const { data: templateOptions = { data: [] } } =
     useNotificationTemplateQuery(FilterInitial);
@@ -71,6 +73,9 @@ const Notification: React.FunctionComponent<INotificationProps> = ({
   ] = useState<IKeywordNotificationEligibility[]>(
     keywordNotificationEligibility
   );
+  const keywordName = useAppSelector(
+    (state) => state.createKeywordValidationSlice.keywordNameEligibility
+  );
 
   useEffect(() => {
     getKeywordNotification("ELIGIBILITY_VERIFICATION");
@@ -87,7 +92,11 @@ const Notification: React.FunctionComponent<INotificationProps> = ({
   }, [keywordNotificationEligibility, stateTrigger]);
 
   return (
-    <Accordion sx={{ p: "1vw" }}>
+    <Accordion
+      expanded={expanded}
+      onChange={() => setExpanded(!expanded)}
+      sx={{ p: "1vw" }}
+    >
       <AccordionSummary
         expandIcon={<ExpandMoreIcon fontSize="large" />}
         aria-controls="panel1a-content"
@@ -127,9 +136,14 @@ const Notification: React.FunctionComponent<INotificationProps> = ({
                     direction="column"
                     label="Keyword Name"
                     variant="outlined"
-                    value={keywordNotificationEligibilityState[idx].keyword_name
-                      .replace(/[^a-zA-Z0-9]/g, "")
-                      .toUpperCase()}
+                    error={
+                      idx === 0 ? (keywordName === "" ? false : true) : false
+                    }
+                    helperText={
+                      idx === 0 ? (keywordName === "" ? "" : keywordName) : ""
+                    }
+                    disabled={idx !== 0}
+                    value={keywordNotificationEligibility[idx].keyword_name}
                     handleChange={(value: string) => {
                       keywordNotificationEligibility[idx].keyword_name = value
                         .replace(/[^a-zA-Z0-9]/g, "")

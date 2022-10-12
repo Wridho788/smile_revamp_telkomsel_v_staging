@@ -4,7 +4,7 @@ import { Select, Subtitle } from "../../../../atoms";
 import { useGetLocationTypeQuery } from "../../../../../redux/features/lov/lov-api-slice";
 import { FilterInitial } from "../../../../../redux/utils/initial-general";
 import {
-	IUpdateKeyword,
+	ICreateKeyword,
 	IKeywordEligibilityLocationHelper
 } from "../../interfaces";
 import { BooleanOptions } from "../../options";
@@ -20,8 +20,8 @@ import { KeywordEligibilityLocationHelper } from "../../initial";
 import { useAccountAuthenticateQuery } from "../../../../../redux/features/account/account-api-slice";
 
 interface ILocationProps {
-	keywordCreateState: IUpdateKeyword;
-	keywordCreate: IUpdateKeyword;
+	keywordCreateState: ICreateKeyword;
+	keywordCreate: ICreateKeyword;
 	stateTrigger: boolean;
 	setStateTrigger: Dispatch<SetStateAction<boolean>>;
 }
@@ -32,6 +32,7 @@ const Location: React.FunctionComponent<ILocationProps> = ({
 	stateTrigger,
 	setStateTrigger
 }) => {
+	const [expanded, setExpanded] = React.useState<boolean>(true);
 	const { data: locationTypeOptions = { data: [] } } =
 		useGetLocationTypeQuery();
 
@@ -64,18 +65,12 @@ const Location: React.FunctionComponent<ILocationProps> = ({
 	}, [keywordCreateState.eligibility?.eligibility_locations]);
 
 	useEffect(() => {
-		// Need to be delayed
-		setTimeout(() => {
-			if (keywordCreateState?.eligibility?.location_type) {
-				getOwnerDetail({
-					type: keywordCreateState?.eligibility?.location_type
-				});
-			}
-		}, 2000);
+		if (keywordCreate?.eligibility?.location_type)
+			getOwnerDetail({ type: keywordCreate?.eligibility?.location_type });
 	}, []);
 
 	return (
-		<Accordion sx={{ p: "1vw" }}>
+		<Accordion expanded={expanded} onChange={()=> setExpanded(!expanded)} sx={{ p: "1vw" }}>
 			<AccordionSummary
 				expandIcon={<ExpandMoreIcon fontSize="large" />}
 				aria-controls="panel1a-content"

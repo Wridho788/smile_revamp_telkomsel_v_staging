@@ -1,82 +1,87 @@
 /**
- * TODO: Update Keyword
+ * TODO: Create Keyword
  * **/
 
-import React, { useEffect } from "react";
-import { useParams } from "react-router-dom";
-
+import React from "react";
 import { Box, CircularProgress } from "@mui/material";
 import { DrawerNav, H2, Stepper, StepperPaper } from "../../components";
-
 import { MainInfo, Bonus } from "../../components/organisms/UpdateKeyword";
+import {
+  CreateKeywordGeneral,
+  KeywordBonusHelper,
+} from "components/organisms/UpdateKeyword/initial";
+import { ICreateKeyword } from "components/organisms/UpdateKeyword/interfaces";
+import { useParams } from "react-router-dom";
+import usePayloadToInitial from "components/organisms/UpdateKeyword/hooks/usePayloadToInitial";
 
-import { useKeywordGeneralDetailQuery } from "../../redux/features/keyword/keyword-api-slice";
-import { UpdateKeywordGeneral } from "../../components/organisms/UpdateKeyword/initial";
+const CreateKeyword = () => {
+  const { _id } = useParams();
+  const [isPayload, setIsPayload] = React.useState<boolean>(false);
+  const { onPayloadToInitial } = usePayloadToInitial();
+  const keywordCreate = CreateKeywordGeneral;
+  const [keywordCreateState, setKeywordCreateState] =
+    React.useState<ICreateKeyword>(keywordCreate);
+  const [stateTrigger, setStateTrigger] = React.useState<boolean>(true);
+  const [activeStep, setActiveStep] = React.useState<number>(0);
+  const steps = ["Main Info", "Bonus"];
+  const stepsItem = [
+    <MainInfo
+      keywordCreateState={keywordCreateState}
+      keywordCreate={keywordCreate}
+      stateTrigger={stateTrigger}
+      setStateTrigger={setStateTrigger}
+    />,
+    <Bonus />,
+  ];
 
-import { cloneDeep } from "lodash";
+  React.useEffect(() => {
+    if (_id && !isPayload) {
+      onPayloadToInitial(_id, setIsPayload);
+    }
+  }, [_id, isPayload, onPayloadToInitial]);
 
-const UpdateKeyword = () => {
-	let UpdateKeyword = UpdateKeywordGeneral;
-	const [activeStep, setActiveStep] = React.useState<number>(0);
-	const steps = ["Main Info", "Bonus"];
-	const stepsItem = [<MainInfo />, <Bonus />];
-
-	/* TODO: Get params url of _id */
-	const { _id } = useParams();
-	const { data, isFetching } = useKeywordGeneralDetailQuery(_id ?? "");
-
-	useEffect(() => {
-		if (data) {
-			UpdateKeyword.approval_log = cloneDeep(data?.approval_log || []);
-			UpdateKeyword.bonus = cloneDeep(data.bonus);
-			UpdateKeyword.eligibility = cloneDeep(data.eligibility);
-			UpdateKeyword.notification = cloneDeep(data.notification);
-
-			// TODO Mapping customer_experience to program_experience
-			UpdateKeyword.eligibility.program_experience = cloneDeep(
-				data.customer_experience
-			);
-		}
-	}, [isFetching]);
-
-	return (
-		<DrawerNav>
-			<Box
-				sx={{
-					paddingBlock: "3vw",
-					paddingInline: "20vw"
-				}}
-			>
-				<StepperPaper sx={{ paddingTop: "4vw" }}>
-					<H2 textAlign="center" mb="2vw">
-						Update Keyword
-					</H2>
-					{isFetching ? (
-						<Box
-							sx={{
-								display: "flex",
-								justifyContent: "center",
-								alignItems: "center",
-								minHeight: "100vh"
-							}}
-						>
-							<CircularProgress />
-						</Box>
-					) : (
-						<Stepper
-							steps={steps}
-							activeStep={activeStep}
-							setActiveStep={setActiveStep}
-							slug={"update"}
-							type={"keyword"}
-						>
-							{stepsItem[activeStep]}
-						</Stepper>
-					)}
-				</StepperPaper>
-			</Box>
-		</DrawerNav>
-	);
+  React.useEffect(() => {
+    setKeywordCreateState(keywordCreate);
+  }, [keywordCreate]);
+  return (
+    <DrawerNav>
+      <Box
+        sx={{
+          paddingBlock: "3vw",
+          paddingInline: "20vw",
+        }}
+      >
+        <StepperPaper sx={{ paddingTop: "4vw" }}>
+          <H2 textAlign="center" mb="2vw">
+            Update Keyword
+          </H2>
+          {!isPayload ? (
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                minHeight: "50vh",
+              }}
+            >
+              <CircularProgress />
+            </Box>
+          ) : (
+            <Stepper
+              steps={steps}
+              activeStep={activeStep}
+              setActiveStep={setActiveStep}
+              slug={"update"}
+              type={"keyword"}
+              keywordCreateState={keywordCreateState}
+            >
+              {stepsItem[activeStep]}
+            </Stepper>
+          )}
+        </StepperPaper>
+      </Box>
+    </DrawerNav>
+  );
 };
 
-export default UpdateKeyword;
+export default CreateKeyword;
