@@ -44,7 +44,6 @@ const ProgramPrimeDt: FC = () => {
 		sortField: "created_at",
 		sortOrder: -1,
 		filters: {
-			is_draft: { value: false, matchMode: "equals" },
 			name: { value: "", matchMode: "contains" },
 			program_experience: {
 				value: InitialFilter.program_experience._id,
@@ -112,17 +111,30 @@ const ProgramPrimeDt: FC = () => {
 		}));
 	};
 
-	const onDraftChange = (): void => {
-		setLazyParams((previousLazyParams: any) => ({
-			...previousLazyParams,
-			filters: {
-				...previousLazyParams?.filters,
-				is_draft: {
-					...previousLazyParams?.filters?.is_draft,
-					value: !previousLazyParams?.filters?.is_draft?.value
-				}
+	const onDraftChange = (value: boolean): void => {
+		setLazyParams((previousLazyParams: any) => {
+			if (!value) {
+				delete previousLazyParams.filters.is_draft;
+				return {
+					...previousLazyParams,
+					filters: {
+						...previousLazyParams?.filters
+					}
+				};
+			} else {
+				return {
+					...previousLazyParams,
+					filters: {
+						...previousLazyParams?.filters,
+						is_draft: {
+							...previousLazyParams?.filters?.is_draft,
+							value: true,
+							matchMode: "equals"
+						}
+					}
+				};
 			}
-		}));
+		});
 	};
 
 	const onRowSelect = (event: any) => {
@@ -211,9 +223,10 @@ const ProgramPrimeDt: FC = () => {
 		);
 	};
 
-	const roleAccess = accountAuth && defaultRoleManager
-		? accountAuth.role === defaultRoleManager
-		: false
+	const roleAccess =
+		accountAuth && defaultRoleManager
+			? accountAuth.role === defaultRoleManager
+			: false;
 
 	return (
 		<>

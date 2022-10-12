@@ -12,4 +12,5 @@ export interface IAuthSignIn {
 	password: string;
 	client_id: string;
 	client_secret: string;
+	coreToken?: string;
 }
