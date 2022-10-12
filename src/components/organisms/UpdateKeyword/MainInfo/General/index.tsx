@@ -1,5 +1,6 @@
-import React, { Dispatch, SetStateAction } from "react";
+import React, { Dispatch, SetStateAction, useState, useEffect } from "react";
 import {
+	Autocomplete,
 	Box,
 	Button,
 	CircularProgress,
@@ -32,7 +33,11 @@ import {
 	MaxModeOptions,
 	PoinValueOptions
 } from "../../options";
-import { useProgramListQuery } from "../../../../../redux/features/program/program-api-slice";
+import {
+	useDetailProgramQuery,
+	useLazyDetailProgramQuery,
+	useProgramListQuery
+} from "../../../../../redux/features/program/program-api-slice";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
@@ -57,21 +62,49 @@ const General: React.FunctionComponent<IGeneralProps> = ({
 	stateTrigger,
 	setStateTrigger
 }) => {
-	// const { data: pointTypeOptions = { data: [] } } = useGetPointTypeQuery();
+	const [programListLimit, setProgramListLimit] = useState<number>(100);
 
 	const {
 		data: programListOptions = { data: [] },
-		isFetching: isFetchingProgram
-	} = useProgramListQuery(FilterInitial);
+		isFetching: isFetchingProgram,
+		isLoading: isProgramListLoading,
+		refetch: refetchProgramList
+	} = useProgramListQuery({ ...FilterInitial, limit: programListLimit });
 	const { data: channelOptions = { data: [] }, isFetching: isFetchingChannel } =
 		useChannelListQuery(FilterInitial);
 	const {
 		data: programExperienceOptions = { data: [] },
 		isFetching: isFetchingProgramExp
 	} = useGetProgramExperienceQuery();
+	const [
+		fetchProgramDetail,
+		{ data: programDetail, isLoading: isProgramDetailLoading }
+	] = useLazyDetailProgramQuery();
 
 	// const { data: customerBadgeOptions = { data: [] } } =
 	//   useCustomerBadgeListQuery(FilterInitial);
+
+	useEffect(() => {
+		if (programListLimit !== 100) {
+			refetchProgramList();
+		}
+	}, [programListLimit, refetchProgramList]);
+
+	useEffect(
+		() => {
+			(async () => {
+				if (keywordCreate.eligibility.multiwhitelist) {
+					if (keywordCreateState.eligibility.multiwhitelist_program) {
+						await fetchProgramDetail(
+							keywordCreateState.eligibility.multiwhitelist_program
+						);
+					}
+				}
+			})();
+		},
+		// eslint-disable-next-line
+		[keywordCreate.eligibility.multiwhitelist]
+	);
 
 	return (
 		<Accordion sx={{ p: "1vw" }}>
@@ -82,7 +115,10 @@ const General: React.FunctionComponent<IGeneralProps> = ({
 			>
 				<Subtitle textTransform="uppercase">
 					<Stack direction="row" spacing={2}>
-						{!isFetchingProgram && isFetchingChannel && isFetchingProgramExp ? (
+						{isProgramListLoading &&
+						isFetchingChannel &&
+						isFetchingProgramExp &&
+						isProgramDetailLoading ? (
 							<Box className="accordion-loading">
 								<CircularProgress size={16}></CircularProgress>
 							</Box>
@@ -662,7 +698,87 @@ const General: React.FunctionComponent<IGeneralProps> = ({
 							e["_id"] === keywordCreateState.eligibility.program_experience[0]
 					)?.set_value !== "Auction" &&
 						keywordCreateState.eligibility.multiwhitelist !== false && (
-							<Select
+							<>
+								<Autocomplete
+									disablePortal
+									getOptionLabel={option => option.name}
+									options={
+										programDetail
+											? [
+													programDetail,
+													...programListOptions.data.filter(
+														e =>
+															e.approval_log?.length > 0 &&
+															e.approval_log[e.approval_log.length - 1].status
+																?.length > 0 &&
+															e.approval_log[e.approval_log.length - 1]
+																.status[0].set_value ===
+																"Approved by Manager HQ" &&
+															moment(e?.end_period).isAfter(moment()) &&
+															e?._id !==
+																keywordCreateState.eligibility
+																	.multiwhitelist_program
+													)
+											  ]
+											: [
+													...programListOptions.data.filter(
+														e =>
+															e.approval_log?.length > 0 &&
+															e.approval_log[e.approval_log.length - 1].status
+																?.length > 0 &&
+															e.approval_log[e.approval_log.length - 1]
+																.status[0].set_value ===
+																"Approved by Manager HQ" &&
+															moment(e?.end_period).isAfter(moment()) &&
+															e?._id !==
+																keywordCreateState.eligibility
+																	.multiwhitelist_program
+													)
+											  ]
+									}
+									value={
+										programDetail ||
+										keywordCreate.eligibility.multiwhitelist_program
+									}
+									disableClearable
+									isOptionEqualToValue={(option, value) => {
+										return option?._id === value?._id;
+									}}
+									onChange={(_, value) => {
+										if (value) {
+											keywordCreate.eligibility.multiwhitelist_program =
+												value?._id;
+											setStateTrigger(!stateTrigger);
+										}
+									}}
+									ListboxProps={{
+										onScroll: (event: React.SyntheticEvent) => {
+											const listboxNode = event.currentTarget;
+
+											if (
+												Math.round(
+													listboxNode.scrollTop + listboxNode.clientHeight
+												) === Math.round(listboxNode.scrollHeight)
+											) {
+												setProgramListLimit(
+													previousProgramListLimit =>
+														previousProgramListLimit + 10
+												);
+											}
+										}
+									}}
+									renderInput={params => (
+										<OutlinedTextField
+											{...params}
+											isRequired
+											label="Choose Program"
+											placeholder="Choose Program"
+											variant="outlined"
+										/>
+									)}
+								/>
+
+								{/* <Select
 								isRequired={false}
 								label="Multiwhitelist Destination"
 								placeholder="Option"
@@ -691,7 +807,8 @@ const General: React.FunctionComponent<IGeneralProps> = ({
 									keywordCreate.eligibility.multiwhitelist_program = value;
 									setStateTrigger(!stateTrigger);
 								}}
-							/>
+							/> */}
+							</>
 						)}
 					<Select
 						isRequired={false}

@@ -6,6 +6,8 @@ import BtnArrowRight from "./btn-Arrow-Right.png"
 import BtnArrowLeft from "./btn-Arrow-Left.png"
 import UserIcon from "./userIcon.png"
 import Upload from "./upload.png"
+import NotificationActive from "./notification_active.png"
+import NotificationDisabled from "./notification_disable.png"
 
 export {
     SuccessAlert,
@@ -15,5 +17,7 @@ export {
     BtnArrowRight,
     BtnArrowLeft,
     UserIcon,
-    Upload
+    Upload,
+    NotificationActive,
+    NotificationDisabled
 };
