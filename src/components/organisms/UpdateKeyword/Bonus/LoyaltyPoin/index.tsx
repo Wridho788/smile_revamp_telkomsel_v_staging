@@ -1,10 +1,6 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Stack, Switch, Grid } from "@mui/material";
-import {
-  OutlinedTextField,
-  Subtitle,
-  SmallCopy,
-} from "../../../../atoms";
+import { OutlinedTextField, Subtitle, SmallCopy } from "../../../../atoms";
 import { ICreateKeyword } from "../../interfaces";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
@@ -29,8 +25,9 @@ const LoyaltyPoin: React.FunctionComponent<ILoyaltyPoinProps> = ({
   stateTrigger,
   setStateTrigger,
 }) => {
-  const { data: locationOptions, isFetching } =
-      useLocationTemplateQuery({ type: keywordCreate.eligibility.location_type });
+  const { data: locationOptions, isFetching } = useLocationTemplateQuery({
+    type: keywordCreate.eligibility.location_type,
+  });
 
   const [index, setIndex] = useState<number>(-1);
 
@@ -41,7 +38,10 @@ const LoyaltyPoin: React.FunctionComponent<ILoyaltyPoinProps> = ({
       ({ bonus_type }) => bonus_type === "loyalty_poin"
     );
 
-    if ((locationOptions && index === -1) || !keywordCreate.eligibility.eligibility_locations) {
+    if (
+      (locationOptions && index === -1) ||
+      !keywordCreate.eligibility.eligibility_locations
+    ) {
       keywordCreate.bonus.push(KeywordBonusLoyaltyPoin);
       const bonusIdx = keywordCreate.bonus.findIndex(
         ({ bonus_type }) => bonus_type === "loyalty_poin"
@@ -50,11 +50,11 @@ const LoyaltyPoin: React.FunctionComponent<ILoyaltyPoinProps> = ({
 
       if (locationOptions && keywordCreate.eligibility.eligibility_locations) {
         keywordCreateState.eligibility.locations.map((location) =>
-            keywordCreateState.bonus[bonusIdx].locations.push({
-              name: locationOptions.find((e: any) => e["_id"] === location).name,
-              location_id: location,
-              stock: 0,
-            })
+          keywordCreateState.bonus[bonusIdx].locations.push({
+            name: locationOptions.find((e: any) => e["_id"] === location).name,
+            location_id: location,
+            stock: 0,
+          })
         );
 
         setStateTrigger(!stateTrigger);
@@ -117,13 +117,15 @@ const LoyaltyPoin: React.FunctionComponent<ILoyaltyPoinProps> = ({
 
               {/* Stock Location Management */}
               <Stack>
-                {locationOptions && <LocationManagement
+                {locationOptions && (
+                  <LocationManagement
                     bonusType="loyalty_poin"
                     keywordCreateState={keywordCreateState}
                     keywordCreate={keywordCreate}
                     stateTrigger={stateTrigger}
                     setStateTrigger={setStateTrigger}
-                />}
+                  />
+                )}
               </Stack>
             </>
           )}

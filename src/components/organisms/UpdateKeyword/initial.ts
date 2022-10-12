@@ -47,16 +47,13 @@ export const KeywordEligibility: IKeywordEligibility = {
   poin_redeemed: 0,
   channel_validation: false,
   channel_validation_list: [],
-  channel_validation_list_info: [],
   program_id: "",
   eligibility_locations: false,
-  location_type: "",
   locations: [],
   program_title_expose: "",
   program_experience: [],
   program_bersubsidi: false,
   merchant: "",
-  merchant_info: "",
   merchandise_keyword: false,
   keyword_schedule: "",
   total_budget: 0,
@@ -91,7 +88,14 @@ export const KeywordEligibility: IKeywordEligibility = {
   segmentation_customer_preferences_bcp: "",
   file: "",
   segmentation_employee_numbers: false,
-  keyword_shift: [KeywordEligibilityKeywordShift],
+  keyword_shift: [
+    {
+      from: "",
+      to: "",
+    },
+  ],
+  eligibility_location: false,
+  location_type: "",
 };
 
 export const KeywordBonusHelper: IKeywordBonusHelper = {
