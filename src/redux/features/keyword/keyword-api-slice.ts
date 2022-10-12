@@ -57,16 +57,17 @@ export const keywordSlice = createApi({
     const putHandler = (
       endpoint: string,
       step: string = "",
-      isId: boolean = false
+      isId: boolean = false,
+      isKeywordGeneral: boolean = false
     ) =>
       builder.mutation<{ success: boolean; body: any }, any>({
-        query: (body) => ({
-          url: isId ? endpoint + body["_id"] + step || "/edit" : endpoint,
+        query: ({ _id, ...body }) => ({
+          url: isId ? endpoint + _id + step || "/edit" : endpoint,
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
           },
-          body: body,
+          body: isKeywordGeneral ? { ...body } : { _id, ...body },
         }),
       });
     const deleteHandler = (endpoint: string) =>
@@ -156,7 +157,12 @@ export const keywordSlice = createApi({
       keywordGeneralList: responseHandler("/general"),
       keywordGeneralDelete: deleteHandler("/general/"),
       keywordGeneralCreate: postHandler(baseUrl + "/v1/keyword"),
-      keywordGeneralUpdate: putHandler(baseUrl + "/v1/keyword/", "/edit", true),
+      keywordGeneralUpdate: putHandler(
+        baseUrl + "/v1/keyword/",
+        "/edit",
+        true,
+        true
+      ),
       keywordGeneralDetail: detailHandler(baseUrl + "/v1/keyword/"),
       keywordNameExisting: keywordNameExistingHandler(baseUrl + "/v2/keyword"),
 

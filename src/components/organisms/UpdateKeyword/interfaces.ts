@@ -182,11 +182,11 @@ export interface IKeywordNotificationAuction {
 
 export interface ICreateKeyword {
   _id: string;
-  is_draft?: boolean;
-  approval_log?: any[];
   eligibility: IKeywordEligibility;
   bonus: any[];
   notification: any[];
+  is_draft?: boolean;
+  need_review_after_edit?: boolean;
 }
 
 export interface IKeywordBonusLinkAjaMain {

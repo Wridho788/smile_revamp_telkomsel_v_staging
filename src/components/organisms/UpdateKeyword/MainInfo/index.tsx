@@ -32,7 +32,7 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
       <Stack spacing="1vw" width="100%">
         <Stack spacing="1vw" px="4vw">
           {/*  Draft Switcher */}
-          {["Rejected by Manager HQ", "Rejected by Manager Non HQ"].includes(
+          {/* {["Rejected by Manager HQ", "Rejected by Manager Non HQ"].includes(
             keywordCreateState?.approval_log?.[
               keywordCreateState?.approval_log?.length - 1
             ]?.status[0]?.set_value
@@ -66,7 +66,7 @@ const MainInfo: React.FunctionComponent<IMainInfoProps> = ({
             </>
           ) : (
             <></>
-          )}
+          )} */}
 
           <Program
             keywordCreateState={keywordCreateState}

@@ -14,13 +14,14 @@ const usePayloadToInitial = () => {
       await getKeywordDetail(_id).then((res) => {
         if (res.isSuccess === true) {
           keywordCreate._id = res.data._id;
-          keywordCreate.approval_log = [...(res.data.approval_log ?? "")];
           keywordCreate.eligibility = { ...res.data.eligibility };
           keywordCreate.bonus = [...res.data.bonus];
           keywordCreate.notification = [...res.data.notification];
+          keywordCreate.is_draft = res.data.is_draft;
           keywordBonusHelper.bonus_type = res.data.bonus.map(
             (e: any) => e.bonus_type
           );
+          console.log(res.data);
           setIsPayload(true);
         }
       });
