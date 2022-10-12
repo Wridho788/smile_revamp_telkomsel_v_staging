@@ -77,9 +77,9 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
     setKeywordCreateState(keywordCreate);
   }, [keywordBonusHelperState.bonus_type]);
 
-  React.useEffect(() => {
-    console.log(keywordCreate);
-  }, [keywordCreate, stateTrigger]);
+  // React.useEffect(() => {
+  //   console.log(keywordCreate);
+  // }, [keywordCreate, stateTrigger]);
 
   return (
     <Box display="flex" justifyContent="center" px="5%" py="1vw">

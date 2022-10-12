@@ -43,7 +43,6 @@ const CreateKeyword = () => {
   React.useEffect(() => {
     setKeywordCreateState(keywordCreate);
   }, [keywordCreate]);
-  console.log(KeywordBonusHelper.bonus_type);
   return (
     <DrawerNav>
       <Box
