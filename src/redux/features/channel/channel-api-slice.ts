@@ -51,6 +51,7 @@ export const channelSlice = createApi({
     return {
       channelList: responseHandler(baseUrl + "/channel"),
       channelListPrime: responseHandler("/prime"),
+      deleteChannel: deleteHandler(baseUrl + "/channel/")
     };
   },
 });
@@ -60,4 +61,5 @@ export const {
   useChannelListPrimeQuery,
   useLazyChannelListPrimeQuery,
   useLazyChannelListQuery,
+  useDeleteChannelMutation
 } = channelSlice;

@@ -19,6 +19,7 @@ import {
   MerchantOutletManagement,
   UpdateKeyword,
   PICManagement,
+  ChannelManagement
 } from '../../pages';
 
 import NotificationManagement from '../../pages/NotificationManagement';
@@ -231,6 +232,7 @@ const Index = () => {
       />
 
       <Route path='/location-management' element={<LocationManagement />} />
+      <Route path='/channel-management' element={<ChannelManagement />} />
       <Route
         path='/pic-management'
         element={

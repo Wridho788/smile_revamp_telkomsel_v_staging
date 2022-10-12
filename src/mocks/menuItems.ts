@@ -10,7 +10,8 @@ import {
     StarsOutlined,
     ErrorOutlineOutlined,
     ShareLocationOutlined,
-    Logout, PersonPin
+    Logout, PersonPin,
+    DonutLargeOutlined
 } from "@mui/icons-material";
 import { Avatar } from "@mui/material";
 
@@ -67,6 +68,29 @@ export const menuItems: Menu[] = [
                 label: "Outlet",
                 path: "/merchant-outlet-management",
                 alias: ["/merchant-outlet-management"],
+            },
+        ],
+    },
+
+    {
+        label: "LOV",
+        hasChild: true,
+        icon: DonutLargeOutlined,
+        child: [
+            {
+                label: "Channel Management",
+                path: "/channel-management",
+                alias: ["/channel-management"],
+            },
+            {
+                label: "Customer Brand Management",
+                path: "/",
+                alias: ["/"],
+            },
+            {
+                label: "Tier Management",
+                path: "/",
+                alias: ["/"],
             },
         ],
     },
