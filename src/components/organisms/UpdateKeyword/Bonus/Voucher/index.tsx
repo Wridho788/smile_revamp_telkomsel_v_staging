@@ -2,8 +2,8 @@ import React, {
 	Dispatch,
 	SetStateAction,
 	useEffect,
-	useRef,
-	useState
+	useState,
+	useRef
 } from "react";
 import { Stack, Box, Grid, Button } from "@mui/material";
 import {
@@ -12,7 +12,7 @@ import {
 	ResponsiveDateTimePicker,
 	Select
 } from "../../../../atoms";
-import { IUpdateKeyword } from "../../interfaces";
+import { ICreateKeyword } from "../../interfaces";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
@@ -32,8 +32,8 @@ import moment from "moment";
 
 interface INotificationVoucherProps {
 	bonusType: string;
-	keywordCreateState: IUpdateKeyword;
-	keywordCreate: IUpdateKeyword;
+	keywordCreateState: ICreateKeyword;
+	keywordCreate: ICreateKeyword;
 	stateTrigger: boolean;
 	setStateTrigger: Dispatch<SetStateAction<boolean>>;
 }
@@ -45,16 +45,18 @@ const Voucher: React.FunctionComponent<INotificationVoucherProps> = ({
 	setStateTrigger
 }) => {
 	const fileRef = useRef<any>(null);
-	const { data: locationOptions, isFetching } = useLocationTemplateQuery({
+	const {
+		data: locationOptions,
+		isLoading,
+		isFetching
+	} = useLocationTemplateQuery({
 		type: keywordCreate.eligibility.location_type
 	});
 
 	const [switchState, setSwitchState] = useState<boolean>(false);
 	const handleSwitch = () => {
 		setSwitchState(!switchState);
-		if (switchState) {
-			keywordCreate.bonus[index].exp_voucher = "";
-		}
+		keywordCreate.bonus[index].exp_voucher = "";
 	};
 
 	const [index, setIndex] = useState<number>(-1);
@@ -65,17 +67,18 @@ const Voucher: React.FunctionComponent<INotificationVoucherProps> = ({
 	// 		bonus => bonus?.bonus_type === "discount_voucher"
 	// 	)?.exp_voucher;
 
-	// 	setSwitchState(() => moment(voucherDate)?.toString() !== "Invalid date");
+	// 	// Do anything with wwitcher
+	// 	setSwitchState(() => );
 	// }, [isFetching]);
 
 	useEffect(() => {
 		// Initial Keyword Bonus Link Aja
-		const bonusIndex = keywordCreate.bonus.findIndex(
-			(bonus: any) => bonus?.bonus_type === "discount_voucher"
+		const index = keywordCreate.bonus.findIndex(
+			({ bonus_type }) => bonus_type === "discount_voucher"
 		);
 
-		if (bonusIndex === -1 || bonusIndex !== -1) {
-			if (bonusIndex === -1) {
+		if (index === -1 || index !== -1) {
+			if (index === -1) {
 				keywordCreate.bonus.push(KeywordBonusVoucher);
 			}
 			const bonusIdx = keywordCreate.bonus.findIndex(
@@ -127,6 +130,8 @@ const Voucher: React.FunctionComponent<INotificationVoucherProps> = ({
 			keywordCreate.bonus[index].voucher_prefix = "";
 			keywordCreate.bonus[index].jumlah_total_voucher = 0;
 			setStateTrigger(!stateTrigger);
+		} else {
+			//
 		}
 	};
 
@@ -170,7 +175,6 @@ const Voucher: React.FunctionComponent<INotificationVoucherProps> = ({
 										/>
 									) : (
 										<OutlinedTextField
-											type={"number"}
 											disabled={switchState}
 											direction="column"
 											label="Voucher Expired Days After Redeem"
@@ -181,8 +185,10 @@ const Voucher: React.FunctionComponent<INotificationVoucherProps> = ({
 													: keywordCreate.bonus[index].exp_voucher
 											}
 											handleChange={(value: string) => {
-												keywordCreate.bonus[index].exp_voucher = value;
-												setStateTrigger(!stateTrigger);
+												if (onlyNumber(value)) {
+													keywordCreate.bonus[index].exp_voucher = value;
+													setStateTrigger(!stateTrigger);
+												}
 											}}
 										/>
 									)}
@@ -292,15 +298,13 @@ const Voucher: React.FunctionComponent<INotificationVoucherProps> = ({
 
 						{/* Stock Location Management */}
 						<Stack>
-							{keywordCreateState.eligibility.locations?.length > 0 && (
-								<LocationManagement
-									bonusType="discount_voucher"
-									keywordCreateState={keywordCreateState}
-									keywordCreate={keywordCreate}
-									stateTrigger={stateTrigger}
-									setStateTrigger={setStateTrigger}
-								/>
-							)}
+							<LocationManagement
+								bonusType="discount_voucher"
+								keywordCreateState={keywordCreateState}
+								keywordCreate={keywordCreate}
+								stateTrigger={stateTrigger}
+								setStateTrigger={setStateTrigger}
+							/>
 						</Stack>
 					</Stack>
 				)}

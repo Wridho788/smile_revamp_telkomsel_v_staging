@@ -17,7 +17,7 @@ import {
 } from "../../../../atoms";
 import { FilterInitial } from "../../../../../redux/utils/initial-general";
 import {
-  IUpdateKeyword,
+  ICreateKeyword,
   IKeywordNotificationLuckyDraw,
   IKeywordNotificationLuckyDrawHelper,
 } from "../../interfaces";
@@ -43,8 +43,8 @@ import LocationManagement from "../LocationManagement";
 interface INotificationLuckyDrawProps {
   bonusType: string;
   bonusTypeId: any;
-  keywordCreateState: IUpdateKeyword;
-  keywordCreate: IUpdateKeyword;
+  keywordCreateState: ICreateKeyword;
+  keywordCreate: ICreateKeyword;
   stateTrigger: boolean;
   setStateTrigger: Dispatch<SetStateAction<boolean>>;
 }
@@ -102,7 +102,10 @@ const NotificationLuckyDraw: React.FunctionComponent<
       ({ bonus_type }) => bonus_type === "lucky_draw"
     );
 
-    if ((locationOptions && index === -1) || !keywordCreate.eligibility.eligibility_locations) {
+    if (
+      (locationOptions && index === -1) ||
+      !keywordCreate.eligibility.eligibility_locations
+    ) {
       keywordCreate.bonus.push(KeywordBonusLuckyDraw);
       const bonusIdx = keywordCreate.bonus.findIndex(
         ({ bonus_type }) => bonus_type === "lucky_draw"
@@ -196,13 +199,17 @@ const NotificationLuckyDraw: React.FunctionComponent<
                       direction="column"
                       label="Keyword Name"
                       variant="outlined"
-                      value={
-                        keywordNotificationLuckyDrawState[idx].keyword_name
-                      }
+                      value={keywordNotificationLuckyDrawState[idx].keyword_name
+                        .replace(/[^a-zA-Z0-9]/g, "")
+                        .toUpperCase()}
                       handleChange={(value: string) => {
-                        keywordNotificationLuckyDraw[idx].keyword_name = value;
+                        keywordNotificationLuckyDraw[idx].keyword_name = value
+                          .replace(/[^a-zA-Z0-9]/g, "")
+                          .toUpperCase();
                         if (idx === 1) {
-                          keywordNotificationLuckyDraw[2].keyword_name = value;
+                          keywordNotificationLuckyDraw[2].keyword_name = value
+                            .replace(/[^a-zA-Z0-9]/g, "")
+                            .toUpperCase();
                         }
                         setStateTrigger(!stateTrigger);
                       }}
