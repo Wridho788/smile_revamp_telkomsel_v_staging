@@ -182,8 +182,10 @@ const NotificationLuckyDraw: React.FunctionComponent<
               </Box>
             ) : (
               keywordNotification.data.map((_: any, idx: any) => {
-                keywordNotificationLuckyDraw[idx].code_identifier = _["_id"];
-                keywordNotificationLuckyDraw[idx].bonus_type_id = bonusTypeId;
+                if (keywordNotificationLuckyDrawHelper.length < idx) {
+                  keywordNotificationLuckyDraw[idx].code_identifier = _["_id"];
+                  keywordNotificationLuckyDraw[idx].bonus_type_id = bonusTypeId;
+                }
 
                 return (
                   <Stack
@@ -199,9 +201,12 @@ const NotificationLuckyDraw: React.FunctionComponent<
                       direction="column"
                       label="Keyword Name"
                       variant="outlined"
-                      value={keywordNotificationLuckyDrawState[idx].keyword_name
-                        .replace(/[^a-zA-Z0-9]/g, "")
-                        .toUpperCase()}
+                      value={
+                        keywordNotificationLuckyDrawState[idx] &&
+                        keywordNotificationLuckyDrawState[idx].keyword_name
+                          .replace(/[^a-zA-Z0-9]/g, "")
+                          .toUpperCase()
+                      }
                       handleChange={(value: string) => {
                         keywordNotificationLuckyDraw[idx].keyword_name = value
                           .replace(/[^a-zA-Z0-9]/g, "")
@@ -223,109 +228,118 @@ const NotificationLuckyDraw: React.FunctionComponent<
                       options={templateOptions.data}
                       optionLabel={"notif_name"}
                       value={
-                        keywordNotificationLuckyDrawHelperState[idx]
-                          .notification_template
+                        keywordNotificationLuckyDrawHelperState.length < idx
+                          ? keywordNotificationLuckyDrawHelperState[idx]
+                              .notification_template
+                          : ""
                       }
                       handleChange={(value: string) => {
-                        keywordNotificationLuckyDrawHelper[
-                          idx
-                        ].notification_template = value;
-                        keywordNotificationLuckyDraw[idx].notification_content =
-                          templateOptions?.data?.find((e) => e["_id"] === value)
-                            ?.notif_content ?? "";
+                        if (keywordNotificationLuckyDrawHelper.length < idx) {
+                          keywordNotificationLuckyDrawHelper[1].notification_template =
+                            value;
+                          keywordNotificationLuckyDraw[1].notification_content =
+                            templateOptions?.data?.find(
+                              (e) => e["_id"] === value
+                            )?.notif_content ?? "";
+                        }
                         setStateTrigger(!stateTrigger);
                       }}
                     />
-                    {keywordNotificationLuckyDrawHelperState[idx]
-                      .notification_template !== "" && (
-                      <OutlinedTextField
-                        isRequired={false}
-                        direction="column"
-                        label="Notification Content"
-                        variant="outlined"
-                        multiline
-                        rows={3}
-                        value={
-                          keywordNotificationLuckyDrawState[idx]
-                            .notification_content
-                        }
-                        handleChange={(value: string) => {
-                          keywordNotificationLuckyDraw[
-                            idx
-                          ].notification_content = value;
-                          setStateTrigger(!stateTrigger);
-                        }}
-                      />
-                    )}
-                    {keywordNotificationLuckyDrawHelperState[idx]
-                      .notification_template !== "" && (
-                      <Stack direction="row" spacing="1vw">
-                        <Button
-                          onClick={() => {
+                    {keywordNotificationLuckyDrawHelper[idx] &&
+                      keywordNotificationLuckyDrawHelper[idx]
+                        .notification_template !== "" && (
+                        <OutlinedTextField
+                          isRequired={false}
+                          direction="column"
+                          label="Notification Content"
+                          variant="outlined"
+                          multiline
+                          rows={3}
+                          value={
+                            keywordNotificationLuckyDrawState[idx]
+                              .notification_content
+                          }
+                          handleChange={(value: string) => {
                             keywordNotificationLuckyDraw[
                               idx
-                            ].notification_content += `[KeywordName]`;
+                            ].notification_content = value;
                             setStateTrigger(!stateTrigger);
                           }}
-                          color="primary"
-                          variant="outlined"
-                          endIcon={<AddBoxIcon fontSize="large" />}
-                          sx={{
-                            borderRadius: "0.3vw",
-                            paddingInline: "1.5vw",
-                            paddingBlock: "0.5vw",
-                            textTransform: "capitalize",
-                          }}
-                        >
-                          [KeywordName]
-                        </Button>
-                        <Button
-                          onClick={() => {
-                            keywordNotificationLuckyDraw[
-                              idx
-                            ].notification_content += `[StartPeriod]`;
-                            setStateTrigger(!stateTrigger);
-                          }}
-                          color="primary"
-                          variant="outlined"
-                          endIcon={<AddBoxIcon fontSize="large" />}
-                          sx={{
-                            borderRadius: "0.3vw",
-                            paddingInline: "1.5vw",
-                            paddingBlock: "0.5vw",
-                            textTransform: "capitalize",
-                          }}
-                        >
-                          [StartPeriod]
-                        </Button>
-                        <Button
-                          onClick={() => {
-                            keywordNotificationLuckyDraw[
-                              idx
-                            ].notification_content += `[EndPeriod]`;
-                            setStateTrigger(!stateTrigger);
-                          }}
-                          color="primary"
-                          variant="outlined"
-                          endIcon={<AddBoxIcon fontSize="large" />}
-                          sx={{
-                            borderRadius: "0.3vw",
-                            paddingInline: "1.5vw",
-                            paddingBlock: "0.5vw",
-                            textTransform: "capitalize",
-                          }}
-                        >
-                          [EndPeriod]
-                        </Button>
-                      </Stack>
-                    )}
+                        />
+                      )}
+                    {keywordNotificationLuckyDrawHelperState[idx] &&
+                      keywordNotificationLuckyDrawHelperState[idx]
+                        .notification_template !== "" && (
+                        <Stack direction="row" spacing="1vw">
+                          <Button
+                            onClick={() => {
+                              keywordNotificationLuckyDraw[
+                                idx
+                              ].notification_content += `[KeywordName]`;
+                              setStateTrigger(!stateTrigger);
+                            }}
+                            color="primary"
+                            variant="outlined"
+                            endIcon={<AddBoxIcon fontSize="large" />}
+                            sx={{
+                              borderRadius: "0.3vw",
+                              paddingInline: "1.5vw",
+                              paddingBlock: "0.5vw",
+                              textTransform: "capitalize",
+                            }}
+                          >
+                            [KeywordName]
+                          </Button>
+                          <Button
+                            onClick={() => {
+                              keywordNotificationLuckyDraw[
+                                idx
+                              ].notification_content += `[StartPeriod]`;
+                              setStateTrigger(!stateTrigger);
+                            }}
+                            color="primary"
+                            variant="outlined"
+                            endIcon={<AddBoxIcon fontSize="large" />}
+                            sx={{
+                              borderRadius: "0.3vw",
+                              paddingInline: "1.5vw",
+                              paddingBlock: "0.5vw",
+                              textTransform: "capitalize",
+                            }}
+                          >
+                            [StartPeriod]
+                          </Button>
+                          <Button
+                            onClick={() => {
+                              keywordNotificationLuckyDraw[
+                                idx
+                              ].notification_content += `[EndPeriod]`;
+                              setStateTrigger(!stateTrigger);
+                            }}
+                            color="primary"
+                            variant="outlined"
+                            endIcon={<AddBoxIcon fontSize="large" />}
+                            sx={{
+                              borderRadius: "0.3vw",
+                              paddingInline: "1.5vw",
+                              paddingBlock: "0.5vw",
+                              textTransform: "capitalize",
+                            }}
+                          >
+                            [EndPeriod]
+                          </Button>
+                        </Stack>
+                      )}
                     <Select
                       isRequired={false}
                       direction="column"
                       label="Notification Via"
                       placeholder="Option"
                       options={viaOptions.data}
-                      value={keywordNotificationLuckyDrawState[idx].via}
+                      value={
+                        keywordNotificationLuckyDrawState[idx] &&
+                        keywordNotificationLuckyDrawState[idx].via
+                      }
                       handleChange={(value: string) => {
                         keywordNotificationLuckyDraw[idx].via = value;
                         setStateTrigger(!stateTrigger);
@@ -334,6 +348,7 @@ const NotificationLuckyDraw: React.FunctionComponent<
                     <Stack direction="row" spacing="0.5vw" alignItems="center">
                       <Switch
                         checked={
+                          keywordNotificationLuckyDrawHelperState[idx] &&
                           keywordNotificationLuckyDrawHelperState[idx]
                             .follow_period
                         }
@@ -357,6 +372,7 @@ const NotificationLuckyDraw: React.FunctionComponent<
                       <ResponsiveDateTimePicker
                         isRequired={false}
                         disabled={
+                          keywordNotificationLuckyDrawHelperState[idx] &&
                           keywordNotificationLuckyDrawHelperState[idx]
                             .follow_period
                         }
@@ -364,6 +380,7 @@ const NotificationLuckyDraw: React.FunctionComponent<
                         label="From"
                         placeholder="From"
                         value={
+                          keywordNotificationLuckyDrawState[idx] &&
                           keywordNotificationLuckyDrawState[idx].start_period
                         }
                         handleChange={(value: Date) => {
@@ -382,6 +399,7 @@ const NotificationLuckyDraw: React.FunctionComponent<
                       <ResponsiveDateTimePicker
                         isRequired={false}
                         disabled={
+                          keywordNotificationLuckyDrawHelperState[idx] &&
                           keywordNotificationLuckyDrawHelperState[idx]
                             .follow_period
                         }
@@ -389,9 +407,11 @@ const NotificationLuckyDraw: React.FunctionComponent<
                         label="To"
                         placeholder="To"
                         minDateTime={
+                          keywordNotificationLuckyDrawState[idx] &&
                           keywordNotificationLuckyDrawState[idx].start_period
                         }
                         value={
+                          keywordNotificationLuckyDrawState[idx] &&
                           keywordNotificationLuckyDrawState[idx].end_period
                         }
                         handleChange={(value: Date) => {
@@ -442,7 +462,7 @@ const NotificationLuckyDraw: React.FunctionComponent<
                     <SmallCopy>Allow Inject Coupon</SmallCopy>
                   </Stack>
                 </Grid>
-                <Grid item xs={1}>
+                {/* <Grid item xs={1}>
                   <Stack
                     direction="row"
                     justifyContent="center"
@@ -462,7 +482,7 @@ const NotificationLuckyDraw: React.FunctionComponent<
                     />
                     <SmallCopy>Redeem After Verification</SmallCopy>
                   </Stack>
-                </Grid>
+                </Grid> */}
               </Grid>
 
               {/* Stock Location Management */}
