@@ -12,7 +12,6 @@ import { useTheme } from '@mui/material/styles';
 import { H3, BodyCopy, SmallCopy } from '../../../components';
 import { useNavigate } from 'react-router-dom';
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
-
 interface SidebarItemProps {
   menu: Menu;
   openMenu: boolean;
@@ -70,6 +69,29 @@ const SidebarItem = ({ menu, openMenu, expandMenu }: SidebarItemProps) => {
           )
         ) : null}
       </ListItemButton>
+      {/* <Divider />
+        <ListItem
+          disablePadding
+          sx={{
+            display: 'block',
+            top: 10,
+          }}>
+          <ListItemButton
+            sx={{
+              position: 'fixed',
+              bottom: 32,
+              zIndex: 9,
+              width: '100%',
+              backgroundColor: '#FFF',
+              minHeight: 48,
+              justifyContent: open ? 'initial' : 'center',
+              px: 2.5,
+            }}
+            onClick={handleCloseNotification}>
+            
+          </ListItemButton>
+        </ListItem>
+        <Divider /> */}
 
       <Collapse in={openList} timeout='auto' unmountOnExit>
         <List component='div' sx={{ marginLeft: 5 }} disablePadding>
