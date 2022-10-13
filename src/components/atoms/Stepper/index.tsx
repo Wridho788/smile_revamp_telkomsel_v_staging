@@ -180,6 +180,10 @@ export default function HorizontalLinearStepper({
 								segmentation_customer_tier:
 									CreateKeywordGeneral?.eligibility?.segmentation_customer_tier?.filter(
 										customerTier => customerTier
+									),
+								segmentation_customer_most_redeem:
+									CreateKeywordGeneral?.eligibility?.segmentation_customer_most_redeem?.filter(
+										mostRedeem => mostRedeem
 									)
 							},
 							notification: CreateKeywordGeneral.notification.filter(
@@ -216,6 +220,10 @@ export default function HorizontalLinearStepper({
 								segmentation_customer_tier:
 									UpdateKeywordGeneral?.eligibility?.segmentation_customer_tier?.filter(
 										customerTier => customerTier
+									),
+								segmentation_customer_most_redeem:
+									UpdateKeywordGeneral?.eligibility?.segmentation_customer_most_redeem?.filter(
+										mostRedeem => mostRedeem
 									)
 							}
 						})
