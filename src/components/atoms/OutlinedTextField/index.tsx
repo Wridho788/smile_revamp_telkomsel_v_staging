@@ -12,7 +12,7 @@ const Index: React.FunctionComponent<IOutlinedTextFieldProps> = ({
   leftColumn = 4,
   rightColumn = 6,
   direction = "row",
-  isRequired = false,
+  isRequired = true,
   ...props
 }) => {
   return (
