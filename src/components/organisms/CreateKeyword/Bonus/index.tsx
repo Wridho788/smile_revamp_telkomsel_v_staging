@@ -89,7 +89,19 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
           direction="column"
           label="Bonus Type"
           placeholder="Option"
-          options={bonusTypeOptions.data}
+          options={
+            keywordCreateState.eligibility.location_type ===
+            "62ffc0fc8a01008799e785bc"
+              ? bonusTypeOptions.data.filter(
+                  (bonusType) =>
+                    bonusType.template !== "ngrs" &&
+                    bonusType.template !== "telco_prepaid" &&
+                    bonusType.template !== "telco_postpaid" &&
+                    bonusType.template !== "linkaja_main" &&
+                    bonusType.template !== "linkaja_bonus"
+                )
+              : bonusTypeOptions.data
+          }
           optionValue="template"
           renderValue={(selected: any) => (
             <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
