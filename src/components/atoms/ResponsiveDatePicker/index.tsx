@@ -16,7 +16,7 @@ const Index: React.FunctionComponent<IResponsiveDatePickerProps> = ({
   leftColumn = 4,
   rightColumn = 6,
   direction = "row",
-  isRequired = true,
+  isRequired = false,
   minDate,
   disabled = false,
 }) => {
