@@ -105,11 +105,9 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
               defaultRoleManagerHQ
               ? bonusTypeOptions.data.filter(
                   (bonusType) =>
-                    bonusType.template !== "ngrs" &&
-                    bonusType.template !== "telco_prepaid" &&
-                    bonusType.template !== "telco_postpaid" &&
-                    bonusType.template !== "linkaja_main" &&
-                    bonusType.template !== "linkaja_bonus"
+                    bonusType.template === "void" ||
+                    bonusType.template === "discount_voucher" ||
+                    bonusType.template === "merchandise"
                 )
               : bonusTypeOptions.data
           }
