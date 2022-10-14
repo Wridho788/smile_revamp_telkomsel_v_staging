@@ -107,7 +107,7 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
                   (bonusType) =>
                     bonusType.template === "void" ||
                     bonusType.template === "discount_voucher" ||
-                    bonusType.template === "merchandise"
+                    bonusType.template === "direct_redeem"
                 )
               : bonusTypeOptions.data
           }
