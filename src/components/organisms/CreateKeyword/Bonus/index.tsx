@@ -28,11 +28,21 @@ import Void from "./Void";
 import Voting from "./Voting";
 import Other from "./Other";
 import { BONUS_TELKOMSEL_LIST } from "service/helpers/bonus-constant";
+import { useAccountAuthenticateQuery } from "redux/features/account/account-api-slice";
+import { useAppConfigQuery } from "redux/features/app-config/app-config-api-slice";
 
 interface IBonusProps {}
 
 const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
   const { data: bonusTypeOptions = { data: [] } } = useGetBonusTypeQuery();
+  const { data: accountAuth } = useAccountAuthenticateQuery();
+  const { data: appConfig } = useAppConfigQuery();
+  const defaultRoleManagerHQ =
+    appConfig !== undefined
+      ? appConfig.find((item) => item["param_key"] === "DEFAULT_LOCATION_HQ")[
+          "param_value"
+        ]
+      : undefined;
 
   const keywordCreate = CreateKeywordGeneral;
   const [keywordCreateState, setKeywordCreateState] =
@@ -90,8 +100,9 @@ const Bonus: React.FunctionComponent<IBonusProps> = (props) => {
           label="Bonus Type"
           placeholder="Option"
           options={
-            keywordCreateState.eligibility.location_type ===
-            "62ffc0fc8a01008799e785bc"
+            accountAuth &&
+            accountAuth.account_location.location_detail.type !==
+              defaultRoleManagerHQ
               ? bonusTypeOptions.data.filter(
                   (bonusType) =>
                     bonusType.template !== "ngrs" &&
